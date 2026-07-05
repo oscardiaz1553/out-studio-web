@@ -10,22 +10,22 @@ const SERVICES = [
   },
   {
     suffix: 'design',
-    dotColor: '#4B8CC8',
+    dotColor: '#E6C8AD',
     meta: ['Identidad', 'UI/UX', 'Branding', 'Editorial'],
   },
   {
     suffix: 'motion',
-    dotColor: '#4B8CC8',
+    dotColor: '#2F6EA6',
     meta: ['Animación', 'Video', 'After Effects', '3D'],
   },
   {
     suffix: 'brand',
-    dotColor: '#4B8CC8',
+    dotColor: '#000000',
     meta: ['Estrategia', 'Naming', 'Posicionamiento'],
   },
   {
     suffix: 'social',
-    dotColor: '#4B8CC8',
+    dotColor: '#606060',
     meta: ['Contenido', 'Redes', 'Gestión de comunidad'],
   },
 ];
@@ -34,7 +34,7 @@ export default function ServicesSection() {
   return (
     <section
       id="servicios"
-      className="bg-[#E6C8AD] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+      className="bg-[#FFFFFF] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
     >
       <ParallaxY from={36} to={-36}>
         <FadeIn delay={0} y={40}>
