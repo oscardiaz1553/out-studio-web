@@ -10,7 +10,7 @@ interface AccentButtonProps {
 }
 
 const BASE_CLASSES =
-  'inline-block rounded-full bg-[#4B8CC8] text-black font-bold uppercase tracking-widest text-center px-8 py-3 sm:px-10 sm:py-3.5 text-xs sm:text-sm transition-[transform,background-color,opacity] duration-150 ease-out hover:bg-[#5E9AD2] active:scale-[0.97] disabled:opacity-60 disabled:pointer-events-none';
+  'inline-block rounded-full bg-[#4B8CC8] text-white font-bold text-center px-8 py-3 sm:px-10 sm:py-3.5 text-xs sm:text-sm transition-[transform,background-color,opacity] duration-150 ease-out hover:bg-[#5E9AD2] active:scale-[0.97] disabled:opacity-60 disabled:pointer-events-none';
 
 export default function AccentButton({
   children,
