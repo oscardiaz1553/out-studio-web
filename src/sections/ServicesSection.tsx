@@ -1,5 +1,6 @@
 import { BrandName } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
+import ParallaxY from '../components/ParallaxY';
 
 const SERVICES = [
   {
@@ -35,14 +36,16 @@ export default function ServicesSection() {
       id="servicios"
       className="bg-[#F7F5F2] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
     >
-      <FadeIn delay={0} y={40}>
-        <h2
-          className="text-[#0A0A0A] font-black text-center leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
-          style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
-        >
-          Servicios
-        </h2>
-      </FadeIn>
+      <ParallaxY from={36} to={-36}>
+        <FadeIn delay={0} y={40}>
+          <h2
+            className="text-[#0A0A0A] font-black text-center leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
+            style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
+          >
+            Servicios
+          </h2>
+        </FadeIn>
+      </ParallaxY>
 
       <div className="max-w-5xl mx-auto">
         {SERVICES.map((service, i) => (

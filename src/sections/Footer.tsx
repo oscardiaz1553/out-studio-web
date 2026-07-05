@@ -8,7 +8,7 @@ export default function Footer() {
           <BrandName />
         </span>
         <span className="text-[#888888] text-sm font-medium">
-          © 2026 Out. Studio — Fuera del molde
+          © 2026 Out. Studio · Fuera del molde
         </span>
         <a
           href="mailto:oscar.diaz@out-studio.net"
