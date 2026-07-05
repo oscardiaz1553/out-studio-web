@@ -72,19 +72,20 @@ function ProjectCard({
   progress: MotionValue<number>;
 }) {
   const reduceMotion = useReducedMotion();
-  const targetScale = 1 - (total - 1 - index) * 0.03;
+  const targetScale = 1 - (total - 1 - index) * 0.04;
   const scale = useTransform(progress, [index / total, 1], [1, targetScale]);
 
   return (
-    <div className="h-[85vh]">
-      <div className="sticky top-24 md:top-32">
-        <motion.div
-          className="relative rounded-3xl border border-white/10 bg-white/5 p-4 sm:p-6 md:p-8"
-          style={{
-            top: `${index * 28}px`,
-            ...(reduceMotion ? {} : { scale }),
-          }}
-        >
+    // Every wrapper pins at the same viewport spot; each new card slides
+    // over the previous one while the section scrolls (stacking parallax).
+    <div className="h-screen sticky top-0 flex items-center justify-center">
+      <motion.div
+        className="relative w-full rounded-3xl border border-white/10 bg-[#0D0D0D] p-4 sm:p-6 md:p-8"
+        style={{
+          top: `calc(-5vh + ${index * 28}px)`,
+          ...(reduceMotion ? {} : { scale }),
+        }}
+      >
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4 sm:mb-6 md:mb-8">
             <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
               <span
@@ -143,8 +144,7 @@ function ProjectCard({
               />
             </div>
           </div>
-        </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 }
