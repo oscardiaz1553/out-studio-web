@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import EmberButton from '../components/EmberButton';
+import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 
 const EMAIL = 'oscar.diaz@out-studio.net';
@@ -7,7 +7,7 @@ const PHONE_DISPLAY = '+57 300 565 8674';
 const PHONE_TEL = '+573005658674';
 
 const INPUT_CLASSES =
-  'w-full bg-[#1A1A1A] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-[#888888] focus:outline-none focus:border-[#FF5733] transition-colors duration-200';
+  'w-full bg-black border border-[#606060]/50 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-[#4B8CC8] transition-colors duration-200';
 
 export default function ContactSection() {
   const [name, setName] = useState('');
@@ -24,7 +24,7 @@ export default function ContactSection() {
   return (
     <section
       id="contacto"
-      className="bg-[#0A0A0A] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+      className="bg-[#000000] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
     >
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-20 items-start">
         <div>
@@ -38,7 +38,7 @@ export default function ContactSection() {
           </FadeIn>
 
           <FadeIn delay={0.15} y={20}>
-            <p className="text-[#888888] font-medium leading-relaxed mb-10 max-w-md">
+            <p className="text-white/60 font-medium leading-relaxed mb-10 max-w-md">
               Cuéntanos qué necesitas y te respondemos con una propuesta clara.
             </p>
           </FadeIn>
@@ -46,13 +46,13 @@ export default function ContactSection() {
           <FadeIn delay={0.25} y={20} className="flex flex-col gap-4">
             <a
               href={`mailto:${EMAIL}`}
-              className="text-white font-semibold text-lg sm:text-xl hover:text-[#FF5733] transition-colors duration-200"
+              className="text-white font-semibold text-lg sm:text-xl hover:text-[#4B8CC8] transition-colors duration-200"
             >
               {EMAIL}
             </a>
             <a
               href={`tel:${PHONE_TEL}`}
-              className="text-white font-semibold text-lg sm:text-xl hover:text-[#FF5733] transition-colors duration-200"
+              className="text-white font-semibold text-lg sm:text-xl hover:text-[#4B8CC8] transition-colors duration-200"
             >
               {PHONE_DISPLAY}
             </a>
@@ -62,7 +62,7 @@ export default function ContactSection() {
         <FadeIn delay={0.2} y={30}>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <label className="flex flex-col gap-2">
-              <span className="text-[#888888] font-medium text-sm">Nombre</span>
+              <span className="text-white/60 font-medium text-sm">Nombre</span>
               <input
                 type="text"
                 required
@@ -73,7 +73,7 @@ export default function ContactSection() {
               />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-[#888888] font-medium text-sm">Email</span>
+              <span className="text-white/60 font-medium text-sm">Email</span>
               <input
                 type="email"
                 required
@@ -84,7 +84,7 @@ export default function ContactSection() {
               />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-[#888888] font-medium text-sm">Mensaje</span>
+              <span className="text-white/60 font-medium text-sm">Mensaje</span>
               <textarea
                 required
                 value={message}
@@ -94,9 +94,9 @@ export default function ContactSection() {
                 className={`${INPUT_CLASSES} resize-none`}
               />
             </label>
-            <EmberButton type="submit" className="mt-2 self-start">
+            <AccentButton type="submit" className="mt-2 self-start">
               Enviar mensaje
-            </EmberButton>
+            </AccentButton>
           </form>
         </FadeIn>
       </div>

@@ -1,4 +1,4 @@
-const EMBER = '#FF5733';
+const ACCENT = '#4B8CC8';
 
 interface BrandDotProps {
   color?: string;
@@ -8,7 +8,7 @@ interface BrandDotProps {
  * The Out. brand dot: a graphic circle element, not a typographic period.
  * Sized in em so it scales with the surrounding wordmark.
  */
-export function BrandDot({ color = EMBER }: BrandDotProps) {
+export function BrandDot({ color = ACCENT }: BrandDotProps) {
   return (
     <span
       aria-hidden
@@ -28,7 +28,7 @@ interface BrandNameProps {
  * Renders the Out. wordmark (Inter Black), optionally as a service module:
  * Out<dot>web, Out<dot>design, etc. The dot always follows "Out" with no space.
  */
-export function BrandName({ suffix, dotColor = EMBER, className }: BrandNameProps) {
+export function BrandName({ suffix, dotColor = ACCENT, className }: BrandNameProps) {
   return (
     <span className={`font-black ${className ?? ''}`}>
       Out
