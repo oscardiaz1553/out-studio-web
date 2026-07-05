@@ -1,10 +1,11 @@
 import {
+  AnimatePresence,
   motion,
   useReducedMotion,
   useScroll,
   useTransform,
 } from 'framer-motion';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BrandName } from '../components/Brand';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
@@ -17,9 +18,77 @@ const NAV_LINKS = [
   { label: 'Contacto', href: '#contacto' },
 ];
 
+const EASE_OUT = [0.16, 1, 0.3, 1] as const;
+
+function MobileMenu({ onClose }: { onClose: () => void }) {
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 bg-black flex flex-col px-6 pt-6 pb-10"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.15, ease: 'easeOut' } }}
+      transition={{ duration: 0.25, ease: EASE_OUT }}
+    >
+      <div className="flex items-center justify-between">
+        <span className="text-white text-xl">
+          <BrandName />
+        </span>
+        <button
+          type="button"
+          aria-label="Cerrar menú"
+          onClick={onClose}
+          className="relative w-10 h-10 flex items-center justify-center"
+        >
+          <span className="absolute block w-6 h-0.5 bg-white rotate-45" />
+          <span className="absolute block w-6 h-0.5 bg-white -rotate-45" />
+        </button>
+      </div>
+
+      <nav
+        aria-label="Navegación móvil"
+        className="flex-1 flex flex-col justify-center gap-6"
+      >
+        {NAV_LINKS.map((link, i) => (
+          <motion.a
+            key={link.label}
+            href={link.href}
+            onClick={onClose}
+            initial={
+              reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16 }
+            }
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.05 + i * 0.05,
+              duration: 0.3,
+              ease: EASE_OUT,
+            }}
+            className="text-white font-black uppercase tracking-tight text-5xl leading-none"
+          >
+            {link.label}
+          </motion.a>
+        ))}
+      </nav>
+
+      <AccentButton href="#contacto" onClick={onClose} className="self-start">
+        Hablemos
+      </AccentButton>
+    </motion.div>
+  );
+}
+
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -73,9 +142,27 @@ export default function HeroSection() {
               </li>
             ))}
           </ul>
-          <AccentButton href="#contacto">Hablar</AccentButton>
+          <div className="flex items-center gap-3">
+            <span className="hidden sm:inline-block">
+              <AccentButton href="#contacto">Hablemos</AccentButton>
+            </span>
+            <button
+              type="button"
+              aria-label="Abrir menú"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(true)}
+              className="sm:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10"
+            >
+              <span className="block w-6 h-0.5 bg-white" />
+              <span className="block w-6 h-0.5 bg-white" />
+            </button>
+          </div>
         </div>
       </FadeIn>
+
+      <AnimatePresence>
+        {menuOpen && <MobileMenu onClose={() => setMenuOpen(false)} />}
+      </AnimatePresence>
 
       <motion.div
         className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6"
@@ -106,7 +193,7 @@ export default function HeroSection() {
 
         <FadeIn delay={0.65} y={20} className="mt-10 sm:mt-12">
           <AccentButton href="#contacto" className="sm:px-12 sm:py-4">
-            Hablemos de tu proyecto
+            Hablemos
           </AccentButton>
         </FadeIn>
       </motion.div>

@@ -12,7 +12,7 @@ export function BrandDot({ color = ACCENT }: BrandDotProps) {
   return (
     <span
       aria-hidden
-      className="inline-block rounded-full"
+      className="inline-block rounded-full transition-transform duration-150 ease-out group-hover:scale-125"
       style={{ width: '0.17em', height: '0.17em', backgroundColor: color }}
     />
   );
