@@ -142,21 +142,16 @@ export default function HeroSection() {
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-3">
-            <span className="hidden sm:inline-block">
-              <AccentButton href="#contacto">Hablemos</AccentButton>
-            </span>
-            <button
-              type="button"
-              aria-label="Abrir menú"
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen(true)}
-              className="sm:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10"
-            >
-              <span className="block w-6 h-0.5 bg-white" />
-              <span className="block w-6 h-0.5 bg-white" />
-            </button>
-          </div>
+          <button
+            type="button"
+            aria-label="Abrir menú"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(true)}
+            className="sm:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10"
+          >
+            <span className="block w-6 h-0.5 bg-white" />
+            <span className="block w-6 h-0.5 bg-white" />
+          </button>
         </div>
       </FadeIn>
 
