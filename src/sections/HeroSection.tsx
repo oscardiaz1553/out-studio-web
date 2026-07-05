@@ -8,8 +8,7 @@ import { useRef } from 'react';
 import { BrandName } from '../components/Brand';
 import EmberButton from '../components/EmberButton';
 import FadeIn from '../components/FadeIn';
-import HeroVideo from '../components/HeroVideo';
-import Magnet from '../components/Magnet';
+import GalaxyCanvas from '../components/GalaxyCanvas';
 
 const NAV_LINKS = [
   { label: 'Servicios', href: '#servicios' },
@@ -27,10 +26,9 @@ export default function HeroSection() {
     offset: ['start start', 'end start'],
   });
 
-  // Parallax: the video drifts slower than the scroll while the content
-  // slides away faster and fades, giving the hero real depth on exit.
-  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.18]);
+  // Depth on exit: the galaxy drifts slower than the scroll while the
+  // content slides away faster and fades.
+  const galaxyY = useTransform(scrollYProgress, [0, 1], ['0%', '14%']);
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '45%']);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 
@@ -41,10 +39,16 @@ export default function HeroSection() {
     >
       <motion.div
         className="absolute inset-0 z-0"
-        style={reduceMotion ? undefined : { y: videoY, scale: videoScale }}
+        style={reduceMotion ? undefined : { y: galaxyY }}
       >
-        <HeroVideo className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/80 via-[#0A0A0A]/40 to-[#0A0A0A]" />
+        <GalaxyCanvas className="w-full h-full" />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(to bottom, transparent 70%, #0A0A0A 100%)',
+          }}
+        />
       </motion.div>
 
       <FadeIn
@@ -101,11 +105,9 @@ export default function HeroSection() {
         </FadeIn>
 
         <FadeIn delay={0.65} y={20} className="mt-10 sm:mt-12">
-          <Magnet padding={80} strength={4}>
-            <EmberButton href="#contacto" className="sm:px-12 sm:py-4">
-              Hablemos de tu proyecto
-            </EmberButton>
-          </Magnet>
+          <EmberButton href="#contacto" className="sm:px-12 sm:py-4">
+            Hablemos de tu proyecto
+          </EmberButton>
         </FadeIn>
       </motion.div>
     </section>
