@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { BrandName } from '../components/Brand';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
-import HeroVideo from '../components/HeroVideo';
+import GalaxyCanvas from '../components/GalaxyCanvas';
 
 const NAV_LINKS = [
   { label: 'Servicios', href: '#servicios' },
@@ -95,10 +95,9 @@ export default function HeroSection() {
     offset: ['start start', 'end start'],
   });
 
-  // Depth on exit: the video drifts slower than the scroll (with a subtle
-  // zoom) while the content slides away faster and fades.
-  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '16%']);
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.16]);
+  // Depth on exit: the galaxy drifts slower than the scroll while the
+  // content slides away faster and fades.
+  const galaxyY = useTransform(scrollYProgress, [0, 1], ['0%', '14%']);
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '45%']);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 
@@ -109,14 +108,14 @@ export default function HeroSection() {
     >
       <motion.div
         className="absolute inset-0 z-0"
-        style={reduceMotion ? undefined : { y: videoY, scale: videoScale }}
+        style={reduceMotion ? undefined : { y: galaxyY }}
       >
-        <HeroVideo className="w-full h-full object-cover" />
+        <GalaxyCanvas className="w-full h-full" />
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.35) 45%, #000000 100%)',
+              'linear-gradient(to bottom, transparent 70%, #000000 100%)',
           }}
         />
       </motion.div>
