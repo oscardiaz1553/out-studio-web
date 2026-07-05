@@ -1,16 +1,14 @@
-import ContactButton from '../components/ContactButton';
+import { BrandName } from '../components/Brand';
+import EmberButton from '../components/EmberButton';
 import FadeIn from '../components/FadeIn';
 import Magnet from '../components/Magnet';
 
 const NAV_LINKS = [
-  { label: 'About', href: '#about' },
-  { label: 'Price', href: '#services' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Servicios', href: '#servicios' },
+  { label: 'Proyectos', href: '#proyectos' },
+  { label: 'Nosotros', href: '#nosotros' },
+  { label: 'Contacto', href: '#contacto' },
 ];
-
-const PORTRAIT_URL =
-  'https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png';
 
 export default function HeroSection() {
   return (
@@ -19,56 +17,54 @@ export default function HeroSection() {
       style={{ overflowX: 'clip' }}
     >
       <FadeIn as="nav" delay={0} y={-20} className="px-6 md:px-10 pt-6 md:pt-8">
-        <ul className="flex items-center justify-between">
-          {NAV_LINKS.map((link) => (
-            <li key={link.label}>
-              <a
-                href={link.href}
-                className="text-[#D7E2EA] font-medium uppercase tracking-wider text-sm md:text-lg lg:text-[1.4rem] hover:opacity-70 transition-opacity duration-200"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="flex items-center justify-between gap-4">
+          <a href="#" className="text-white text-xl md:text-2xl">
+            <BrandName />
+          </a>
+          <ul className="hidden sm:flex items-center gap-6 md:gap-10">
+            {NAV_LINKS.map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  className="text-white font-medium text-sm md:text-base hover:opacity-70 transition-opacity duration-200"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <EmberButton href="#contacto">Hablar</EmberButton>
+        </div>
       </FadeIn>
 
-      <div className="overflow-hidden">
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
         <FadeIn delay={0.15} y={40}>
-          <h1 className="hero-heading font-black uppercase tracking-tight leading-none whitespace-nowrap w-full text-center text-[14vw] sm:text-[15vw] md:text-[16vw] lg:text-[17.5vw] mt-6 sm:mt-4 md:-mt-5">
-            Hi, i&rsquo;m jack
+          <h1 className="text-white leading-none tracking-tight text-[26vw] sm:text-[22vw] md:text-[19vw]">
+            <BrandName />
           </h1>
         </FadeIn>
-      </div>
 
-      <div className="absolute left-1/2 -translate-x-1/2 z-10 top-1/2 -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0 w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px]">
-        <FadeIn delay={0.6} y={30}>
-          <Magnet
-            padding={150}
-            strength={3}
-            activeTransition="transform 0.3s ease-out"
-            inactiveTransition="transform 0.6s ease-in-out"
-          >
-            <img
-              src={PORTRAIT_URL}
-              alt="Jack — 3D creator portrait"
-              className="w-full h-auto"
-            />
-          </Magnet>
-        </FadeIn>
-      </div>
-
-      <div className="relative z-20 mt-auto flex justify-between items-end px-6 md:px-10 pb-7 sm:pb-8 md:pb-10">
         <FadeIn delay={0.35} y={20}>
           <p
-            className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug max-w-[160px] sm:max-w-[220px] md:max-w-[260px]"
-            style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1.5rem)' }}
+            className="text-white font-medium mt-6 sm:mt-8"
+            style={{ fontSize: 'clamp(1.15rem, 2.6vw, 2rem)' }}
           >
-            a 3d creator driven by crafting striking and unforgettable projects
+            Presencia digital que vende.
           </p>
         </FadeIn>
+
         <FadeIn delay={0.5} y={20}>
-          <ContactButton />
+          <p className="text-[#888888] font-semibold uppercase tracking-[0.35em] text-xs sm:text-sm mt-4 sm:mt-5">
+            Fuera del molde
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.65} y={20} className="mt-10 sm:mt-12">
+          <Magnet padding={80} strength={4}>
+            <EmberButton href="#contacto" className="sm:px-12 sm:py-4">
+              Hablemos de tu proyecto
+            </EmberButton>
+          </Magnet>
         </FadeIn>
       </div>
     </section>
