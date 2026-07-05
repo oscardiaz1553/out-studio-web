@@ -8,37 +8,39 @@ export default function ProjectsSection() {
       id="proyectos"
       className="relative z-10 bg-[#000000] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 px-5 sm:px-8 md:px-10 pt-20 sm:pt-24 md:pt-32 pb-24"
     >
-      <ParallaxY from={36} to={-36}>
-        <FadeIn delay={0} y={40}>
-          <h2
-            className="text-white font-black text-center leading-none tracking-tight mb-6 sm:mb-8"
-            style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
-          >
-            Proyectos
-          </h2>
-        </FadeIn>
-      </ParallaxY>
-
-      <FadeIn delay={0.15} y={20}>
-        <p className="text-white/60 font-medium text-center max-w-md mx-auto mb-14 sm:mb-16 md:mb-20">
-          Estamos documentando nuestros primeros casos. Muy pronto podrás
-          verlos aquí.
-        </p>
-      </FadeIn>
-
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
-        {[0, 1, 2].map((i) => (
-          <FadeIn key={i} delay={0.2 + i * 0.1} y={30}>
-            <div className="aspect-[4/3] rounded-3xl border border-dashed border-white/15 bg-white/5 flex items-center justify-center">
-              <span className="flex items-center gap-2 text-white/60 font-semibold uppercase tracking-[0.25em] text-xs">
-                <span className="text-base leading-none" aria-hidden>
-                  <BrandDot />
-                </span>
-                Próximamente
-              </span>
-            </div>
+      <div className="max-w-6xl mx-auto">
+        <ParallaxY from={36} to={-36}>
+          <FadeIn delay={0} y={40}>
+            <h2
+              className="text-white font-black leading-none tracking-tight mb-12 sm:mb-16 md:mb-20"
+              style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
+            >
+              Proyectos
+            </h2>
           </FadeIn>
-        ))}
+        </ParallaxY>
+
+        <FadeIn delay={0.15} y={30}>
+          <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 px-8 py-14 sm:px-14 sm:py-20 flex flex-col items-start gap-5">
+            <span
+              className="flex items-baseline text-white font-black uppercase tracking-tight leading-none"
+              style={{ fontSize: 'clamp(1.8rem, 4.5vw, 3.5rem)' }}
+            >
+              Próximamente
+              <BrandDot />
+            </span>
+            <p className="text-white/60 font-medium max-w-md leading-relaxed">
+              Estamos construyendo nuestros primeros casos. El tuyo puede ser
+              uno de ellos.
+            </p>
+            <a
+              href="#contacto"
+              className="text-[#4B8CC8] font-bold uppercase tracking-widest text-sm hover:opacity-80 transition-opacity duration-200"
+            >
+              Hablemos →
+            </a>
+          </div>
+        </FadeIn>
       </div>
     </section>
   );

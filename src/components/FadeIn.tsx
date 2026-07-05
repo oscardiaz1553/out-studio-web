@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { CSSProperties, ElementType, ReactNode, useMemo } from 'react';
 
 interface FadeInProps {
@@ -22,6 +22,7 @@ export default function FadeIn({
   className,
   style,
 }: FadeInProps) {
+  const reduceMotion = useReducedMotion();
   const MotionComponent = useMemo(
     () => motion.create(as as ElementType) as typeof motion.div,
     [as]
@@ -29,10 +30,14 @@ export default function FadeIn({
 
   return (
     <MotionComponent
-      initial={{ opacity: 0, x, y }}
+      initial={{
+        opacity: 0,
+        x: reduceMotion ? 0 : x,
+        y: reduceMotion ? 0 : y,
+      }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, margin: '50px', amount: 0 }}
-      transition={{ delay, duration, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ delay, duration, ease: [0.16, 1, 0.3, 1] }}
       className={className}
       style={style}
     >

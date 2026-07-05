@@ -10,7 +10,7 @@ const SERVICES = [
   },
   {
     suffix: 'design',
-    dotColor: '#E6C8AD',
+    dotColor: '#CBA06A',
     meta: ['Identidad', 'UI/UX', 'Branding', 'Editorial'],
   },
   {
@@ -36,24 +36,24 @@ export default function ServicesSection() {
       id="servicios"
       className="bg-[#FFFFFF] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
     >
-      <ParallaxY from={36} to={-36}>
-        <FadeIn delay={0} y={40}>
-          <h2
-            className="text-[#000000] font-black text-center leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
-            style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
-          >
-            Servicios
-          </h2>
-        </FadeIn>
-      </ParallaxY>
-
       <div className="max-w-5xl mx-auto">
+        <ParallaxY from={36} to={-36}>
+          <FadeIn delay={0} y={40}>
+            <h2
+              className="text-[#000000] font-black leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
+              style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
+            >
+              Servicios
+            </h2>
+          </FadeIn>
+        </ParallaxY>
+
         {SERVICES.map((service, i) => (
           <FadeIn
             key={service.suffix}
             delay={i * 0.1}
             y={30}
-            className={`flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-10 py-8 sm:py-10 md:py-12 ${
+            className={`group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-10 py-8 sm:py-10 md:py-12 ${
               i > 0 ? 'border-t' : ''
             }`}
             style={i > 0 ? { borderColor: 'rgba(0, 0, 0, 0.15)' } : undefined}
@@ -65,7 +65,7 @@ export default function ServicesSection() {
               <BrandName suffix={service.suffix} dotColor={service.dotColor} />
             </h3>
             <p
-              className="text-black/60 font-medium sm:text-right"
+              className="text-black/60 font-medium sm:text-right transition-colors duration-200 group-hover:text-black"
               style={{ fontSize: 'clamp(0.85rem, 1.5vw, 1.15rem)' }}
             >
               {service.meta.join(' · ')}
