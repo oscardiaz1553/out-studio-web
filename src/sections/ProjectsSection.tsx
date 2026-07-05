@@ -21,9 +21,44 @@ interface Project {
   url?: string;
 }
 
-// Agrega aquí los casos reales cuando estén listos; con el array vacío la
-// sección muestra el panel "Próximamente" automáticamente.
-const PROJECTS: Project[] = [];
+// CARDS DE PRUEBA para visualizar el stack final. Reemplazar título,
+// categoría, imágenes y url con los casos reales; si el array queda vacío,
+// la sección vuelve a mostrar el panel "Próximamente".
+const PROJECTS: Project[] = [
+  {
+    number: '01',
+    name: 'Andina Café',
+    category: 'E-commerce · Shopify',
+    leftImages: [
+      'https://picsum.photos/seed/out-andina-detalle/900/560',
+      'https://picsum.photos/seed/out-andina-producto/900/760',
+    ],
+    rightImage: 'https://picsum.photos/seed/out-andina-hero/1000/1300',
+    url: '#',
+  },
+  {
+    number: '02',
+    name: 'Nórdica Estudio',
+    category: 'Branding · Identidad',
+    leftImages: [
+      'https://picsum.photos/seed/out-nordica-marca/900/560',
+      'https://picsum.photos/seed/out-nordica-papeleria/900/760',
+    ],
+    rightImage: 'https://picsum.photos/seed/out-nordica-hero/1000/1300',
+    url: '#',
+  },
+  {
+    number: '03',
+    name: 'Kiro App',
+    category: 'Web · UI/UX',
+    leftImages: [
+      'https://picsum.photos/seed/out-kiro-pantallas/900/560',
+      'https://picsum.photos/seed/out-kiro-flujo/900/760',
+    ],
+    rightImage: 'https://picsum.photos/seed/out-kiro-hero/1000/1300',
+    url: '#',
+  },
+];
 
 function ProjectCard({
   project,
