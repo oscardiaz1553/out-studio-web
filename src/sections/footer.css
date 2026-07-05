@@ -2,8 +2,8 @@
   position: relative;
   z-index: 100;
   overflow: hidden;
-  background: #0a0a0a;
-  color: #f7f5f2;
+  background: #000000;
+  color: #ffffff;
 }
 
 /* Animated dotted strip along the top edge */
@@ -11,7 +11,7 @@
   position: relative;
   height: 120px;
   overflow: hidden;
-  background: #0a0a0a;
+  background: #000000;
 }
 
 .footer-dots__line {
@@ -24,11 +24,11 @@
   transform: translateY(-50%);
   background-image: radial-gradient(
       circle,
-      rgb(247 245 242 / 0.55) 1.5px,
+      rgb(255 255 255 / 0.55) 1.5px,
       transparent 2px
     ),
-    radial-gradient(circle, rgb(247 245 242 / 0.35) 1px, transparent 1.5px),
-    radial-gradient(circle, rgb(255 87 51 / 0.45) 1.2px, transparent 1.8px);
+    radial-gradient(circle, rgb(255 255 255 / 0.35) 1px, transparent 1.5px),
+    radial-gradient(circle, rgb(75 140 200 / 0.45) 1.2px, transparent 1.8px);
   background-position: 0 8px, 24px 22px, 48px 14px;
   background-size: 72px 38px, 110px 44px, 160px 52px;
   animation: footerDotsMove 18s linear infinite;
@@ -65,7 +65,7 @@
 .site-footer__top h2 {
   max-width: 680px;
   margin: 0;
-  color: #f7f5f2;
+  color: #ffffff;
   font-size: clamp(34px, 3.5vw, 62px);
   font-weight: 220;
   letter-spacing: 0;
@@ -80,7 +80,7 @@
 }
 
 .site-footer__nav a {
-  color: rgb(247 245 242 / 0.88);
+  color: rgb(255 255 255 / 0.88);
   font-size: 16px;
   font-weight: 650;
   line-height: 1.1;
@@ -88,7 +88,7 @@
 }
 
 .site-footer__nav a:hover {
-  color: #f7f5f2;
+  color: #ffffff;
   transform: translateX(3px);
 }
 
@@ -101,7 +101,7 @@
   display: flex;
   align-items: flex-end;
   width: 100%;
-  color: #f7f5f2;
+  color: #ffffff;
 }
 
 .site-footer__wordmark {
@@ -113,7 +113,7 @@
   letter-spacing: -0.02em;
   line-height: 0.78;
   white-space: nowrap;
-  color: #f7f5f2;
+  color: #ffffff;
 }
 
 /* The Out. brand dot: a graphic Ember circle sitting right after the
@@ -124,7 +124,7 @@
   aspect-ratio: 1;
   margin-left: clamp(6px, 0.9vw, 16px);
   border-radius: 50%;
-  background: #ff5733;
+  background: #4b8cc8;
 }
 
 .site-footer__legal {
@@ -133,7 +133,7 @@
   justify-content: flex-start;
   gap: 8px 18px;
   margin-top: clamp(14px, 1.4vw, 24px);
-  color: rgb(247 245 242 / 0.52);
+  color: rgb(255 255 255 / 0.52);
   font-size: 9px;
   line-height: 1.35;
 }
@@ -148,7 +148,7 @@
 }
 
 .site-footer__legal a:hover {
-  color: #f7f5f2;
+  color: #ffffff;
 }
 
 @media (max-width: 980px) {

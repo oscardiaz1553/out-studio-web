@@ -6,7 +6,7 @@ import {
 } from 'framer-motion';
 import { useRef } from 'react';
 import { BrandName } from '../components/Brand';
-import EmberButton from '../components/EmberButton';
+import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import GalaxyCanvas from '../components/GalaxyCanvas';
 
@@ -46,7 +46,7 @@ export default function HeroSection() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'linear-gradient(to bottom, transparent 70%, #0A0A0A 100%)',
+              'linear-gradient(to bottom, transparent 70%, #000000 100%)',
           }}
         />
       </motion.div>
@@ -73,7 +73,7 @@ export default function HeroSection() {
               </li>
             ))}
           </ul>
-          <EmberButton href="#contacto">Hablar</EmberButton>
+          <AccentButton href="#contacto">Hablar</AccentButton>
         </div>
       </FadeIn>
 
@@ -99,15 +99,15 @@ export default function HeroSection() {
         </FadeIn>
 
         <FadeIn delay={0.5} y={20}>
-          <p className="text-[#c9c9c9] font-semibold uppercase tracking-[0.35em] text-xs sm:text-sm mt-4 sm:mt-5">
+          <p className="text-white/60 font-semibold uppercase tracking-[0.35em] text-xs sm:text-sm mt-4 sm:mt-5">
             Fuera del molde
           </p>
         </FadeIn>
 
         <FadeIn delay={0.65} y={20} className="mt-10 sm:mt-12">
-          <EmberButton href="#contacto" className="sm:px-12 sm:py-4">
+          <AccentButton href="#contacto" className="sm:px-12 sm:py-4">
             Hablemos de tu proyecto
-          </EmberButton>
+          </AccentButton>
         </FadeIn>
       </motion.div>
     </section>

@@ -5,27 +5,27 @@ import ParallaxY from '../components/ParallaxY';
 const SERVICES = [
   {
     suffix: 'web',
-    dotColor: '#4D9FFF',
+    dotColor: '#4B8CC8',
     meta: ['Desarrollo', 'Shopify', 'E-commerce', 'CMS'],
   },
   {
     suffix: 'design',
-    dotColor: '#B675FF',
+    dotColor: '#4B8CC8',
     meta: ['Identidad', 'UI/UX', 'Branding', 'Editorial'],
   },
   {
     suffix: 'motion',
-    dotColor: '#FFC24D',
+    dotColor: '#4B8CC8',
     meta: ['Animación', 'Video', 'After Effects', '3D'],
   },
   {
     suffix: 'brand',
-    dotColor: '#FF5733',
+    dotColor: '#4B8CC8',
     meta: ['Estrategia', 'Naming', 'Posicionamiento'],
   },
   {
     suffix: 'social',
-    dotColor: '#4DE1A0',
+    dotColor: '#4B8CC8',
     meta: ['Contenido', 'Redes', 'Gestión de comunidad'],
   },
 ];
@@ -34,12 +34,12 @@ export default function ServicesSection() {
   return (
     <section
       id="servicios"
-      className="bg-[#F7F5F2] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+      className="bg-[#E6C8AD] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
     >
       <ParallaxY from={36} to={-36}>
         <FadeIn delay={0} y={40}>
           <h2
-            className="text-[#0A0A0A] font-black text-center leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
+            className="text-[#000000] font-black text-center leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
             style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
           >
             Servicios
@@ -56,16 +56,16 @@ export default function ServicesSection() {
             className={`flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-10 py-8 sm:py-10 md:py-12 ${
               i > 0 ? 'border-t' : ''
             }`}
-            style={i > 0 ? { borderColor: 'rgba(10, 10, 10, 0.15)' } : undefined}
+            style={i > 0 ? { borderColor: 'rgba(0, 0, 0, 0.15)' } : undefined}
           >
             <h3
-              className="text-[#0A0A0A] leading-none"
+              className="text-[#000000] leading-none"
               style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
             >
               <BrandName suffix={service.suffix} dotColor={service.dotColor} />
             </h3>
             <p
-              className="text-[#888888] font-medium sm:text-right"
+              className="text-black/60 font-medium sm:text-right"
               style={{ fontSize: 'clamp(0.85rem, 1.5vw, 1.15rem)' }}
             >
               {service.meta.join(' · ')}

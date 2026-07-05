@@ -11,8 +11,8 @@ interface Star {
 }
 
 const LIGHT_RADIUS = 230;
-const OFF_WHITE = '247, 245, 242';
-const EMBER = '255, 87, 51';
+const STAR_WHITE = '255, 255, 255';
+const ACCENT = '75, 140, 200';
 
 /**
  * Starfield background. Static at rest; the area under the cursor lights up
@@ -76,8 +76,8 @@ export default function GalaxyCanvas({ className }: { className?: string }) {
           lightY,
           LIGHT_RADIUS * 1.3
         );
-        glow.addColorStop(0, `rgba(${EMBER}, ${0.045 * strength})`);
-        glow.addColorStop(0.35, `rgba(${OFF_WHITE}, ${0.035 * strength})`);
+        glow.addColorStop(0, `rgba(${ACCENT}, ${0.045 * strength})`);
+        glow.addColorStop(0.35, `rgba(${STAR_WHITE}, ${0.035 * strength})`);
         glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = glow;
         ctx.fillRect(0, 0, width, height);
@@ -110,8 +110,8 @@ export default function GalaxyCanvas({ className }: { className?: string }) {
 
         ctx.beginPath();
         ctx.fillStyle = star.ember
-          ? `rgba(${EMBER}, ${alpha})`
-          : `rgba(${OFF_WHITE}, ${alpha})`;
+          ? `rgba(${ACCENT}, ${alpha})`
+          : `rgba(${STAR_WHITE}, ${alpha})`;
         ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.fill();
       }

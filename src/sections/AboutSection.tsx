@@ -9,7 +9,7 @@ export default function AboutSection() {
   return (
     <section
       id="nosotros"
-      className="bg-[#0A0A0A] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+      className="bg-[#000000] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
     >
       <ParallaxY from={36} to={-36}>
         <FadeIn delay={0} y={40}>
@@ -31,7 +31,7 @@ export default function AboutSection() {
 
         <FadeIn delay={0.1} y={20}>
           <p
-            className="text-[#888888] text-center leading-relaxed max-w-xl"
+            className="text-white/60 text-center leading-relaxed max-w-xl"
             style={{ fontSize: 'clamp(0.95rem, 1.8vw, 1.15rem)' }}
           >
             Detrás de Out. está{' '}
