@@ -1,84 +1,72 @@
+import { BrandName } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
 
 const SERVICES = [
   {
-    number: '01',
-    name: '3D Modeling',
-    description:
-      'Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.',
+    suffix: 'web',
+    dotColor: '#4D9FFF',
+    meta: ['Desarrollo', 'Shopify', 'E-commerce', 'CMS'],
   },
   {
-    number: '02',
-    name: 'Rendering',
-    description:
-      'High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.',
+    suffix: 'design',
+    dotColor: '#B675FF',
+    meta: ['Identidad', 'UI/UX', 'Branding', 'Editorial'],
   },
   {
-    number: '03',
-    name: 'Motion Design',
-    description:
-      'Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.',
+    suffix: 'motion',
+    dotColor: '#FFC24D',
+    meta: ['Animación', 'Video', 'After Effects', '3D'],
   },
   {
-    number: '04',
-    name: 'Branding',
-    description:
-      'Crafting cohesive visual identities — from logos to full brand systems — that communicate a clear and memorable presence.',
+    suffix: 'brand',
+    dotColor: '#FF5733',
+    meta: ['Estrategia', 'Naming', 'Posicionamiento'],
   },
   {
-    number: '05',
-    name: 'Web Design',
-    description:
-      'Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.',
+    suffix: 'social',
+    dotColor: '#4DE1A0',
+    meta: ['Contenido', 'Redes', 'Gestión de comunidad'],
   },
 ];
 
 export default function ServicesSection() {
   return (
     <section
-      id="services"
-      className="bg-[#FFFFFF] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+      id="servicios"
+      className="bg-[#F7F5F2] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
     >
       <FadeIn delay={0} y={40}>
         <h2
-          className="text-[#0C0C0C] font-black uppercase text-center leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
-          style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
+          className="text-[#0A0A0A] font-black text-center leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
+          style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
         >
-          Services
+          Servicios
         </h2>
       </FadeIn>
 
       <div className="max-w-5xl mx-auto">
         {SERVICES.map((service, i) => (
           <FadeIn
-            key={service.number}
+            key={service.suffix}
             delay={i * 0.1}
             y={30}
-            className={`flex items-start gap-6 sm:gap-10 md:gap-16 py-8 sm:py-10 md:py-12 ${
+            className={`flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-10 py-8 sm:py-10 md:py-12 ${
               i > 0 ? 'border-t' : ''
             }`}
-            style={i > 0 ? { borderColor: 'rgba(12, 12, 12, 0.15)' } : undefined}
+            style={i > 0 ? { borderColor: 'rgba(10, 10, 10, 0.15)' } : undefined}
           >
-            <span
-              className="text-[#0C0C0C] font-black leading-none"
-              style={{ fontSize: 'clamp(3rem, 10vw, 140px)' }}
+            <h3
+              className="text-[#0A0A0A] leading-none"
+              style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
             >
-              {service.number}
-            </span>
-            <div className="flex flex-col gap-3 sm:gap-4 pt-2 sm:pt-3">
-              <h3
-                className="text-[#0C0C0C] font-medium uppercase"
-                style={{ fontSize: 'clamp(1rem, 2.2vw, 2.1rem)' }}
-              >
-                {service.name}
-              </h3>
-              <p
-                className="text-[#0C0C0C] font-light leading-relaxed max-w-2xl opacity-60"
-                style={{ fontSize: 'clamp(0.85rem, 1.6vw, 1.25rem)' }}
-              >
-                {service.description}
-              </p>
-            </div>
+              <BrandName suffix={service.suffix} dotColor={service.dotColor} />
+            </h3>
+            <p
+              className="text-[#888888] font-medium sm:text-right"
+              style={{ fontSize: 'clamp(0.85rem, 1.5vw, 1.15rem)' }}
+            >
+              {service.meta.join(' · ')}
+            </p>
           </FadeIn>
         ))}
       </div>

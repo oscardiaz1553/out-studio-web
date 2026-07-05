@@ -11,16 +11,14 @@
 html,
 body,
 #root {
-  background: #0c0c0c;
+  background: #0a0a0a;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: 'Kanit', sans-serif;
-}
-
-.hero-heading {
-  background: linear-gradient(180deg, #646973 0%, #bbccd7 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: 'Inter', sans-serif;
+  color: #ffffff;
 }
