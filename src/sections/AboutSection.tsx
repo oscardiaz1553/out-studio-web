@@ -45,10 +45,10 @@ export default function AboutSection() {
             Detrás de Out. está{' '}
             <span className="text-klein font-semibold">Oscar Díaz</span>,{' '}
             <span className="text-klein font-semibold">
-              Founder &amp; Creative Director
+              UX/UI Specialist y Desarrollador WordPress y Shopify
             </span>
             , liderando cada proyecto de punta a punta: estrategia, diseño y
-            desarrollo.
+            desarrollo. Potenciamos tu idea con inteligencia artificial.
           </p>
         </FadeIn>
       </div>

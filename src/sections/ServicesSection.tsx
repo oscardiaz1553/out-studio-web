@@ -27,12 +27,8 @@ export default function ServicesSection() {
             Servicios
           </h2>
         </div>
-        <p className="text-ink-2 max-w-[52ch] leading-relaxed mb-14 sm:mb-20">
-          El punto no separa: lanza. Lo que viene después del punto es el
-          servicio, y el servicio es, literalmente, lo que se sale de la marca.
-        </p>
 
-        <ul>
+        <ul className="mt-12 sm:mt-16">
           {SERVICES.map((service, i) => (
             <FadeIn
               key={service.suffix}

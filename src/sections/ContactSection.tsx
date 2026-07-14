@@ -84,8 +84,7 @@ export default function ContactSection() {
 
           <FadeIn delay={0.15} y={20}>
             <p className="text-ink-2 leading-relaxed mb-10 max-w-md">
-              Cuéntanos qué necesitas. Te respondemos con una propuesta clara,
-              sin humo.
+              Cuéntanos qué necesitas.
             </p>
           </FadeIn>
 
