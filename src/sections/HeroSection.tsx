@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import { BrandName } from '../components/Brand';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
-import Statue from '../components/Statue';
-import { STATUES } from '../data/statues';
+import ConceptGrid from '../components/ConceptGrid';
 
 const NAV_LINKS = [
   { label: 'Servicios', href: '#servicios' },
@@ -167,13 +166,9 @@ export default function HeroSection() {
           duration={1}
           className="relative order-1 md:order-2 h-[42vh] md:h-[86vh] overflow-hidden"
         >
-          <Statue
-            src={STATUES.hero}
-            alt="Estatua clásica griega en dúotono"
-            className="absolute inset-0"
-          />
-          <span className="absolute left-4 bottom-4 font-mono text-[10px] uppercase tracking-[0.14em] text-carne z-10">
-            Fig. 01 — Lo que se sale
+          <ConceptGrid className="absolute inset-0" />
+          <span className="absolute left-4 bottom-4 font-mono text-[10px] uppercase tracking-[0.14em] text-carne z-10 pointer-events-none">
+            Fig. 01 — Casi todo obedece. Una cosa se sale.
           </span>
         </FadeIn>
       </div>
