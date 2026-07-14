@@ -1,77 +1,58 @@
 import { BrandName } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
-import ParallaxY from '../components/ParallaxY';
 
 const SERVICES = [
-  {
-    suffix: 'web',
-    dotColor: '#4B8CC8',
-    meta: ['Desarrollo', 'Shopify', 'E-commerce', 'CMS'],
-  },
-  {
-    suffix: 'design',
-    dotColor: '#CBA06A',
-    meta: ['Identidad', 'UI/UX', 'Branding', 'Editorial'],
-  },
-  {
-    suffix: 'motion',
-    dotColor: '#2F6EA6',
-    meta: ['Animación', 'Video', 'After Effects', '3D'],
-  },
-  {
-    suffix: 'brand',
-    dotColor: '#000000',
-    meta: ['Estrategia', 'Naming', 'Posicionamiento'],
-  },
-  {
-    suffix: 'social',
-    dotColor: '#606060',
-    meta: ['Contenido', 'Redes', 'Gestión de comunidad'],
-  },
+  { suffix: 'Web', meta: ['Sitios', 'Landings', 'Corporativos'] },
+  { suffix: 'Design', meta: ['Identidad', 'UI/UX', 'Editorial'] },
+  { suffix: 'Motion', meta: ['Animación', 'Video', '3D'] },
+  { suffix: 'Brand', meta: ['Estrategia', 'Naming', 'Posicionamiento'] },
+  { suffix: 'Social', meta: ['Contenido', 'Redes', 'Comunidad'] },
 ];
 
 export default function ServicesSection() {
   return (
     <section
       id="servicios"
-      className="bg-[#FFFFFF] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+      className="bg-paper px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32 border-t border-klein-deep/15"
     >
-      <div className="max-w-5xl mx-auto">
-        <ParallaxY from={36} to={-36}>
-          <FadeIn delay={0} y={40}>
-            <h2
-              className="text-[#000000] font-black leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
-              style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
-            >
-              Servicios
-            </h2>
-          </FadeIn>
-        </ParallaxY>
-
-        {SERVICES.map((service, i) => (
-          <FadeIn
-            key={service.suffix}
-            delay={i * 0.1}
-            y={30}
-            className={`group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-10 py-8 sm:py-10 md:py-12 ${
-              i > 0 ? 'border-t' : ''
-            }`}
-            style={i > 0 ? { borderColor: 'rgba(0, 0, 0, 0.15)' } : undefined}
+      <div className="max-w-[1400px] mx-auto">
+        <div className="flex items-baseline gap-4 mb-3">
+          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-carne-tinta">
+            01
+          </span>
+          <h2
+            className="font-display font-semibold text-klein tracking-[-0.035em]"
+            style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
           >
-            <h3
-              className="text-[#000000] leading-none"
-              style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
+            Servicios
+          </h2>
+        </div>
+        <p className="text-ink-2 max-w-[52ch] leading-relaxed mb-14 sm:mb-20">
+          El punto no separa: lanza. Lo que viene después del punto es el
+          servicio, y el servicio es, literalmente, lo que se sale de la marca.
+        </p>
+
+        <ul>
+          {SERVICES.map((service, i) => (
+            <FadeIn
+              key={service.suffix}
+              as="li"
+              delay={i * 0.08}
+              y={24}
+              className="group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-10 py-7 sm:py-9 border-t border-klein-deep/15"
             >
-              <BrandName suffix={service.suffix} dotColor={service.dotColor} />
-            </h3>
-            <p
-              className="text-black/60 font-medium sm:text-right transition-colors duration-200 group-hover:text-black"
-              style={{ fontSize: 'clamp(0.85rem, 1.5vw, 1.15rem)' }}
-            >
-              {service.meta.join(' · ')}
-            </p>
-          </FadeIn>
-        ))}
+              <h3
+                className="text-klein leading-none"
+                style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}
+              >
+                <BrandName suffix={service.suffix} />
+              </h3>
+              <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.14em] text-muted sm:text-right sm:pt-4 transition-colors duration-200 group-hover:text-klein">
+                {service.meta.join(' · ')}
+              </p>
+            </FadeIn>
+          ))}
+        </ul>
       </div>
     </section>
   );

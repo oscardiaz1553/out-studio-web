@@ -1,13 +1,16 @@
 .brand-marquee {
   overflow: hidden;
-  padding: clamp(24px, 4vw, 56px) 0;
+  padding: clamp(20px, 3vw, 44px) 0;
+  background: var(--klein);
+  border-top: 1px solid color-mix(in srgb, var(--carne) 30%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--carne) 30%, transparent);
 }
 
 .brand-marquee__track {
   display: flex;
   align-items: center;
   width: max-content;
-  animation: brandMarqueeMove 40s linear infinite;
+  animation: brandMarqueeMove 42s linear infinite;
   will-change: transform;
 }
 
@@ -31,20 +34,20 @@
   align-items: center;
   gap: clamp(24px, 3vw, 48px);
   margin-right: clamp(24px, 3vw, 48px);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  font-size: clamp(3rem, 8vw, 7rem);
-  line-height: 1.1;
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-size: clamp(2.6rem, 7vw, 6rem);
+  line-height: 1.05;
   white-space: nowrap;
   color: transparent;
-  -webkit-text-stroke: 1px rgb(255 255 255 / 0.25);
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--klein-soft) 70%, transparent);
 }
 
 .brand-marquee__dot {
-  width: clamp(14px, 1.6vw, 28px);
-  height: clamp(14px, 1.6vw, 28px);
+  width: clamp(14px, 1.6vw, 26px);
+  height: clamp(14px, 1.6vw, 26px);
   border-radius: 50%;
-  background: #4b8cc8;
+  background: var(--carne);
   flex: none;
 }

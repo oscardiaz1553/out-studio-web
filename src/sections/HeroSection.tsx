@@ -1,15 +1,10 @@
-import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { BrandName } from '../components/Brand';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
-import GalaxyCanvas from '../components/GalaxyCanvas';
+import Statue from '../components/Statue';
+import { STATUES } from '../data/statues';
 
 const NAV_LINKS = [
   { label: 'Servicios', href: '#servicios' },
@@ -25,15 +20,15 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 bg-black flex flex-col px-6 pt-6 pb-10"
+      className="fixed inset-0 z-50 bg-klein flex flex-col px-6 pt-6 pb-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.15, ease: 'easeOut' } }}
       transition={{ duration: 0.25, ease: EASE_OUT }}
     >
       <div className="flex items-center justify-between">
-        <span className="text-white text-xl">
-          <BrandName />
+        <span className="text-paper-pure text-xl">
+          <BrandName onBlue />
         </span>
         <button
           type="button"
@@ -41,8 +36,8 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
           onClick={onClose}
           className="relative w-10 h-10 flex items-center justify-center"
         >
-          <span className="absolute block w-6 h-0.5 bg-white rotate-45" />
-          <span className="absolute block w-6 h-0.5 bg-white -rotate-45" />
+          <span className="absolute block w-6 h-0.5 bg-paper-pure rotate-45" />
+          <span className="absolute block w-6 h-0.5 bg-paper-pure -rotate-45" />
         </button>
       </div>
 
@@ -55,23 +50,17 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
             key={link.label}
             href={link.href}
             onClick={onClose}
-            initial={
-              reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16 }
-            }
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.05 + i * 0.05,
-              duration: 0.3,
-              ease: EASE_OUT,
-            }}
-            className="text-white font-black uppercase tracking-tight text-5xl leading-none"
+            transition={{ delay: 0.05 + i * 0.05, duration: 0.3, ease: EASE_OUT }}
+            className="font-display font-extrabold tracking-[-0.03em] text-paper-pure text-5xl leading-none"
           >
             {link.label}
           </motion.a>
         ))}
       </nav>
 
-      <AccentButton href="#contacto" onClick={onClose} className="self-start">
+      <AccentButton href="#contacto" onBlue onClick={onClose} className="self-start">
         Hablemos
       </AccentButton>
     </motion.div>
@@ -79,8 +68,6 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
 }
 
 export default function HeroSection() {
-  const heroRef = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -90,44 +77,17 @@ export default function HeroSection() {
     };
   }, [menuOpen]);
 
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  });
-
-  // Depth on exit: the galaxy drifts slower than the scroll while the
-  // content slides away faster and fades.
-  const galaxyY = useTransform(scrollYProgress, [0, 1], ['0%', '14%']);
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '45%']);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
-
   return (
-    <section
-      ref={heroRef}
-      className="relative min-h-[100dvh] flex flex-col overflow-hidden"
-    >
-      <motion.div
-        className="absolute inset-0 z-0"
-        style={reduceMotion ? undefined : { y: galaxyY }}
-      >
-        <GalaxyCanvas className="w-full h-full" />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(to bottom, transparent 70%, #000000 100%)',
-          }}
-        />
-      </motion.div>
-
+    <section className="relative min-h-[100dvh] flex flex-col bg-paper overflow-hidden">
+      {/* Navegación */}
       <FadeIn
         as="nav"
         delay={0}
-        y={-20}
-        className="relative z-10 px-6 md:px-10 pt-6 md:pt-8"
+        y={-16}
+        className="relative z-20 px-6 md:px-10 pt-6 md:pt-8"
       >
         <div className="flex items-center justify-between gap-4">
-          <a href="#" className="text-white text-xl md:text-2xl">
+          <a href="#" className="text-klein text-xl md:text-2xl">
             <BrandName />
           </a>
           <ul className="hidden sm:flex items-center gap-6 md:gap-10">
@@ -135,7 +95,7 @@ export default function HeroSection() {
               <li key={link.label}>
                 <a
                   href={link.href}
-                  className="text-white font-medium text-sm md:text-base hover:opacity-70 transition-opacity duration-200"
+                  className="text-klein-deep font-medium text-sm md:text-base hover:text-klein transition-colors duration-200"
                 >
                   {link.label}
                 </a>
@@ -149,8 +109,8 @@ export default function HeroSection() {
             onClick={() => setMenuOpen(true)}
             className="sm:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10"
           >
-            <span className="block w-6 h-0.5 bg-white" />
-            <span className="block w-6 h-0.5 bg-white" />
+            <span className="block w-6 h-0.5 bg-klein" />
+            <span className="block w-6 h-0.5 bg-klein" />
           </button>
         </div>
       </FadeIn>
@@ -159,39 +119,64 @@ export default function HeroSection() {
         {menuOpen && <MobileMenu onClose={() => setMenuOpen(false)} />}
       </AnimatePresence>
 
-      <motion.div
-        className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6"
-        style={
-          reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }
-        }
-      >
-        <FadeIn delay={0.15} y={40}>
-          <h1 className="text-white leading-none tracking-tight text-[26vw] sm:text-[22vw] md:text-[19vw]">
-            <BrandName />
-          </h1>
-        </FadeIn>
+      {/* Portada editorial: texto a la izquierda, estatua a sangre a la derecha */}
+      <div className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-[1.05fr_0.95fr] items-stretch">
+        <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 py-14 md:py-0 order-2 md:order-1">
+          <FadeIn delay={0.1} y={16}>
+            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-carne-tinta">
+              Estudio digital · Bogotá · São Paulo
+            </span>
+          </FadeIn>
 
-        <FadeIn delay={0.35} y={20}>
-          <p
-            className="text-white font-medium mt-6 sm:mt-8"
-            style={{ fontSize: 'clamp(1.15rem, 2.6vw, 2rem)' }}
-          >
-            Presencia digital que vende.
-          </p>
-        </FadeIn>
+          <FadeIn delay={0.2} y={24}>
+            <h1
+              className="font-display font-extrabold text-klein tracking-[-0.05em] leading-[0.86] mt-5"
+              style={{ fontSize: 'clamp(4rem, 13vw, 12rem)' }}
+            >
+              <BrandName />
+            </h1>
+          </FadeIn>
 
-        <FadeIn delay={0.5} y={20}>
-          <p className="text-white/60 font-semibold uppercase tracking-[0.35em] text-xs sm:text-sm mt-4 sm:mt-5">
-            Fuera del molde
-          </p>
-        </FadeIn>
+          <FadeIn delay={0.34} y={18}>
+            <p
+              className="font-display font-semibold text-klein-mid tracking-[-0.03em] mt-6"
+              style={{ fontSize: 'clamp(1.4rem, 3vw, 2.6rem)' }}
+            >
+              Fuera de lo usual.
+            </p>
+          </FadeIn>
 
-        <FadeIn delay={0.65} y={20} className="mt-10 sm:mt-12">
-          <AccentButton href="#contacto" className="sm:px-12 sm:py-4">
-            Hablemos
-          </AccentButton>
+          <FadeIn delay={0.46} y={16}>
+            <p className="text-ink-2 leading-relaxed max-w-[42ch] mt-6 text-base sm:text-lg">
+              Casi todo obedece. Una cosa se sale. Diseñamos el sistema, no la
+              pieza suelta, y sabemos exactamente dónde romperlo.
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.58} y={16} className="mt-9">
+            <AccentButton href="#contacto" className="sm:px-12 sm:py-4">
+              Hablemos
+            </AccentButton>
+          </FadeIn>
+        </div>
+
+        {/* La estatua bleed: toca los bordes derecho, superior e inferior */}
+        <FadeIn
+          delay={0.3}
+          y={0}
+          duration={1}
+          className="relative order-1 md:order-2 h-[42vh] md:h-[86vh] overflow-hidden"
+        >
+          <Statue
+            src={STATUES.hero}
+            alt="Estatua clásica griega en dúotono"
+            className="absolute inset-0"
+          />
+          <span className="absolute left-4 bottom-4 font-mono text-[10px] uppercase tracking-[0.14em] text-carne z-10">
+            Fig. 01 — Lo que se sale
+          </span>
         </FadeIn>
-      </motion.div>
+      </div>
     </section>
   );
 }
