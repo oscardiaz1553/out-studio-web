@@ -23,7 +23,7 @@ export default function AboutSection() {
 
       <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 py-16 md:py-24 order-2">
         <div className="flex items-baseline gap-4 mb-8">
-          <span className="font-mono text-[11px] tracking-[0.06em] text-carne-tinta">
+          <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             03
           </span>
           <h2

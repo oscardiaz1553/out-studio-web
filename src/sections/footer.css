@@ -140,7 +140,7 @@
   justify-content: flex-start;
   gap: 8px 18px;
   margin-top: clamp(14px, 1.4vw, 24px);
-  font-family: var(--mono);
+  font-family: var(--body);
   color: color-mix(in srgb, var(--klein-soft) 80%, transparent);
   font-size: 11px;
   line-height: 1.35;

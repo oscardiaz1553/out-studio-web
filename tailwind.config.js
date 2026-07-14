@@ -22,7 +22,6 @@ export default {
       fontFamily: {
         display: ['Bricolage Grotesque Variable', 'sans-serif'],
         sans: ['Instrument Sans', 'sans-serif'],
-        mono: ['DM Mono', 'monospace'],
       },
     },
   },
