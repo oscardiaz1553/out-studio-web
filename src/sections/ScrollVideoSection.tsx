@@ -1,59 +1,101 @@
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useScroll } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 
 const VIDEO = `${import.meta.env.BASE_URL}Out_video.mp4`;
 
 /**
- * Sección scroll-reactiva bajo el hero. El video corre a sangre y queda
- * anclado (sticky) mientras se scrollea; encima, el logo "Out." centrado
- * cambia de color siguiendo el progreso: azul Klein → blanco → naranja.
- * El fondo klein-deep sostiene la marca si el video no carga.
+ * Sección scroll-scrubbing (efecto tipo Apple): el video no se reproduce
+ * solo; el scroll controla su currentTime. Al bajar avanza, al subir
+ * retrocede. El bloque es alto y el visor queda anclado (sticky) mientras
+ * se recorre. Encima, el logo "Out." blanco, fijo y centrado.
  */
 export default function ScrollVideoSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: sectionRef,
     offset: ['start start', 'end end'],
   });
 
-  // El logo: azul → blanco → naranja a lo largo del scroll de la sección.
-  const color = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    ['#1B2FCC', '#FBF8F5', '#BC6039']
-  );
-  // Respiro sutil de escala para darle vida (desactivado con reduce-motion).
-  const scaleRaw = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1.06, 0.98]);
-  const scale = reduce ? 1 : scaleRaw;
-  // Entra y sale con un fade en los extremos.
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.1, 0.9, 1],
-    [0.55, 1, 1, 0.55]
-  );
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let raf = 0;
+    let duration = 0;
+    let target = 0; // segundo objetivo según el scroll
+    let current = 0; // segundo aplicado (suavizado)
+
+    const readDuration = () => {
+      if (Number.isFinite(video.duration) && video.duration > 0) {
+        duration = video.duration;
+      }
+    };
+
+    // Prime para que iOS/Safari permita hacer seek sin gesto previo.
+    const prime = () => {
+      readDuration();
+      video.pause();
+      video
+        .play()
+        .then(() => video.pause())
+        .catch(() => {});
+    };
+
+    video.addEventListener('loadedmetadata', readDuration);
+    video.addEventListener('loadeddata', prime, { once: true });
+    if (video.readyState >= 1) readDuration();
+
+    const unsubscribe = scrollYProgress.on('change', (p) => {
+      if (duration) {
+        target = Math.min(duration, Math.max(0, p * duration));
+      }
+    });
+
+    // Bucle de suavizado: interpola currentTime hacia el objetivo del scroll.
+    const tick = () => {
+      if (duration) {
+        current += (target - current) * 0.18;
+        if (Math.abs(target - current) < 0.004) current = target;
+        if (video.readyState >= 2 && Number.isFinite(current)) {
+          try {
+            video.currentTime = current;
+          } catch {
+            /* seek fuera de rango durante la carga: se ignora */
+          }
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      unsubscribe();
+      video.removeEventListener('loadedmetadata', readDuration);
+      video.removeEventListener('loadeddata', prime);
+    };
+  }, [scrollYProgress]);
 
   return (
     <section
-      ref={ref}
+      ref={sectionRef}
       aria-label="Out. — Never the usual"
-      className="relative h-[240vh] bg-klein-deep"
+      className="relative h-[320vh] bg-klein-deep"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
         <video
+          ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover"
           src={VIDEO}
-          autoPlay
           muted
-          loop
           playsInline
           preload="auto"
           aria-hidden
-          style={{ filter: 'brightness(0.92)' }}
         />
 
-        {/* Scrim on-brand (klein-deep) para legibilidad al pasar por el blanco */}
+        {/* Scrim on-brand para que el logo blanco siempre tenga contraste */}
         <div className="absolute inset-0 bg-klein-deep/30 pointer-events-none" />
         <div
           className="absolute inset-0 pointer-events-none"
@@ -63,29 +105,21 @@ export default function ScrollVideoSection() {
           }}
         />
 
-        <motion.h2
+        <h2
           aria-label="Out."
-          className="relative z-10 font-display font-extrabold tracking-[-0.05em] leading-none flex items-baseline select-none"
+          className="relative z-10 font-display font-extrabold tracking-[-0.05em] leading-none flex items-baseline select-none text-paper-pure"
           style={{
-            color,
-            scale,
-            opacity,
             fontSize: 'clamp(5rem, 22vw, 20rem)',
             filter: 'drop-shadow(0 4px 44px rgba(20,30,92,0.45))',
           }}
         >
           Out
-          <motion.span
+          <span
             aria-hidden
-            className="inline-block rounded-full"
-            style={{
-              width: '0.16em',
-              height: '0.16em',
-              marginLeft: '0.03em',
-              backgroundColor: color,
-            }}
+            className="inline-block rounded-full bg-paper-pure"
+            style={{ width: '0.16em', height: '0.16em', marginLeft: '0.03em' }}
           />
-        </motion.h2>
+        </h2>
       </div>
     </section>
   );
