@@ -277,7 +277,7 @@ export default function ConceptGrid({ className }: { className?: string }) {
           type="button"
           onClick={() => setPaused((p) => !p)}
           aria-pressed={paused}
-          className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full border border-klein-soft/50 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-klein-soft hover:bg-paper-pure hover:text-klein transition-colors duration-200"
+          className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full border border-klein-soft/50 px-3 py-1.5 font-mono text-[10px] tracking-[0.04em] text-klein-soft hover:bg-paper-pure hover:text-klein transition-colors duration-200"
         >
           <span
             className="w-1.5 h-1.5 rounded-full"

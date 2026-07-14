@@ -16,13 +16,11 @@ export default function App() {
 
       {/* Lámina I — macro con titular calado, en el umbral papel→Klein */}
       <EditorialPlate
-        fig="Fig. 03"
-        caption="Peonía azul, mango fugado · lám. facsímil"
+        caption="Peonía azul, mango fugado"
         objectPosition="30% 45%"
         minH="min-h-[92vh]"
         quoteObeys="Casi todo obedece."
         quoteEscapes="Una se sale."
-        captionSide="right"
       />
 
       <ProjectsSection />
@@ -31,12 +29,10 @@ export default function App() {
       {/* Lámina II — los mangos fugados, respiro antes de Nosotros.
           Segundo motivo botánico para no repetir imagen. */}
       <EditorialPlate
-        fig="Fig. 07"
         caption="Mango fugado, escala 1:1"
         image={MANGOS}
         objectPosition="50% 50%"
         minH="min-h-[78vh]"
-        captionSide="left"
         hideWithoutImage
       />
 

@@ -19,14 +19,11 @@ export default function AboutSection() {
           alt="Retrato de estatua clásica en dúotono"
           className="absolute inset-0"
         />
-        <span className="absolute left-4 bottom-4 font-mono text-[10px] uppercase tracking-[0.14em] text-carne z-10">
-          Fig. 02 — El sistema
-        </span>
       </div>
 
       <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 py-16 md:py-24 order-2">
         <div className="flex items-baseline gap-4 mb-8">
-          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-carne-tinta">
+          <span className="font-mono text-[11px] tracking-[0.06em] text-carne-tinta">
             03
           </span>
           <h2

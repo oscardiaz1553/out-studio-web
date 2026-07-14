@@ -90,7 +90,7 @@ function ProjectCard({
               <BrandDot />
             </span>
             <div className="flex flex-col gap-1">
-              <span className="font-mono text-muted uppercase tracking-[0.14em] text-[11px] sm:text-xs">
+              <span className="font-mono text-muted tracking-[0.04em] text-[11px] sm:text-xs">
                 {project.category}
               </span>
               <h3
@@ -155,7 +155,7 @@ function ProjectStack() {
     <div ref={containerRef} className="relative">
       <div className="sticky top-8 md:top-10 z-10">
         <div className="flex items-baseline gap-4">
-          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-carne">
+          <span className="font-mono text-[11px] tracking-[0.06em] text-carne">
             02
           </span>
           <h2
@@ -184,7 +184,7 @@ function ComingSoonPanel() {
   return (
     <>
       <div className="flex items-baseline gap-4 mb-12">
-        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-carne">
+        <span className="font-mono text-[11px] tracking-[0.06em] text-carne">
           02
         </span>
         <h2

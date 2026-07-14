@@ -122,7 +122,7 @@ export default function HeroSection() {
       <div className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-[1.05fr_0.95fr] items-stretch">
         <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 py-14 md:py-0 order-2 md:order-1">
           <FadeIn delay={0.1} y={16}>
-            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-carne-tinta">
+            <span className="font-mono text-[11px] tracking-[0.05em] text-carne-tinta">
               Estudio digital · Bogotá · São Paulo
             </span>
           </FadeIn>
@@ -168,9 +168,6 @@ export default function HeroSection() {
           className="relative order-1 md:order-2 h-[42vh] md:h-[86vh] overflow-hidden"
         >
           <ConceptGrid className="absolute inset-0" />
-          <span className="absolute left-4 bottom-4 font-mono text-[10px] uppercase tracking-[0.14em] text-carne z-10 pointer-events-none">
-            Fig. 01 — Casi todo obedece. Una cosa se sale.
-          </span>
         </FadeIn>
       </div>
     </section>

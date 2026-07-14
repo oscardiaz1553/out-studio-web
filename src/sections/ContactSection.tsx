@@ -71,7 +71,7 @@ export default function ContactSection() {
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-20 items-start">
         <div>
           <div className="flex items-baseline gap-4 mb-6 sm:mb-8">
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-carne-tinta">
+            <span className="font-mono text-[11px] tracking-[0.06em] text-carne-tinta">
               04
             </span>
             <h2
@@ -119,7 +119,7 @@ export default function ContactSection() {
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label className="flex flex-col gap-2">
-                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                <span className="font-mono text-[11px] tracking-[0.04em] text-muted">
                   Nombre
                 </span>
                 <input
@@ -132,7 +132,7 @@ export default function ContactSection() {
                 />
               </label>
               <label className="flex flex-col gap-2">
-                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                <span className="font-mono text-[11px] tracking-[0.04em] text-muted">
                   Email
                 </span>
                 <input
@@ -145,7 +145,7 @@ export default function ContactSection() {
                 />
               </label>
               <label className="flex flex-col gap-2">
-                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                <span className="font-mono text-[11px] tracking-[0.04em] text-muted">
                   Mensaje
                 </span>
                 <textarea

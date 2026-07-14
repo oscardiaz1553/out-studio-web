@@ -17,7 +17,7 @@ export default function ServicesSection() {
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">
-          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-carne-tinta">
+          <span className="font-mono text-[11px] tracking-[0.06em] text-carne-tinta">
             01
           </span>
           <h2
@@ -47,7 +47,7 @@ export default function ServicesSection() {
               >
                 <BrandName suffix={service.suffix} />
               </h3>
-              <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.14em] text-muted sm:text-right sm:pt-4 transition-colors duration-200 group-hover:text-klein">
+              <p className="font-mono text-xs sm:text-sm tracking-[0.04em] text-muted sm:text-right sm:pt-4 transition-colors duration-200 group-hover:text-klein">
                 {service.meta.join(' · ')}
               </p>
             </FadeIn>

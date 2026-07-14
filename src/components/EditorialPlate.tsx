@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { BOTANICA } from '../data/botanica';
 
 interface EditorialPlateProps {
-  fig: string;
+  /** describes the plate for assistive tech only (no visible label) */
   caption: string;
   /** which botanical plate to run edge-to-edge (defaults to BOTANICA) */
   image?: string;
@@ -19,7 +19,6 @@ interface EditorialPlateProps {
   /** knockout pull-quote (two lines: obeys / escapes) */
   quoteObeys?: string;
   quoteEscapes?: string;
-  captionSide?: 'left' | 'right';
   /** if true, the plate renders nothing until the botanical image loads */
   hideWithoutImage?: boolean;
 }
@@ -31,14 +30,12 @@ interface EditorialPlateProps {
  * drift on scroll, gated by prefers-reduced-motion.
  */
 export default function EditorialPlate({
-  fig,
   caption,
   image = BOTANICA,
   objectPosition = '50% 45%',
   minH = 'min-h-[86vh]',
   quoteObeys,
   quoteEscapes,
-  captionSide = 'right',
   hideWithoutImage = false,
 }: EditorialPlateProps) {
   const ref = useRef<HTMLElement>(null);
@@ -71,7 +68,7 @@ export default function EditorialPlate({
   return (
     <section
       ref={ref}
-      aria-label={`${fig} — ${caption}`}
+      aria-label={caption}
       className={`relative w-full overflow-hidden bg-klein ${minH}`}
     >
       {/* botanical in full colour (already on-brand), oversized so parallax
@@ -115,14 +112,6 @@ export default function EditorialPlate({
           </p>
         </div>
       )}
-
-      <span
-        className={`absolute bottom-5 ${
-          captionSide === 'left' ? 'left-5' : 'right-5'
-        } z-10 rounded-full bg-klein-deep/55 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-paper-pure pointer-events-none`}
-      >
-        {fig} — {caption}
-      </span>
     </section>
   );
 }
