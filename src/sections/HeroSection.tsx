@@ -122,7 +122,7 @@ export default function HeroSection() {
       <div className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-[1.05fr_0.95fr] items-stretch">
         <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 py-14 md:py-0 order-2 md:order-1">
           <FadeIn delay={0.1} y={16}>
-            <span className="text-[11px] tracking-[0.05em] text-carne-tinta">
+            <span className="text-base sm:text-lg text-carne-tinta">
               Estudio digital · Bogotá · São Paulo
             </span>
           </FadeIn>
