@@ -142,7 +142,7 @@ export default function HeroSection() {
               className="font-display font-semibold text-klein-mid tracking-[-0.03em] mt-6"
               style={{ fontSize: 'clamp(1.4rem, 3vw, 2.6rem)' }}
             >
-              Fuera de lo usual.
+              Never the usual.
             </p>
           </FadeIn>
 
