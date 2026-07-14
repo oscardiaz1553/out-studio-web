@@ -8,27 +8,23 @@ import {
 import { useRef } from 'react';
 import { BrandDot } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
-import ParallaxY from '../components/ParallaxY';
 
 interface Project {
   number: string;
   name: string;
   category: string;
-  /** Two stacked images for the left column (40%) */
   leftImages: [string, string];
-  /** One tall image for the right column (60%) */
   rightImage: string;
   url?: string;
 }
 
-// CARDS DE PRUEBA para visualizar el stack final. Reemplazar título,
-// categoría, imágenes y url con los casos reales; si el array queda vacío,
-// la sección vuelve a mostrar el panel "Próximamente".
+// CARDS DE PRUEBA para visualizar el stack. Reemplazar con los casos reales;
+// con el array vacío la sección muestra el panel "Próximamente".
 const PROJECTS: Project[] = [
   {
     number: '01',
     name: 'Andina Café',
-    category: 'E-commerce · Shopify',
+    category: 'Out.Commerce',
     leftImages: [
       'https://picsum.photos/seed/out-andina-detalle/900/560',
       'https://picsum.photos/seed/out-andina-producto/900/760',
@@ -39,7 +35,7 @@ const PROJECTS: Project[] = [
   {
     number: '02',
     name: 'Nórdica Estudio',
-    category: 'Branding · Identidad',
+    category: 'Out.Brand',
     leftImages: [
       'https://picsum.photos/seed/out-nordica-marca/900/560',
       'https://picsum.photos/seed/out-nordica-papeleria/900/760',
@@ -50,7 +46,7 @@ const PROJECTS: Project[] = [
   {
     number: '03',
     name: 'Kiro App',
-    category: 'Web · UI/UX',
+    category: 'Out.Web',
     leftImages: [
       'https://picsum.photos/seed/out-kiro-pantallas/900/560',
       'https://picsum.photos/seed/out-kiro-flujo/900/760',
@@ -76,13 +72,9 @@ function ProjectCard({
   const scale = useTransform(progress, [index / total, 1], [1, targetScale]);
 
   return (
-    // Every wrapper pins at the same spot below the sticky heading; each new
-    // card slides over the previous ones, which peek behind in a cascade.
-    // Top padding clears the pinned "Proyectos" title; image heights are
-    // viewport-based so the whole card always fits on screen.
     <div className="h-[100svh] sticky top-0 flex flex-col justify-start pt-28 md:pt-36 pb-4">
       <motion.div
-        className="relative w-full rounded-3xl border border-white/10 bg-[#0D0D0D] p-4 sm:p-6 md:p-8"
+        className="relative w-full rounded-2xl border border-klein-deep/15 bg-paper-pure p-4 sm:p-6 md:p-8"
         style={{
           top: `${index * 24}px`,
           ...(reduceMotion ? {} : { scale }),
@@ -91,18 +83,19 @@ function ProjectCard({
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4 sm:mb-6">
           <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
             <span
-              className="text-white font-black leading-none"
+              className="font-display font-extrabold text-klein leading-none flex items-baseline"
               style={{ fontSize: 'clamp(2.2rem, 6.5vw, 90px)' }}
             >
               {project.number}
+              <BrandDot />
             </span>
             <div className="flex flex-col gap-1">
-              <span className="text-white/60 font-medium uppercase tracking-widest text-xs sm:text-sm">
+              <span className="font-mono text-muted uppercase tracking-[0.14em] text-[11px] sm:text-xs">
                 {project.category}
               </span>
               <h3
-                className="text-white font-bold uppercase"
-                style={{ fontSize: 'clamp(1rem, 2vw, 1.8rem)' }}
+                className="font-display font-semibold text-klein tracking-[-0.02em]"
+                style={{ fontSize: 'clamp(1.1rem, 2vw, 1.9rem)' }}
               >
                 {project.name}
               </h3>
@@ -113,7 +106,7 @@ function ProjectCard({
               href={project.url}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border-2 border-white/40 text-white font-bold px-8 py-3 text-xs sm:text-sm transition-colors duration-200 hover:border-[#4B8CC8] hover:text-[#4B8CC8] active:scale-[0.97]"
+              className="rounded-full border border-klein text-klein font-medium px-7 py-2.5 text-sm transition-colors duration-200 hover:bg-klein hover:text-paper-pure active:scale-[0.97]"
             >
               Ver proyecto
             </a>
@@ -126,14 +119,14 @@ function ProjectCard({
               src={project.leftImages[0]}
               alt={`${project.name}, vista 1`}
               loading="lazy"
-              className="w-full object-cover rounded-2xl"
+              className="w-full object-cover rounded-xl"
               style={{ height: 'clamp(100px, 17vh, 220px)' }}
             />
             <img
               src={project.leftImages[1]}
               alt={`${project.name}, vista 2`}
               loading="lazy"
-              className="w-full object-cover rounded-2xl"
+              className="w-full object-cover rounded-xl"
               style={{ height: 'clamp(130px, 24vh, 320px)' }}
             />
           </div>
@@ -142,7 +135,7 @@ function ProjectCard({
               src={project.rightImage}
               alt={`${project.name}, vista principal`}
               loading="lazy"
-              className="w-full h-full object-cover rounded-2xl"
+              className="w-full h-full object-cover rounded-xl"
             />
           </div>
         </div>
@@ -160,16 +153,18 @@ function ProjectStack() {
 
   return (
     <div ref={containerRef} className="relative">
-      {/* The section title stays pinned above the stack for its whole run */}
-      <div className="sticky top-8 md:top-10">
-        <FadeIn delay={0} y={30}>
+      <div className="sticky top-8 md:top-10 z-10">
+        <div className="flex items-baseline gap-4">
+          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-carne">
+            02
+          </span>
           <h2
-            className="text-white font-black leading-none tracking-tight"
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 80px)' }}
+            className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
+            style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
           >
             Proyectos
           </h2>
-        </FadeIn>
+        </div>
       </div>
 
       {PROJECTS.map((project, i) => (
@@ -188,32 +183,33 @@ function ProjectStack() {
 function ComingSoonPanel() {
   return (
     <>
-      <ParallaxY from={36} to={-36}>
-        <FadeIn delay={0} y={40}>
-          <h2
-            className="text-white font-black leading-none tracking-tight mb-12 sm:mb-16 md:mb-20"
-            style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
-          >
-            Proyectos
-          </h2>
-        </FadeIn>
-      </ParallaxY>
+      <div className="flex items-baseline gap-4 mb-12">
+        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-carne">
+          02
+        </span>
+        <h2
+          className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
+          style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
+        >
+          Proyectos
+        </h2>
+      </div>
       <FadeIn delay={0.15} y={30}>
-        <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 px-8 py-14 sm:px-14 sm:py-20 flex flex-col items-start gap-5">
+        <div className="rounded-2xl border border-carne/40 bg-klein-deep/40 px-8 py-14 sm:px-14 sm:py-20 flex flex-col items-start gap-5">
           <span
-            className="flex items-baseline text-white font-black uppercase tracking-tight leading-none"
+            className="flex items-baseline font-display font-extrabold text-paper-pure tracking-[-0.03em] leading-none"
             style={{ fontSize: 'clamp(1.8rem, 4.5vw, 3.5rem)' }}
           >
             Próximamente
-            <BrandDot />
+            <BrandDot color="#F2C6B4" />
           </span>
-          <p className="text-white/60 font-medium max-w-md leading-relaxed">
-            Estamos construyendo nuestros primeros casos. El tuyo puede ser
-            uno de ellos.
+          <p className="text-klein-soft max-w-md leading-relaxed">
+            Estamos construyendo nuestros primeros casos. El tuyo puede ser uno
+            de ellos.
           </p>
           <a
             href="#contacto"
-            className="text-[#4B8CC8] font-bold text-sm hover:opacity-80 transition-opacity duration-200"
+            className="text-carne font-medium hover:opacity-80 transition-opacity duration-200"
           >
             Hablemos →
           </a>
@@ -227,9 +223,9 @@ export default function ProjectsSection() {
   return (
     <section
       id="proyectos"
-      className="relative z-10 bg-[#000000] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 px-5 sm:px-8 md:px-10 pt-16 sm:pt-20 md:pt-24 pb-24"
+      className="relative z-10 bg-klein px-6 md:px-10 lg:px-16 pt-16 sm:pt-20 md:pt-24 pb-24"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-[1400px] mx-auto">
         {PROJECTS.length > 0 ? <ProjectStack /> : <ComingSoonPanel />}
       </div>
     </section>

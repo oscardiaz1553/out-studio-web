@@ -13,7 +13,7 @@ const PHONE_TEL = '+573005658674';
 const WEB3FORMS_ACCESS_KEY = '';
 
 const INPUT_CLASSES =
-  'w-full bg-black border border-[#606060]/50 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:border-[#4B8CC8] transition-colors duration-200';
+  'w-full bg-paper-pure border border-klein-deep/25 rounded-lg px-4 py-3 text-klein-deep placeholder-muted focus:border-klein transition-colors duration-200';
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
@@ -66,35 +66,39 @@ export default function ContactSection() {
   return (
     <section
       id="contacto"
-      className="bg-[#000000] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+      className="bg-paper border-t border-klein-deep/15 px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32"
     >
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-20 items-start">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-20 items-start">
         <div>
-          <FadeIn delay={0} y={40}>
+          <div className="flex items-baseline gap-4 mb-6 sm:mb-8">
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-carne-tinta">
+              04
+            </span>
             <h2
-              className="text-white font-black leading-none tracking-tight mb-6 sm:mb-8"
-              style={{ fontSize: 'clamp(3rem, 8vw, 110px)' }}
+              className="font-display font-semibold text-klein tracking-[-0.035em]"
+              style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}
             >
               Contacto
             </h2>
-          </FadeIn>
+          </div>
 
           <FadeIn delay={0.15} y={20}>
-            <p className="text-white/60 font-medium leading-relaxed mb-10 max-w-md">
-              Cuéntanos qué necesitas y te respondemos con una propuesta clara.
+            <p className="text-ink-2 leading-relaxed mb-10 max-w-md">
+              Cuéntanos qué necesitas. Te respondemos con una propuesta clara,
+              sin humo.
             </p>
           </FadeIn>
 
           <FadeIn delay={0.25} y={20} className="flex flex-col gap-4">
             <a
               href={`mailto:${EMAIL}`}
-              className="text-white font-semibold text-lg sm:text-xl hover:text-[#4B8CC8] transition-colors duration-200"
+              className="text-klein font-semibold text-lg sm:text-xl hover:text-carne-tinta transition-colors duration-200"
             >
               {EMAIL}
             </a>
             <a
               href={`tel:${PHONE_TEL}`}
-              className="text-white font-semibold text-lg sm:text-xl hover:text-[#4B8CC8] transition-colors duration-200"
+              className="text-klein font-semibold text-lg sm:text-xl hover:text-carne-tinta transition-colors duration-200"
             >
               {PHONE_DISPLAY}
             </a>
@@ -103,22 +107,19 @@ export default function ContactSection() {
 
         <FadeIn delay={0.2} y={30}>
           {status === 'success' ? (
-            <div className="rounded-3xl border border-[#4B8CC8]/40 bg-white/5 px-8 py-14 flex flex-col items-start gap-3">
-              <span
-                aria-hidden
-                className="w-3.5 h-3.5 rounded-full bg-[#4B8CC8]"
-              />
-              <p className="text-white font-semibold text-xl">
+            <div className="rounded-2xl border border-klein/30 bg-paper-pure px-8 py-14 flex flex-col items-start gap-3">
+              <span aria-hidden className="w-3.5 h-3.5 rounded-full bg-carne-deep" />
+              <p className="font-display font-semibold text-klein text-xl">
                 Mensaje enviado.
               </p>
-              <p className="text-white/60 leading-relaxed">
+              <p className="text-ink-2 leading-relaxed">
                 Gracias por escribirnos. Te respondemos pronto a tu correo.
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label className="flex flex-col gap-2">
-                <span className="text-white/60 font-medium text-sm">
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
                   Nombre
                 </span>
                 <input
@@ -131,7 +132,7 @@ export default function ContactSection() {
                 />
               </label>
               <label className="flex flex-col gap-2">
-                <span className="text-white/60 font-medium text-sm">
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
                   Email
                 </span>
                 <input
@@ -144,7 +145,7 @@ export default function ContactSection() {
                 />
               </label>
               <label className="flex flex-col gap-2">
-                <span className="text-white/60 font-medium text-sm">
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
                   Mensaje
                 </span>
                 <textarea
@@ -164,10 +165,7 @@ export default function ContactSection() {
                 {status === 'sending' ? 'Enviando…' : 'Enviar mensaje'}
               </AccentButton>
               {status === 'error' && (
-                <p
-                  className="text-[#E6C8AD] text-sm leading-relaxed"
-                  role="alert"
-                >
+                <p className="text-carne-tinta text-sm leading-relaxed" role="alert">
                   No se pudo enviar el mensaje. Escríbenos directo a{' '}
                   <a href={`mailto:${EMAIL}`} className="underline">
                     {EMAIL}

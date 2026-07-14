@@ -11,11 +11,11 @@ export default function MarqueeStrip() {
   const items = Array.from({ length: REPEATS * 2 });
 
   return (
-    <section aria-hidden="true" className="brand-marquee bg-black">
+    <section aria-hidden="true" className="brand-marquee">
       <div className="brand-marquee__track">
         {items.map((_, i) => (
           <span key={i} className="brand-marquee__item">
-            Transforma tu presencia digital
+            Fuera de lo usual
             <span className="brand-marquee__dot" />
           </span>
         ))}

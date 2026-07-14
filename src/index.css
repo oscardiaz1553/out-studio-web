@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  Out. — sistema de marca v1.0
+  El azul es el sistema; el cálido es lo que se le escapa.
+  Sin negro, sin blanco puro. Proporción 60/30/10 (papel/azul/cálido).
+*/
+:root {
+  --klein: #1b2fcc;
+  --klein-deep: #141e5c;
+  --klein-soft: #c8cdf0;
+  --klein-mid: #4a55c4;
+  --carne: #f2c6b4;
+  --carne-deep: #bc6039;
+  --carne-tinta: #9c3f1c;
+  --paper: #f3ede7;
+  --paper-pure: #fbf8f5;
+  --ink-2: #3c4375;
+  --muted: #585d88;
+
+  --display: 'Bricolage Grotesque Variable', sans-serif;
+  --body: 'Instrument Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+
+  --hero-max-width: 1400px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -11,7 +36,7 @@
 html,
 body,
 #root {
-  background: #000000;
+  background: var(--paper);
 }
 
 html {
@@ -19,11 +44,16 @@ html {
 }
 
 body {
-  font-family: 'Inter Variable', ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--body);
+  color: var(--klein-deep);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
-  color: #ffffff;
+}
+
+::selection {
+  background: var(--carne);
+  color: var(--klein-deep);
 }
 
 a {
@@ -32,10 +62,47 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid #4b8cc8;
-  outline-offset: 3px;
+  outline: 3px solid var(--carne-tinta);
+  outline-offset: 2px;
 }
 
-:root {
-  --hero-max-width: 1820px;
+/* Estatuaria en dúotono: azul Klein sobre las sombras, cálido en las luces.
+   Editorial, a sangre. El fallback (sin imagen) es un panel Klein con la
+   retícula de puntos, siempre on-brand.
+   En @layer components para que las utilities de Tailwind (p.ej. `absolute`)
+   ganen sobre el `position` base cuando se pasan por className. */
+@layer components {
+  .duotone {
+    position: relative;
+    background-color: var(--klein);
+    background-image: radial-gradient(
+      var(--klein-soft) 1.1px,
+      transparent 1.4px
+    );
+    background-size: 22px 22px;
+    overflow: hidden;
+  }
+}
+.duotone img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: luminosity;
+  filter: grayscale(1) contrast(1.05);
+  opacity: 0.9;
+}
+.duotone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--klein) 78%, transparent) 0%,
+    color-mix(in srgb, var(--klein) 30%, transparent) 45%,
+    color-mix(in srgb, var(--carne-tinta) 32%, transparent) 100%
+  );
+  mix-blend-mode: multiply;
+  pointer-events: none;
 }
