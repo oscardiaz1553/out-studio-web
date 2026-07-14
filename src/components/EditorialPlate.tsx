@@ -115,7 +115,7 @@ export default function EditorialPlate({
       <span
         className={`absolute bottom-5 ${
           captionSide === 'left' ? 'left-5' : 'right-5'
-        } z-10 font-mono text-[10px] uppercase tracking-[0.2em] text-paper-pure/80 pointer-events-none`}
+        } z-10 rounded-full bg-klein-deep/55 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-paper-pure pointer-events-none`}
       >
         {fig} — {caption}
       </span>
