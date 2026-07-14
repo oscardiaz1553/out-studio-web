@@ -1,17 +1,19 @@
 import { useScroll } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 
-const VIDEO = `${import.meta.env.BASE_URL}Out_video.mp4`;
+/*
+  Secuencia de fotogramas extraída de Out_video.mp4 (public/out-seq/).
+  Scrubbing tipo Apple: el scroll elige el fotograma y un canvas lo pinta.
+  Un <video> con seek por currentTime va a saltos (solo decodifica rápido
+  en keyframes); con imágenes precargadas el cuadro exacto sale al instante.
+*/
+const FRAME_COUNT = 119;
+const frameSrc = (i: number) =>
+  `${import.meta.env.BASE_URL}out-seq/f_${String(i + 1).padStart(4, '0')}.webp`;
 
-/**
- * Sección scroll-scrubbing (efecto tipo Apple): el video no se reproduce
- * solo; el scroll controla su currentTime. Al bajar avanza, al subir
- * retrocede. El bloque es alto y el visor queda anclado (sticky) mientras
- * se recorre. Encima, el logo "Out." blanco, fijo y centrado.
- */
 export default function ScrollVideoSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -19,62 +21,100 @@ export default function ScrollVideoSection() {
   });
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
+    const images: (HTMLImageElement | null)[] = Array(FRAME_COUNT).fill(null);
     let raf = 0;
-    let duration = 0;
-    let target = 0; // segundo objetivo según el scroll
-    let current = 0; // segundo aplicado (suavizado)
+    let target = 0; // fotograma que pide el scroll
+    let current = 0; // fotograma pintado (suavizado)
+    let lastDrawn = -1;
+    let disposed = false;
 
-    const readDuration = () => {
-      if (Number.isFinite(video.duration) && video.duration > 0) {
-        duration = video.duration;
+    // Precarga en dos pasadas: primero 1 de cada 8 (el scrub funciona ya),
+    // después el resto en orden.
+    const load = (i: number) =>
+      new Promise<void>((resolve) => {
+        if (images[i]) return resolve();
+        const img = new Image();
+        img.onload = () => {
+          images[i] = img;
+          resolve();
+        };
+        img.onerror = () => resolve();
+        img.src = frameSrc(i);
+      });
+
+    (async () => {
+      const coarse: number[] = [];
+      const rest: number[] = [];
+      for (let i = 0; i < FRAME_COUNT; i++) {
+        (i % 8 === 0 ? coarse : rest).push(i);
       }
-    };
+      await Promise.all(coarse.map(load));
+      if (disposed) return;
+      lastDrawn = -1; // repintar con el primer material disponible
+      // El resto en tandas para no saturar la red
+      const BATCH = 12;
+      for (let s = 0; s < rest.length; s += BATCH) {
+        if (disposed) return;
+        await Promise.all(rest.slice(s, s + BATCH).map(load));
+      }
+      lastDrawn = -1;
+    })();
 
-    // Prime para que iOS/Safari permita hacer seek sin gesto previo.
-    const prime = () => {
-      readDuration();
-      video.pause();
-      video
-        .play()
-        .then(() => video.pause())
-        .catch(() => {});
-    };
+    // Dibujo tipo object-fit: cover
+    const draw = (index: number) => {
+      // usa el fotograma cargado más cercano si este aún no está
+      let img = images[index];
+      if (!img) {
+        for (let d = 1; d < FRAME_COUNT && !img; d++) {
+          img = images[index - d] ?? images[index + d] ?? null;
+        }
+      }
+      if (!img) return;
 
-    video.addEventListener('loadedmetadata', readDuration);
-    video.addEventListener('loadeddata', prime, { once: true });
-    if (video.readyState >= 1) readDuration();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cw = canvas.clientWidth * dpr;
+      const ch = canvas.clientHeight * dpr;
+      if (canvas.width !== cw || canvas.height !== ch) {
+        canvas.width = cw;
+        canvas.height = ch;
+      }
+      const scale = Math.max(cw / img.width, ch / img.height);
+      const dw = img.width * scale;
+      const dh = img.height * scale;
+      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    };
 
     const unsubscribe = scrollYProgress.on('change', (p) => {
-      if (duration) {
-        target = Math.min(duration, Math.max(0, p * duration));
-      }
+      target = Math.min(FRAME_COUNT - 1, Math.max(0, p * (FRAME_COUNT - 1)));
     });
 
-    // Bucle de suavizado: interpola currentTime hacia el objetivo del scroll.
     const tick = () => {
-      if (duration) {
-        current += (target - current) * 0.18;
-        if (Math.abs(target - current) < 0.004) current = target;
-        if (video.readyState >= 2 && Number.isFinite(current)) {
-          try {
-            video.currentTime = current;
-          } catch {
-            /* seek fuera de rango durante la carga: se ignora */
-          }
-        }
+      current += (target - current) * 0.22;
+      if (Math.abs(target - current) < 0.05) current = target;
+      const index = Math.round(current);
+      if (index !== lastDrawn) {
+        draw(index);
+        lastDrawn = index;
       }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
 
+    const onResize = () => {
+      lastDrawn = -1;
+    };
+    window.addEventListener('resize', onResize);
+
     return () => {
+      disposed = true;
       cancelAnimationFrame(raf);
       unsubscribe();
-      video.removeEventListener('loadedmetadata', readDuration);
-      video.removeEventListener('loadeddata', prime);
+      window.removeEventListener('resize', onResize);
     };
   }, [scrollYProgress]);
 
@@ -82,16 +122,12 @@ export default function ScrollVideoSection() {
     <section
       ref={sectionRef}
       aria-label="Out. — Never the usual"
-      className="relative h-[320vh] bg-klein-deep"
+      className="relative h-[300vh] bg-klein-deep"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
-          src={VIDEO}
-          muted
-          playsInline
-          preload="auto"
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full"
           aria-hidden
         />
 
