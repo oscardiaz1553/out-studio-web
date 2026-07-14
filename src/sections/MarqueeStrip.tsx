@@ -15,7 +15,7 @@ export default function MarqueeStrip() {
       <div className="brand-marquee__track">
         {items.map((_, i) => (
           <span key={i} className="brand-marquee__item">
-            Fuera de lo usual
+            Never the usual
             <span className="brand-marquee__dot" />
           </span>
         ))}
