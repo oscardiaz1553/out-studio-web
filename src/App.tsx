@@ -1,6 +1,7 @@
 import HeroSection from './sections/HeroSection';
 import ServicesSection from './sections/ServicesSection';
 import EditorialPlate from './components/EditorialPlate';
+import { MANGOS } from './data/botanica';
 import ProjectsSection from './sections/ProjectsSection';
 import MarqueeStrip from './sections/MarqueeStrip';
 import AboutSection from './sections/AboutSection';
@@ -27,12 +28,13 @@ export default function App() {
       <ProjectsSection />
       <MarqueeStrip />
 
-      {/* Lámina II — el patrón continuo, respiro antes de Nosotros.
-          Se oculta hasta que exista la imagen (evita panel vacío). */}
+      {/* Lámina II — los mangos fugados, respiro antes de Nosotros.
+          Segundo motivo botánico para no repetir imagen. */}
       <EditorialPlate
         fig="Fig. 07"
-        caption="Patrón continuo, escala 1:1"
-        objectPosition="70% 55%"
+        caption="Mango fugado, escala 1:1"
+        image={MANGOS}
+        objectPosition="50% 50%"
         minH="min-h-[78vh]"
         captionSide="left"
         hideWithoutImage

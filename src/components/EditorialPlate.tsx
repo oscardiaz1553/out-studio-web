@@ -10,6 +10,8 @@ import { BOTANICA } from '../data/botanica';
 interface EditorialPlateProps {
   fig: string;
   caption: string;
+  /** which botanical plate to run edge-to-edge (defaults to BOTANICA) */
+  image?: string;
   /** object-position for the crop, e.g. "38% 42%" */
   objectPosition?: string;
   /** capsize the plate height */
@@ -31,6 +33,7 @@ interface EditorialPlateProps {
 export default function EditorialPlate({
   fig,
   caption,
+  image = BOTANICA,
   objectPosition = '50% 45%',
   minH = 'min-h-[86vh]',
   quoteObeys,
@@ -47,10 +50,11 @@ export default function EditorialPlate({
 
   useEffect(() => {
     const img = new Image();
+    setStatus('probing');
     img.onload = () => setStatus('ok');
     img.onerror = () => setStatus('fail');
-    img.src = BOTANICA;
-  }, []);
+    img.src = image;
+  }, [image]);
 
   // All hooks must run before any early return (hooks-order rule).
   const { scrollYProgress } = useScroll({
@@ -83,7 +87,7 @@ export default function EditorialPlate({
       >
         {status === 'ok' && (
           <img
-            src={BOTANICA}
+            src={image}
             alt=""
             loading="lazy"
             className="absolute inset-0 w-full h-full object-cover"

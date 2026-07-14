@@ -8,3 +8,11 @@
   renómbrala "botanica.png" → commit. El deploy la publica automáticamente.
 */
 export const BOTANICA = `${import.meta.env.BASE_URL}botanica.png`;
+
+/*
+  Segunda lámina botánica: los mangos fugados (el naranja que se sale del
+  sistema azul). Se usa para que el sitio no dependa de una sola imagen y
+  cada plancha editorial tenga su propio motivo. Misma degradación on-brand
+  si el archivo no existe.
+*/
+export const MANGOS = `${import.meta.env.BASE_URL}mangos_out.png`;
