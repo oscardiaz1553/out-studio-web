@@ -107,23 +107,3 @@ a {
   pointer-events: none;
 }
 
-/* The botanical clipped into the hero wordmark: the garden breathes inside
-   the letters. Position tuned so no letter lands on a pale highlight. */
-.botanical-fill {
-  background-size: 190% auto;
-  background-position: 40% 42%;
-  background-repeat: no-repeat;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .botanical-fill {
-    animation: botanicalDrift 26s ease-in-out infinite alternate;
-  }
-}
-@keyframes botanicalDrift {
-  from {
-    background-position: 36% 44%;
-  }
-  to {
-    background-position: 46% 38%;
-  }
-}
