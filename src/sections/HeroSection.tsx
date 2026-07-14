@@ -4,6 +4,7 @@ import { BrandName } from '../components/Brand';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import ConceptGrid from '../components/ConceptGrid';
+import BotanicalWord from '../components/BotanicalWord';
 
 const NAV_LINKS = [
   { label: 'Servicios', href: '#servicios' },
@@ -128,12 +129,7 @@ export default function HeroSection() {
           </FadeIn>
 
           <FadeIn delay={0.2} y={24}>
-            <h1
-              className="font-display font-extrabold text-klein tracking-[-0.05em] leading-[0.86] mt-5"
-              style={{ fontSize: 'clamp(4rem, 13vw, 12rem)' }}
-            >
-              <BrandName />
-            </h1>
+            <BotanicalWord className="mt-5" />
           </FadeIn>
 
           <FadeIn delay={0.34} y={18}>
