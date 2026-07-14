@@ -1,4 +1,5 @@
 import HeroSection from './sections/HeroSection';
+import ScrollVideoSection from './sections/ScrollVideoSection';
 import ServicesSection from './sections/ServicesSection';
 import EditorialPlate from './components/EditorialPlate';
 import { MANGOS } from './data/botanica';
@@ -12,6 +13,7 @@ export default function App() {
   return (
     <main className="min-h-screen bg-paper" style={{ overflowX: 'clip' }}>
       <HeroSection />
+      <ScrollVideoSection />
       <ServicesSection />
 
       {/* Lámina I — macro con titular calado, en el umbral papel→Klein */}
