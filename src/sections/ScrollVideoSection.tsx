@@ -1,4 +1,4 @@
-import { useScroll } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 
 /*
@@ -19,6 +19,13 @@ export default function ScrollVideoSection() {
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
+
+  // Solo el color del logo sigue al scroll: azul Klein → blanco → naranja.
+  const logoColor = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    ['#1B2FCC', '#FBF8F5', '#BC6039']
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -141,21 +148,27 @@ export default function ScrollVideoSection() {
           }}
         />
 
-        <h2
+        <motion.h2
           aria-label="Out."
-          className="relative z-10 font-display font-extrabold tracking-[-0.05em] leading-none flex items-baseline select-none text-paper-pure"
+          className="relative z-10 font-display font-extrabold tracking-[-0.05em] leading-none flex items-baseline select-none"
           style={{
+            color: logoColor,
             fontSize: 'clamp(5rem, 22vw, 20rem)',
             filter: 'drop-shadow(0 4px 44px rgba(20,30,92,0.45))',
           }}
         >
           Out
-          <span
+          <motion.span
             aria-hidden
-            className="inline-block rounded-full bg-paper-pure"
-            style={{ width: '0.16em', height: '0.16em', marginLeft: '0.03em' }}
+            className="inline-block rounded-full"
+            style={{
+              width: '0.16em',
+              height: '0.16em',
+              marginLeft: '0.03em',
+              backgroundColor: logoColor,
+            }}
           />
-        </h2>
+        </motion.h2>
       </div>
     </section>
   );
