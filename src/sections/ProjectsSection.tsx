@@ -8,6 +8,7 @@ import {
 import { useRef } from 'react';
 import { BrandDot } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
+import { AZULEJO } from '../data/botanica';
 
 interface Project {
   number: string;
@@ -74,12 +75,23 @@ function ProjectCard({
   return (
     <div className="h-[100svh] sticky top-0 flex flex-col justify-start pt-28 md:pt-36 pb-4">
       <motion.div
-        className="relative w-full rounded-2xl border border-klein-deep/15 bg-paper-pure p-4 sm:p-6 md:p-8"
+        className="relative w-full overflow-hidden rounded-2xl border border-klein-deep/15 bg-paper-pure p-4 sm:p-6 md:p-8 pl-7 sm:pl-9 md:pl-12"
         style={{
           top: `${index * 24}px`,
           ...(reduceMotion ? {} : { scale }),
         }}
       >
+        {/* Lomo de azulejo: cada card muestra un tramo distinto del patrón,
+            como pliegos de un mismo cuadernillo. */}
+        <div
+          aria-hidden
+          className="absolute left-0 top-0 bottom-0 w-2.5 sm:w-3.5"
+          style={{
+            backgroundImage: `url(${AZULEJO})`,
+            backgroundSize: 'auto 140%',
+            backgroundPosition: `${index * 33}% 50%`,
+          }}
+        />
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4 sm:mb-6">
           <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
             <span

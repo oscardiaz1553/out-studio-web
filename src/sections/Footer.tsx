@@ -1,10 +1,19 @@
 import './footer.css';
+import { AZULEJO, AZULEJO_BAND } from '../data/botanica';
+
+// Copias suficientes para cubrir pantallas anchas; el loop mueve -50%,
+// así que el track son dos mitades idénticas (8 + 8).
+const TILE_COPIES = 16;
 
 export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="footer-dots" aria-hidden="true">
-        <div className="footer-dots__line" />
+        <div className="footer-tiles__track">
+          {Array.from({ length: TILE_COPIES }).map((_, i) => (
+            <img key={i} src={AZULEJO_BAND} alt="" loading="lazy" />
+          ))}
+        </div>
       </div>
 
       <div className="site-footer__inner">
@@ -39,7 +48,16 @@ export default function Footer() {
             aria-label="Out. Studio inicio"
           >
             <span className="site-footer__wordmark">Out</span>
-            <span className="site-footer__mark" aria-hidden="true" />
+            {/* El punto: al hover se llena de fruta (el azulejo dentro
+                de "lo que se sale") */}
+            <span className="site-footer__mark" aria-hidden="true">
+              <img
+                className="site-footer__mark-img"
+                src={AZULEJO}
+                alt=""
+                loading="lazy"
+              />
+            </span>
           </a>
         </div>
 

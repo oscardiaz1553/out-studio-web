@@ -14,31 +14,30 @@
   background: var(--klein);
 }
 
-.footer-dots__line {
+/* El friso de azulejo: cada <img> es una banda espejada [A|reflejo(A)],
+   así toda unión del desfile es un borde contra su propio espejo y el
+   loop de -50% es continuo. Transform-only (compositor), muy lento:
+   la cenefa se percibe solo si te fijas. */
+.footer-tiles__track {
   position: absolute;
   left: 0;
   top: 50%;
-  width: 200%;
+  display: flex;
+  width: max-content;
   height: 70px;
-  opacity: 0.85;
-  transform: translateY(-50%);
-  background-image: radial-gradient(
-      circle,
-      color-mix(in srgb, var(--klein-soft) 75%, transparent) 1.5px,
-      transparent 2px
-    ),
-    radial-gradient(
-      circle,
-      color-mix(in srgb, var(--klein-soft) 45%, transparent) 1px,
-      transparent 1.5px
-    ),
-    radial-gradient(circle, var(--carne) 1.3px, transparent 1.9px);
-  background-position: 0 8px, 24px 22px, 48px 14px;
-  background-size: 72px 38px, 110px 44px, 160px 52px;
-  animation: footerDotsMove 18s linear infinite;
+  opacity: 0.92;
+  transform: translate3d(0, -50%, 0);
+  will-change: transform;
+  animation: footerTilesMove 90s linear infinite;
 }
 
-@keyframes footerDotsMove {
+.footer-tiles__track img {
+  display: block;
+  height: 100%;
+  width: auto;
+}
+
+@keyframes footerTilesMove {
   from {
     transform: translate3d(0, -50%, 0);
   }
@@ -48,7 +47,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .footer-dots__line {
+  .footer-tiles__track {
     animation: none;
   }
 }
@@ -124,7 +123,8 @@
   color: var(--paper-pure);
 }
 
-/* The Out. brand dot: the warm circle, "lo que se sale". On blue it is carne. */
+/* The Out. brand dot: the warm circle, "lo que se sale". On blue it is carne.
+   Huevo de pascua: al hover del brand, el punto se llena de azulejo. */
 .site-footer__mark {
   position: relative;
   flex: 0 0 clamp(52px, 5.6vw, 108px);
@@ -132,6 +132,27 @@
   margin-left: clamp(6px, 0.9vw, 16px);
   border-radius: 50%;
   background: var(--carne);
+  overflow: hidden;
+}
+
+.site-footer__mark-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 38%;
+  opacity: 0;
+  transform: scale(1.12);
+  transition: opacity 260ms cubic-bezier(0.32, 0.72, 0, 1),
+    transform 260ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-footer__brand:hover .site-footer__mark-img {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .site-footer__legal {

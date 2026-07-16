@@ -16,3 +16,16 @@ export const BOTANICA = `${import.meta.env.BASE_URL}botanica.png`;
   si el archivo no existe.
 */
 export const MANGOS = `${import.meta.env.BASE_URL}mangos_out.png`;
+
+/*
+  El azulejo (mango_out_patrones.png optimizado a WebP): el patrón que
+  obedece con la fruta que se sale. Se usa pequeño y sistemático — friso
+  del footer, tinta de los servicios, lomo de las cards — nunca a sangre
+  completa (a esa escala lee como mantel, no como lámina).
+
+  AZULEJO      → recorte único (tinta de texto, rellenos cover).
+  AZULEJO_BAND → banda espejada [original|reflejo] que repite sin costuras
+                 en X (el PNG original no es tileable).
+*/
+export const AZULEJO = `${import.meta.env.BASE_URL}azulejo.webp`;
+export const AZULEJO_BAND = `${import.meta.env.BASE_URL}azulejo-band.webp`;

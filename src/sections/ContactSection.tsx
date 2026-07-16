@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
+import { AZULEJO_BAND } from '../data/botanica';
 
 const EMAIL = 'oscar.diaz@out-studio.net';
 const PHONE_DISPLAY = '+57 300 565 8674';
@@ -106,14 +107,27 @@ export default function ContactSection() {
 
         <FadeIn delay={0.2} y={30}>
           {status === 'success' ? (
-            <div className="rounded-2xl border border-klein/30 bg-paper-pure px-8 py-14 flex flex-col items-start gap-3">
-              <span aria-hidden className="w-3.5 h-3.5 rounded-full bg-carne-deep" />
-              <p className="font-display font-semibold text-klein text-xl">
-                Mensaje enviado.
-              </p>
-              <p className="text-ink-2 leading-relaxed">
-                Gracias por escribirnos. Te respondemos pronto a tu correo.
-              </p>
+            <div className="rounded-2xl border border-klein/30 bg-paper-pure overflow-hidden flex flex-col items-start">
+              {/* Cenefa de azulejo: la recompensa artesanal para quien
+                  ya escribió. */}
+              <div
+                aria-hidden
+                className="w-full h-14 border-b border-klein/15"
+                style={{
+                  backgroundImage: `url(${AZULEJO_BAND})`,
+                  backgroundRepeat: 'repeat-x',
+                  backgroundSize: 'auto 100%',
+                }}
+              />
+              <div className="px-8 py-12 flex flex-col items-start gap-3">
+                <span aria-hidden className="w-3.5 h-3.5 rounded-full bg-carne-deep" />
+                <p className="font-display font-semibold text-klein text-xl">
+                  Mensaje enviado.
+                </p>
+                <p className="text-ink-2 leading-relaxed">
+                  Gracias por escribirnos. Te respondemos pronto a tu correo.
+                </p>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">

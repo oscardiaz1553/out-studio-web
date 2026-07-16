@@ -1,5 +1,6 @@
 import { BrandName } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
+import { AZULEJO } from '../data/botanica';
 
 const SERVICES = [
   { suffix: 'Web', meta: ['Sitios', 'Landings', 'Corporativos'] },
@@ -37,11 +38,28 @@ export default function ServicesSection() {
               y={24}
               className="group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-10 py-7 sm:py-9 border-t border-klein-deep/15"
             >
+              {/* Al hover, la tipografía se llena de azulejo (tinta de
+                  patrón vía background-clip). Cada fila muestra un recorte
+                  distinto. Crossfade de opacidad: compositor puro. */}
               <h3
-                className="text-klein leading-none"
+                className="relative leading-none text-klein"
                 style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}
               >
                 <BrandName suffix={service.suffix} />
+                <span
+                  aria-hidden
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none select-none"
+                  style={{
+                    backgroundImage: `url(${AZULEJO})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: `${i * 22}% 50%`,
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                  }}
+                >
+                  <BrandName suffix={service.suffix} />
+                </span>
               </h3>
               <p className="text-xs sm:text-sm tracking-[0.04em] text-muted sm:text-right sm:pt-4 transition-colors duration-200 group-hover:text-klein">
                 {service.meta.join(' · ')}
