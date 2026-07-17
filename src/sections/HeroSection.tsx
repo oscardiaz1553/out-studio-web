@@ -5,11 +5,14 @@ import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import ConceptGrid from '../components/ConceptGrid';
 
-const NAV_LINKS = [
+type NavLink = { label: string; href: string; newTab?: boolean };
+
+const NAV_LINKS: NavLink[] = [
   { label: 'Servicios', href: '#servicios' },
   { label: 'Proyectos', href: '#proyectos' },
   { label: 'Nosotros', href: '#nosotros' },
-  { label: 'Contacto', href: '#contacto' },
+  // Contacto vive en su propia página y abre en pestaña nueva.
+  { label: 'Contacto', href: `${import.meta.env.BASE_URL}contacto.html`, newTab: true },
 ];
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
@@ -48,6 +51,8 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
           <motion.a
             key={link.label}
             href={link.href}
+            target={link.newTab ? '_blank' : undefined}
+            rel={link.newTab ? 'noopener noreferrer' : undefined}
             onClick={onClose}
             initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -94,6 +99,8 @@ export default function HeroSection() {
               <li key={link.label}>
                 <a
                   href={link.href}
+                  target={link.newTab ? '_blank' : undefined}
+                  rel={link.newTab ? 'noopener noreferrer' : undefined}
                   className="text-klein-deep font-medium text-sm md:text-base hover:text-klein transition-colors duration-200"
                 >
                   {link.label}
