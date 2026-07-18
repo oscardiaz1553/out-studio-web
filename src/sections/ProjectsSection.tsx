@@ -7,55 +7,16 @@ import {
 } from 'framer-motion';
 import { useRef } from 'react';
 import { BrandDot } from '../components/Brand';
+import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import { AZULEJO } from '../data/botanica';
+import {
+  categoryLabel,
+  FEATURED_PROJECTS,
+  type Project,
+} from '../data/projects';
 
-interface Project {
-  number: string;
-  name: string;
-  category: string;
-  leftImages: [string, string];
-  rightImage: string;
-  url?: string;
-}
-
-// CARDS DE PRUEBA para visualizar el stack. Reemplazar con los casos reales;
-// con el array vacío la sección muestra el panel "Próximamente".
-const PROJECTS: Project[] = [
-  {
-    number: '01',
-    name: 'Andina Café',
-    category: 'Out.Commerce',
-    leftImages: [
-      'https://picsum.photos/seed/out-andina-detalle/900/560',
-      'https://picsum.photos/seed/out-andina-producto/900/760',
-    ],
-    rightImage: 'https://picsum.photos/seed/out-andina-hero/1000/1300',
-    url: '#',
-  },
-  {
-    number: '02',
-    name: 'Nórdica Estudio',
-    category: 'Out.Brand',
-    leftImages: [
-      'https://picsum.photos/seed/out-nordica-marca/900/560',
-      'https://picsum.photos/seed/out-nordica-papeleria/900/760',
-    ],
-    rightImage: 'https://picsum.photos/seed/out-nordica-hero/1000/1300',
-    url: '#',
-  },
-  {
-    number: '03',
-    name: 'Kiro App',
-    category: 'Out.Web',
-    leftImages: [
-      'https://picsum.photos/seed/out-kiro-pantallas/900/560',
-      'https://picsum.photos/seed/out-kiro-flujo/900/760',
-    ],
-    rightImage: 'https://picsum.photos/seed/out-kiro-hero/1000/1300',
-    url: '#',
-  },
-];
+const PROJECTS_URL = `${import.meta.env.BASE_URL}proyectos.html`;
 
 function ProjectCard({
   project,
@@ -103,7 +64,7 @@ function ProjectCard({
             </span>
             <div className="flex flex-col gap-1">
               <span className="text-muted tracking-[0.04em] text-[11px] sm:text-xs">
-                {project.category}
+                {categoryLabel(project.type)}
               </span>
               <h3
                 className="font-display font-semibold text-klein tracking-[-0.02em]"
@@ -179,16 +140,33 @@ function ProjectStack() {
         </div>
       </div>
 
-      {PROJECTS.map((project, i) => (
+      {FEATURED_PROJECTS.map((project, i) => (
         <ProjectCard
           key={project.number}
           project={project}
           index={i}
-          total={PROJECTS.length}
+          total={FEATURED_PROJECTS.length}
           progress={scrollYProgress}
         />
       ))}
     </div>
+  );
+}
+
+function AllProjectsCta() {
+  return (
+    <FadeIn
+      delay={0.1}
+      y={24}
+      className="mt-16 sm:mt-20 flex flex-col items-start gap-4"
+    >
+      <p className="text-klein-soft max-w-md leading-relaxed">
+        Esto es solo una muestra. Explora todos los casos y fíltralos por tipo.
+      </p>
+      <AccentButton href={PROJECTS_URL} onBlue>
+        Ver todos los proyectos →
+      </AccentButton>
+    </FadeIn>
   );
 }
 
@@ -238,7 +216,14 @@ export default function ProjectsSection() {
       className="relative z-10 bg-klein px-6 md:px-10 lg:px-16 pt-16 sm:pt-20 md:pt-24 pb-24"
     >
       <div className="max-w-[1400px] mx-auto">
-        {PROJECTS.length > 0 ? <ProjectStack /> : <ComingSoonPanel />}
+        {FEATURED_PROJECTS.length > 0 ? (
+          <>
+            <ProjectStack />
+            <AllProjectsCta />
+          </>
+        ) : (
+          <ComingSoonPanel />
+        )}
       </div>
     </section>
   );

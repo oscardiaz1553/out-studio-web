@@ -9,7 +9,8 @@ type NavLink = { label: string; href: string; newTab?: boolean };
 
 const NAV_LINKS: NavLink[] = [
   { label: 'Servicios', href: '#servicios' },
-  { label: 'Proyectos', href: '#proyectos' },
+  // Proyectos tiene su propia página con catálogo filtrable.
+  { label: 'Proyectos', href: `${import.meta.env.BASE_URL}proyectos.html` },
   { label: 'Nosotros', href: '#nosotros' },
   // Contacto vive en su propia página y abre en pestaña nueva.
   { label: 'Contacto', href: `${import.meta.env.BASE_URL}contacto.html`, newTab: true },

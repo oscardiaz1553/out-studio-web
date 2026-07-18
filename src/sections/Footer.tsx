@@ -22,7 +22,7 @@ export default function Footer() {
 
           <nav className="site-footer__nav" aria-label="Navegación del footer">
             <a href="#servicios">Servicios</a>
-            <a href="#proyectos">Proyectos</a>
+            <a href={`${import.meta.env.BASE_URL}proyectos.html`}>Proyectos</a>
             <a href="#nosotros">Nosotros</a>
             <a href="#contacto">Contacto</a>
           </nav>
