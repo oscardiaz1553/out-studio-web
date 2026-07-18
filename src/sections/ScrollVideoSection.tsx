@@ -1,5 +1,6 @@
 import { useScroll } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import LogoOut from '../components/LogoOut';
 
 /*
   Secuencia de fotogramas extraída de Out_video.mp4 (public/out-seq/).
@@ -143,17 +144,14 @@ export default function ScrollVideoSection() {
 
         <h2
           aria-label="Out."
-          className="relative z-10 font-display font-extrabold tracking-[-0.05em] leading-none flex items-baseline select-none text-paper-pure"
-          style={{
-            fontSize: 'clamp(5rem, 22vw, 20rem)',
-            filter: 'drop-shadow(0 4px 44px rgba(20,30,92,0.45))',
-          }}
+          className="relative z-10 select-none text-paper-pure"
+          style={{ filter: 'drop-shadow(0 4px 44px rgba(20,30,92,0.45))' }}
         >
-          Out
-          <span
-            aria-hidden
-            className="inline-block rounded-full bg-paper-pure"
-            style={{ width: '0.16em', height: '0.16em', marginLeft: '0.03em' }}
+          {/* Logo con el punto en blanco para conservar el look sobre el video */}
+          <LogoOut
+            decorative
+            dotColor="#FBF8F5"
+            className="w-[clamp(15rem,58vw,48rem)] h-auto"
           />
         </h2>
       </div>
