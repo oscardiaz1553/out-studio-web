@@ -7,7 +7,6 @@ import {
 } from 'framer-motion';
 import { useRef } from 'react';
 import { BrandDot } from '../components/Brand';
-import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import { AZULEJO } from '../data/botanica';
 import {
@@ -127,16 +126,24 @@ function ProjectStack() {
   return (
     <div ref={containerRef} className="relative">
       <div className="sticky top-8 md:top-10 z-10">
-        <div className="flex items-baseline gap-4">
-          <span className="text-[11px] tracking-[0.06em] text-carne">
-            02
-          </span>
-          <h2
-            className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
+        <div className="flex items-baseline justify-between gap-4">
+          <div className="flex items-baseline gap-4">
+            <span className="text-[11px] tracking-[0.06em] text-carne">
+              02
+            </span>
+            <h2
+              className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
+              style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
+            >
+              Proyectos
+            </h2>
+          </div>
+          <a
+            href={PROJECTS_URL}
+            className="text-carne font-medium text-sm sm:text-base hover:text-paper-pure transition-colors duration-200 whitespace-nowrap"
           >
-            Proyectos
-          </h2>
+            Ver todos →
+          </a>
         </div>
       </div>
 
@@ -150,23 +157,6 @@ function ProjectStack() {
         />
       ))}
     </div>
-  );
-}
-
-function AllProjectsCta() {
-  return (
-    <FadeIn
-      delay={0.1}
-      y={24}
-      className="mt-16 sm:mt-20 flex flex-col items-start gap-4"
-    >
-      <p className="text-klein-soft max-w-md leading-relaxed">
-        Esto es solo una muestra. Explora todos los casos y fíltralos por tipo.
-      </p>
-      <AccentButton href={PROJECTS_URL} onBlue>
-        Ver todos los proyectos →
-      </AccentButton>
-    </FadeIn>
   );
 }
 
@@ -216,14 +206,7 @@ export default function ProjectsSection() {
       className="relative z-10 bg-klein px-6 md:px-10 lg:px-16 pt-16 sm:pt-20 md:pt-24 pb-24"
     >
       <div className="max-w-[1400px] mx-auto">
-        {FEATURED_PROJECTS.length > 0 ? (
-          <>
-            <ProjectStack />
-            <AllProjectsCta />
-          </>
-        ) : (
-          <ComingSoonPanel />
-        )}
+        {FEATURED_PROJECTS.length > 0 ? <ProjectStack /> : <ComingSoonPanel />}
       </div>
     </section>
   );

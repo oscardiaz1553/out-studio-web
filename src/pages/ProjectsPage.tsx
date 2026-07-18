@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useMemo, useState } from 'react';
-import { BrandDot, BrandName } from '../components/Brand';
+import { BrandDot } from '../components/Brand';
+import SiteNav from '../components/SiteNav';
 import { AZULEJO } from '../data/botanica';
 import {
   categoryLabel,
@@ -69,7 +70,6 @@ function ProjectGridCard({ project }: { project: Project }) {
 }
 
 export default function ProjectsPage() {
-  const home = import.meta.env.BASE_URL;
   const reduceMotion = useReducedMotion();
   const [filter, setFilter] = useState<Filter>('Todos');
 
@@ -91,19 +91,7 @@ export default function ProjectsPage() {
 
   return (
     <main className="min-h-screen bg-paper flex flex-col" style={{ overflowX: 'clip' }}>
-      <header className="px-6 md:px-10 pt-6 md:pt-8">
-        <div className="flex items-center justify-between gap-4">
-          <a href={home} className="text-klein text-xl md:text-2xl">
-            <BrandName />
-          </a>
-          <a
-            href={home}
-            className="text-klein-deep font-medium text-sm md:text-base hover:text-klein transition-colors duration-200"
-          >
-            ← Volver al inicio
-          </a>
-        </div>
-      </header>
+      <SiteNav />
 
       <section className="px-6 md:px-10 lg:px-16 pt-16 sm:pt-20 md:pt-24 pb-24 flex-1">
         <div className="max-w-[1400px] mx-auto">
