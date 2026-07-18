@@ -1,4 +1,5 @@
 import SiteNav from '../components/SiteNav';
+import ScrollToTop from '../components/ScrollToTop';
 import ContactSection from '../sections/ContactSection';
 
 /**
@@ -18,6 +19,8 @@ export default function ContactPage() {
           © 2026 Out. Studio. Todos los derechos reservados.
         </p>
       </footer>
+
+      <ScrollToTop />
     </main>
   );
 }

@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { BrandDot } from '../components/Brand';
 import SiteNav from '../components/SiteNav';
+import ScrollToTop from '../components/ScrollToTop';
 import { AZULEJO } from '../data/botanica';
 import {
   categoryLabel,
@@ -174,6 +175,8 @@ export default function ProjectsPage() {
           © 2026 Out. Studio. Todos los derechos reservados.
         </p>
       </footer>
+
+      <ScrollToTop />
     </main>
   );
 }

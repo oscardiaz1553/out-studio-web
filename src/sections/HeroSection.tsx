@@ -2,14 +2,10 @@ import { BrandName } from '../components/Brand';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import ConceptGrid from '../components/ConceptGrid';
-import SiteNav from '../components/SiteNav';
 
 export default function HeroSection() {
   return (
     <section className="relative min-h-[100dvh] flex flex-col bg-paper overflow-hidden">
-      {/* Navegación (compartida por todas las páginas) */}
-      <SiteNav />
-
       {/* Portada editorial: texto a la izquierda, estatua a sangre a la derecha */}
       <div className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-[1.05fr_0.95fr] items-stretch">
         <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 py-14 md:py-0 order-2 md:order-1">

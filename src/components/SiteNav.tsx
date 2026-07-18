@@ -1,12 +1,12 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import AccentButton from './AccentButton';
-import FadeIn from './FadeIn';
 import { BrandName } from './Brand';
 
 // Navbar compartido por todas las páginas (home, contacto, proyectos).
-// Los anclas apuntan al home (/#servicios…) para que funcionen desde
-// cualquier página; Proyectos y Contacto abren sus propias páginas.
+// Es sticky: se queda arriba al hacer scroll y gana un fondo translúcido
+// una vez que el usuario se desplaza. Los anclas apuntan al home para
+// funcionar desde cualquier página; Proyectos y Contacto abren sus páginas.
 const HOME = import.meta.env.BASE_URL;
 
 type NavLink = { label: string; href: string };
@@ -75,6 +75,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
 
 export default function SiteNav() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -83,13 +84,21 @@ export default function SiteNav() {
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <>
-      <FadeIn
-        as="nav"
-        delay={0}
-        y={-16}
-        className="relative z-20 px-6 md:px-10 pt-6 md:pt-8"
+      <header
+        className={`sticky top-0 z-40 px-6 md:px-10 py-4 md:py-5 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ${
+          scrolled
+            ? 'bg-paper/85 backdrop-blur-md border-b border-klein-deep/10 shadow-[0_1px_24px_rgba(20,20,60,0.06)]'
+            : 'bg-transparent border-b border-transparent'
+        }`}
       >
         <div className="flex items-center justify-between gap-4">
           <a href={HOME} className="text-klein text-xl md:text-2xl">
@@ -118,7 +127,7 @@ export default function SiteNav() {
             <span className="block w-6 h-0.5 bg-klein" />
           </button>
         </div>
-      </FadeIn>
+      </header>
 
       <AnimatePresence>
         {menuOpen && <MobileMenu onClose={() => setMenuOpen(false)} />}

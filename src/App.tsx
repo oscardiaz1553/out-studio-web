@@ -1,3 +1,5 @@
+import SiteNav from './components/SiteNav';
+import ScrollToTop from './components/ScrollToTop';
 import HeroSection from './sections/HeroSection';
 import ScrollVideoSection from './sections/ScrollVideoSection';
 import ServicesSection from './sections/ServicesSection';
@@ -12,6 +14,7 @@ import Footer from './sections/Footer';
 export default function App() {
   return (
     <main className="min-h-screen bg-paper" style={{ overflowX: 'clip' }}>
+      <SiteNav />
       <HeroSection />
       <ScrollVideoSection />
       <ServicesSection />
@@ -41,6 +44,7 @@ export default function App() {
       <AboutSection />
       <ContactSection />
       <Footer />
+      <ScrollToTop />
     </main>
   );
 }
