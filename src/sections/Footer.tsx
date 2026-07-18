@@ -1,5 +1,6 @@
 import './footer.css';
-import { AZULEJO, AZULEJO_BAND } from '../data/botanica';
+import { AZULEJO_BAND } from '../data/botanica';
+import LogoOut from '../components/LogoOut';
 
 // Copias suficientes para cubrir pantallas anchas; el loop mueve -50%,
 // así que el track son dos mitades idénticas (8 + 8).
@@ -47,17 +48,11 @@ export default function Footer() {
             href={import.meta.env.BASE_URL}
             aria-label="Out. Studio inicio"
           >
-            <span className="site-footer__wordmark">Out</span>
-            {/* El punto: al hover se llena de fruta (el azulejo dentro
-                de "lo que se sale") */}
-            <span className="site-footer__mark" aria-hidden="true">
-              <img
-                className="site-footer__mark-img"
-                src={AZULEJO}
-                alt=""
-                loading="lazy"
-              />
-            </span>
+            <LogoOut
+              onBlue
+              decorative
+              className="w-[clamp(150px,42vw,520px)] h-auto text-paper-pure"
+            />
           </a>
         </div>
 

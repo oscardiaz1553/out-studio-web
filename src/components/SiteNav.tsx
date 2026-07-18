@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import AccentButton from './AccentButton';
-import { BrandName } from './Brand';
+import LogoOut from './LogoOut';
 
 // Navbar compartido por todas las páginas (home, contacto, proyectos).
 // Es sticky: se queda arriba al hacer scroll y gana un fondo translúcido
@@ -33,8 +33,8 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
       transition={{ duration: 0.25, ease: EASE_OUT }}
     >
       <div className="flex items-center justify-between">
-        <a href={HOME} onClick={onClose} className="text-paper-pure text-xl">
-          <BrandName onBlue />
+        <a href={HOME} onClick={onClose} className="text-paper-pure">
+          <LogoOut onBlue className="h-7 w-auto" />
         </a>
         <button
           type="button"
@@ -101,8 +101,8 @@ export default function SiteNav() {
         }`}
       >
         <div className="flex items-center justify-between gap-4">
-          <a href={HOME} className="text-klein text-xl md:text-2xl">
-            <BrandName />
+          <a href={HOME} className="text-klein">
+            <LogoOut className="h-6 md:h-7 w-auto" />
           </a>
           <ul className="hidden sm:flex items-center gap-6 md:gap-10">
             {NAV_LINKS.map((link) => (

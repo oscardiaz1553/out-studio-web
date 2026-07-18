@@ -1,7 +1,7 @@
-import { BrandName } from '../components/Brand';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import ConceptGrid from '../components/ConceptGrid';
+import LogoOut from '../components/LogoOut';
 
 export default function HeroSection() {
   return (
@@ -16,12 +16,11 @@ export default function HeroSection() {
           </FadeIn>
 
           <FadeIn delay={0.2} y={24}>
-            <h1
-              className="font-display font-extrabold text-klein tracking-[-0.05em] leading-[0.86] mt-5"
-              style={{ fontSize: 'clamp(4rem, 13vw, 12rem)' }}
-              aria-label="Out."
-            >
-              <BrandName />
+            <h1 className="mt-5 text-klein" aria-label="Out.">
+              <LogoOut
+                decorative
+                className="w-[clamp(13rem,42vw,32rem)] h-auto"
+              />
             </h1>
           </FadeIn>
 
