@@ -12,8 +12,8 @@ const NAV_LINKS: NavLink[] = [
   // Proyectos tiene su propia página con catálogo filtrable.
   { label: 'Proyectos', href: `${import.meta.env.BASE_URL}proyectos.html` },
   { label: 'Nosotros', href: '#nosotros' },
-  // Contacto vive en su propia página y abre en pestaña nueva.
-  { label: 'Contacto', href: `${import.meta.env.BASE_URL}contacto.html`, newTab: true },
+  // Contacto tiene su propia página; navega dentro de la misma pestaña.
+  { label: 'Contacto', href: `${import.meta.env.BASE_URL}contacto.html` },
 ];
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
