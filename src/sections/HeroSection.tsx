@@ -19,7 +19,7 @@ export default function HeroSection() {
             <h1 className="mt-5 text-klein" aria-label="Out.">
               <LogoOut
                 decorative
-                className="w-[clamp(13rem,42vw,32rem)] h-auto"
+                className="w-[clamp(9rem,26vw,17rem)] h-auto"
               />
             </h1>
           </FadeIn>

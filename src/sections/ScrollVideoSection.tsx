@@ -151,7 +151,7 @@ export default function ScrollVideoSection() {
           <LogoOut
             decorative
             dotColor="#FBF8F5"
-            className="w-[clamp(15rem,58vw,48rem)] h-auto"
+            className="w-[clamp(11rem,34vw,26rem)] h-auto"
           />
         </h2>
       </div>

@@ -51,7 +51,7 @@ export default function Footer() {
             <LogoOut
               onBlue
               decorative
-              className="w-[clamp(150px,42vw,520px)] h-auto text-paper-pure"
+              className="w-[clamp(120px,30vw,300px)] h-auto text-paper-pure"
             />
           </a>
         </div>

@@ -34,7 +34,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
     >
       <div className="flex items-center justify-between">
         <a href={HOME} onClick={onClose} className="text-paper-pure">
-          <LogoOut onBlue className="h-7 w-auto" />
+          <LogoOut onBlue className="h-9 w-auto" />
         </a>
         <button
           type="button"
@@ -102,7 +102,7 @@ export default function SiteNav() {
       >
         <div className="flex items-center justify-between gap-4">
           <a href={HOME} className="text-klein">
-            <LogoOut className="h-6 md:h-7 w-auto" />
+            <LogoOut className="h-8 md:h-9 w-auto" />
           </a>
           <ul className="hidden sm:flex items-center gap-6 md:gap-10">
             {NAV_LINKS.map((link) => (
