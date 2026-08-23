@@ -3,12 +3,12 @@ import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import { AZULEJO_BAND } from '../data/botanica';
 
-const EMAIL = 'oscar.diaz@out-studio.net';
-const PHONE_DISPLAY = '+57 300 565 8674';
-const PHONE_TEL = '+573005658674';
+const EMAIL = 'oscar.diaz@outstudio.online';
+const PHONE_DISPLAY = '+57 318 888 8392';
+const PHONE_TEL = '+573188888392';
 
 // TODO: crear una access key gratis en https://web3forms.com con el correo
-// oscar.diaz@out-studio.net y pegarla aquí para que el formulario envíe
+// oscar.diaz@outstudio.online y pegarla aquí para que el formulario envíe
 // directo al inbox. Mientras esté vacía, el formulario abre el cliente de
 // correo del visitante como respaldo.
 const WEB3FORMS_ACCESS_KEY = '';

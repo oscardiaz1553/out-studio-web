@@ -29,8 +29,8 @@ export default function Footer() {
           </nav>
 
           <nav className="site-footer__nav" aria-label="Contacto">
-            <a href="mailto:oscar.diaz@out-studio.net">Email</a>
-            <a href="tel:+573005658674">Teléfono</a>
+            <a href="mailto:oscar.diaz@outstudio.online">Email</a>
+            <a href="tel:+573188888392">Teléfono</a>
             <a href="#contacto">Hablar</a>
           </nav>
 
