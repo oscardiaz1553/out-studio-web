@@ -33,13 +33,6 @@ export default function Footer() {
             <a href="tel:+573188888392">Teléfono</a>
             <a href="#contacto">Hablar</a>
           </nav>
-
-          <nav className="site-footer__nav" aria-label="Redes sociales">
-            {/* TODO: reemplazar con el link real de Instagram */}
-            <a href="#">Instagram</a>
-            {/* TODO: reemplazar con el link real de LinkedIn */}
-            <a href="#">LinkedIn</a>
-          </nav>
         </div>
 
         <div className="site-footer__brand-row">
