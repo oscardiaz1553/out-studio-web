@@ -1,13 +1,33 @@
-import { BrandName } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
 import { AZULEJO } from '../data/botanica';
 
+// Servicios reales de Out, con el lenguaje en tono cálido y directo.
 const SERVICES = [
-  { suffix: 'Web', meta: ['Sitios', 'Landings', 'Corporativos'] },
-  { suffix: 'Design', meta: ['Identidad', 'UI/UX', 'Editorial'] },
-  { suffix: 'Motion', meta: ['Animación', 'Video', '3D'] },
-  { suffix: 'Brand', meta: ['Estrategia', 'Naming', 'Posicionamiento'] },
-  { suffix: 'Social', meta: ['Contenido', 'Redes', 'Comunidad'] },
+  {
+    name: 'Tiendas Shopify',
+    description:
+      'Tu tienda vendiendo desde el primer día, no cuando por fin quede lista.',
+  },
+  {
+    name: 'Sitios WordPress',
+    description:
+      'Una web profesional que actualizas tú mismo, sin depender de nadie.',
+  },
+  {
+    name: 'Landing Pages',
+    description:
+      'Páginas de campaña con un solo objetivo: que la gente actúe.',
+  },
+  {
+    name: 'Integraciones & Automatizaciones',
+    description:
+      'Conectamos tus herramientas para que el trabajo repetitivo se haga solo.',
+  },
+  {
+    name: 'Soporte & Optimización',
+    description:
+      'No desaparecemos después del lanzamiento. Seguimos contigo.',
+  },
 ];
 
 export default function ServicesSection() {
@@ -32,37 +52,42 @@ export default function ServicesSection() {
         <ul className="mt-12 sm:mt-16">
           {SERVICES.map((service, i) => (
             <FadeIn
-              key={service.suffix}
+              key={service.name}
               as="li"
               delay={i * 0.08}
               y={24}
-              className="group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-10 py-7 sm:py-9 border-t border-klein-deep/15"
+              className="group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-12 py-7 sm:py-9 border-t border-klein-deep/15"
             >
-              {/* Al hover, la tipografía se llena de azulejo (tinta de
-                  patrón vía background-clip). Cada fila muestra un recorte
-                  distinto. Crossfade de opacidad: compositor puro. */}
-              <h3
-                className="relative leading-none text-klein"
-                style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}
-              >
-                <BrandName suffix={service.suffix} />
-                <span
-                  aria-hidden
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none select-none"
-                  style={{
-                    backgroundImage: `url(${AZULEJO})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: `${i * 22}% 50%`,
-                    WebkitBackgroundClip: 'text',
-                    backgroundClip: 'text',
-                    color: 'transparent',
-                  }}
-                >
-                  <BrandName suffix={service.suffix} />
+              <div className="flex items-baseline gap-4 sm:gap-6">
+                <span className="text-[11px] tracking-[0.06em] text-carne-tinta shrink-0">
+                  {String(i + 1).padStart(2, '0')}
                 </span>
-              </h3>
-              <p className="text-xs sm:text-sm tracking-[0.04em] text-muted sm:text-right sm:pt-4 transition-colors duration-200 group-hover:text-klein">
-                {service.meta.join(' · ')}
+                {/* Al hover, la tipografía se llena de azulejo (tinta de
+                    patrón vía background-clip). Cada fila muestra un recorte
+                    distinto. Crossfade de opacidad: compositor puro. */}
+                <h3
+                  className="relative font-display font-semibold text-klein tracking-[-0.02em] leading-[1.03]"
+                  style={{ fontSize: 'clamp(1.6rem, 3.4vw, 2.8rem)' }}
+                >
+                  {service.name}
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none select-none"
+                    style={{
+                      backgroundImage: `url(${AZULEJO})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: `${i * 22}% 50%`,
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      color: 'transparent',
+                    }}
+                  >
+                    {service.name}
+                  </span>
+                </h3>
+              </div>
+              <p className="text-sm sm:text-base leading-relaxed text-muted sm:text-right sm:pt-2 sm:max-w-[34ch] transition-colors duration-200 group-hover:text-klein">
+                {service.description}
               </p>
             </FadeIn>
           ))}
