@@ -1,4 +1,5 @@
 import FadeIn from '../components/FadeIn';
+import RevealText from '../components/RevealText';
 
 // Cómo trabajamos, en 4 pasos. Ligado a los servicios reales (Shopify,
 // WordPress, a medida) y a la promesa de no desaparecer tras el lanzamiento.
@@ -40,12 +41,13 @@ export default function MethodSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             02
           </span>
-          <h2
+          <RevealText
+            as="h2"
+            text="Nuestro método"
+            unit="word"
             className="font-display font-semibold text-klein tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
-          >
-            Nuestro método
-          </h2>
+          />
         </div>
 
         <p className="text-ink-2 leading-relaxed max-w-xl mt-4 mb-12 sm:mb-16">

@@ -1,4 +1,5 @@
 import FadeIn from '../components/FadeIn';
+import RevealText from '../components/RevealText';
 import { AZULEJO } from '../data/botanica';
 
 // Servicios reales de Out, con el lenguaje en tono cálido y directo.
@@ -41,12 +42,13 @@ export default function ServicesSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             01
           </span>
-          <h2
+          <RevealText
+            as="h2"
+            text="Servicios"
+            unit="char"
             className="font-display font-semibold text-klein tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
-          >
-            Servicios
-          </h2>
+          />
         </div>
 
         <ul className="mt-12 sm:mt-16">

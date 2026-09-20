@@ -1,5 +1,6 @@
 import AnimatedText from '../components/AnimatedText';
 import FadeIn from '../components/FadeIn';
+import RevealText from '../components/RevealText';
 import Statue from '../components/Statue';
 import { STATUES } from '../data/statues';
 
@@ -26,12 +27,13 @@ export default function AboutSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             04
           </span>
-          <h2
+          <RevealText
+            as="h2"
+            text="Nosotros"
+            unit="char"
             className="font-display font-semibold text-klein tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
-          >
-            Nosotros
-          </h2>
+          />
         </div>
 
         <AnimatedText
