@@ -11,7 +11,7 @@ export default function HeroSection() {
         <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 py-14 md:py-0 order-2 md:order-1">
           <FadeIn delay={0.1} y={16}>
             <span className="text-base sm:text-lg text-carne-tinta">
-              Estudio digital · Bogotá · São Paulo
+              Estudio digital · Bogotá, Colombia
             </span>
           </FadeIn>
 
