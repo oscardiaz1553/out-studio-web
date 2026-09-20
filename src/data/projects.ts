@@ -96,6 +96,15 @@ export const PROJECTS: Project[] = [
     summary: 'Sitio web para una marca de caviar de lujo, en línea y funcionando.',
     url: 'https://maisoncaviar.com.co',
   },
+  {
+    number: '08',
+    name: 'Volta',
+    type: 'Web',
+    status: 'launched',
+    summary: 'App desarrollada desde cero, de la idea al lanzamiento.',
+    url: 'https://usevolta.app',
+    featured: true,
+  },
 ];
 
 export const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured);
