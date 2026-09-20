@@ -80,6 +80,22 @@ export const PROJECTS: Project[] = [
       'Rediseño completo de un medio de fútbol colombiano: video, radio y marca propia.',
     url: 'https://habladeportes.co',
   },
+  {
+    number: '06',
+    name: 'La Mejor Estación',
+    type: 'Web',
+    status: 'in-progress',
+    summary: 'Sitio web para una estación de radio, de principio a fin.',
+    url: 'https://www.lamejorestacion.com.co',
+  },
+  {
+    number: '07',
+    name: 'Maison Caviar',
+    type: 'Web',
+    status: 'launched',
+    summary: 'Sitio web para una marca de caviar de lujo, en línea y funcionando.',
+    url: 'https://maisoncaviar.com.co',
+  },
 ];
 
 export const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured);
