@@ -4,7 +4,7 @@ import Statue from '../components/Statue';
 import { STATUES } from '../data/statues';
 
 const ABOUT_TEXT =
-  'La mayoría de negocios digitales se ven todos iguales. Mismos templates, mismas fórmulas, mismo molde. Out. existe para romper eso. Diseñamos el sistema, no la pieza suelta, y escribimos el código nosotros para que nadie tenga que decirte que no se puede.';
+  'La mayoría de negocios digitales se ven todos iguales. Mismos templates, mismas fórmulas, mismo molde. Out existe para romper eso: tiendas Shopify y webs en WordPress hechas a medida, con código propio, para que nadie tenga que decirte que no se puede.';
 
 export default function AboutSection() {
   return (
@@ -42,7 +42,7 @@ export default function AboutSection() {
 
         <FadeIn delay={0.1} y={18} className="mt-10">
           <p className="text-ink-2 leading-relaxed max-w-[46ch]">
-            Detrás de Out. está{' '}
+            Detrás de Out está{' '}
             <span className="text-klein font-semibold">Oscar Díaz</span>,{' '}
             <span className="text-klein font-semibold">
               UX/UI Specialist y Desarrollador WordPress y Shopify

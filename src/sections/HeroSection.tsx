@@ -34,9 +34,10 @@ export default function HeroSection() {
           </FadeIn>
 
           <FadeIn delay={0.46} y={16}>
-            <p className="text-ink-2 leading-relaxed max-w-[42ch] mt-6 text-base sm:text-lg">
-              Casi todo obedece. Una cosa se sale. Diseñamos el sistema, no la
-              pieza suelta, y sabemos exactamente dónde romperlo.
+            <p className="text-ink-2 leading-relaxed max-w-[44ch] mt-6 text-base sm:text-lg">
+              Casi todo obedece. Una cosa se sale. Diseñamos y desarrollamos tu
+              tienda Shopify o tu web en WordPress, con código propio y de
+              principio a fin, para que no se vea como todas y venda de verdad.
             </p>
           </FadeIn>
 
