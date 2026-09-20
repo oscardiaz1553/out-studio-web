@@ -3,11 +3,13 @@ import ScrollToTop from './components/ScrollToTop';
 import HeroSection from './sections/HeroSection';
 import ScrollVideoSection from './sections/ScrollVideoSection';
 import ServicesSection from './sections/ServicesSection';
+import MethodSection from './sections/MethodSection';
 import EditorialPlate from './components/EditorialPlate';
 import { MANGOS } from './data/botanica';
 import ProjectsSection from './sections/ProjectsSection';
 import MarqueeStrip from './sections/MarqueeStrip';
 import AboutSection from './sections/AboutSection';
+import FoundersSection from './sections/FoundersSection';
 import ContactSection from './sections/ContactSection';
 import Footer from './sections/Footer';
 
@@ -18,6 +20,7 @@ export default function App() {
       <HeroSection />
       <ScrollVideoSection />
       <ServicesSection />
+      <MethodSection />
 
       {/* Lámina I — macro con titular calado, en el umbral papel→Klein */}
       <EditorialPlate
@@ -42,6 +45,8 @@ export default function App() {
       />
 
       <AboutSection />
+      <FoundersSection />
+      {/* 06 Cotización — sección pendiente, va aquí una vez con precios reales */}
       <ContactSection />
       <Footer />
       <ScrollToTop />

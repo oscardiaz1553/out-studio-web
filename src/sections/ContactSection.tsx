@@ -73,7 +73,7 @@ export default function ContactSection() {
         <div>
           <div className="flex items-baseline gap-4 mb-6 sm:mb-8">
             <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
-              04
+              07
             </span>
             <h2
               className="font-display font-semibold text-klein tracking-[-0.035em]"

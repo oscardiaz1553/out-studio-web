@@ -138,7 +138,7 @@ function ProjectStack() {
         <div className="flex items-baseline justify-between gap-4">
           <div className="flex items-baseline gap-4">
             <span className="text-[11px] tracking-[0.06em] text-carne">
-              02
+              03
             </span>
             <h2
               className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
@@ -174,7 +174,7 @@ function ComingSoonPanel() {
     <>
       <div className="flex items-baseline gap-4 mb-12">
         <span className="text-[11px] tracking-[0.06em] text-carne">
-          02
+          03
         </span>
         <h2
           className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
