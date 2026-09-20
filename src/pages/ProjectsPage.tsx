@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { BrandDot } from '../components/Brand';
 import SiteNav from '../components/SiteNav';
 import ScrollToTop from '../components/ScrollToTop';
+import ProjectMedia from '../components/ProjectMedia';
 import { AZULEJO } from '../data/botanica';
 import {
   categoryLabel,
@@ -21,10 +22,10 @@ function ProjectGridCard({ project }: { project: Project }) {
   return (
     <article className="group h-full rounded-2xl border border-klein-deep/15 bg-paper-pure overflow-hidden flex flex-col">
       <div className="relative overflow-hidden">
-        <img
+        <ProjectMedia
           src={project.rightImage}
           alt={`${project.name}, vista principal`}
-          loading="lazy"
+          label={project.name.charAt(0)}
           className="w-full aspect-[4/3] object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         />
         {/* Lomo de azulejo: el mismo motivo que en las cards del home. */}
@@ -37,6 +38,12 @@ function ProjectGridCard({ project }: { project: Project }) {
             backgroundPosition: '50% 50%',
           }}
         />
+        {project.status === 'in-progress' && (
+          <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 rounded-full border border-carne-tinta/30 bg-paper-pure/95 backdrop-blur px-2.5 py-1 text-[10px] font-medium tracking-[0.03em] text-carne-tinta">
+            <span className="w-1.5 h-1.5 rounded-full bg-carne-tinta" />
+            En desarrollo
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col gap-2 flex-1 p-5 sm:p-6">
@@ -55,7 +62,7 @@ function ProjectGridCard({ project }: { project: Project }) {
         </h3>
         <p className="text-ink-2 text-sm leading-relaxed">{project.summary}</p>
 
-        {project.url && (
+        {project.url && project.status !== 'in-progress' && (
           <a
             href={project.url}
             target="_blank"

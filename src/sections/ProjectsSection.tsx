@@ -8,6 +8,7 @@ import {
 import { useRef } from 'react';
 import { BrandDot } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
+import ProjectMedia from '../components/ProjectMedia';
 import { AZULEJO } from '../data/botanica';
 import {
   categoryLabel,
@@ -61,10 +62,18 @@ function ProjectCard({
               {project.number}
               <BrandDot />
             </span>
-            <div className="flex flex-col gap-1">
-              <span className="text-muted tracking-[0.04em] text-[11px] sm:text-xs">
-                {categoryLabel(project.type)}
-              </span>
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <span className="text-muted tracking-[0.04em] text-[11px] sm:text-xs">
+                  {categoryLabel(project.type)}
+                </span>
+                {project.status === 'in-progress' && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-carne-tinta/30 bg-carne/20 px-2.5 py-0.5 text-[10px] font-medium tracking-[0.03em] text-carne-tinta">
+                    <span className="w-1.5 h-1.5 rounded-full bg-carne-tinta" />
+                    En desarrollo
+                  </span>
+                )}
+              </div>
               <h3
                 className="font-display font-semibold text-klein tracking-[-0.02em]"
                 style={{ fontSize: 'clamp(1.1rem, 2vw, 1.9rem)' }}
@@ -73,7 +82,7 @@ function ProjectCard({
               </h3>
             </div>
           </div>
-          {project.url && (
+          {project.url && project.status !== 'in-progress' && (
             <a
               href={project.url}
               target="_blank"
@@ -87,26 +96,26 @@ function ProjectCard({
 
         <div className="flex gap-3 sm:gap-4">
           <div className="w-[40%] flex flex-col gap-3 sm:gap-4">
-            <img
-              src={project.leftImages[0]}
+            <ProjectMedia
+              src={project.leftImages?.[0]}
               alt={`${project.name}, vista 1`}
-              loading="lazy"
+              label={project.name.charAt(0)}
               className="w-full object-cover rounded-xl"
               style={{ height: 'clamp(100px, 17vh, 220px)' }}
             />
-            <img
-              src={project.leftImages[1]}
+            <ProjectMedia
+              src={project.leftImages?.[1]}
               alt={`${project.name}, vista 2`}
-              loading="lazy"
+              label={project.name.charAt(0)}
               className="w-full object-cover rounded-xl"
               style={{ height: 'clamp(130px, 24vh, 320px)' }}
             />
           </div>
           <div className="w-[60%]">
-            <img
+            <ProjectMedia
               src={project.rightImage}
               alt={`${project.name}, vista principal`}
-              loading="lazy"
+              label={project.name.charAt(0)}
               className="w-full h-full object-cover rounded-xl"
             />
           </div>
