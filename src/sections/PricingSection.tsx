@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import AccentButton from '../components/AccentButton';
 import { BrandDot } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
 
 const CONTACT_URL = `${import.meta.env.BASE_URL}contacto.html`;
+const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
 // Precios base reales de Out. El de WordPress es el único que depende del
-// alcance (número de páginas), así que se muestra como calculadora.
+// alcance (número de páginas), así que se cotiza con un slider.
 const SHOPIFY_PRICE = 2_400_000;
 const LANDING_PRICE = 1_400_000;
 const WORDPRESS_BASE = 4_800_000;
@@ -17,132 +19,48 @@ function formatCOP(amount: number): string {
   return `$${new Intl.NumberFormat('es-CO').format(amount)} COP`;
 }
 
-function PriceAmount({ amount, className }: { amount: number; className?: string }) {
-  return (
-    <span
-      className={`font-display font-extrabold text-klein leading-none inline-flex items-baseline ${className ?? ''}`}
-    >
-      {formatCOP(amount)}
-      <BrandDot />
-    </span>
-  );
-}
+type TabId = 'shopify' | 'wordpress' | 'landing' | 'otros';
 
-function SimplePriceCard({
-  eyebrow,
+const TABS: { id: TabId; label: string }[] = [
+  { id: 'shopify', label: 'Tiendas Shopify' },
+  { id: 'wordpress', label: 'Sitios WordPress' },
+  { id: 'landing', label: 'Landing Pages' },
+  { id: 'otros', label: 'Automatizaciones & otros' },
+];
+
+function PriceDisplay({
   amount,
   fromPrefix,
-  note,
-  description,
 }: {
-  eyebrow: string;
-  amount?: number;
+  amount: number;
   fromPrefix?: boolean;
-  note: string;
-  description: string;
 }) {
   return (
-    <FadeIn
-      y={24}
-      className="flex flex-col gap-4 p-6 sm:p-8 rounded-2xl border border-klein-deep/15 bg-paper-pure"
-    >
-      <span className="text-muted tracking-[0.04em] text-[11px] sm:text-xs">
-        {eyebrow}
+    <div className="flex flex-col gap-1">
+      {fromPrefix && <span className="text-xs text-muted">Desde</span>}
+      <span className="font-display font-extrabold text-klein leading-none inline-flex items-baseline text-3xl sm:text-4xl">
+        {formatCOP(amount)}
+        <BrandDot />
       </span>
-      {amount ? (
-        <div className="flex flex-col gap-1">
-          {fromPrefix && (
-            <span className="text-xs text-muted">Desde</span>
-          )}
-          <PriceAmount amount={amount} className="text-2xl sm:text-3xl" />
-        </div>
-      ) : (
-        <span
-          className="font-display font-extrabold text-klein leading-none"
-          style={{ fontSize: 'clamp(1.4rem, 2.4vw, 1.9rem)' }}
-        >
-          {note}
-        </span>
-      )}
-      <p className="text-sm text-muted leading-relaxed">{description}</p>
-    </FadeIn>
-  );
-}
-
-function WordpressCalculator() {
-  const [extraPages, setExtraPages] = useState(0);
-  const total = WORDPRESS_BASE + extraPages * WORDPRESS_PER_PAGE;
-
-  const decrease = () => setExtraPages((p) => Math.max(0, p - 1));
-  const increase = () => setExtraPages((p) => Math.min(MAX_EXTRA_PAGES, p + 1));
-
-  return (
-    <FadeIn
-      y={24}
-      className="flex flex-col gap-6 p-6 sm:p-10 rounded-2xl border border-klein-deep/15 bg-paper-pure"
-    >
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
-        <div className="flex flex-col gap-2 max-w-md">
-          <span className="text-muted tracking-[0.04em] text-[11px] sm:text-xs">
-            Sitios WordPress
-          </span>
-          <h3 className="font-display font-semibold text-klein tracking-[-0.01em] text-xl sm:text-2xl">
-            Calcula un estimado
-          </h3>
-          <p className="text-sm text-muted leading-relaxed">
-            El sitio base parte de {formatCOP(WORDPRESS_BASE)}. El precio final
-            depende de la cantidad de páginas y el tipo de web —cada página
-            adicional suma {formatCOP(WORDPRESS_PER_PAGE)} aprox.
-          </p>
-        </div>
-
-        <div className="flex flex-col items-start sm:items-end gap-1 shrink-0">
-          <span className="text-xs text-muted">Total estimado</span>
-          <PriceAmount amount={total} className="text-3xl sm:text-4xl" />
-        </div>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-4 pt-2 border-t border-klein-deep/15">
-        <span className="text-sm text-klein-deep font-medium">
-          Páginas adicionales
-        </span>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={decrease}
-            disabled={extraPages === 0}
-            aria-label="Restar página"
-            className="w-9 h-9 rounded-full border border-klein-deep/25 text-klein flex items-center justify-center text-lg font-semibold transition-colors duration-200 hover:bg-klein hover:text-paper-pure disabled:opacity-30 disabled:pointer-events-none"
-          >
-            −
-          </button>
-          <span
-            className="font-display font-semibold text-klein w-6 text-center"
-            aria-live="polite"
-          >
-            {extraPages}
-          </span>
-          <button
-            type="button"
-            onClick={increase}
-            disabled={extraPages === MAX_EXTRA_PAGES}
-            aria-label="Sumar página"
-            className="w-9 h-9 rounded-full border border-klein-deep/25 text-klein flex items-center justify-center text-lg font-semibold transition-colors duration-200 hover:bg-klein hover:text-paper-pure disabled:opacity-30 disabled:pointer-events-none"
-          >
-            +
-          </button>
-        </div>
-      </div>
-
-      <p className="text-xs text-muted leading-relaxed">
-        Estimado de referencia. La cotización final se ajusta al alcance real
-        de tu proyecto.
-      </p>
-    </FadeIn>
+    </div>
   );
 }
 
 export default function PricingSection() {
+  const [activeTab, setActiveTab] = useState<TabId>('wordpress');
+  const [extraPages, setExtraPages] = useState(2);
+  const reduceMotion = useReducedMotion();
+
+  const wordpressTotal = WORDPRESS_BASE + extraPages * WORDPRESS_PER_PAGE;
+  const sliderPercent = (extraPages / MAX_EXTRA_PAGES) * 100;
+
+  const panelMotion = {
+    initial: reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 },
+    animate: { opacity: 1, y: 0 },
+    exit: reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 },
+    transition: { duration: 0.25, ease: EASE_OUT },
+  };
+
   return (
     <section
       id="cotizacion"
@@ -161,41 +79,164 @@ export default function PricingSection() {
           </h2>
         </div>
 
-        <p className="text-ink-2 leading-relaxed max-w-xl mt-4 mb-12 sm:mb-16">
-          Una idea de lo que cuesta, antes de escribirnos. Precios de
-          referencia; la cotización final depende del alcance de tu proyecto.
+        <p className="text-ink-2 leading-relaxed max-w-xl mt-4 mb-10 sm:mb-12">
+          Elige un servicio y arma tu estimado. Precios de referencia; la
+          cotización final depende del alcance de tu proyecto.
         </p>
 
-        <div className="grid grid-cols-1 gap-6">
-          <WordpressCalculator />
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <SimplePriceCard
-              eyebrow="Tiendas Shopify"
-              amount={SHOPIFY_PRICE}
-              note=""
-              description="Servicio completo: diseño, desarrollo, carga de productos y capacitación."
-            />
-            <SimplePriceCard
-              eyebrow="Landing Pages"
-              amount={LANDING_PRICE}
-              fromPrefix
-              note=""
-              description="Página de campaña, lista para convertir."
-            />
-            <SimplePriceCard
-              eyebrow="Automatizaciones & otros"
-              note="Cotización a la medida"
-              description="Integraciones, automatizaciones y proyectos a medida se cotizan directamente contigo."
-            />
-          </div>
+        {/* Tabs */}
+        <div
+          role="tablist"
+          aria-label="Elegir servicio a cotizar"
+          className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8"
+        >
+          {TABS.map((tab) => {
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setActiveTab(tab.id)}
+                className={`rounded-full px-5 py-2 text-sm font-medium transition-colors duration-200 ${
+                  active
+                    ? 'bg-klein text-paper-pure border border-klein'
+                    : 'border border-klein-deep/25 text-klein-deep hover:border-klein hover:text-klein'
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
 
-        <FadeIn y={20} delay={0.1} className="mt-10 sm:mt-12">
-          <AccentButton href={CONTACT_URL}>
-            Solicita tu cotización
-          </AccentButton>
-        </FadeIn>
+        {/* Panel dinámico */}
+        <div className="rounded-2xl border border-klein-deep/15 bg-paper-pure p-6 sm:p-10 overflow-hidden">
+          <AnimatePresence mode="wait">
+            {activeTab === 'shopify' && (
+              <motion.div
+                key="shopify"
+                {...panelMotion}
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"
+              >
+                <div className="max-w-md">
+                  <h3 className="font-display font-semibold text-klein text-xl sm:text-2xl mb-2">
+                    Tiendas Shopify
+                  </h3>
+                  <p className="text-sm text-muted leading-relaxed">
+                    Servicio completo: diseño, desarrollo, carga de productos
+                    y capacitación.
+                  </p>
+                </div>
+                <PriceDisplay amount={SHOPIFY_PRICE} />
+              </motion.div>
+            )}
+
+            {activeTab === 'landing' && (
+              <motion.div
+                key="landing"
+                {...panelMotion}
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"
+              >
+                <div className="max-w-md">
+                  <h3 className="font-display font-semibold text-klein text-xl sm:text-2xl mb-2">
+                    Landing Pages
+                  </h3>
+                  <p className="text-sm text-muted leading-relaxed">
+                    Página de campaña, lista para convertir.
+                  </p>
+                </div>
+                <PriceDisplay amount={LANDING_PRICE} fromPrefix />
+              </motion.div>
+            )}
+
+            {activeTab === 'wordpress' && (
+              <motion.div key="wordpress" {...panelMotion}>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 mb-8">
+                  <div className="max-w-md">
+                    <h3 className="font-display font-semibold text-klein text-xl sm:text-2xl mb-2">
+                      Sitios WordPress
+                    </h3>
+                    <p className="text-sm text-muted leading-relaxed">
+                      El sitio base parte de {formatCOP(WORDPRESS_BASE)}. El
+                      precio final depende de la cantidad de páginas y el
+                      tipo de web.
+                    </p>
+                  </div>
+                  <div className="text-left sm:text-right shrink-0">
+                    <span className="text-xs text-muted block mb-1">
+                      Total estimado
+                    </span>
+                    <PriceDisplay amount={wordpressTotal} />
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-klein-deep/15">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm font-medium text-klein-deep">
+                      Páginas adicionales
+                    </span>
+                    <span className="font-display font-semibold text-klein">
+                      {extraPages}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={MAX_EXTRA_PAGES}
+                    value={extraPages}
+                    onChange={(e) => setExtraPages(Number(e.target.value))}
+                    aria-label="Número de páginas adicionales"
+                    className="w-full h-2 rounded-full appearance-none cursor-pointer accent-klein [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-klein [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_1px_6px_rgba(20,30,92,0.4)] [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-klein [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, #1B2FCC ${sliderPercent}%, rgba(20,30,92,0.14) ${sliderPercent}%)`,
+                    }}
+                  />
+                  <div className="flex justify-between mt-2 text-[11px] text-muted">
+                    <span>0</span>
+                    <span>+{formatCOP(WORDPRESS_PER_PAGE)} / página</span>
+                    <span>{MAX_EXTRA_PAGES}</span>
+                  </div>
+                </div>
+
+                <p className="text-xs text-muted leading-relaxed mt-6">
+                  Estimado de referencia. La cotización final se ajusta al
+                  alcance real de tu proyecto.
+                </p>
+              </motion.div>
+            )}
+
+            {activeTab === 'otros' && (
+              <motion.div
+                key="otros"
+                {...panelMotion}
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"
+              >
+                <div className="max-w-md">
+                  <h3 className="font-display font-semibold text-klein text-xl sm:text-2xl mb-2">
+                    Automatizaciones & otros servicios
+                  </h3>
+                  <p className="text-sm text-muted leading-relaxed">
+                    Integraciones, automatizaciones y proyectos a medida se
+                    cotizan directamente contigo.
+                  </p>
+                </div>
+                <AccentButton href={CONTACT_URL} className="shrink-0">
+                  Hablemos
+                </AccentButton>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {activeTab !== 'otros' && (
+          <FadeIn y={20} delay={0.1} className="mt-8 sm:mt-10">
+            <AccentButton href={CONTACT_URL}>
+              Solicita tu cotización
+            </AccentButton>
+          </FadeIn>
+        )}
       </div>
     </section>
   );
