@@ -17,7 +17,7 @@ import Footer from './sections/Footer';
 export default function App() {
   return (
     <main className="min-h-screen bg-paper" style={{ overflowX: 'clip' }}>
-      <SiteNav heroDark />
+      <SiteNav />
       <HeroSection />
       <ScrollVideoSection />
       <ServicesSection />

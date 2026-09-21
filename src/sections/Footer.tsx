@@ -8,7 +8,7 @@ const TILE_COPIES = 16;
 
 export default function Footer() {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" data-nav-bg="dark">
       <div className="footer-dots" aria-hidden="true">
         <div className="footer-tiles__track">
           {Array.from({ length: TILE_COPIES }).map((_, i) => (

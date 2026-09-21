@@ -34,7 +34,10 @@ function ScrollCue() {
  */
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-klein">
+    <section
+      data-nav-bg="dark"
+      className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-klein"
+    >
       <img
         src={BOTANICA}
         alt=""

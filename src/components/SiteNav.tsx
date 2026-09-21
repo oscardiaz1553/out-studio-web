@@ -1,15 +1,18 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import AccentButton from './AccentButton';
 import LogoOut from './LogoOut';
 import Magnetic from './Magnetic';
 
 // Navbar compartido por todas las páginas (home, contacto, proyectos).
 // Estilo "Huge": flota sobre el contenido (fixed, no sticky) en tres
-// columnas — logo suelto a la izquierda, una píldora de enlaces centrada
-// con su propio fondo opaco, y un CTA a la derecha — así que siempre se lee
-// bien sin importar qué haya detrás. El logo es lo único sin fondo propio:
-// cambia de blanco a azul cuando el hero oscuro del home queda atrás.
+// columnas — logo suelto a la izquierda, enlaces centrados sin cápsula
+// propia, y un CTA a la derecha. El logo y los enlaces cambian de klein a
+// paper-pure según lo que haya realmente detrás del nav en cada momento
+// (no solo "es el home"): cada sección marca su fondo con
+// data-nav-bg="dark" (Hero, la secuencia, Proyectos, las láminas
+// editoriales, el marquee, el footer) y un IntersectionObserver detecta
+// cuál está cruzando la franja del nav.
 const HOME = import.meta.env.BASE_URL;
 
 type NavLink = { label: string; href: string };
@@ -76,14 +79,15 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
   );
 }
 
-/** Píldora central de enlaces: un halo azul viaja entre ellos al hacer hover. */
-function NavPill() {
+/** Enlaces centrados, sin cápsula propia: un halo viaja detrás del que
+ *  tiene el mouse encima, en el color que corresponda al fondo actual. */
+function NavPill({ onDark }: { onDark: boolean }) {
   const [hovered, setHovered] = useState<string | null>(null);
 
   return (
     <ul
       onMouseLeave={() => setHovered(null)}
-      className="hidden md:flex items-center gap-0.5 rounded-full bg-paper-pure/95 backdrop-blur-md border border-klein-deep/10 shadow-[0_8px_30px_rgba(20,20,60,0.14)] p-1.5"
+      className="hidden md:flex items-center gap-0.5"
     >
       {NAV_LINKS.map((link) => {
         const active = hovered === link.label;
@@ -92,7 +96,9 @@ function NavPill() {
             {active && (
               <motion.span
                 layoutId="nav-hover-pill"
-                className="absolute inset-0 rounded-full bg-klein"
+                className={`absolute inset-0 rounded-full ${
+                  onDark ? 'bg-paper-pure/15 backdrop-blur-sm' : 'bg-klein'
+                }`}
                 transition={{ type: 'spring', stiffness: 380, damping: 32 }}
               />
             )}
@@ -100,7 +106,11 @@ function NavPill() {
               href={link.href}
               onMouseEnter={() => setHovered(link.label)}
               className={`relative z-10 block px-4 lg:px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
-                active ? 'text-paper-pure' : 'text-klein-deep'
+                onDark
+                  ? 'text-paper-pure'
+                  : active
+                    ? 'text-paper-pure'
+                    : 'text-klein-deep'
               }`}
             >
               {link.label}
@@ -112,15 +122,9 @@ function NavPill() {
   );
 }
 
-interface SiteNavProps {
-  /** true cuando la página arranca con un hero oscuro (home): el logo nace
-   *  en paper-pure y pasa a klein una vez que el scroll deja atrás el hero. */
-  heroDark?: boolean;
-}
-
-export default function SiteNav({ heroDark = false }: SiteNavProps) {
+export default function SiteNav() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [pastHero, setPastHero] = useState(!heroDark);
+  const [onDark, setOnDark] = useState(true);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -129,30 +133,48 @@ export default function SiteNav({ heroDark = false }: SiteNavProps) {
     };
   }, [menuOpen]);
 
-  useEffect(() => {
-    if (!heroDark) return;
-    const onScroll = () => setPastHero(window.scrollY > window.innerHeight * 0.82);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [heroDark]);
+  // Detecta qué hay realmente detrás del nav: cualquier sección marcada
+  // data-nav-bg="dark" que cruce una franja fina a la altura del header
+  // (rootMargin en % se recalcula solo con el alto del viewport).
+  useLayoutEffect(() => {
+    const targets = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-nav-bg="dark"]')
+    );
+    if (targets.length === 0) {
+      setOnDark(false);
+      return;
+    }
 
-  const logoLight = heroDark && !pastHero;
+    const intersecting = new Set<Element>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) intersecting.add(entry.target);
+          else intersecting.delete(entry.target);
+        }
+        setOnDark(intersecting.size > 0);
+      },
+      { rootMargin: '-60px 0px -100% 0px', threshold: 0 }
+    );
+
+    targets.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
 
   return (
     <>
       <header className="fixed top-0 inset-x-0 z-40">
         {/* Velo de desenfoque degradado: funde lo que pasa por debajo del
-            nav (fuerte arriba, se disuelve hacia abajo), en vez de una
-            barra sólida con borde duro. */}
+            nav (fuerte arriba, se disuelve rápido), sin llegar a tocar
+            títulos que quedan fijos justo debajo (p. ej. "Proyectos"). */}
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 h-24 sm:h-28 md:h-36 backdrop-blur-md pointer-events-none"
+          className="absolute inset-x-0 top-0 h-14 sm:h-16 md:h-20 backdrop-blur pointer-events-none"
           style={{
             WebkitMaskImage:
-              'linear-gradient(to bottom, black 0%, black 35%, transparent 100%)',
+              'linear-gradient(to bottom, black 0%, black 20%, transparent 55%)',
             maskImage:
-              'linear-gradient(to bottom, black 0%, black 35%, transparent 100%)',
+              'linear-gradient(to bottom, black 0%, black 20%, transparent 55%)',
           }}
         />
 
@@ -160,13 +182,13 @@ export default function SiteNav({ heroDark = false }: SiteNavProps) {
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
             <a
               href={HOME}
-              className={`justify-self-start transition-colors duration-300 ${logoLight ? 'text-paper-pure' : 'text-klein'}`}
+              className={`justify-self-start transition-colors duration-300 ${onDark ? 'text-paper-pure' : 'text-klein'}`}
             >
               <LogoOut className="h-8 md:h-9 w-auto" />
             </a>
 
             <div className="justify-self-center">
-              <NavPill />
+              <NavPill onDark={onDark} />
             </div>
 
             <div className="justify-self-end flex items-center gap-3">

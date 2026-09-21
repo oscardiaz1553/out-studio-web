@@ -69,6 +69,7 @@ export default function EditorialPlate({
     <section
       ref={ref}
       aria-label={caption}
+      data-nav-bg="dark"
       className={`relative w-full overflow-hidden bg-klein ${minH}`}
     >
       {/* botanical in full colour (already on-brand), oversized so parallax

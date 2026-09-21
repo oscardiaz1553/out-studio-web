@@ -215,6 +215,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="proyectos"
+      data-nav-bg="dark"
       className="relative z-10 bg-klein px-6 md:px-10 lg:px-16 pt-16 sm:pt-20 md:pt-24 pb-24"
     >
       <div className="max-w-[1400px] mx-auto">

@@ -123,6 +123,7 @@ export default function ScrollVideoSection() {
     <section
       ref={sectionRef}
       aria-label="Out. — Never the usual"
+      data-nav-bg="dark"
       className="relative h-[300vh] bg-klein-deep"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
