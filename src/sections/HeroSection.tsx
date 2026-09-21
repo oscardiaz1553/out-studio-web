@@ -1,10 +1,16 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import AccentButton from '../components/AccentButton';
 import Magnetic from '../components/Magnetic';
-import RevealText from '../components/RevealText';
+import RotatingWord from '../components/RotatingWord';
 import { BOTANICA } from '../data/botanica';
 
-const HEADLINE = ['CASI TODO', 'OBEDECE.', 'UNA COSA', 'SE SALE.'];
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+// Los tres servicios "de producto" (no Integraciones/Soporte, que son más
+// de acompañamiento que de titular). Cada rotación debe leerse completa:
+// "Tiendas Shopify que venden.", "Sitios WordPress que venden.", etc.
+const SERVICES = ['Tiendas Shopify', 'Sitios WordPress', 'Landing Pages'];
+const SR_HEADLINE = SERVICES.map((s) => `${s} que venden.`).join(' ');
 
 function ScrollCue() {
   const reduceMotion = useReducedMotion();
@@ -29,8 +35,10 @@ function ScrollCue() {
 
 /**
  * Hero estilo "Huge": tipografía enorme dominando el fold, sobre la lámina
- * botánica de la marca a sangre completa, en vez del layout partido
- * texto/imagen anterior. El titular se revela línea por línea al cargar.
+ * botánica de la marca a sangre completa. El titular rota entre los tres
+ * servicios ("Tiendas Shopify / Sitios WordPress / Landing Pages que
+ * venden.") — decorativo vía aria-hidden, con las tres frases completas
+ * disponibles en un sr-only para lectores de pantalla y buscadores.
  */
 export default function HeroSection() {
   return (
@@ -73,20 +81,37 @@ export default function HeroSection() {
         </motion.div>
 
         <div className="my-10 md:my-14">
-          <RevealText
-            as="h1"
-            lines={HEADLINE}
-            unit="line"
-            trigger="mount"
-            delay={0.15}
-            stagger={0.09}
-            lineClassName="overflow-hidden"
-            className="font-display font-extrabold text-paper-pure tracking-[-0.04em]"
+          <h1
+            className="font-display font-extrabold tracking-[-0.04em]"
             style={{
               fontSize: 'clamp(2.6rem, 8.5vw, 8.5rem)',
               lineHeight: 0.94,
             }}
-          />
+          >
+            {/* Texto real para lectores de pantalla y buscadores: las tres
+                variantes completas, sin depender de en qué punto de la
+                rotación esté la animación decorativa. */}
+            <span className="sr-only">{SR_HEADLINE}</span>
+
+            <motion.span
+              aria-hidden="true"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.7, ease: EASE }}
+              className="block text-paper-pure"
+            >
+              <RotatingWord words={SERVICES} />
+            </motion.span>
+            <motion.span
+              aria-hidden="true"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.7, ease: EASE }}
+              className="block text-carne"
+            >
+              que venden.
+            </motion.span>
+          </h1>
         </div>
 
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
@@ -96,9 +121,8 @@ export default function HeroSection() {
             transition={{ delay: 0.75, duration: 0.7 }}
             className="text-paper-pure/85 leading-relaxed max-w-[46ch] text-base sm:text-lg"
           >
-            Diseñamos y desarrollamos tu tienda Shopify o tu web en WordPress,
-            con código propio y de principio a fin, para que no se vea como
-            todas y venda de verdad.
+            Shopify, WordPress o una landing: código propio, de principio a
+            fin, para que no se vea como todas y venda de verdad.
           </motion.p>
 
           <motion.div
