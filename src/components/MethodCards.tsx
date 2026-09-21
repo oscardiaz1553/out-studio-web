@@ -180,7 +180,7 @@ export default function MethodCards({ steps }: { steps: MethodStep[] }) {
         <motion.div
           ref={rowRef}
           style={{ x }}
-          className="flex items-center gap-6 sm:gap-10 px-[11vw] sm:px-[16vw]"
+          className="flex items-center gap-6 sm:gap-10 px-[4vw] sm:px-[6vw]"
         >
           {steps.map((s, i) => (
             <Card
