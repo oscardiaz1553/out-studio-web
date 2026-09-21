@@ -51,14 +51,17 @@ function Card({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const centerRef = useRef(0);
+  const widthRef = useRef(0);
 
-  // Centro de la tarjeta dentro de la fila, medido en su posición natural
-  // (sin transformar): un transform en el padre no mueve offsetLeft, así
-  // que esto es estable y no hace falta releer el DOM en cada frame.
+  // Centro y ancho de la tarjeta dentro de la fila, medidos en su posición
+  // natural (sin transformar): un transform en el padre no mueve
+  // offsetLeft/offsetWidth, así que esto es estable y no hace falta releer
+  // el DOM en cada frame.
   useLayoutEffect(() => {
     const measure = () => {
       if (ref.current) {
         centerRef.current = ref.current.offsetLeft + ref.current.offsetWidth / 2;
+        widthRef.current = ref.current.offsetWidth;
       }
     };
     measure();
@@ -74,14 +77,30 @@ function Card({
     const dist = Math.abs(screenCenter - window.innerWidth / 2);
     return Math.min(1, dist / (window.innerWidth * 0.55));
   });
-  const scale = useTransform(proximity, [0, 1], [1.08, 0.85]);
+  // Nunca escala por encima de 1 (su tamaño natural medido): así el ancho
+  // renderizado nunca supera lo que mide el cálculo del margen de borde.
+  const scale = useTransform(proximity, [0, 1], [1, 0.85]);
   const rotate = useTransform(proximity, [0, 1], [tilt * 0.25, tilt]);
   const y = useTransform(proximity, [0, 1], [-10, 14]);
+
+  // La tarjeta se desvanece ANTES de que su borde llegue al borde de la
+  // pantalla (con margen de sobra) — así nunca se ve una tarjeta partida
+  // por el límite del navegador, solo aparece/desaparece ya invisible.
+  const opacity = useTransform(x, (xVal) => {
+    const screenCenter = centerRef.current + xVal;
+    const dist = Math.abs(screenCenter - window.innerWidth / 2);
+    const edgeDist = window.innerWidth / 2 - widthRef.current / 2;
+    const fadeStart = edgeDist * 0.45;
+    const fadeEnd = edgeDist * 0.78;
+    if (dist <= fadeStart) return 1;
+    if (dist >= fadeEnd) return 0;
+    return 1 - (dist - fadeStart) / (fadeEnd - fadeStart);
+  });
 
   return (
     <motion.div
       ref={ref}
-      style={{ scale, rotate, y }}
+      style={{ scale, rotate, y, opacity }}
       className={`shrink-0 w-[78vw] sm:w-[46vw] md:w-[34vw] max-w-[420px] aspect-[4/5] rounded-3xl p-7 sm:p-9 shadow-[0_14px_28px_rgba(20,20,60,0.12)] flex flex-col justify-between ${style.bg} ${style.border ?? ''}`}
     >
       <span
