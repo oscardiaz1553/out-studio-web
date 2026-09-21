@@ -141,37 +141,53 @@ export default function SiteNav({ heroDark = false }: SiteNavProps) {
 
   return (
     <>
-      <header className="fixed top-0 inset-x-0 z-40 px-4 sm:px-6 md:px-10 pt-4 md:pt-6">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-          <a
-            href={HOME}
-            className={`justify-self-start transition-colors duration-300 ${logoLight ? 'text-paper-pure' : 'text-klein'}`}
-          >
-            <LogoOut className="h-8 md:h-9 w-auto" />
-          </a>
+      <header className="fixed top-0 inset-x-0 z-40">
+        {/* Velo de desenfoque degradado: funde lo que pasa por debajo del
+            nav (fuerte arriba, se disuelve hacia abajo), en vez de una
+            barra sólida con borde duro. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-24 sm:h-28 md:h-36 backdrop-blur-md pointer-events-none"
+          style={{
+            WebkitMaskImage:
+              'linear-gradient(to bottom, black 0%, black 35%, transparent 100%)',
+            maskImage:
+              'linear-gradient(to bottom, black 0%, black 35%, transparent 100%)',
+          }}
+        />
 
-          <div className="justify-self-center">
-            <NavPill />
-          </div>
-
-          <div className="justify-self-end flex items-center gap-3">
-            <div className="hidden sm:block">
-              <Magnetic>
-                <AccentButton href={CONTACT_URL} className="px-6 py-2.5 text-sm">
-                  Hablemos
-                </AccentButton>
-              </Magnetic>
-            </div>
-            <button
-              type="button"
-              aria-label="Abrir menú"
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen(true)}
-              className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 rounded-full bg-paper-pure shadow-[0_4px_18px_rgba(20,20,60,0.14)]"
+        <div className="relative px-4 sm:px-6 md:px-10 pt-4 md:pt-6">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+            <a
+              href={HOME}
+              className={`justify-self-start transition-colors duration-300 ${logoLight ? 'text-paper-pure' : 'text-klein'}`}
             >
-              <span className="block w-5 h-0.5 bg-klein" />
-              <span className="block w-5 h-0.5 bg-klein" />
-            </button>
+              <LogoOut className="h-8 md:h-9 w-auto" />
+            </a>
+
+            <div className="justify-self-center">
+              <NavPill />
+            </div>
+
+            <div className="justify-self-end flex items-center gap-3">
+              <div className="hidden sm:block">
+                <Magnetic>
+                  <AccentButton href={CONTACT_URL} className="px-6 py-2.5 text-sm">
+                    Hablemos
+                  </AccentButton>
+                </Magnetic>
+              </div>
+              <button
+                type="button"
+                aria-label="Abrir menú"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen(true)}
+                className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 rounded-full bg-paper-pure shadow-[0_4px_18px_rgba(20,20,60,0.14)]"
+              >
+                <span className="block w-5 h-0.5 bg-klein" />
+                <span className="block w-5 h-0.5 bg-klein" />
+              </button>
+            </div>
           </div>
         </div>
       </header>
