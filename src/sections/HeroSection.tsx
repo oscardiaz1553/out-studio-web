@@ -2,7 +2,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 import AccentButton from '../components/AccentButton';
 import Magnetic from '../components/Magnetic';
 import RotatingWord from '../components/RotatingWord';
-import { BOTANICA } from '../data/botanica';
+
+const MANGO = `${import.meta.env.BASE_URL}mango-hero.webp`;
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -11,6 +12,55 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 // "Tiendas Shopify que venden.", "Sitios WordPress que venden.", etc.
 const SERVICES = ['Tiendas Shopify', 'Sitios WordPress', 'Landing Pages'];
 const SR_HEADLINE = SERVICES.map((s) => `${s} que venden.`).join(' ');
+
+/** El mango partido: objeto 3D grande a un lado, como el H de Huge —
+ *  pero on-brand (azul Klein sólido detrás, no negro). Sangra por el
+ *  borde superior/derecho, con un halo suave y una deriva lenta. */
+function MangoHero() {
+  const reduceMotion = useReducedMotion();
+  return (
+    <div
+      aria-hidden
+      className="absolute right-[-6%] top-[-4%] sm:top-[-2%] z-[2] pointer-events-none select-none"
+      style={{ width: 'clamp(240px, 36vw, 640px)' }}
+    >
+      {/* Halo: separa el mango del azul plano detrás */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            'radial-gradient(closest-side, rgba(242,198,180,0.28), transparent 72%)',
+          transform: 'scale(1.35)',
+        }}
+      />
+      <motion.img
+        src={MANGO}
+        alt=""
+        loading="eager"
+        className="relative w-full h-auto"
+        style={{
+          filter: 'drop-shadow(0 40px 70px rgba(10,14,50,0.45))',
+        }}
+        initial={{ opacity: 0, scale: 0.82, rotate: -8 }}
+        animate={
+          reduceMotion
+            ? { opacity: 1, scale: 1, rotate: -4 }
+            : { opacity: 1, scale: 1, rotate: -4, y: [0, -14, 0] }
+        }
+        transition={
+          reduceMotion
+            ? { delay: 0.3, duration: 0.9, ease: EASE }
+            : {
+                opacity: { delay: 0.3, duration: 0.9, ease: EASE },
+                scale: { delay: 0.3, duration: 0.9, ease: EASE },
+                rotate: { delay: 0.3, duration: 0.9, ease: EASE },
+                y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1.2 },
+              }
+        }
+      />
+    </div>
+  );
+}
 
 function ScrollCue() {
   const reduceMotion = useReducedMotion();
@@ -34,11 +84,13 @@ function ScrollCue() {
 }
 
 /**
- * Hero estilo "Huge": tipografía enorme dominando el fold, sobre la lámina
- * botánica de la marca a sangre completa. El titular rota entre los tres
- * servicios ("Tiendas Shopify / Sitios WordPress / Landing Pages que
- * venden.") — decorativo vía aria-hidden, con las tres frases completas
- * disponibles en un sr-only para lectores de pantalla y buscadores.
+ * Hero estilo "Huge": tipografía enorme dominando el fold, sobre azul Klein
+ * sólido con el mango partido a sangre por el borde superior derecho — el
+ * objeto 3D grande que hace las veces del H de Huge, pero on-brand. El
+ * titular rota entre los tres servicios ("Tiendas Shopify / Sitios
+ * WordPress / Landing Pages que venden.") — decorativo vía aria-hidden, con
+ * las tres frases completas disponibles en un sr-only para lectores de
+ * pantalla y buscadores.
  */
 export default function HeroSection() {
   return (
@@ -46,37 +98,23 @@ export default function HeroSection() {
       data-nav-bg="dark"
       className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-klein"
     >
-      <img
-        src={BOTANICA}
-        alt=""
-        loading="eager"
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ objectPosition: '60% 40%' }}
+      {/* Degradado sutil: da profundidad al azul plano sin volverlo una
+          textura que compita con el mango. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-b from-klein-deep/40 via-transparent to-klein-deep/55 pointer-events-none"
       />
 
-      {/* Tinte Klein + degradado: la lámina queda on-brand y el texto en
-          paper-pure se lee limpio de arriba a abajo. */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-klein/55 mix-blend-multiply pointer-events-none"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-klein-deep/50 via-klein-deep/25 to-klein-deep/65 pointer-events-none"
-      />
+      <MangoHero />
 
       <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-10 lg:px-16 py-24 md:py-28">
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6 }}
-          className="flex flex-wrap items-baseline justify-between gap-4"
         >
           <span className="text-paper-pure/75 text-sm sm:text-base tracking-[0.02em]">
             Estudio digital · Bogotá, Colombia
-          </span>
-          <span className="font-display font-semibold text-carne text-sm sm:text-base tracking-[-0.01em]">
-            Never the usual.
           </span>
         </motion.div>
 
@@ -129,7 +167,11 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.7 }}
+            className="flex flex-col items-start md:items-end gap-3"
           >
+            <span className="font-display font-semibold text-carne text-sm sm:text-base tracking-[-0.01em]">
+              Never the usual.
+            </span>
             <Magnetic>
               <AccentButton
                 href="#contacto"
