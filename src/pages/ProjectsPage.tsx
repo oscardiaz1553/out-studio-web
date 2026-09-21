@@ -4,6 +4,7 @@ import { BrandDot } from '../components/Brand';
 import SiteNav from '../components/SiteNav';
 import ScrollToTop from '../components/ScrollToTop';
 import ProjectMedia from '../components/ProjectMedia';
+import RevealText from '../components/RevealText';
 import { AZULEJO } from '../data/botanica';
 import {
   categoryLabel,
@@ -105,12 +106,13 @@ export default function ProjectsPage() {
         <div className="max-w-[1400px] mx-auto">
           <div className="flex items-baseline gap-4 mb-4">
             <span className="text-[11px] tracking-[0.06em] text-carne-tinta">02</span>
-            <h1
+            <RevealText
+              as="h1"
+              text="Proyectos"
+              unit="char"
               className="font-display font-semibold text-klein tracking-[-0.035em]"
               style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}
-            >
-              Proyectos
-            </h1>
+            />
           </div>
           <p className="text-ink-2 leading-relaxed max-w-xl mb-10 sm:mb-12">
             Nuestros casos, por tipo de proyecto. Elige una categoría para

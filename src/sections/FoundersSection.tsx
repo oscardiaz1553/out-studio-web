@@ -1,4 +1,5 @@
 import FadeIn from '../components/FadeIn';
+import RevealText from '../components/RevealText';
 import { AZULEJO } from '../data/botanica';
 
 interface Founder {
@@ -53,12 +54,13 @@ export default function FoundersSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             05
           </span>
-          <h2
+          <RevealText
+            as="h2"
+            text="Los fundadores"
+            unit="word"
             className="font-display font-semibold text-klein tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
-          >
-            Los fundadores
-          </h2>
+          />
         </div>
 
         <p className="text-ink-2 leading-relaxed max-w-xl mt-4 mb-12 sm:mb-16">

@@ -9,6 +9,7 @@ import { useRef } from 'react';
 import { BrandDot } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
 import ProjectMedia from '../components/ProjectMedia';
+import RevealText from '../components/RevealText';
 import { AZULEJO } from '../data/botanica';
 import {
   categoryLabel,
@@ -140,12 +141,13 @@ function ProjectStack() {
             <span className="text-[11px] tracking-[0.06em] text-carne">
               03
             </span>
-            <h2
+            <RevealText
+              as="h2"
+              text="Proyectos"
+              unit="char"
               className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
               style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
-            >
-              Proyectos
-            </h2>
+            />
           </div>
           <a
             href={PROJECTS_URL}
@@ -176,12 +178,13 @@ function ComingSoonPanel() {
         <span className="text-[11px] tracking-[0.06em] text-carne">
           03
         </span>
-        <h2
+        <RevealText
+          as="h2"
+          text="Proyectos"
+          unit="char"
           className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
           style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
-        >
-          Proyectos
-        </h2>
+        />
       </div>
       <FadeIn delay={0.15} y={30}>
         <div className="rounded-2xl border border-carne/40 bg-klein-deep/40 px-8 py-14 sm:px-14 sm:py-20 flex flex-col items-start gap-5">

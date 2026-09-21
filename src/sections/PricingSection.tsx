@@ -3,6 +3,8 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import AccentButton from '../components/AccentButton';
 import { BrandDot } from '../components/Brand';
 import FadeIn from '../components/FadeIn';
+import Magnetic from '../components/Magnetic';
+import RevealText from '../components/RevealText';
 
 const CONTACT_URL = `${import.meta.env.BASE_URL}contacto.html`;
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
@@ -71,12 +73,13 @@ export default function PricingSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             06
           </span>
-          <h2
+          <RevealText
+            as="h2"
+            text="Cotización"
+            unit="char"
             className="font-display font-semibold text-klein tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
-          >
-            Cotización
-          </h2>
+          />
         </div>
 
         <p className="text-ink-2 leading-relaxed max-w-xl mt-4 mb-10 sm:mb-12">
@@ -222,9 +225,9 @@ export default function PricingSection() {
                     cotizan directamente contigo.
                   </p>
                 </div>
-                <AccentButton href={CONTACT_URL} className="shrink-0">
-                  Hablemos
-                </AccentButton>
+                <Magnetic className="shrink-0">
+                  <AccentButton href={CONTACT_URL}>Hablemos</AccentButton>
+                </Magnetic>
               </motion.div>
             )}
           </AnimatePresence>
@@ -232,9 +235,11 @@ export default function PricingSection() {
 
         {activeTab !== 'otros' && (
           <FadeIn y={20} delay={0.1} className="mt-8 sm:mt-10">
-            <AccentButton href={CONTACT_URL}>
-              Solicita tu cotización
-            </AccentButton>
+            <Magnetic>
+              <AccentButton href={CONTACT_URL}>
+                Solicita tu cotización
+              </AccentButton>
+            </Magnetic>
           </FadeIn>
         )}
       </div>

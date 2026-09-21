@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
+import RevealText from '../components/RevealText';
 import { AZULEJO_BAND } from '../data/botanica';
 
 const EMAIL = 'oscar.diaz@outstudio.online';
@@ -75,12 +76,13 @@ export default function ContactSection() {
             <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
               07
             </span>
-            <h2
+            <RevealText
+              as="h2"
+              text="Contacto"
+              unit="char"
               className="font-display font-semibold text-klein tracking-[-0.035em]"
               style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}
-            >
-              Contacto
-            </h2>
+            />
           </div>
 
           <FadeIn delay={0.15} y={20}>
