@@ -1,6 +1,5 @@
 import FadeIn from '../components/FadeIn';
 import RevealText from '../components/RevealText';
-import { AZULEJO } from '../data/botanica';
 
 // Servicios reales de Out, con el lenguaje en tono cálido y directo.
 const SERVICES = [
@@ -64,9 +63,12 @@ export default function ServicesSection() {
                 <span className="text-[11px] tracking-[0.06em] text-carne-tinta shrink-0">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                {/* Al hover, la tipografía se llena de azulejo (tinta de
-                    patrón vía background-clip). Cada fila muestra un recorte
-                    distinto. Crossfade de opacidad: compositor puro. */}
+                {/* Al hover, la tipografía pasa a un degradado de dos
+                    azules (crossfade de opacidad, compositor puro). Antes
+                    era una tinta de patrón (azulejo) vía background-clip,
+                    pero sobre texto se veía borroso/con glow — un
+                    degradado limpio en dos tonos del mismo azul se lee
+                    mucho mejor. */}
                 <h3
                   className="relative font-display font-semibold text-klein tracking-[-0.02em] leading-[1.03]"
                   style={{ fontSize: 'clamp(1.6rem, 3.4vw, 2.8rem)' }}
@@ -76,9 +78,8 @@ export default function ServicesSection() {
                     aria-hidden
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none select-none"
                     style={{
-                      backgroundImage: `url(${AZULEJO})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: `${i * 22}% 50%`,
+                      backgroundImage:
+                        'linear-gradient(100deg, var(--klein-deep) 0%, var(--klein-mid) 100%)',
                       WebkitBackgroundClip: 'text',
                       backgroundClip: 'text',
                       color: 'transparent',
