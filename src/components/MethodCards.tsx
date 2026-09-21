@@ -1,5 +1,6 @@
 import {
   motion,
+  MotionValue,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -34,14 +35,53 @@ const CARD_STYLES: CardStyle[] = [
   { bg: 'bg-klein-deep', text: 'text-paper-pure', sub: 'text-klein-soft' },
 ];
 
-// Inclinación fija por tarjeta (no gira: ya nace así y así sale, como en
-// Huge — es el deslizamiento horizontal el que hace el trabajo).
+// Inclinación de reposo por tarjeta (la que tiene lejos del centro).
 const TILT = [-6, 5, -4, 7];
 
-function Card({ s, style, tilt }: { s: MethodStep; style: CardStyle; tilt: number }) {
+function Card({
+  s,
+  style,
+  tilt,
+  x,
+}: {
+  s: MethodStep;
+  style: CardStyle;
+  tilt: number;
+  x: MotionValue<number>;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const centerRef = useRef(0);
+
+  // Centro de la tarjeta dentro de la fila, medido en su posición natural
+  // (sin transformar): un transform en el padre no mueve offsetLeft, así
+  // que esto es estable y no hace falta releer el DOM en cada frame.
+  useLayoutEffect(() => {
+    const measure = () => {
+      if (ref.current) {
+        centerRef.current = ref.current.offsetLeft + ref.current.offsetWidth / 2;
+      }
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
+  // 0 = la tarjeta está centrada en la pantalla ahora mismo; 1 = lejos,
+  // en el borde. No es estática: cada tarjeta reacciona a su propia
+  // posición real mientras la fila se desliza, no solo la fila en bloque.
+  const proximity = useTransform(x, (xVal) => {
+    const screenCenter = centerRef.current + xVal;
+    const dist = Math.abs(screenCenter - window.innerWidth / 2);
+    return Math.min(1, dist / (window.innerWidth * 0.55));
+  });
+  const scale = useTransform(proximity, [0, 1], [1.08, 0.85]);
+  const rotate = useTransform(proximity, [0, 1], [tilt * 0.25, tilt]);
+  const y = useTransform(proximity, [0, 1], [-10, 14]);
+
   return (
-    <div
-      style={{ rotate: `${tilt}deg` }}
+    <motion.div
+      ref={ref}
+      style={{ scale, rotate, y }}
       className={`shrink-0 w-[78vw] sm:w-[46vw] md:w-[34vw] max-w-[420px] aspect-[4/5] rounded-3xl p-7 sm:p-9 shadow-[0_30px_70px_rgba(20,20,60,0.25)] flex flex-col justify-between ${style.bg} ${style.border ?? ''}`}
     >
       <span
@@ -59,7 +99,7 @@ function Card({ s, style, tilt }: { s: MethodStep; style: CardStyle; tilt: numbe
         </h3>
         <p className={`leading-relaxed ${style.sub}`}>{s.description}</p>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -85,12 +125,14 @@ function StaticCard({ s, style }: { s: MethodStep; style: CardStyle }) {
 }
 
 /**
- * Fila de tarjetas inclinadas que se desliza horizontalmente mientras el
- * scroll vertical queda "enganchado" (estilo Huge, sección "Our work"):
- * cada tarjeta mantiene su propia inclinación fija de principio a fin —
- * no gira, no se desvanece — es el conjunto el que se traslada en X. El
- * pin no suelta el scroll hasta que la última tarjeta llegó a su lugar.
- * En prefers-reduced-motion no hay pin: las tarjetas se listan normales.
+ * Fila de tarjetas que se desliza horizontalmente mientras el scroll
+ * vertical queda "enganchado" (estilo Huge, sección "Our work"). No es
+ * solo la fila en bloque: cada tarjeta reacciona a su propia posición en
+ * pantalla — crece y se endereza un poco al acercarse al centro, se
+ * encoge y se inclina más al alejarse — así que se siente viva, no una
+ * imagen fija que solo se traslada. El pin no suelta el scroll hasta que
+ * la última tarjeta llegó a su lugar. En prefers-reduced-motion no hay
+ * pin ni transformaciones: las tarjetas se listan normales.
  */
 export default function MethodCards({ steps }: { steps: MethodStep[] }) {
   const reduceMotion = useReducedMotion();
@@ -146,6 +188,7 @@ export default function MethodCards({ steps }: { steps: MethodStep[] }) {
               s={s}
               style={CARD_STYLES[i % CARD_STYLES.length]}
               tilt={TILT[i % TILT.length]}
+              x={x}
             />
           ))}
         </motion.div>
