@@ -1,11 +1,10 @@
 import {
   motion,
-  MotionValue,
   useReducedMotion,
   useScroll,
   useTransform,
 } from 'framer-motion';
-import { useRef } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 export interface MethodStep {
   step: string;
@@ -35,6 +34,35 @@ const CARD_STYLES: CardStyle[] = [
   { bg: 'bg-klein-deep', text: 'text-paper-pure', sub: 'text-klein-soft' },
 ];
 
+// Inclinación fija por tarjeta (no gira: ya nace así y así sale, como en
+// Huge — es el deslizamiento horizontal el que hace el trabajo).
+const TILT = [-6, 5, -4, 7];
+
+function Card({ s, style, tilt }: { s: MethodStep; style: CardStyle; tilt: number }) {
+  return (
+    <div
+      style={{ rotate: `${tilt}deg` }}
+      className={`shrink-0 w-[78vw] sm:w-[46vw] md:w-[34vw] max-w-[420px] aspect-[4/5] rounded-3xl p-7 sm:p-9 shadow-[0_30px_70px_rgba(20,20,60,0.25)] flex flex-col justify-between ${style.bg} ${style.border ?? ''}`}
+    >
+      <span
+        className={`font-display font-extrabold leading-none ${style.text}`}
+        style={{ fontSize: 'clamp(2.6rem, 5vw, 4rem)' }}
+      >
+        {s.step}
+      </span>
+      <div>
+        <h3
+          className={`font-display font-semibold tracking-[-0.02em] mb-3 ${style.text}`}
+          style={{ fontSize: 'clamp(1.3rem, 2.4vw, 1.8rem)' }}
+        >
+          {s.title}
+        </h3>
+        <p className={`leading-relaxed ${style.sub}`}>{s.description}</p>
+      </div>
+    </div>
+  );
+}
+
 function StaticCard({ s, style }: { s: MethodStep; style: CardStyle }) {
   return (
     <div
@@ -56,115 +84,38 @@ function StaticCard({ s, style }: { s: MethodStep; style: CardStyle }) {
   );
 }
 
-function PinnedCard({
-  s,
-  i,
-  total,
-  progress,
-  style,
-}: {
-  s: MethodStep;
-  i: number;
-  total: number;
-  progress: MotionValue<number>;
-  style: CardStyle;
-}) {
-  const seg = 1 / total;
-  const sign = i % 2 === 0 ? 1 : -1;
-  const isLast = i === total - 1;
-
-  // El cruce entre tarjetas dura muy poco (8% del tramo de cada una): la
-  // mayor parte del tiempo hay UNA sola tarjeta legible en pantalla, no dos
-  // superpuestas. Además de girar, la que sale sube y se va, la que entra
-  // viene de abajo — así que aunque coincidan un instante, no quedan text
-  // sobre texto en el mismo punto. Los breakpoints deben caer estrictamente
-  // dentro de [0,1]: framer-motion puede animar useScroll con timelines
-  // nativas del navegador, que exigen offsets crecientes en ese rango — un
-  // punto fuera (p. ej. antes de 0) rompe el montaje entero.
-  const trans = seg * 0.08;
-  const enterAt = i * seg;
-  const settleAt = enterAt + trans;
-  const holdAt = (i + 1) * seg - trans;
-  const exitAt = (i + 1) * seg;
-
-  const times = isLast ? [enterAt, settleAt] : [enterAt, settleAt, holdAt, exitAt];
-  const rotateOut = isLast
-    ? [sign * 12, sign * -2]
-    : [sign * 12, sign * -2, sign * -2, sign * -12];
-  const opacityOut = isLast ? [0, 1] : [0, 1, 1, 0];
-  const yOut = isLast ? [44, 0] : [44, 0, 0, -44];
-
-  const rotate = useTransform(progress, times, rotateOut);
-  const opacity = useTransform(progress, times, opacityOut);
-  const y = useTransform(progress, times, yOut);
-
-  return (
-    <motion.div
-      style={{ rotate, opacity, y }}
-      className={`absolute inset-0 rounded-3xl p-8 sm:p-12 shadow-[0_30px_80px_rgba(20,20,60,0.3)] flex flex-col justify-between ${style.bg} ${style.border ?? ''}`}
-    >
-      <span
-        className={`font-display font-extrabold leading-none ${style.text}`}
-        style={{ fontSize: 'clamp(3rem, 6vw, 5rem)' }}
-      >
-        {s.step}
-      </span>
-      <div>
-        <h3
-          className={`font-display font-semibold tracking-[-0.02em] mb-3 ${style.text}`}
-          style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}
-        >
-          {s.title}
-        </h3>
-        <p
-          className={`leading-relaxed max-w-[42ch] ${style.sub}`}
-          style={{ fontSize: 'clamp(0.95rem, 1.4vw, 1.15rem)' }}
-        >
-          {s.description}
-        </p>
-      </div>
-    </motion.div>
-  );
-}
-
-function StepDot({
-  i,
-  total,
-  progress,
-}: {
-  i: number;
-  total: number;
-  progress: MotionValue<number>;
-}) {
-  const active = useTransform(progress, (p) => {
-    const idx = Math.min(total - 1, Math.floor(p * total));
-    return idx === i;
-  });
-  const opacity = useTransform(active, (a) => (a ? 1 : 0.35));
-  const width = useTransform(active, (a) => (a ? 28 : 8));
-
-  return (
-    <motion.span
-      style={{ opacity, width }}
-      className="h-2 rounded-full bg-klein"
-    />
-  );
-}
-
 /**
- * Secuencia de tarjetas fijada al scroll (estilo Huge): la sección se
- * "engancha" (sticky) y no suelta el scroll hasta que las cuatro tarjetas
- * terminaron de pasar, cada una girando al entrar y al salir. En
- * prefers-reduced-motion no hay pin ni scroll-jacking: las tarjetas se
- * listan normales, una debajo de otra.
+ * Fila de tarjetas inclinadas que se desliza horizontalmente mientras el
+ * scroll vertical queda "enganchado" (estilo Huge, sección "Our work"):
+ * cada tarjeta mantiene su propia inclinación fija de principio a fin —
+ * no gira, no se desvanece — es el conjunto el que se traslada en X. El
+ * pin no suelta el scroll hasta que la última tarjeta llegó a su lugar.
+ * En prefers-reduced-motion no hay pin: las tarjetas se listan normales.
  */
 export default function MethodCards({ steps }: { steps: MethodStep[] }) {
   const reduceMotion = useReducedMotion();
-  const ref = useRef<HTMLDivElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [scrollDistance, setScrollDistance] = useState(0);
+
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: pinRef,
     offset: ['start start', 'end end'],
   });
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollDistance]);
+
+  useLayoutEffect(() => {
+    if (reduceMotion) return;
+    const measure = () => {
+      if (!rowRef.current) return;
+      const rowWidth = rowRef.current.scrollWidth;
+      const viewportWidth = window.innerWidth;
+      setScrollDistance(Math.max(0, rowWidth - viewportWidth));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [reduceMotion, steps.length]);
 
   if (reduceMotion) {
     return (
@@ -176,27 +127,28 @@ export default function MethodCards({ steps }: { steps: MethodStep[] }) {
     );
   }
 
+  // Alto del tramo fijado: suficiente para que el desplazamiento horizontal
+  // (scrollDistance) se sienta proporcional al scroll vertical, no
+  // demasiado brusco ni demasiado largo.
+  const pinHeight = Math.max(220, steps.length * 90);
+
   return (
-    <div ref={ref} className="relative" style={{ height: `${steps.length * 100}vh` }}>
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
-        <div className="relative w-full max-w-[560px] h-[400px] sm:h-[460px]">
+    <div ref={pinRef} className="relative" style={{ height: `${pinHeight}vh` }}>
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+        <motion.div
+          ref={rowRef}
+          style={{ x }}
+          className="flex items-center gap-6 sm:gap-10 px-[11vw] sm:px-[16vw]"
+        >
           {steps.map((s, i) => (
-            <PinnedCard
+            <Card
               key={s.step}
               s={s}
-              i={i}
-              total={steps.length}
-              progress={scrollYProgress}
               style={CARD_STYLES[i % CARD_STYLES.length]}
+              tilt={TILT[i % TILT.length]}
             />
           ))}
-        </div>
-
-        <div className="flex items-center gap-2 mt-10">
-          {steps.map((s, i) => (
-            <StepDot key={s.step} i={i} total={steps.length} progress={scrollYProgress} />
-          ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
