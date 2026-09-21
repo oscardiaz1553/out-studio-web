@@ -1,4 +1,4 @@
-import FadeIn from '../components/FadeIn';
+import MethodCards from '../components/MethodCards';
 import RevealText from '../components/RevealText';
 
 // Cómo trabajamos, en 4 pasos. Ligado a los servicios reales (Shopify,
@@ -55,31 +55,7 @@ export default function MethodSection() {
           que vende.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 border-t border-klein-deep/15">
-          {STEPS.map((s, i) => (
-            <FadeIn
-              key={s.step}
-              delay={i * 0.08}
-              y={24}
-              className={`flex flex-col gap-4 py-8 px-0 lg:px-8 border-b sm:border-b-0 border-klein-deep/15 ${
-                i > 0 ? 'lg:border-l lg:border-klein-deep/15 lg:pl-8' : ''
-              } ${i % 2 === 1 ? '' : 'sm:border-r sm:border-klein-deep/15 sm:pr-8'}`}
-            >
-              <span
-                className="font-display font-extrabold text-klein/25 leading-none"
-                style={{ fontSize: 'clamp(2.4rem, 4vw, 3.4rem)' }}
-              >
-                {s.step}
-              </span>
-              <h3 className="font-display font-semibold text-klein tracking-[-0.01em] text-lg sm:text-xl">
-                {s.title}
-              </h3>
-              <p className="text-sm text-muted leading-relaxed">
-                {s.description}
-              </p>
-            </FadeIn>
-          ))}
-        </div>
+        <MethodCards steps={STEPS} />
       </div>
     </section>
   );
