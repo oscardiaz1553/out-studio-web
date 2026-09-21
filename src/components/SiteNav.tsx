@@ -2,11 +2,14 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import AccentButton from './AccentButton';
 import LogoOut from './LogoOut';
+import Magnetic from './Magnetic';
 
 // Navbar compartido por todas las páginas (home, contacto, proyectos).
-// Es sticky: se queda arriba al hacer scroll y gana un fondo translúcido
-// una vez que el usuario se desplaza. Los anclas apuntan al home para
-// funcionar desde cualquier página; Proyectos y Contacto abren sus páginas.
+// Estilo "Huge": flota sobre el contenido (fixed, no sticky) en tres
+// columnas — logo suelto a la izquierda, una píldora de enlaces centrada
+// con su propio fondo opaco, y un CTA a la derecha — así que siempre se lee
+// bien sin importar qué haya detrás. El logo es lo único sin fondo propio:
+// cambia de blanco a azul cuando el hero oscuro del home queda atrás.
 const HOME = import.meta.env.BASE_URL;
 
 type NavLink = { label: string; href: string };
@@ -73,9 +76,51 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default function SiteNav() {
+/** Píldora central de enlaces: un halo azul viaja entre ellos al hacer hover. */
+function NavPill() {
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  return (
+    <ul
+      onMouseLeave={() => setHovered(null)}
+      className="hidden md:flex items-center gap-0.5 rounded-full bg-paper-pure/95 backdrop-blur-md border border-klein-deep/10 shadow-[0_8px_30px_rgba(20,20,60,0.14)] p-1.5"
+    >
+      {NAV_LINKS.map((link) => {
+        const active = hovered === link.label;
+        return (
+          <li key={link.label} className="relative">
+            {active && (
+              <motion.span
+                layoutId="nav-hover-pill"
+                className="absolute inset-0 rounded-full bg-klein"
+                transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+              />
+            )}
+            <a
+              href={link.href}
+              onMouseEnter={() => setHovered(link.label)}
+              className={`relative z-10 block px-4 lg:px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
+                active ? 'text-paper-pure' : 'text-klein-deep'
+              }`}
+            >
+              {link.label}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+interface SiteNavProps {
+  /** true cuando la página arranca con un hero oscuro (home): el logo nace
+   *  en paper-pure y pasa a klein una vez que el scroll deja atrás el hero. */
+  heroDark?: boolean;
+}
+
+export default function SiteNav({ heroDark = false }: SiteNavProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [pastHero, setPastHero] = useState(!heroDark);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -85,47 +130,49 @@ export default function SiteNav() {
   }, [menuOpen]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    if (!heroDark) return;
+    const onScroll = () => setPastHero(window.scrollY > window.innerHeight * 0.82);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [heroDark]);
+
+  const logoLight = heroDark && !pastHero;
 
   return (
     <>
-      <header
-        className={`sticky top-0 z-40 px-6 md:px-10 py-4 md:py-5 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ${
-          scrolled
-            ? 'bg-paper/85 backdrop-blur-md border-b border-klein-deep/10 shadow-[0_1px_24px_rgba(20,20,60,0.06)]'
-            : 'bg-transparent border-b border-transparent'
-        }`}
-      >
-        <div className="flex items-center justify-between gap-4">
-          <a href={HOME} className="text-klein">
+      <header className="fixed top-0 inset-x-0 z-40 px-4 sm:px-6 md:px-10 pt-4 md:pt-6">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+          <a
+            href={HOME}
+            className={`justify-self-start transition-colors duration-300 ${logoLight ? 'text-paper-pure' : 'text-klein'}`}
+          >
             <LogoOut className="h-8 md:h-9 w-auto" />
           </a>
-          <ul className="hidden sm:flex items-center gap-6 md:gap-10">
-            {NAV_LINKS.map((link) => (
-              <li key={link.label}>
-                <a
-                  href={link.href}
-                  className="text-klein-deep font-medium text-sm md:text-base hover:text-klein transition-colors duration-200"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <button
-            type="button"
-            aria-label="Abrir menú"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen(true)}
-            className="sm:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10"
-          >
-            <span className="block w-6 h-0.5 bg-klein" />
-            <span className="block w-6 h-0.5 bg-klein" />
-          </button>
+
+          <div className="justify-self-center">
+            <NavPill />
+          </div>
+
+          <div className="justify-self-end flex items-center gap-3">
+            <div className="hidden sm:block">
+              <Magnetic>
+                <AccentButton href={CONTACT_URL} className="px-6 py-2.5 text-sm">
+                  Hablemos
+                </AccentButton>
+              </Magnetic>
+            </div>
+            <button
+              type="button"
+              aria-label="Abrir menú"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(true)}
+              className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 rounded-full bg-paper-pure shadow-[0_4px_18px_rgba(20,20,60,0.14)]"
+            >
+              <span className="block w-5 h-0.5 bg-klein" />
+              <span className="block w-5 h-0.5 bg-klein" />
+            </button>
+          </div>
         </div>
       </header>
 

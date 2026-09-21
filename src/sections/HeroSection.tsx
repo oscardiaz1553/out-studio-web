@@ -10,19 +10,19 @@ function ScrollCue() {
   const reduceMotion = useReducedMotion();
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1.4, duration: 0.6 }}
-      className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-paper-pure/70"
+      className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
     >
-      <span className="text-[10px] tracking-[0.18em]">SCROLL</span>
-      <motion.span
-        aria-hidden
-        className="block w-px h-8 bg-paper-pure/50"
-        animate={reduceMotion ? {} : { scaleY: [0.3, 1, 0.3] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ transformOrigin: 'top' }}
-      />
+      <motion.div
+        animate={reduceMotion ? {} : { y: [0, 5, 0] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+        className="flex items-center gap-2 rounded-full bg-paper-pure/95 backdrop-blur-md px-4 py-2 text-klein-deep text-xs font-medium tracking-[0.04em] shadow-[0_8px_24px_rgba(20,20,60,0.2)]"
+      >
+        Scroll
+        <span aria-hidden>↓</span>
+      </motion.div>
     </motion.div>
   );
 }
