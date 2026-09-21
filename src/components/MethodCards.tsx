@@ -82,7 +82,7 @@ function Card({
     <motion.div
       ref={ref}
       style={{ scale, rotate, y }}
-      className={`shrink-0 w-[78vw] sm:w-[46vw] md:w-[34vw] max-w-[420px] aspect-[4/5] rounded-3xl p-7 sm:p-9 shadow-[0_30px_70px_rgba(20,20,60,0.25)] flex flex-col justify-between ${style.bg} ${style.border ?? ''}`}
+      className={`shrink-0 w-[78vw] sm:w-[46vw] md:w-[34vw] max-w-[420px] aspect-[4/5] rounded-3xl p-7 sm:p-9 shadow-[0_14px_28px_rgba(20,20,60,0.12)] flex flex-col justify-between ${style.bg} ${style.border ?? ''}`}
     >
       <span
         className={`font-display font-extrabold leading-none ${style.text}`}
