@@ -4,8 +4,15 @@ import RevealText from '../components/RevealText';
 import Statue from '../components/Statue';
 import { STATUES } from '../data/statues';
 
-const ABOUT_TEXT =
-  'La mayoría de negocios digitales se ven todos iguales. Mismos templates, mismas fórmulas, mismo molde. Out existe para romper eso: tiendas Shopify y webs en WordPress hechas a medida, con código propio, para que nadie tenga que decirte que no se puede.';
+const ABOUT_SEGMENTS = [
+  {
+    text: 'La mayoría de negocios digitales se ven todos iguales. Mismos templates, mismas fórmulas, mismo molde. ',
+  },
+  { text: 'Out existe para romper eso: ', accent: true },
+  {
+    text: 'tiendas Shopify y webs en WordPress hechas a medida, con código propio, para que nadie tenga que decirte que no se puede.',
+  },
+];
 
 export default function AboutSection() {
   return (
@@ -37,8 +44,8 @@ export default function AboutSection() {
         </div>
 
         <AnimatedText
-          text={ABOUT_TEXT}
-          className="text-klein-deep font-medium leading-relaxed max-w-[46ch]"
+          segments={ABOUT_SEGMENTS}
+          className="font-medium leading-relaxed max-w-[46ch]"
           style={{ fontSize: 'clamp(1.15rem, 2vw, 1.6rem)' }}
         />
 
