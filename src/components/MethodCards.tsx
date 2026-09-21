@@ -73,33 +73,34 @@ function PinnedCard({
   const sign = i % 2 === 0 ? 1 : -1;
   const isLast = i === total - 1;
 
-  // Cada tarjeta: entra girando, se asienta un momento, sale girando en el
-  // mismo sentido (como si la pila siguiera rotando) — salvo la primera,
-  // que ya nace asentada (nada antes de progreso 0), y la última, que solo
-  // entra y se queda (después de ella se suelta el pin). Los breakpoints
-  // deben caer estrictamente dentro de [0,1]: framer-motion puede animar
-  // useScroll con timelines nativas del navegador, que exigen offsets
-  // crecientes en ese rango — un punto fuera (p. ej. antes de 0) rompe el
-  // montaje entero.
-  const settleAt = i * seg + seg * 0.22;
-  const holdAt = (i + 1) * seg - seg * 0.22;
+  // El cruce entre tarjetas dura muy poco (8% del tramo de cada una): la
+  // mayor parte del tiempo hay UNA sola tarjeta legible en pantalla, no dos
+  // superpuestas. Además de girar, la que sale sube y se va, la que entra
+  // viene de abajo — así que aunque coincidan un instante, no quedan text
+  // sobre texto en el mismo punto. Los breakpoints deben caer estrictamente
+  // dentro de [0,1]: framer-motion puede animar useScroll con timelines
+  // nativas del navegador, que exigen offsets crecientes en ese rango — un
+  // punto fuera (p. ej. antes de 0) rompe el montaje entero.
+  const trans = seg * 0.08;
+  const enterAt = i * seg;
+  const settleAt = enterAt + trans;
+  const holdAt = (i + 1) * seg - trans;
   const exitAt = (i + 1) * seg;
 
-  const enterAt = Math.max(0, i - 1) * seg;
   const times = isLast ? [enterAt, settleAt] : [enterAt, settleAt, holdAt, exitAt];
   const rotateOut = isLast
-    ? [sign * 20, sign * -3]
-    : [sign * 20, sign * -3, sign * -3, sign * -20];
+    ? [sign * 12, sign * -2]
+    : [sign * 12, sign * -2, sign * -2, sign * -12];
   const opacityOut = isLast ? [0, 1] : [0, 1, 1, 0];
-  const scaleOut = isLast ? [0.86, 1] : [0.86, 1, 1, 0.86];
+  const yOut = isLast ? [44, 0] : [44, 0, 0, -44];
 
   const rotate = useTransform(progress, times, rotateOut);
   const opacity = useTransform(progress, times, opacityOut);
-  const scale = useTransform(progress, times, scaleOut);
+  const y = useTransform(progress, times, yOut);
 
   return (
     <motion.div
-      style={{ rotate, opacity, scale }}
+      style={{ rotate, opacity, y }}
       className={`absolute inset-0 rounded-3xl p-8 sm:p-12 shadow-[0_30px_80px_rgba(20,20,60,0.3)] flex flex-col justify-between ${style.bg} ${style.border ?? ''}`}
     >
       <span
