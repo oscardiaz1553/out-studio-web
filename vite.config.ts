@@ -14,6 +14,7 @@ export default defineConfig({
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
         contacto: fileURLToPath(new URL('./contacto.html', import.meta.url)),
         proyectos: fileURLToPath(new URL('./proyectos.html', import.meta.url)),
+        cotizar: fileURLToPath(new URL('./cotizar.html', import.meta.url)),
       },
     },
   },
