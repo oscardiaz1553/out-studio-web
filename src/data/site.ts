@@ -2,8 +2,7 @@ export const EMAIL = 'oscar.diaz@outstudio.online';
 export const PHONE_DISPLAY = '+57 318 888 8392';
 export const PHONE_TEL = '+573188888392';
 
-// TODO: crear una access key gratis en https://web3forms.com con el correo
-// oscar.diaz@outstudio.online y pegarla aquí para que los formularios
-// (contacto y cotizador) envíen directo al inbox. Mientras esté vacía, abren
-// el cliente de correo del visitante como respaldo.
-export const WEB3FORMS_ACCESS_KEY = '';
+// Access key de Web3Forms (pública por diseño: va en el front-end). Los
+// formularios de contacto y cotizador envían con ella directo al inbox de
+// oscar.diaz@outstudio.online. Si se vacía, abren el correo del visitante.
+export const WEB3FORMS_ACCESS_KEY = 'd7b8bdbb-5202-4264-b1d3-d80b7b60f854';
