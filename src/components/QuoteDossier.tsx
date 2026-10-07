@@ -26,6 +26,8 @@ export interface QuoteDraft {
   timeline: string;
   terms: string;
   note: string;
+  /** Cuerpo del correo con el que se envía el PDF. */
+  emailMessage: string;
 }
 
 export const IVA_RATE = 0.19;

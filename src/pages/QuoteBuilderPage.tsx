@@ -1,4 +1,6 @@
 import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { buildDossierPdf } from '../lib/dossierPdf';
+import { QUOTE_WORKER_URL } from '../data/site';
 import QuoteDossier, {
   QuoteDraft,
   QuoteItem,
@@ -46,6 +48,11 @@ function hashString(s: string) {
   return (h >>> 0).toString(36);
 }
 
+function defaultEmailMessage(name: string) {
+  const first = name.trim().split(' ')[0];
+  return `Hola${first ? ` ${first}` : ''},\n\nGracias por contarnos sobre tu proyecto. Te compartimos nuestra propuesta de cotización, con el alcance, la inversión y los tiempos.\n\nCualquier duda la resolvemos con gusto.\n\nOscar Díaz\nOut. Studio`;
+}
+
 function initialDraft(payload: QuotePayload | null): QuoteDraft {
   const plazo = payload?.answers[answerKey('comun', 'plazo')];
   const items: QuoteItem[] = payload
@@ -72,6 +79,7 @@ function initialDraft(payload: QuotePayload | null): QuoteDraft {
     }Con tu aprobación enviamos un cronograma por etapas con fechas de entrega.`,
     terms: DEFAULT_TERMS,
     note: '',
+    emailMessage: defaultEmailMessage(payload?.contact.name ?? ''),
   };
 }
 
@@ -118,6 +126,16 @@ export default function QuoteBuilderPage() {
   const [loading, setLoading] = useState(true);
   const [payload, setPayload] = useState<QuotePayload | null>(null);
   const [draft, setDraft] = useState<QuoteDraft | null>(null);
+  const [sendKey, setSendKey] = useState(() => {
+    try {
+      return localStorage.getItem('out-quote-key') ?? '';
+    } catch {
+      return '';
+    }
+  });
+  const [send, setSend] = useState<
+    { kind: 'idle' } | { kind: 'working' } | { kind: 'ok'; to: string } | { kind: 'error'; msg: string }
+  >({ kind: 'idle' });
   const hash = typeof window !== 'undefined' ? window.location.hash : '';
   const storageKey = `out-quote:${hashString(hash)}`;
 
@@ -135,7 +153,7 @@ export default function QuoteBuilderPage() {
       } catch {
         /* sin almacenamiento: se parte del borrador nuevo */
       }
-      setDraft(saved ?? initialDraft(data));
+      setDraft(saved ? { ...initialDraft(data), ...saved } : initialDraft(data));
       setLoading(false);
     })();
   }, [hash, storageKey]);
@@ -173,12 +191,48 @@ export default function QuoteBuilderPage() {
 
   const { total } = totals(draft);
 
+  const subject = `Propuesta de cotización ${draft.folio} — Out. Studio`;
+  const pdfName = `Cotización ${draft.folio} - ${draft.clientCompany || draft.clientName || 'Out'}.pdf`;
+
   const mailto = () => {
-    const subject = `Propuesta de cotización ${draft.folio} — Out. Studio`;
-    const body = `Hola ${draft.clientName.split(' ')[0] || ''},\n\nGracias por contarnos sobre tu proyecto. Adjunto encuentras nuestra propuesta de cotización (${draft.folio}) con el alcance, la inversión (${formatCOP(total)}) y los tiempos.\n\nCualquier duda la resolvemos con gusto.\n\nOscar Díaz\nOut. Studio`;
     window.location.href = `mailto:${draft.clientEmail}?subject=${encodeURIComponent(
       subject,
-    )}&body=${encodeURIComponent(body)}`;
+    )}&body=${encodeURIComponent(draft.emailMessage)}`;
+  };
+
+  const sendToClient = async () => {
+    const unpriced = draft.items.filter((i) => !i.price).length;
+    const warning = unpriced ? `\n\nOjo: ${unpriced} concepto(s) están sin valor ("Por definir").` : '';
+    if (!window.confirm(`¿Enviar la cotización a ${draft.clientEmail}? Te llega una copia a ti.${warning}`)) return;
+    setSend({ kind: 'working' });
+    try {
+      const { base64 } = await buildDossierPdf(draft, groups);
+      const res = await fetch(QUOTE_WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key: sendKey,
+          to: draft.clientEmail.trim(),
+          subject,
+          message: draft.emailMessage,
+          pdfBase64: base64,
+          filename: pdfName,
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (res.ok && data.ok) {
+        try {
+          localStorage.setItem('out-quote-key', sendKey);
+        } catch {
+          /* ignorar */
+        }
+        setSend({ kind: 'ok', to: draft.clientEmail });
+      } else {
+        setSend({ kind: 'error', msg: data.error || 'No se pudo enviar. Intenta de nuevo.' });
+      }
+    } catch {
+      setSend({ kind: 'error', msg: 'No se pudo generar o enviar el PDF. Revisa tu conexión.' });
+    }
   };
 
   const reset = () => {
@@ -299,12 +353,46 @@ export default function QuoteBuilderPage() {
             <Field label="Condiciones (una por línea)">
               <textarea className={`${INPUT} resize-y`} rows={8} value={draft.terms} onChange={(e) => set('terms', e.target.value)} />
             </Field>
-            <Field label="Nota personal (opcional)">
+            <Field label="Mensaje del correo">
+              <textarea className={`${INPUT} resize-y`} rows={6} value={draft.emailMessage} onChange={(e) => set('emailMessage', e.target.value)} />
+            </Field>
+            <Field label="Nota personal en el PDF (opcional)">
               <textarea className={`${INPUT} resize-y`} rows={3} value={draft.note} onChange={(e) => set('note', e.target.value)} />
             </Field>
           </Group>
 
           <div className="sticky bottom-0 -mx-6 px-6 py-4 bg-paper-pure border-t border-klein-deep/15 flex flex-wrap gap-3">
+            {QUOTE_WORKER_URL && (
+              <div className="basis-full flex flex-col gap-2 pb-3 mb-1 border-b border-klein-deep/10">
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={sendKey}
+                  onChange={(e) => setSendKey(e.target.value)}
+                  placeholder="Clave de envío"
+                  aria-label="Clave de envío"
+                  className={INPUT}
+                />
+                <button
+                  type="button"
+                  onClick={sendToClient}
+                  disabled={!draft.clientEmail || !sendKey || send.kind === 'working'}
+                  className="rounded-full bg-carne-deep text-paper-pure text-sm font-medium px-6 py-2.5 hover:bg-carne-tinta transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  {send.kind === 'working' ? 'Generando y enviando…' : 'Enviar al cliente'}
+                </button>
+                {send.kind === 'ok' && (
+                  <p className="text-xs text-klein" role="status">
+                    Enviada a {send.to}. Te llegó una copia.
+                  </p>
+                )}
+                {send.kind === 'error' && (
+                  <p className="text-xs text-carne-tinta" role="alert">
+                    {send.msg}
+                  </p>
+                )}
+              </div>
+            )}
             <button
               type="button"
               onClick={() => window.print()}
@@ -318,7 +406,7 @@ export default function QuoteBuilderPage() {
               disabled={!draft.clientEmail}
               className="rounded-full border border-klein text-klein text-sm font-medium px-6 py-2.5 hover:bg-klein hover:text-paper-pure transition-colors disabled:opacity-50 disabled:pointer-events-none"
             >
-              Preparar correo
+              Preparar correo (manual)
             </button>
             <button type="button" onClick={reset} className="text-sm text-muted hover:text-klein px-2">
               Reiniciar
