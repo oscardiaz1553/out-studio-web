@@ -106,3 +106,31 @@ a {
   pointer-events: none;
 }
 
+
+/* Dossier de cotización (cotizar.html): una hoja A4 por página al imprimir /
+   guardar como PDF, con los fondos de color incluidos. */
+.dossier,
+.dossier * {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    background: #fff;
+  }
+  .dossier-page {
+    width: 210mm;
+    max-width: none;
+    min-height: 296mm;
+    margin: 0 !important;
+    box-shadow: none !important;
+    break-after: page;
+  }
+  .dossier-page:last-child {
+    break-after: auto;
+  }
+}

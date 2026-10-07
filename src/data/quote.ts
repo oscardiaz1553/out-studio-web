@@ -541,3 +541,143 @@ export function buildBrief(
   ];
   return parts.join('\n\n');
 }
+
+// ---------------------------------------------------------------------------
+// Fase 2: del brief del cliente al dossier de cotización.
+// ---------------------------------------------------------------------------
+
+/** Entregables por defecto de cada tipo: punto de partida editable en el dossier. */
+export const DEFAULT_SCOPE: Record<string, string[]> = {
+  shopify: [
+    'Diseño de la tienda a medida y adaptado a móvil',
+    'Configuración de Shopify: productos, colecciones, páginas y menús',
+    'Pasarela de pagos y métodos de envío',
+    'Carga inicial de productos',
+    'SEO básico y analítica instalada',
+    'Capacitación para administrar la tienda',
+  ],
+  wordpress: [
+    'Diseño a medida y adaptado a móvil',
+    'Desarrollo en WordPress con un panel fácil de administrar',
+    'Formularios conectados y optimización de velocidad',
+    'SEO técnico básico',
+    'Capacitación de uso',
+  ],
+  landing: [
+    'Diseño y desarrollo de la página',
+    'Formulario y/o botón de WhatsApp conectados',
+    'Pixel y analítica instalados',
+    'Optimización de velocidad y adaptación a móvil',
+  ],
+  app: [
+    'Descubrimiento y definición del alcance',
+    'Diseño de interfaz y experiencia (UI/UX)',
+    'Desarrollo del producto',
+    'Pruebas y puesta en producción',
+    'Documentación y entrega',
+  ],
+  automatizacion: [
+    'Levantamiento del proceso actual',
+    'Diseño e implementación de las integraciones',
+    'Pruebas con datos reales',
+    'Documentación y acompañamiento inicial',
+  ],
+  branding: [
+    'Investigación y definición de la marca',
+    'Diseño del logo con sus variantes',
+    'Paleta de color, tipografías y estilo visual',
+    'Manual de marca',
+    'Aplicaciones (papelería, redes, empaques) según lo acordado',
+  ],
+  soporte: [
+    'Diagnóstico inicial del sitio',
+    'Mantenimiento, copias de respaldo y actualizaciones',
+    'Optimizaciones según lo acordado',
+    'Reporte de lo realizado',
+  ],
+};
+
+export interface QuotePayload {
+  v: 1;
+  contact: Contact;
+  types: string[];
+  answers: Answers;
+}
+
+export interface AnswerRow {
+  question: string;
+  answer: string;
+}
+
+export interface AnswerGroup {
+  title: string;
+  rows: AnswerRow[];
+}
+
+/** Respuestas contestadas, agrupadas por tipo de proyecto, para mostrarlas. */
+export function answerGroups(
+  typeIds: string[],
+  answers: Answers,
+): AnswerGroup[] {
+  const make = (title: string, qs: Question[], scope: string): AnswerGroup => ({
+    title,
+    rows: qs
+      .map((q) => ({
+        question: q.label,
+        answer: formatAnswer(answers[answerKey(scope, q.id)]),
+      }))
+      .filter((r) => r.answer !== '—'),
+  });
+  return [
+    ...PROJECT_TYPES.filter((t) => typeIds.includes(t.id)).map((t) =>
+      make(t.label, t.questions, t.id),
+    ),
+    make('Sobre el proyecto', COMMON_QUESTIONS, 'comun'),
+  ].filter((g) => g.rows.length > 0);
+}
+
+// El payload viaja en el hash de un link (nunca llega a un servidor): JSON
+// comprimido con deflate y en base64 "seguro para URL". Prefijo "z." si va
+// comprimido, "j." si el navegador no soporta CompressionStream.
+function toBase64Url(bytes: Uint8Array): string {
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  }
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function fromBase64Url(text: string): Uint8Array {
+  const b64 = text.replace(/-/g, '+').replace(/_/g, '/');
+  const bin = atob(b64 + '='.repeat((4 - (b64.length % 4)) % 4));
+  return Uint8Array.from(bin, (c) => c.charCodeAt(0));
+}
+
+async function pipe(bytes: Uint8Array, stream: GenericTransformStream) {
+  const out = new Blob([bytes as BlobPart]).stream().pipeThrough(stream);
+  return new Uint8Array(await new Response(out).arrayBuffer());
+}
+
+export async function encodePayload(payload: QuotePayload): Promise<string> {
+  const raw = new TextEncoder().encode(JSON.stringify(payload));
+  if (typeof CompressionStream === 'undefined') return `j.${toBase64Url(raw)}`;
+  return `z.${toBase64Url(await pipe(raw, new CompressionStream('deflate-raw')))}`;
+}
+
+export async function decodePayload(
+  encoded: string,
+): Promise<QuotePayload | null> {
+  try {
+    const [kind, body] = [encoded.slice(0, 2), encoded.slice(2)];
+    let bytes = fromBase64Url(body);
+    if (kind === 'z.') {
+      bytes = await pipe(bytes, new DecompressionStream('deflate-raw'));
+    } else if (kind !== 'j.') {
+      return null;
+    }
+    const data = JSON.parse(new TextDecoder().decode(bytes)) as QuotePayload;
+    return data && data.v === 1 && Array.isArray(data.types) ? data : null;
+  } catch {
+    return null;
+  }
+}

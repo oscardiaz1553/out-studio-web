@@ -13,6 +13,7 @@ import {
   Question,
   answerKey,
   buildBrief,
+  encodePayload,
   isAnswered,
 } from '../data/quote';
 import { EMAIL, WEB3FORMS_ACCESS_KEY } from '../data/site';
@@ -198,7 +199,16 @@ export default function QuoteSection() {
     // Trampa para bots: este checkbox está oculto, una persona nunca lo marca.
     if (new FormData(form).get('botcheck')) return;
 
-    const brief = buildBrief(selected, answers, contact);
+    // Link al generador de cotización con todo el brief prellenado (viaja en
+    // el hash, nunca pasa por un servidor).
+    const payload = await encodePayload({
+      v: 1,
+      contact,
+      types: selected,
+      answers,
+    });
+    const builderUrl = `${window.location.origin}${import.meta.env.BASE_URL}cotizar.html#q=${payload}`;
+    const brief = `${buildBrief(selected, answers, contact)}\n\n=== ARMAR COTIZACIÓN ===\nAbre este link para generar el dossier con todo prellenado:\n${builderUrl}`;
     const labels = types.map((t) => t.label).join(' + ');
     const subject = `Solicitud de cotización: ${contact.name} — ${labels}`;
 
