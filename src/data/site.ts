@@ -10,4 +10,4 @@ export const WEB3FORMS_ACCESS_KEY = 'd7b8bdbb-5202-4264-b1d3-d80b7b60f854';
 // URL del Worker de Cloudflare que envía la cotización en PDF por correo
 // (ver worker/cotizaciones.js). Mientras esté vacía, el generador solo ofrece
 // "Descargar PDF" y "Preparar correo".
-export const QUOTE_WORKER_URL = '';
+export const QUOTE_WORKER_URL = 'https://out-cotizaciones.oscar-diaz-dc0.workers.dev/';
