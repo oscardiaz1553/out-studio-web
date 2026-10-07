@@ -10,7 +10,7 @@ import ProjectsSection from './sections/ProjectsSection';
 import MarqueeStrip from './sections/MarqueeStrip';
 import AboutSection from './sections/AboutSection';
 import FoundersSection from './sections/FoundersSection';
-import PricingSection from './sections/PricingSection';
+import QuoteSection from './sections/QuoteSection';
 import ContactSection from './sections/ContactSection';
 import Footer from './sections/Footer';
 
@@ -47,7 +47,7 @@ export default function App() {
 
       <AboutSection />
       <FoundersSection />
-      <PricingSection />
+      <QuoteSection />
       <ContactSection />
       <Footer />
       <ScrollToTop />
