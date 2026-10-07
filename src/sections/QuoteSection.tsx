@@ -263,6 +263,39 @@ function useQuoteForm() {
 
 type QuoteForm = ReturnType<typeof useQuoteForm>;
 
+/** Tarjetas de tipo de proyecto: el primer paso de la encuesta. Se usan en la
+ *  página (donde elegir una abre la pantalla completa) y dentro de ella. */
+function TypeCards({
+  selected,
+  onToggle,
+}: {
+  selected: string[];
+  onToggle: (id: string) => void;
+}) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {PROJECT_TYPES.map((t) => (
+        <label key={t.id} className="relative block">
+          <input
+            type="checkbox"
+            checked={selected.includes(t.id)}
+            onChange={() => onToggle(t.id)}
+            className="peer sr-only"
+          />
+          <span
+            className={`${OPTION_BASE} flex-col !items-start gap-1 h-full text-left`}
+          >
+            <span className="font-display font-semibold text-base">
+              {t.label}
+            </span>
+            <span className="text-xs opacity-75">{t.blurb}</span>
+          </span>
+        </label>
+      ))}
+    </div>
+  );
+}
+
 const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -452,28 +485,10 @@ function QuoteScreen({
                         cifra al azar: cuéntanos y te enviamos una cotización a
                         la medida en 24 a 48 horas. Puedes elegir más de uno.
                       </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {PROJECT_TYPES.map((t) => (
-                          <label key={t.id} className="relative block">
-                            <input
-                              type="checkbox"
-                              checked={form.selected.includes(t.id)}
-                              onChange={() => form.toggleType(t.id)}
-                              className="peer sr-only"
-                            />
-                            <span
-                              className={`${OPTION_BASE} flex-col !items-start gap-1 h-full text-left`}
-                            >
-                              <span className="font-display font-semibold text-base">
-                                {t.label}
-                              </span>
-                              <span className="text-xs opacity-75">
-                                {t.blurb}
-                              </span>
-                            </span>
-                          </label>
-                        ))}
-                      </div>
+                      <TypeCards
+                        selected={form.selected}
+                        onToggle={form.toggleType}
+                      />
                     </>
                   )}
 
@@ -697,13 +712,33 @@ export default function QuoteSection() {
           24 a 48 horas.
         </p>
 
-        <FadeIn y={20} className="flex flex-col items-start gap-4">
-          <AccentButton onClick={() => setOpen(true)} className="sm:px-12 sm:py-4">
-            Cotiza tu proyecto
-          </AccentButton>
-          <p className="text-xs text-muted">
-            Toma unos 3 minutos. Sin compromiso.
-          </p>
+        <FadeIn y={20}>
+          <div className="rounded-2xl border border-klein-deep/15 bg-paper-pure p-6 sm:p-10 max-w-[880px]">
+            <h3 className="font-display font-semibold text-klein text-xl sm:text-2xl mb-1">
+              ¿Qué necesitas?
+            </h3>
+            <p className="text-sm text-muted mb-6">
+              Elige para empezar; se abre en pantalla completa para que te
+              concentres. Puedes marcar más de uno.
+            </p>
+            <TypeCards
+              selected={form.selected}
+              onToggle={(id) => {
+                form.toggleType(id);
+                setOpen(true);
+              }}
+            />
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 min-h-[2.75rem]">
+              {form.selected.length > 0 && (
+                <AccentButton onClick={() => setOpen(true)}>
+                  Continuar mi cotización
+                </AccentButton>
+              )}
+              <p className="text-xs text-muted">
+                Toma unos 3 minutos. Sin compromiso.
+              </p>
+            </div>
+          </div>
         </FadeIn>
       </div>
 
