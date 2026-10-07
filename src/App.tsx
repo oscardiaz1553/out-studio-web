@@ -9,7 +9,6 @@ import { MANGOS } from './data/botanica';
 import ProjectsSection from './sections/ProjectsSection';
 import MarqueeStrip from './sections/MarqueeStrip';
 import AboutSection from './sections/AboutSection';
-import FoundersSection from './sections/FoundersSection';
 import QuoteSection from './sections/QuoteSection';
 import ContactSection from './sections/ContactSection';
 import Footer from './sections/Footer';
@@ -46,7 +45,6 @@ export default function App() {
       />
 
       <AboutSection />
-      <FoundersSection />
       <QuoteSection />
       <ContactSection />
       <Footer />
