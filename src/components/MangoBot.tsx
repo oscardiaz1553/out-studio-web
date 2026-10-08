@@ -10,14 +10,14 @@ const HIDE_ON = ['#cotizacion', '#contacto'];
 // mensaje llega con unos puntitos de "escribiendo…" para que se sienta vivo,
 // pero no es un chat: el botón lleva directo a la cotización.
 const DEFAULT_MESSAGES = [
-  '¡Qué hubo! Soy MangOut 🥭',
+  '¡Quihubo! Soy MangOut 🥭',
   '¿Cotizamos tu proyecto?',
   'Cuéntame qué necesitas. Respondemos en 24 a 48 horas.',
 ];
 
 const SECTION_MESSAGES: Record<string, string[]> = {
   servicios: [
-    '¿Cuál de estos te late?',
+    '¿Cuál de estos servicios te interesa?',
     'Dime cuál y te armamos la cotización.',
   ],
   proyectos: [
