@@ -1,40 +1,90 @@
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from 'framer-motion';
+import { useRef, useState } from 'react';
 import FadeIn from '../components/FadeIn';
 import RevealText from '../components/RevealText';
 
-// Servicios reales de Out, con el lenguaje en tono cálido y directo.
+const BASE = import.meta.env.BASE_URL;
+
+// Servicios reales de Out, con el lenguaje en tono cálido y directo. Cada uno
+// lleva una lámina de la ilustración de marca que aparece siguiendo al mouse
+// al pasar por encima (en escritorio): un detalle de agencia, con identidad.
 const SERVICES = [
   {
     name: 'Tiendas Shopify',
     description:
       'Tu tienda vendiendo desde el primer día, no cuando por fin quede lista.',
+    preview: `${BASE}previews/prev-1.webp`,
+    tilt: -4,
   },
   {
     name: 'Sitios WordPress',
     description:
       'Una web profesional que actualizas tú mismo, sin depender de nadie.',
+    preview: `${BASE}previews/prev-2.webp`,
+    tilt: 3,
   },
   {
     name: 'Landing Pages',
     description:
       'Páginas de campaña con un solo objetivo: que la gente actúe.',
+    preview: `${BASE}previews/prev-3.webp`,
+    tilt: -3,
   },
   {
-    name: 'Integraciones & Automatizaciones',
+    name: 'Branding',
     description:
-      'Conectamos tus herramientas para que el trabajo repetitivo se haga solo.',
+      'Logo e identidad visual con carácter: que te reconozcan a la primera.',
+    preview: `${BASE}previews/prev-4.webp`,
+    tilt: 4,
+  },
+  {
+    name: 'Apps & Integraciones',
+    description:
+      'Productos a medida y herramientas conectadas para que el trabajo repetitivo se haga solo.',
+    preview: `${BASE}previews/prev-5.webp`,
+    tilt: -2,
   },
   {
     name: 'Soporte & Optimización',
-    description:
-      'No desaparecemos después del lanzamiento. Seguimos contigo.',
+    description: 'No desaparecemos después del lanzamiento. Seguimos contigo.',
+    preview: `${BASE}previews/prev-1.webp`,
+    tilt: 3,
   },
 ];
 
 export default function ServicesSection() {
+  const reduceMotion = useReducedMotion();
+  const listRef = useRef<HTMLUListElement>(null);
+  const [active, setActive] = useState<number | null>(null);
+
+  // La lámina sigue al cursor con un resorte suave (coordenadas relativas a
+  // la lista, para que no dependa del scroll).
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 260, damping: 28, mass: 0.6 });
+  const sy = useSpring(y, { stiffness: 260, damping: 28, mass: 0.6 });
+
+  const onMove = (e: React.PointerEvent) => {
+    if (e.pointerType !== 'mouse' || !listRef.current) return;
+    const r = listRef.current.getBoundingClientRect();
+    // La lámina se queda en el espacio libre entre título y descripción y
+    // sólo sigue al cursor en vertical (con un leve desplazamiento lateral),
+    // así nunca tapa el título que estás mirando.
+    x.set(r.width * 0.6 + (e.clientX - r.left - r.width / 2) * 0.12);
+    y.set(e.clientY - r.top);
+  };
+
+  const showPreview = !reduceMotion;
+
   return (
     <section
       id="servicios"
-      className="bg-paper px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32 border-t border-klein-deep/15"
+      className="bg-carne px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32"
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">
@@ -50,50 +100,72 @@ export default function ServicesSection() {
           />
         </div>
 
-        <ul className="mt-12 sm:mt-16">
+        <ul
+          ref={listRef}
+          onPointerMove={onMove}
+          onPointerLeave={() => setActive(null)}
+          className="relative mt-12 sm:mt-16"
+        >
           {SERVICES.map((service, i) => (
             <FadeIn
               key={service.name}
               as="li"
-              delay={i * 0.08}
+              delay={i * 0.06}
               y={24}
-              className="group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-12 py-7 sm:py-9 border-t border-klein-deep/15"
+              onPointerEnter={(e: React.PointerEvent) => {
+                if (e.pointerType === 'mouse') setActive(i);
+              }}
+              className="group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-12 py-7 sm:py-9 border-t border-klein-deep/25 last:border-b cursor-default"
             >
               <div className="flex items-baseline gap-4 sm:gap-6">
                 <span className="text-[11px] tracking-[0.06em] text-carne-tinta shrink-0">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                {/* Al hover, la tipografía pasa a un degradado de dos
-                    azules (crossfade de opacidad, compositor puro). Antes
-                    era una tinta de patrón (azulejo) vía background-clip,
-                    pero sobre texto se veía borroso/con glow — un
-                    degradado limpio en dos tonos del mismo azul se lee
-                    mucho mejor. */}
                 <h3
-                  className="relative font-display font-semibold text-klein tracking-[-0.02em] leading-[1.03]"
-                  style={{ fontSize: 'clamp(1.6rem, 3.4vw, 2.8rem)' }}
+                  className="font-display font-extrabold text-klein tracking-[-0.04em] leading-[1.02] transition-transform duration-500 ease-out sm:group-hover:translate-x-3"
+                  style={{ fontSize: 'clamp(1.9rem, 4.6vw, 4rem)' }}
                 >
                   {service.name}
-                  <span
-                    aria-hidden
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none select-none"
-                    style={{
-                      backgroundImage:
-                        'linear-gradient(100deg, var(--klein-deep) 0%, var(--klein-mid) 100%)',
-                      WebkitBackgroundClip: 'text',
-                      backgroundClip: 'text',
-                      color: 'transparent',
-                    }}
-                  >
-                    {service.name}
-                  </span>
                 </h3>
               </div>
-              <p className="text-sm sm:text-base leading-relaxed text-muted sm:text-right sm:pt-2 sm:max-w-[34ch] transition-colors duration-200 group-hover:text-klein">
+              <p className="text-sm sm:text-base leading-relaxed text-klein-deep/80 sm:text-right sm:pt-2 sm:max-w-[34ch]">
                 {service.description}
               </p>
             </FadeIn>
           ))}
+
+          {showPreview && (
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute left-0 top-0 z-20 hidden md:block"
+              style={{ x: sx, y: sy }}
+            >
+              <div className="-translate-x-1/2 -translate-y-1/2">
+                <motion.div
+                  initial={false}
+                  animate={{
+                    opacity: active === null ? 0 : 1,
+                    scale: active === null ? 0.85 : 1,
+                    rotate: active === null ? 0 : SERVICES[active].tilt,
+                  }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+                  className="w-[240px] lg:w-[280px] aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_24px_60px_rgba(20,30,92,0.35)] ring-4 ring-paper-pure bg-paper-pure"
+                >
+                  {SERVICES.map((s, i) => (
+                    <img
+                      key={s.name}
+                      src={s.preview}
+                      alt=""
+                      loading="lazy"
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${
+                        active === i ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    />
+                  ))}
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
         </ul>
       </div>
     </section>

@@ -2,12 +2,12 @@ import SiteNav from './components/SiteNav';
 import ScrollToTop from './components/ScrollToTop';
 import FloatingQuoteCTA from './components/FloatingQuoteCTA';
 import HeroSection from './sections/HeroSection';
-import ScrollVideoSection from './sections/ScrollVideoSection';
+import ClientsStrip from './sections/ClientsStrip';
 import WhyOut from './sections/WhyOut';
 import ServicesSection from './sections/ServicesSection';
-import MethodSection from './sections/MethodSection';
 import ProjectsSection from './sections/ProjectsSection';
-import MarqueeStrip from './sections/MarqueeStrip';
+import MethodSection from './sections/MethodSection';
+import ReviewsSection from './sections/ReviewsSection';
 import AboutSection from './sections/AboutSection';
 import QuoteSection from './sections/QuoteSection';
 import ContactSection from './sections/ContactSection';
@@ -18,12 +18,12 @@ export default function App() {
     <main className="min-h-screen bg-paper" style={{ overflowX: 'clip' }}>
       <SiteNav />
       <HeroSection />
-      <MarqueeStrip />
+      <ClientsStrip />
       <WhyOut />
       <ServicesSection />
       <ProjectsSection />
       <MethodSection />
-      <ScrollVideoSection />
+      <ReviewsSection />
       <AboutSection />
       <QuoteSection />
       <ContactSection />

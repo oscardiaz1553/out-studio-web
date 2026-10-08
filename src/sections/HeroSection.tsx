@@ -1,4 +1,10 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from 'framer-motion';
+import { useEffect } from 'react';
 import AccentButton from '../components/AccentButton';
 import Magnetic from '../components/Magnetic';
 import RotatingWord from '../components/RotatingWord';
@@ -24,11 +30,29 @@ const LIVE_PROJECTS = PROJECTS.filter((p) => p.status === 'launched').map(
  *  borde superior/derecho, con un halo suave y una deriva lenta. */
 function MangoHero() {
   const reduceMotion = useReducedMotion();
+  // Parallax con el mouse: el mango se desplaza y se inclina un poco hacia
+  // donde mira el cursor (solo con mouse; en táctil queda quieto).
+  const px = useMotionValue(0);
+  const py = useMotionValue(0);
+  const x = useSpring(px, { stiffness: 80, damping: 18 });
+  const y = useSpring(py, { stiffness: 80, damping: 18 });
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      px.set((e.clientX / window.innerWidth - 0.5) * -34);
+      py.set((e.clientY / window.innerHeight - 0.5) * -26);
+    };
+    window.addEventListener('pointermove', onMove);
+    return () => window.removeEventListener('pointermove', onMove);
+  }, [reduceMotion, px, py]);
+
   return (
-    <div
+    <motion.div
       aria-hidden
       className="absolute right-[-6%] top-[-4%] sm:top-[-2%] z-[2] pointer-events-none select-none"
-      style={{ width: 'clamp(240px, 36vw, 640px)' }}
+      style={{ width: 'clamp(240px, 36vw, 640px)', x, y }}
     >
       {/* Halo: separa el mango del azul plano detrás */}
       <div
@@ -64,7 +88,7 @@ function MangoHero() {
               }
         }
       />
-    </div>
+    </motion.div>
   );
 }
 

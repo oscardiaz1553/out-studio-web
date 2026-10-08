@@ -134,3 +134,22 @@ a {
     break-after: auto;
   }
 }
+
+/* Cinta de marcas (ClientsStrip): dos mitades idénticas, desplaza -50%. */
+.clients-track {
+  animation: clientsMove 38s linear infinite;
+  will-change: transform;
+}
+@keyframes clientsMove {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .clients-track {
+    animation: none;
+  }
+}

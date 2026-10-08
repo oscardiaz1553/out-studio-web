@@ -21,7 +21,7 @@ export default function AboutSection() {
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-10 md:gap-16 items-start">
         <div className="flex items-baseline gap-4">
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
-            04
+            05
           </span>
           <RevealText
             as="h2"

@@ -693,23 +693,23 @@ export default function QuoteSection() {
   return (
     <section
       id="cotizacion"
-      className="bg-paper px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32 border-t border-klein-deep/15"
+      className="bg-klein-deep px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32"
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">
-          <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
-            05
+          <span className="text-[11px] tracking-[0.06em] text-carne">
+            06
           </span>
           <RevealText
             as="h2"
             text="Cotización"
             unit="char"
-            className="font-display font-semibold text-klein tracking-[-0.035em]"
+            className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
           />
         </div>
 
-        <p className="text-ink-2 leading-relaxed max-w-xl mt-4 mb-10 sm:mb-12">
+        <p className="text-paper-pure/80 leading-relaxed max-w-xl mt-4 mb-10 sm:mb-12">
           Cada proyecto es distinto, así que no te damos una cifra al azar.
           Cuéntanos qué necesitas y te enviamos una cotización a la medida en
           24 a 48 horas.

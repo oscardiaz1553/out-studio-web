@@ -70,7 +70,7 @@ export default function ContactSection() {
         <div>
           <div className="flex items-baseline gap-4 mb-6 sm:mb-8">
             <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
-              06
+              07
             </span>
             <RevealText
               as="h2"

@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { CSSProperties, ElementType, ReactNode, useMemo } from 'react';
+import { CSSProperties, ElementType, PointerEvent, ReactNode, useMemo } from 'react';
 
 interface FadeInProps {
   children: ReactNode;
@@ -10,6 +10,7 @@ interface FadeInProps {
   as?: ElementType;
   className?: string;
   style?: CSSProperties;
+  onPointerEnter?: (e: PointerEvent) => void;
 }
 
 export default function FadeIn({
@@ -21,6 +22,7 @@ export default function FadeIn({
   as = 'div',
   className,
   style,
+  onPointerEnter,
 }: FadeInProps) {
   const reduceMotion = useReducedMotion();
   const MotionComponent = useMemo(
@@ -40,6 +42,7 @@ export default function FadeIn({
       transition={{ delay, duration, ease: [0.16, 1, 0.3, 1] }}
       className={className}
       style={style}
+      onPointerEnter={onPointerEnter}
     >
       {children}
     </MotionComponent>

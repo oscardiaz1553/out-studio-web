@@ -90,7 +90,7 @@ function ProjectCard({
               rel="noreferrer"
               className="rounded-full border border-klein text-klein font-medium px-7 py-2.5 text-sm transition-colors duration-200 hover:bg-klein hover:text-paper-pure active:scale-[0.97]"
             >
-              Ver proyecto
+              Ver sitio ↗
             </a>
           )}
         </div>
@@ -171,7 +171,7 @@ function ProjectStack() {
         <div className="flex items-baseline justify-between gap-4">
           <div className="flex items-baseline gap-4">
             <span className="text-[11px] tracking-[0.06em] text-carne">
-              03
+              02
             </span>
             <RevealText
               as="h2"
@@ -208,7 +208,7 @@ function ComingSoonPanel() {
     <>
       <div className="flex items-baseline gap-4 mb-12">
         <span className="text-[11px] tracking-[0.06em] text-carne">
-          03
+          02
         </span>
         <RevealText
           as="h2"
