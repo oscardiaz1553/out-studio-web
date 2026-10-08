@@ -293,7 +293,7 @@ export function MangOutChat({ chat, onClose }: { chat: ChatState; onClose: () =>
               alt=""
               width={240}
               height={240}
-              className="h-[110%] w-auto max-w-none"
+              className="w-[100%] h-auto"
             />
           </span>
           <span

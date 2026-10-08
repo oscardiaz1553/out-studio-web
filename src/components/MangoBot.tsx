@@ -145,7 +145,7 @@ export default function MangoBot() {
                   width={240}
                   height={240}
                   draggable={false}
-                  className="h-[112%] w-auto max-w-none select-none"
+                  className="w-[114%] max-w-none h-auto select-none"
                   animate={
                     reduceMotion
                       ? undefined
