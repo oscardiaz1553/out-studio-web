@@ -6,14 +6,35 @@ const AVATAR = `${import.meta.env.BASE_URL}mango-bot.webp`;
 // Dónde NO mostrarlo: ya estás en la cotización/contacto.
 const HIDE_ON = ['#cotizacion', '#contacto'];
 
-// Lo que dice Mango, uno tras otro. Cada mensaje llega con unos puntitos de
-// "escribiendo…" para que se sienta vivo, pero no es un chat: el botón lleva
-// directo a la cotización.
-const MESSAGES = [
-  '¡Hola! Soy Mango 🥭',
+// Lo que dice MangOut, según la parte de la página en la que estás. Cada
+// mensaje llega con unos puntitos de "escribiendo…" para que se sienta vivo,
+// pero no es un chat: el botón lleva directo a la cotización.
+const DEFAULT_MESSAGES = [
+  '¡Qué hubo! Soy MangOut 🥭',
   '¿Cotizamos tu proyecto?',
-  'Cuéntame qué necesitas y te respondemos en 24 a 48 horas.',
+  'Cuéntame qué necesitas. Respondemos en 24 a 48 horas.',
 ];
+
+const SECTION_MESSAGES: Record<string, string[]> = {
+  servicios: [
+    '¿Cuál de estos te late?',
+    'Dime cuál y te armamos la cotización.',
+  ],
+  proyectos: [
+    '¿Te gustó lo que ves?',
+    'El próximo proyecto de esta lista puede ser el tuyo 😉',
+  ],
+  cotizacion: [],
+  metodo: [
+    'Cuatro pasos y tu proyecto está andando.',
+    '¿Arrancamos con el primero?',
+  ],
+  resenas: ['¿Ya te convenció? Cotiza sin compromiso.'],
+  nosotros: [
+    'Detrás de Out hay una persona real, no un call center.',
+    'Cuéntale tu idea.',
+  ],
+};
 
 const SHOW_MS = 4600;
 const TYPING_MS = 900;
@@ -28,7 +49,7 @@ function readDismissed() {
 }
 
 /**
- * "Mango", el asistente flotante de cotización. Un mango de la ilustración de
+ * "MangOut", el asistente flotante de cotización. Un mango de la ilustración de
  * marca como avatar, un globo que va hablando y un toque para empezar la
  * cotización. Aparece a los pocos segundos (o al empezar a bajar) y se
  * esconde cuando ya estás frente a la cotización o el contacto.
@@ -39,6 +60,7 @@ export default function MangoBot() {
   const [hidden, setHidden] = useState(false);
   const [bubbleOff, setBubbleOff] = useState(readDismissed);
   const [index, setIndex] = useState(0);
+  const [topic, setTopic] = useState('default');
   const [typing, setTyping] = useState(true);
 
   // Aparece a los 3 s o en cuanto se empieza a hacer scroll.
@@ -46,6 +68,7 @@ export default function MangoBot() {
     const t = window.setTimeout(() => setReady(true), 3000);
     const onScroll = () => {
       if (window.scrollY > 200) setReady(true);
+      else setTopic('default');
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
@@ -59,16 +82,49 @@ export default function MangoBot() {
       Boolean,
     ) as Element[];
     const seen = new Set<Element>();
-    const io = new IntersectionObserver((entries) => {
-      for (const e of entries) {
-        if (e.isIntersecting) seen.add(e.target);
-        else seen.delete(e.target);
-      }
-      setHidden(seen.size > 0);
-    });
+    // Sólo cuenta cuando la sección ocupa el centro de la pantalla, no con
+    // que asome por un borde.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) seen.add(e.target);
+          else seen.delete(e.target);
+        }
+        setHidden(seen.size > 0);
+      },
+      { rootMargin: '-35% 0px -35% 0px' },
+    );
     targets.forEach((t) => io.observe(t));
     return () => io.disconnect();
   }, []);
+
+  // Qué parte de la página tienes en el centro de la pantalla: MangOut
+  // comenta según donde estés.
+  useEffect(() => {
+    const ids = Object.keys(SECTION_MESSAGES).filter(
+      (k) => SECTION_MESSAGES[k].length > 0,
+    );
+    const targets = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setTopic(e.target.id);
+            setIndex(0);
+          }
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    targets.forEach((t) => io.observe(t));
+    return () => io.disconnect();
+  }, []);
+
+  const messages = SECTION_MESSAGES[topic]?.length
+    ? SECTION_MESSAGES[topic]
+    : DEFAULT_MESSAGES;
 
   // Ciclo: puntitos → mensaje → puntitos → siguiente mensaje (en bucle).
   const talking = ready && !hidden && !bubbleOff;
@@ -77,14 +133,14 @@ export default function MangoBot() {
     setTyping(true);
     const showTimer = window.setTimeout(() => setTyping(false), TYPING_MS);
     const nextTimer = window.setTimeout(
-      () => setIndex((i) => (i + 1) % MESSAGES.length),
+      () => setIndex((i) => (i + 1) % messages.length),
       TYPING_MS + SHOW_MS,
     );
     return () => {
       window.clearTimeout(showTimer);
       window.clearTimeout(nextTimer);
     };
-  }, [talking, index]);
+  }, [talking, index, topic, messages.length]);
 
   const dismissBubble = () => {
     setBubbleOff(true);
@@ -114,8 +170,8 @@ export default function MangoBot() {
               href="#cotizar"
               className="block pl-4 pr-9 py-3 text-sm leading-snug min-h-[44px]"
             >
-              <span className="block text-[10px] tracking-[0.08em] uppercase text-carne-tinta mb-0.5">
-                Mango · Cotizaciones
+              <span className="block text-xs font-bold tracking-[-0.01em] text-klein mb-0.5">
+                MangOut
               </span>
               <AnimatePresence mode="wait" initial={false}>
                 {typing ? (
@@ -143,14 +199,14 @@ export default function MangoBot() {
                   </motion.span>
                 ) : (
                   <motion.span
-                    key={`msg-${index}`}
+                    key={`msg-${topic}-${index}`}
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                     className="block font-medium"
                   >
-                    {MESSAGES[index]}
+                    {messages[index % messages.length]}
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -170,7 +226,7 @@ export default function MangoBot() {
           <motion.a
             key="avatar"
             href="#cotizar"
-            aria-label="Cotiza tu proyecto con Mango"
+            aria-label="MangOut: cotiza tu proyecto"
             initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.4, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.6 }}
@@ -189,12 +245,17 @@ export default function MangoBot() {
               animate={
                 reduceMotion
                   ? undefined
-                  : { y: [0, -3, 0], rotate: [0, -3, 0, 3, 0] }
+                  : {
+                      y: [0, -14, 0, -6, 0],
+                      scaleY: [1, 1.06, 0.92, 1.02, 1],
+                      rotate: [0, -8, 6, -3, 0],
+                    }
               }
               transition={{
-                duration: 3.6,
+                duration: 1.1,
                 repeat: Infinity,
-                ease: 'easeInOut',
+                repeatDelay: 4.5,
+                ease: 'easeOut',
               }}
             />
             {/* Punto "en línea" */}
