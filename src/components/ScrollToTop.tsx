@@ -30,7 +30,7 @@ export default function ScrollToTop() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8, y: 8 }}
           transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-5 right-5 sm:bottom-8 sm:right-8 z-40 w-12 h-12 rounded-full bg-klein text-paper-pure shadow-[0_6px_24px_rgba(20,20,60,0.25)] flex items-center justify-center hover:bg-klein-mid active:scale-95 transition-colors duration-200"
+          className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 w-12 h-12 rounded-full bg-klein text-paper-pure shadow-[0_6px_24px_rgba(20,20,60,0.25)] flex items-center justify-center hover:bg-klein-mid active:scale-95 transition-colors duration-200"
         >
           <svg
             width="20"

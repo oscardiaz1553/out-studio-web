@@ -1,6 +1,6 @@
 import SiteNav from './components/SiteNav';
 import ScrollToTop from './components/ScrollToTop';
-import FloatingQuoteCTA from './components/FloatingQuoteCTA';
+import MangoBot from './components/MangoBot';
 import HeroSection from './sections/HeroSection';
 import ClientsStrip from './sections/ClientsStrip';
 import WhyOut from './sections/WhyOut';
@@ -22,13 +22,13 @@ export default function App() {
       <WhyOut />
       <ServicesSection />
       <ProjectsSection />
+      <QuoteSection />
       <MethodSection />
       <ReviewsSection />
       <AboutSection />
-      <QuoteSection />
       <ContactSection />
       <Footer />
-      <FloatingQuoteCTA />
+      <MangoBot />
       <ScrollToTop />
     </main>
   );

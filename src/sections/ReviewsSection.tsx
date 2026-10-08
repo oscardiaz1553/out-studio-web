@@ -264,7 +264,7 @@ export default function ReviewsSection() {
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
-            04
+            05
           </span>
           <RevealText
             as="h2"
