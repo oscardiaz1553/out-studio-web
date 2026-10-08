@@ -2,7 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { MangOutChat, useChatState } from './MangOutChat';
 
-const AVATAR = `${import.meta.env.BASE_URL}mango-bot.webp`;
+const AVATAR = `${import.meta.env.BASE_URL}mango-bot-3d.webp`;
 
 // Dónde NO mostrarlo: ya estás en la cotización/contacto.
 const HIDE_ON = ['#cotizacion', '#contacto'];
@@ -136,21 +136,21 @@ export default function MangoBot() {
               transition={{ type: 'spring', stiffness: 260, damping: 18 }}
               whileHover={reduceMotion ? undefined : { scale: 1.08, rotate: -6 }}
               whileTap={{ scale: 0.94 }}
-              className="pointer-events-auto relative shrink-0 w-[62px] h-[62px] sm:w-[70px] sm:h-[70px] rounded-full bg-klein ring-[3px] ring-paper-pure shadow-[0_10px_30px_rgba(20,30,92,0.4)]"
+              className="pointer-events-auto relative shrink-0 w-[56px] h-[76px] sm:w-[64px] sm:h-[88px] rounded-2xl bg-klein ring-[3px] ring-paper-pure shadow-[0_10px_30px_rgba(20,30,92,0.4)]"
             >
-              <span className="absolute inset-0 rounded-full overflow-hidden flex items-center justify-center">
+              <span className="absolute inset-0 rounded-[13px] overflow-hidden flex items-center justify-center">
                 <motion.img
                   src={AVATAR}
                   alt=""
-                  width={220}
-                  height={178}
+                  width={240}
+                  height={240}
                   draggable={false}
-                  className="w-[86%] h-auto select-none"
+                  className="h-[112%] w-auto max-w-none select-none"
                   animate={
                     reduceMotion
                       ? undefined
                       : {
-                          y: [0, -5, 0, -2, 0],
+                          y: [0, -6, 0, -2, 0],
                           scaleY: [1, 1.06, 0.92, 1.02, 1],
                           rotate: [0, -8, 6, -3, 0],
                         }
