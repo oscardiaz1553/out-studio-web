@@ -2,16 +2,22 @@ import { motion, useReducedMotion } from 'framer-motion';
 import AccentButton from '../components/AccentButton';
 import Magnetic from '../components/Magnetic';
 import RotatingWord from '../components/RotatingWord';
+import { PROJECTS } from '../data/projects';
 
 const MANGO = `${import.meta.env.BASE_URL}mango-hero.webp`;
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-// Los tres servicios "de producto" (no Integraciones/Soporte, que son más
-// de acompañamiento que de titular). Cada rotación debe leerse completa:
-// "Tiendas Shopify que venden.", "Sitios WordPress que venden.", etc.
-const SERVICES = ['Tiendas Shopify', 'Sitios WordPress', 'Landing Pages'];
-const SR_HEADLINE = SERVICES.map((s) => `${s} que venden.`).join(' ');
+// Promesa + palabra rotativa: "Hacemos que tu [marca] sea imposible de
+// ignorar." Cada rotación se lee completa y apunta a un servicio real
+// (tienda, sitio, app, marca). El texto completo vive en un sr-only.
+const SUBJECTS = ['marca', 'tienda online', 'sitio web', 'negocio', 'app'];
+const SR_HEADLINE = `Hacemos que tu ${SUBJECTS.join(', tu ')} sea imposible de ignorar.`;
+
+// Prueba social real: proyectos ya en línea.
+const LIVE_PROJECTS = PROJECTS.filter((p) => p.status === 'launched').map(
+  (p) => p.name,
+);
 
 /** El mango partido: objeto 3D grande a un lado, como el H de Huge —
  *  pero on-brand (azul Klein sólido detrás, no negro). Sangra por el
@@ -85,12 +91,12 @@ function ScrollCue() {
 
 /**
  * Hero estilo "Huge": tipografía enorme dominando el fold, sobre azul Klein
- * sólido con el mango partido a sangre por el borde superior derecho — el
- * objeto 3D grande que hace las veces del H de Huge, pero on-brand. El
- * titular rota entre los tres servicios ("Tiendas Shopify / Sitios
- * WordPress / Landing Pages que venden.") — decorativo vía aria-hidden, con
- * las tres frases completas disponibles en un sr-only para lectores de
- * pantalla y buscadores.
+ * sólido con el mango partido a sangre por el borde superior derecho. La
+ * promesa es el titular ("Hacemos que tu [marca] sea imposible de ignorar"),
+ * con la palabra central rotando entre lo que Out hace. Un solo CTA primario
+ * (cotizar), uno secundario (ver proyectos) y prueba social real: los
+ * proyectos que ya están en línea. Decorativo vía aria-hidden, con la frase
+ * completa en un sr-only para lectores de pantalla y buscadores.
  */
 export default function HeroSection() {
   return (
@@ -98,8 +104,6 @@ export default function HeroSection() {
       data-nav-bg="dark"
       className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-klein"
     >
-      {/* Degradado sutil: da profundidad al azul plano sin volverlo una
-          textura que compita con el mango. */}
       <div
         aria-hidden
         className="absolute inset-0 bg-gradient-to-b from-klein-deep/40 via-transparent to-klein-deep/55 pointer-events-none"
@@ -122,13 +126,10 @@ export default function HeroSection() {
           <h1
             className="font-display font-extrabold tracking-[-0.04em]"
             style={{
-              fontSize: 'clamp(2.6rem, 8.5vw, 8.5rem)',
-              lineHeight: 0.94,
+              fontSize: 'clamp(2.5rem, 7.2vw, 7.6rem)',
+              lineHeight: 0.96,
             }}
           >
-            {/* Texto real para lectores de pantalla y buscadores: las tres
-                variantes completas, sin depender de en qué punto de la
-                rotación esté la animación decorativa. */}
             <span className="sr-only">{SR_HEADLINE}</span>
 
             <motion.span
@@ -138,49 +139,85 @@ export default function HeroSection() {
               transition={{ delay: 0.2, duration: 0.7, ease: EASE }}
               className="block text-paper-pure"
             >
-              <RotatingWord words={SERVICES} />
+              Hacemos que tu
             </motion.span>
             <motion.span
               aria-hidden="true"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.7, ease: EASE }}
+              transition={{ delay: 0.32, duration: 0.7, ease: EASE }}
               className="block text-carne"
             >
-              que venden.
+              <RotatingWord
+                words={SUBJECTS}
+                interval={3000}
+                className="pb-[0.14em] -mb-[0.14em]"
+              />
+            </motion.span>
+            <motion.span
+              aria-hidden="true"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.44, duration: 0.7, ease: EASE }}
+              className="block text-paper-pure"
+            >
+              sea imposible de ignorar.
             </motion.span>
           </h1>
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75, duration: 0.7 }}
-            className="text-paper-pure/85 leading-relaxed max-w-[46ch] text-base sm:text-lg"
-          >
-            Shopify, WordPress o una landing: código propio, de principio a
-            fin, para que no se vea como todas y venda de verdad.
-          </motion.p>
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
+          <div className="flex flex-col gap-7 max-w-[52ch]">
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.75, duration: 0.7 }}
+              className="text-paper-pure/90 leading-relaxed text-base sm:text-lg"
+            >
+              Diseño y desarrollo a medida, con código propio: tiendas
+              Shopify, sitios WordPress, apps y branding pensados para
+              convertir visitas en clientes.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.7 }}
+              className="flex flex-wrap items-center gap-x-7 gap-y-4"
+            >
+              <Magnetic>
+                <AccentButton
+                  href="#cotizar"
+                  onBlue
+                  className="sm:px-12 sm:py-4"
+                >
+                  Cotiza tu proyecto
+                </AccentButton>
+              </Magnetic>
+              <a
+                href="#proyectos"
+                className="text-paper-pure font-medium text-sm sm:text-base underline underline-offset-[6px] decoration-paper-pure/40 hover:decoration-carne hover:text-carne transition-colors duration-200"
+              >
+                Ver proyectos →
+              </a>
+            </motion.div>
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.7 }}
-            className="flex flex-col items-start md:items-end gap-3"
+            transition={{ delay: 1.05, duration: 0.7 }}
+            className="flex flex-col gap-2 lg:items-end lg:text-right"
           >
-            <span className="font-display font-semibold text-carne text-sm sm:text-base tracking-[-0.01em]">
+            <span className="text-[11px] tracking-[0.1em] uppercase text-carne">
+              Ya en línea
+            </span>
+            <p className="font-display font-semibold text-paper-pure text-lg sm:text-xl tracking-[-0.01em]">
+              {LIVE_PROJECTS.join(' · ')}
+            </p>
+            <span className="font-display font-semibold text-carne text-sm tracking-[-0.01em]">
               Never the usual.
             </span>
-            <Magnetic>
-              <AccentButton
-                href="#contacto"
-                onBlue
-                className="sm:px-12 sm:py-4"
-              >
-                Hablemos
-              </AccentButton>
-            </Magnetic>
           </motion.div>
         </div>
       </div>

@@ -27,7 +27,7 @@ const NAV_LINKS: NavLink[] = [
   { label: 'Contacto', href: `${HOME}contacto.html` },
 ];
 
-const CONTACT_URL = `${HOME}contacto.html`;
+const QUOTE_URL = `${HOME}#cotizar`;
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
 function MobileMenu({ onClose }: { onClose: () => void }) {
@@ -75,8 +75,8 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
         ))}
       </nav>
 
-      <AccentButton href={CONTACT_URL} onBlue onClick={onClose} className="self-start">
-        Hablemos
+      <AccentButton href={QUOTE_URL} onBlue onClick={onClose} className="self-start">
+        Cotiza tu proyecto
       </AccentButton>
     </motion.div>
   );
@@ -230,8 +230,8 @@ export default function SiteNav() {
             <div className="justify-self-end flex items-center gap-3">
               <div className="hidden sm:block">
                 <Magnetic>
-                  <AccentButton href={CONTACT_URL} className="px-6 py-2.5 text-sm">
-                    Hablemos
+                  <AccentButton href={QUOTE_URL} className="px-6 py-2.5 text-sm">
+                    Cotiza tu proyecto
                   </AccentButton>
                 </Magnetic>
               </div>

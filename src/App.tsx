@@ -1,11 +1,11 @@
 import SiteNav from './components/SiteNav';
 import ScrollToTop from './components/ScrollToTop';
+import FloatingQuoteCTA from './components/FloatingQuoteCTA';
 import HeroSection from './sections/HeroSection';
 import ScrollVideoSection from './sections/ScrollVideoSection';
+import WhyOut from './sections/WhyOut';
 import ServicesSection from './sections/ServicesSection';
 import MethodSection from './sections/MethodSection';
-import EditorialPlate from './components/EditorialPlate';
-import { MANGOS } from './data/botanica';
 import ProjectsSection from './sections/ProjectsSection';
 import MarqueeStrip from './sections/MarqueeStrip';
 import AboutSection from './sections/AboutSection';
@@ -18,36 +18,17 @@ export default function App() {
     <main className="min-h-screen bg-paper" style={{ overflowX: 'clip' }}>
       <SiteNav />
       <HeroSection />
-      <ScrollVideoSection />
-      <ServicesSection />
-      <MethodSection />
-
-      {/* Lámina I — macro con titular calado, en el umbral papel→Klein */}
-      <EditorialPlate
-        caption="Peonía azul, mango fugado"
-        objectPosition="30% 45%"
-        minH="min-h-[92vh]"
-        quoteObeys="Casi todo obedece."
-        quoteEscapes="Una se sale."
-      />
-
-      <ProjectsSection />
       <MarqueeStrip />
-
-      {/* Lámina II — los mangos fugados, respiro antes de Nosotros.
-          Segundo motivo botánico para no repetir imagen. */}
-      <EditorialPlate
-        caption="Mango fugado, escala 1:1"
-        image={MANGOS}
-        objectPosition="50% 50%"
-        minH="min-h-[78vh]"
-        hideWithoutImage
-      />
-
+      <WhyOut />
+      <ServicesSection />
+      <ProjectsSection />
+      <MethodSection />
+      <ScrollVideoSection />
       <AboutSection />
       <QuoteSection />
       <ContactSection />
       <Footer />
+      <FloatingQuoteCTA />
       <ScrollToTop />
     </main>
   );

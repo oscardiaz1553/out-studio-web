@@ -95,32 +95,64 @@ function ProjectCard({
           )}
         </div>
 
-        <div className="flex gap-3 sm:gap-4">
-          <div className="w-[40%] flex flex-col gap-3 sm:gap-4">
-            <ProjectMedia
-              src={project.leftImages?.[0]}
-              alt={`${project.name}, vista 1`}
-              label={project.name.charAt(0)}
-              className="w-full object-cover rounded-xl"
-              style={{ height: 'clamp(100px, 17vh, 220px)' }}
-            />
-            <ProjectMedia
-              src={project.leftImages?.[1]}
-              alt={`${project.name}, vista 2`}
-              label={project.name.charAt(0)}
-              className="w-full object-cover rounded-xl"
-              style={{ height: 'clamp(130px, 24vh, 320px)' }}
-            />
+        {project.leftImages || project.rightImage ? (
+          <div className="flex gap-3 sm:gap-4">
+            <div className="w-[40%] flex flex-col gap-3 sm:gap-4">
+              <ProjectMedia
+                src={project.leftImages?.[0]}
+                alt={`${project.name}, vista 1`}
+                label={project.name.charAt(0)}
+                className="w-full object-cover rounded-xl"
+                style={{ height: 'clamp(100px, 17vh, 220px)' }}
+              />
+              <ProjectMedia
+                src={project.leftImages?.[1]}
+                alt={`${project.name}, vista 2`}
+                label={project.name.charAt(0)}
+                className="w-full object-cover rounded-xl"
+                style={{ height: 'clamp(130px, 24vh, 320px)' }}
+              />
+            </div>
+            <div className="w-[60%]">
+              <ProjectMedia
+                src={project.rightImage}
+                alt={`${project.name}, vista principal`}
+                label={project.name.charAt(0)}
+                className="w-full h-full object-cover rounded-xl"
+              />
+            </div>
           </div>
-          <div className="w-[60%]">
-            <ProjectMedia
-              src={project.rightImage}
-              alt={`${project.name}, vista principal`}
-              label={project.name.charAt(0)}
-              className="w-full h-full object-cover rounded-xl"
+        ) : (
+          // Sin capturas todavía: panel tipográfico con el nombre a gran
+          // escala, en vez de recuadros vacíos con una letra.
+          <div
+            className="relative overflow-hidden rounded-xl bg-klein-deep text-paper-pure flex flex-col justify-end p-6 sm:p-10"
+            style={{ height: 'clamp(240px, 50vh, 540px)' }}
+          >
+            <div
+              aria-hidden
+              className="absolute inset-0 opacity-[0.1]"
+              style={{
+                backgroundImage: `url(${AZULEJO})`,
+                backgroundSize: '160%',
+                backgroundPosition: `${index * 33}% 40%`,
+              }}
             />
+            <p className="relative text-[11px] tracking-[0.1em] uppercase text-carne mb-3">
+              {categoryLabel(project.type)} ·{' '}
+              {project.status === 'launched' ? 'En línea' : 'En desarrollo'}
+            </p>
+            <p
+              className="relative font-display font-extrabold tracking-[-0.045em] leading-[0.92]"
+              style={{ fontSize: 'clamp(2.6rem, 9.5vw, 8.5rem)' }}
+            >
+              {project.name}
+            </p>
+            <p className="relative mt-4 max-w-[46ch] text-paper-pure/85 leading-relaxed">
+              {project.summary}
+            </p>
           </div>
-        </div>
+        )}
       </motion.div>
     </div>
   );

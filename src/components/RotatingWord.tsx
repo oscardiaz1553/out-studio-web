@@ -45,9 +45,16 @@ export default function RotatingWord({
         <motion.span
           key={words[index]}
           initial={{ y: '110%', opacity: 0 }}
-          animate={{ y: '0%', opacity: 1 }}
-          exit={{ y: '-110%', opacity: 0 }}
-          transition={{ duration: 0.6, ease: EASE }}
+          animate={{
+            y: '0%',
+            opacity: 1,
+            transition: { duration: 0.5, ease: EASE },
+          }}
+          exit={{
+            y: '-110%',
+            opacity: 0,
+            transition: { duration: 0.3, ease: EASE },
+          }}
           className="block"
         >
           {words[index]}
