@@ -12,7 +12,10 @@ import Magnetic from './Magnetic';
 // (no solo "es el home"): cada sección marca su fondo con
 // data-nav-bg="dark" (Hero, la secuencia, Proyectos, las láminas
 // editoriales, el marquee, el footer) y un IntersectionObserver detecta
-// cuál está cruzando la franja del nav.
+// cuál está cruzando la franja del nav. Al hacer scroll el nav toma un
+// fondo propio (papel con desenfoque) y pasa siempre a texto oscuro: así
+// el logo y los enlaces se leen sobre cualquier imagen o color, también
+// sobre las láminas claras que el detector marcaba como oscuras.
 const HOME = import.meta.env.BASE_URL;
 
 type NavLink = { label: string; href: string };
@@ -122,9 +125,29 @@ function NavPill({ onDark }: { onDark: boolean }) {
   );
 }
 
+const SCROLLED_AT = 24;
+
 export default function SiteNav() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [onDark, setOnDark] = useState(true);
+  const [darkBehind, setDarkBehind] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
+  // Con fondo propio (scrolled) el nav es siempre claro: texto oscuro.
+  const onDark = darkBehind && !scrolled;
+
+  useEffect(() => {
+    let raf = 0;
+    const update = () => setScrolled(window.scrollY > SCROLLED_AT);
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -141,7 +164,7 @@ export default function SiteNav() {
       document.querySelectorAll<HTMLElement>('[data-nav-bg="dark"]')
     );
     if (targets.length === 0) {
-      setOnDark(false);
+      setDarkBehind(false);
       return;
     }
 
@@ -152,7 +175,7 @@ export default function SiteNav() {
           if (entry.isIntersecting) intersecting.add(entry.target);
           else intersecting.delete(entry.target);
         }
-        setOnDark(intersecting.size > 0);
+        setDarkBehind(intersecting.size > 0);
       },
       { rootMargin: '-60px 0px -100% 0px', threshold: 0 }
     );
@@ -164,12 +187,13 @@ export default function SiteNav() {
   return (
     <>
       <header className="fixed top-0 inset-x-0 z-40">
-        {/* Velo de desenfoque degradado: funde lo que pasa por debajo del
-            nav (fuerte arriba, se disuelve rápido), sin llegar a tocar
-            títulos que quedan fijos justo debajo (p. ej. "Proyectos"). */}
+        {/* Arriba del todo: velo de desenfoque degradado que funde lo que pasa
+            por debajo (fuerte arriba, se disuelve rápido). */}
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 h-14 sm:h-16 md:h-20 backdrop-blur pointer-events-none"
+          className={`absolute inset-x-0 top-0 h-14 sm:h-16 md:h-20 backdrop-blur pointer-events-none transition-opacity duration-300 ${
+            scrolled ? 'opacity-0' : 'opacity-100'
+          }`}
           style={{
             WebkitMaskImage:
               'linear-gradient(to bottom, black 0%, black 20%, transparent 55%)',
@@ -177,8 +201,20 @@ export default function SiteNav() {
               'linear-gradient(to bottom, black 0%, black 20%, transparent 55%)',
           }}
         />
+        {/* Al hacer scroll: barra con fondo propio, para que el logo y los
+            enlaces se vean sobre cualquier cosa. */}
+        <div
+          aria-hidden
+          className={`absolute inset-0 bg-paper/90 backdrop-blur-md border-b border-klein-deep/10 shadow-[0_6px_24px_rgba(20,20,60,0.06)] pointer-events-none transition-opacity duration-300 ${
+            scrolled ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
 
-        <div className="relative px-4 sm:px-6 md:px-10 pt-4 md:pt-6">
+        <div
+          className={`relative px-4 sm:px-6 md:px-10 transition-[padding] duration-300 ${
+            scrolled ? 'py-3' : 'pt-4 md:pt-6'
+          }`}
+        >
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
             <a
               href={HOME}

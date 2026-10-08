@@ -160,10 +160,8 @@ function useQuoteForm() {
   const setAnswer = (key: string, value: Answer) =>
     setAnswers((prev) => ({ ...prev, [key]: value }));
 
-  const toggleType = (id: string) =>
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id],
-    );
+  // Un solo tipo de proyecto por solicitud.
+  const selectType = (id: string) => setSelected([id]);
 
   const canContinue = (() => {
     if (step === 'tipos') return selected.length > 0;
@@ -253,7 +251,7 @@ function useQuoteForm() {
     isLast,
     currentType,
     setAnswer,
-    toggleType,
+    selectType,
     canContinue,
     go,
     reset,
@@ -267,19 +265,23 @@ type QuoteForm = ReturnType<typeof useQuoteForm>;
  *  página (donde elegir una abre la pantalla completa) y dentro de ella. */
 function TypeCards({
   selected,
-  onToggle,
+  onSelect,
 }: {
   selected: string[];
-  onToggle: (id: string) => void;
+  onSelect: (id: string) => void;
 }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {PROJECT_TYPES.map((t) => (
         <label key={t.id} className="relative block">
           <input
-            type="checkbox"
+            type="radio"
+            name="tipo-proyecto"
             checked={selected.includes(t.id)}
-            onChange={() => onToggle(t.id)}
+            onChange={() => onSelect(t.id)}
+            // click además de change: tocar el que ya estaba elegido no
+            // dispara change, pero sí debe volver a abrir la pantalla.
+            onClick={() => onSelect(t.id)}
             className="peer sr-only"
           />
           <span
@@ -483,11 +485,12 @@ function QuoteScreen({
                       <p className="text-ink-2 leading-relaxed mb-8 max-w-lg">
                         Cada proyecto es distinto, así que no te damos una
                         cifra al azar: cuéntanos y te enviamos una cotización a
-                        la medida en 24 a 48 horas. Puedes elegir más de uno.
+                        la medida en 24 a 48 horas. Elige la opción que más
+                        se acerque.
                       </p>
                       <TypeCards
                         selected={form.selected}
-                        onToggle={form.toggleType}
+                        onSelect={form.selectType}
                       />
                     </>
                   )}
@@ -718,13 +721,13 @@ export default function QuoteSection() {
               ¿Qué necesitas?
             </h3>
             <p className="text-sm text-muted mb-6">
-              Elige para empezar; se abre en pantalla completa para que te
-              concentres. Puedes marcar más de uno.
+              Elige una opción para empezar; se abre en pantalla completa
+              para que te concentres.
             </p>
             <TypeCards
               selected={form.selected}
-              onToggle={(id) => {
-                form.toggleType(id);
+              onSelect={(id) => {
+                form.selectType(id);
                 setOpen(true);
               }}
             />

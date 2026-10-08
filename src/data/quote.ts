@@ -1,5 +1,5 @@
-// Cotizador por encuesta: el cliente elige uno o varios tipos de proyecto y
-// responde las preguntas de cada uno. Las respuestas llegan completas al
+// Cotizador por encuesta: el cliente elige un tipo de proyecto y responde
+// sus preguntas. Las respuestas llegan completas al
 // correo de Out para armar una cotización a la medida (sin cifra automática).
 
 export type QuestionKind = 'single' | 'multi' | 'text' | 'long';
@@ -465,9 +465,8 @@ export const COMMON_QUESTIONS: Question[] = [
     options: [
       'Menos de $2 millones',
       '$2 a $5 millones',
-      '$5 a $10 millones',
-      '$10 a $20 millones',
-      'Más de $20 millones',
+      '$5 a $9 millones',
+      '$9 millones o más',
       'Prefiero que ustedes me propongan',
     ],
   },

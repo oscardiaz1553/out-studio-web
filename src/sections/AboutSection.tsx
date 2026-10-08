@@ -1,8 +1,6 @@
 import AnimatedText from '../components/AnimatedText';
 import FadeIn from '../components/FadeIn';
 import RevealText from '../components/RevealText';
-import Statue from '../components/Statue';
-import { STATUES } from '../data/statues';
 
 const ABOUT_SEGMENTS = [
   {
@@ -18,19 +16,10 @@ export default function AboutSection() {
   return (
     <section
       id="nosotros"
-      className="bg-paper border-t border-klein-deep/15 grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr]"
+      className="bg-paper border-t border-klein-deep/15 px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32"
     >
-      {/* Estatua a sangre por el borde izquierdo */}
-      <div className="relative min-h-[46vh] md:min-h-[80vh] order-1">
-        <Statue
-          src={STATUES.about}
-          alt="Retrato de estatua clásica en dúotono"
-          className="absolute inset-0"
-        />
-      </div>
-
-      <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 py-16 md:py-24 order-2">
-        <div className="flex items-baseline gap-4 mb-8">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-10 md:gap-16 items-start">
+        <div className="flex items-baseline gap-4">
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             04
           </span>
@@ -43,23 +32,25 @@ export default function AboutSection() {
           />
         </div>
 
-        <AnimatedText
-          segments={ABOUT_SEGMENTS}
-          className="font-medium leading-relaxed max-w-[46ch]"
-          style={{ fontSize: 'clamp(1.15rem, 2vw, 1.6rem)' }}
-        />
+        <div>
+          <AnimatedText
+            segments={ABOUT_SEGMENTS}
+            className="font-medium leading-relaxed max-w-[46ch]"
+            style={{ fontSize: 'clamp(1.15rem, 2vw, 1.6rem)' }}
+          />
 
-        <FadeIn delay={0.1} y={18} className="mt-10">
-          <p className="text-ink-2 leading-relaxed max-w-[46ch]">
-            Detrás de Out está{' '}
-            <span className="text-klein font-semibold">Oscar Díaz</span>,{' '}
-            <span className="text-klein font-semibold">
-              UX/UI Specialist y Desarrollador WordPress y Shopify
-            </span>
-            , liderando cada proyecto de punta a punta: estrategia, diseño y
-            desarrollo. Potenciamos tu idea con inteligencia artificial.
-          </p>
-        </FadeIn>
+          <FadeIn delay={0.1} y={18} className="mt-10">
+            <p className="text-ink-2 leading-relaxed max-w-[46ch]">
+              Detrás de Out está{' '}
+              <span className="text-klein font-semibold">Oscar Díaz</span>,{' '}
+              <span className="text-klein font-semibold">
+                UX/UI Specialist y Desarrollador WordPress y Shopify
+              </span>
+              , liderando cada proyecto de punta a punta: estrategia, diseño y
+              desarrollo. Potenciamos tu idea con inteligencia artificial.
+            </p>
+          </FadeIn>
+        </div>
       </div>
     </section>
   );
