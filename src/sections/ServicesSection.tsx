@@ -84,7 +84,7 @@ export default function ServicesSection() {
   return (
     <section
       id="servicios"
-      className="bg-carne px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
+      className="bg-klein-soft px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">

@@ -59,7 +59,7 @@ function MangoHero() {
         className="absolute inset-0 rounded-full"
         style={{
           background:
-            'radial-gradient(closest-side, rgba(242,198,180,0.28), transparent 72%)',
+            'radial-gradient(closest-side, rgba(245,227,179,0.22), transparent 72%)',
           transform: 'scale(1.35)',
         }}
       />

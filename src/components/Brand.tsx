@@ -1,7 +1,7 @@
 // The dot is "lo que se sale": always warm, never the colour of the word.
 // carne-deep on light (paper); carne on blue.
 const DOT_ON_LIGHT = '#BC6039';
-const DOT_ON_BLUE = '#F2C6B4';
+const DOT_ON_BLUE = '#F5E3B3';
 
 interface BrandDotProps {
   color?: string;

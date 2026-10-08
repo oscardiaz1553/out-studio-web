@@ -116,7 +116,7 @@ export default function ProjectsSection() {
           <div className="rounded-2xl border border-carne/40 bg-klein-deep/40 px-8 py-12 flex flex-col items-start gap-4">
             <span className="flex items-baseline font-display font-extrabold text-paper-pure text-3xl">
               Próximamente
-              <BrandDot color="#F2C6B4" />
+              <BrandDot color="#F5E3B3" />
             </span>
             <a href="#contacto" className="text-carne font-medium">
               Hablemos →

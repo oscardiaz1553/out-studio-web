@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 const KLEIN_SOFT = '200, 205, 240';
-const CARNE = '242, 198, 180';
+const CARNE = '245, 227, 179';
 
 const SPACING = 34;
 const BASE_R = 3.1;
@@ -281,7 +281,7 @@ export default function ConceptGrid({ className }: { className?: string }) {
         >
           <span
             className="w-1.5 h-1.5 rounded-full"
-            style={{ background: paused ? '#585D88' : '#F2C6B4' }}
+            style={{ background: paused ? '#585D88' : '#F5E3B3' }}
           />
           {paused ? 'Reanudar' : 'Pausar'}
         </button>

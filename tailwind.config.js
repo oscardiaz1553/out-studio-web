@@ -11,7 +11,7 @@ export default {
         'klein-deep': '#141E5C',
         'klein-soft': '#C8CDF0',
         'klein-mid': '#4A55C4',
-        carne: '#F2C6B4',
+        carne: '#F5E3B3',
         'carne-deep': '#BC6039',
         'carne-tinta': '#9C3F1C',
         paper: '#F3EDE7',

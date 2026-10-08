@@ -27,7 +27,7 @@ const STEPS = [
     we: 'Diseñamos y construimos con código propio (Shopify, WordPress o a medida), compartiendo avances reales.',
     you: 'Textos, imágenes y decisiones a tiempo, y tu opinión en cada entrega.',
     get: 'Avances que puedes ver, probar y comentar mientras se construyen.',
-    card: 'bg-carne text-klein',
+    card: 'bg-klein-soft text-klein',
     accent: 'text-carne-tinta',
     muted: 'text-klein-deep/75',
     rule: 'border-klein-deep/20',
