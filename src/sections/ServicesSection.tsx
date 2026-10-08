@@ -84,7 +84,7 @@ export default function ServicesSection() {
   return (
     <section
       id="servicios"
-      className="bg-carne px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32"
+      className="bg-carne px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">
@@ -104,7 +104,7 @@ export default function ServicesSection() {
           ref={listRef}
           onPointerMove={onMove}
           onPointerLeave={() => setActive(null)}
-          className="relative mt-12 sm:mt-16"
+          className="relative mt-8 sm:mt-10"
         >
           {SERVICES.map((service, i) => (
             <FadeIn
@@ -115,7 +115,7 @@ export default function ServicesSection() {
               onPointerEnter={(e: React.PointerEvent) => {
                 if (e.pointerType === 'mouse') setActive(i);
               }}
-              className="group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-12 py-7 sm:py-9 border-t border-klein-deep/25 last:border-b cursor-default"
+              className="group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-12 py-4 sm:py-5 border-t border-klein-deep/25 last:border-b cursor-default"
             >
               <div className="flex items-baseline gap-4 sm:gap-6">
                 <span className="text-[11px] tracking-[0.06em] text-carne-tinta shrink-0">
@@ -123,7 +123,7 @@ export default function ServicesSection() {
                 </span>
                 <h3
                   className="font-display font-extrabold text-klein tracking-[-0.04em] leading-[1.02] transition-transform duration-500 ease-out sm:group-hover:translate-x-3"
-                  style={{ fontSize: 'clamp(1.9rem, 4.6vw, 4rem)' }}
+                  style={{ fontSize: 'clamp(1.6rem, 3.4vw, 2.8rem)' }}
                 >
                   {service.name}
                 </h3>

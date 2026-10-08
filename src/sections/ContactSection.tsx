@@ -64,7 +64,7 @@ export default function ContactSection() {
   return (
     <section
       id="contacto"
-      className="bg-paper border-t border-klein-deep/15 px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32"
+      className="bg-paper border-t border-klein-deep/15 px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-20 items-start">
         <div>

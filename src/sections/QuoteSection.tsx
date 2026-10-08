@@ -693,7 +693,7 @@ export default function QuoteSection() {
   return (
     <section
       id="cotizacion"
-      className="bg-klein-deep px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32"
+      className="bg-klein-deep px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">

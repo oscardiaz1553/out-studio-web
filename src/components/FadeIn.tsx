@@ -1,8 +1,8 @@
-import { motion, useReducedMotion } from 'framer-motion';
-import { CSSProperties, ElementType, PointerEvent, ReactNode, useMemo } from 'react';
+import { CSSProperties, ElementType, PointerEvent, ReactNode } from 'react';
 
 interface FadeInProps {
   children: ReactNode;
+  /** Se conservan por compatibilidad: ya no hay animación al hacer scroll. */
   delay?: number;
   duration?: number;
   x?: number;
@@ -13,38 +13,19 @@ interface FadeInProps {
   onPointerEnter?: (e: PointerEvent) => void;
 }
 
+// Antes revelaba el contenido al hacer scroll. Ahora el contenido está
+// siempre visible desde el primer momento: quien llega quiere leer, no
+// esperar a que las cosas aparezcan.
 export default function FadeIn({
   children,
-  delay = 0,
-  duration = 0.7,
-  x = 0,
-  y = 30,
-  as = 'div',
+  as: Tag = 'div',
   className,
   style,
   onPointerEnter,
 }: FadeInProps) {
-  const reduceMotion = useReducedMotion();
-  const MotionComponent = useMemo(
-    () => motion.create(as as ElementType) as typeof motion.div,
-    [as]
-  );
-
   return (
-    <MotionComponent
-      initial={{
-        opacity: 0,
-        x: reduceMotion ? 0 : x,
-        y: reduceMotion ? 0 : y,
-      }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, margin: '50px', amount: 0 }}
-      transition={{ delay, duration, ease: [0.16, 1, 0.3, 1] }}
-      className={className}
-      style={style}
-      onPointerEnter={onPointerEnter}
-    >
+    <Tag className={className} style={style} onPointerEnter={onPointerEnter}>
       {children}
-    </MotionComponent>
+    </Tag>
   );
 }

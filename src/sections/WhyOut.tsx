@@ -30,12 +30,12 @@ export default function WhyOut() {
   return (
     <section
       aria-labelledby="por-que-out"
-      className="bg-paper px-6 md:px-10 lg:px-16 py-20 sm:py-24 md:py-32"
+      className="bg-paper px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <div className="max-w-[1400px] mx-auto">
         <h2
           id="por-que-out"
-          className="text-[11px] tracking-[0.1em] uppercase text-carne-tinta mb-8 sm:mb-12"
+          className="text-[11px] tracking-[0.1em] uppercase text-carne-tinta mb-5 sm:mb-6"
         >
           Por qué Out
         </h2>
@@ -47,11 +47,11 @@ export default function WhyOut() {
               as="li"
               delay={i * 0.06}
               y={28}
-              className="group grid grid-cols-1 lg:grid-cols-[2.2fr_1fr] gap-3 lg:gap-16 items-end py-6 sm:py-8 border-t border-klein-deep/15 last:border-b"
+              className="group grid grid-cols-1 lg:grid-cols-[2.2fr_1fr] gap-3 lg:gap-16 items-end py-4 sm:py-5 border-t border-klein-deep/15 last:border-b"
             >
               <p
                 className="font-display font-extrabold text-klein tracking-[-0.045em] leading-[0.95] transition-transform duration-500 ease-out lg:group-hover:translate-x-3"
-                style={{ fontSize: 'clamp(2.3rem, 6vw, 6rem)' }}
+                style={{ fontSize: 'clamp(1.7rem, 3.6vw, 3.2rem)' }}
               >
                 {r.claim}
               </p>
