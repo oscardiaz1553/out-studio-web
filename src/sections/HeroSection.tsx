@@ -90,7 +90,6 @@ function ScrollCue() {
         className="flex items-center gap-2 rounded-full bg-paper-pure/95 backdrop-blur-md px-4 py-2 text-klein-deep text-xs font-medium tracking-[0.04em] shadow-[0_8px_24px_rgba(20,20,60,0.2)]"
       >
         Scroll
-        <span aria-hidden>↓</span>
       </motion.div>
     </motion.div>
   );
@@ -207,7 +206,7 @@ export default function HeroSection() {
                 href="#proyectos"
                 className="text-paper-pure font-medium text-sm sm:text-base underline underline-offset-[6px] decoration-paper-pure/40 hover:decoration-carne hover:text-carne transition-colors duration-200"
               >
-                Ver proyectos →
+                Ver proyectos
               </a>
             </motion.div>
           </div>

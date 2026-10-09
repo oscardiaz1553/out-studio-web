@@ -101,8 +101,10 @@ function CaseVideo() {
           aria-label="Reproducir el video"
           className="absolute inset-0 flex items-center justify-center bg-klein-deep/30 hover:bg-klein-deep/20 transition-colors"
         >
-          <span className="w-16 h-16 rounded-full bg-paper-pure text-klein flex items-center justify-center text-xl pl-1">
-            ▶
+          <span className="w-16 h-16 rounded-full bg-paper-pure text-klein flex items-center justify-center pl-1">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
           </span>
         </button>
       )}
@@ -112,7 +114,7 @@ function CaseVideo() {
         aria-pressed={!muted}
         className="absolute bottom-3 right-3 rounded-full bg-paper-pure/95 text-klein-deep text-xs font-medium px-4 py-2 shadow-[0_6px_20px_rgba(20,20,60,0.3)] hover:bg-paper-pure active:scale-[0.97] transition"
       >
-        {muted ? '🔈 Activar sonido' : '🔊 Silenciar'}
+        {muted ? 'Activar sonido' : 'Silenciar'}
       </button>
     </div>
   );
@@ -162,7 +164,7 @@ export default function ResultsSection() {
                 rel="noreferrer"
                 className="mt-7"
               >
-                Mira el caso Diario Deportes ↗
+                Mira el caso Diario Deportes
               </AccentButton>
             )}
           </FadeIn>

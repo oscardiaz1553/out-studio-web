@@ -65,7 +65,7 @@ function ProjectGridCard({ project }: { project: Project }) {
             rel="noreferrer"
             className="mt-auto pt-3 self-start text-klein font-medium text-sm hover:text-carne-tinta transition-colors duration-200"
           >
-            Ver proyecto →
+            Ver proyecto
           </a>
         )}
       </div>

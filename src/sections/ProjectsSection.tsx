@@ -75,7 +75,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             rel="noreferrer"
             className="mt-auto pt-2 self-start font-medium text-carne hover:text-paper-pure transition-colors duration-200"
           >
-            Ver sitio ↗
+            Ver sitio
           </a>
         )}
       </div>
@@ -168,7 +168,7 @@ export default function ProjectsSection() {
               href={PROJECTS_URL}
               className="text-carne font-medium text-sm sm:text-base hover:text-paper-pure transition-colors duration-200 whitespace-nowrap"
             >
-              Ver todos →
+              Ver todos
             </a>
             <div className="hidden sm:flex gap-2">
               <Arrow dir="prev" disabled={edges.start} onClick={() => go(-1)} />
@@ -198,7 +198,7 @@ export default function ProjectsSection() {
               <BrandDot color="#F5E3B3" />
             </span>
             <a href="#contacto" className="text-carne font-medium">
-              Hablemos →
+              Hablemos
             </a>
           </div>
         )}
