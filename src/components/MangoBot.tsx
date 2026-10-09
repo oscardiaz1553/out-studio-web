@@ -88,6 +88,16 @@ export default function MangoBot() {
     }
   };
 
+  // El globo se muestra un rato y se retira solo, para no tapar el contenido
+  // (sobre todo en el celular). El avatar se queda.
+  const visibleNow = ready && !hidden && !chat.open;
+  useEffect(() => {
+    if (!visibleNow || bubbleOff) return;
+    const t = window.setTimeout(dismissBubble, 8000);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleNow, bubbleOff]);
+
   const openChat = () => chat.setOpen(true);
   const visible = ready && !hidden && !chat.open;
 

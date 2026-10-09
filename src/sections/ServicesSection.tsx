@@ -1,5 +1,6 @@
 import TitleFrame from '../components/TitleFrame';
 import WordStage from '../components/WordStage';
+import { SERVICE_SCENES } from '../components/ServiceScenes';
 import {
   motion,
   useMotionValue,
@@ -10,7 +11,6 @@ import { useRef, useState } from 'react';
 import FadeIn from '../components/FadeIn';
 import RevealText from '../components/RevealText';
 
-const BASE = import.meta.env.BASE_URL;
 
 // Servicios reales de Out, con el lenguaje en tono cálido y directo. Cada uno
 // lleva una lámina de la ilustración de marca que aparece siguiendo al mouse
@@ -20,41 +20,35 @@ const SERVICES = [
     name: 'Tiendas Shopify',
     description:
       'Tu tienda vendiendo desde el primer día, no cuando por fin quede lista.',
-    preview: `${BASE}previews/prev-1.webp`,
     tilt: -4,
   },
   {
     name: 'Sitios WordPress',
     description:
       'Una web profesional que actualizas tú mismo, sin depender de nadie.',
-    preview: `${BASE}previews/prev-2.webp`,
     tilt: 3,
   },
   {
     name: 'Landing Pages',
     description:
       'Páginas de campaña con un solo objetivo: que la gente actúe.',
-    preview: `${BASE}previews/prev-3.webp`,
     tilt: -3,
   },
   {
     name: 'Branding',
     description:
       'Logo e identidad visual con carácter: que te reconozcan a la primera.',
-    preview: `${BASE}previews/prev-4.webp`,
     tilt: 4,
   },
   {
     name: 'Apps & Integraciones',
     description:
       'Productos a medida y herramientas conectadas para que el trabajo repetitivo se haga solo.',
-    preview: `${BASE}previews/prev-5.webp`,
     tilt: -2,
   },
   {
     name: 'Soporte & Optimización',
     description: 'No desaparecemos después del lanzamiento. Seguimos contigo.',
-    preview: `${BASE}previews/prev-1.webp`,
     tilt: 3,
   },
 ];
@@ -151,18 +145,19 @@ export default function ServicesSection() {
                     rotate: active === null ? 0 : SERVICES[active].tilt,
                   }}
                   transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-                  className="w-[240px] lg:w-[280px] aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_24px_60px_rgba(20,30,92,0.35)] ring-4 ring-paper-pure bg-paper-pure"
+                  className="relative w-[240px] lg:w-[280px] aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_24px_60px_rgba(20,30,92,0.35)] ring-4 ring-paper-pure bg-paper-pure"
+                  style={{ containerType: 'inline-size' }}
                 >
-                  {SERVICES.map((s, i) => (
-                    <img
-                      key={s.name}
-                      src={s.preview}
-                      alt=""
-                      loading="lazy"
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${
+                  {SERVICE_SCENES.map((scene, i) => (
+                    <div
+                      key={i}
+                      aria-hidden
+                      className={`absolute inset-0 transition-opacity duration-200 ${
                         active === i ? 'opacity-100' : 'opacity-0'
                       }`}
-                    />
+                    >
+                      {scene}
+                    </div>
                   ))}
                 </motion.div>
               </div>
