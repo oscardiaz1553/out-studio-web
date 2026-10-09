@@ -1,6 +1,6 @@
 import './footer.css';
 import { AZULEJO_BAND } from '../data/botanica';
-import LogoOut from '../components/LogoOut';
+import FooterAnimation from '../components/FooterAnimation';
 
 // Copias suficientes para cubrir pantallas anchas; el loop mueve -50%,
 // así que el track son dos mitades idénticas (8 + 8).
@@ -35,17 +35,7 @@ export default function Footer() {
         </div>
 
         <div className="site-footer__brand-row">
-          <a
-            className="site-footer__brand"
-            href={import.meta.env.BASE_URL}
-            aria-label="Out. Studio inicio"
-          >
-            <LogoOut
-              onBlue
-              decorative
-              className="w-[clamp(120px,30vw,300px)] h-auto text-paper-pure"
-            />
-          </a>
+          <FooterAnimation />
         </div>
 
         <div className="site-footer__legal">

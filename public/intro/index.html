@@ -286,9 +286,19 @@
       tl.eventCallback("onComplete", () => {
         setTimeout(() => parent.postMessage({ source: "out-intro", type: "done" }, "*"), 700);
       });
+      /* auto=0: espera la orden "play" del padre (la animación del pie arranca
+         al entrar en pantalla). static=1: se queda en el cuadro final. */
+      const AUTO = params.get("auto") !== "0";
+      const STATIC = params.has("static");
+      window.addEventListener("message", (e) => {
+        if (e.origin !== location.origin) return;
+        if (e.data && e.data.source === "out-intro-cmd" && e.data.cmd === "play") tl.restart();
+      });
       (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
         parent.postMessage({ source: "out-intro", type: "ready" }, "*");
-        tl.play(0);
+        if (STATIC) { tl.progress(1).pause(); return; }
+        if (AUTO) tl.play(0);
+        else tl.pause(0);
       });
     </script>
   </body>
