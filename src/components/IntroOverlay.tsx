@@ -5,7 +5,17 @@ const SEEN_KEY = 'out-intro-seen';
 // 1 = ritmo original (100 BPM, ~9 s). 1.5 la deja en unos 6 s sin perder
 // los golpes.
 const SPEED = 1.5;
-const SRC = `${import.meta.env.BASE_URL}intro/index.html?nowords=1&speed=${SPEED}`;
+const BASE = import.meta.env.BASE_URL;
+const SRC = `${BASE}intro/index.html?nowords=1&speed=${SPEED}`;
+// En el celular NO se corre la animación en vivo (capas gigantes que hacen
+// que el navegador del teléfono se quede sin memoria y recargue la página):
+// se reproduce el video vertical, liviano.
+const VIDEO = `${BASE}intro-movil.mp4`;
+const POSTER = `${BASE}intro-movil-poster.webp`;
+
+export function isPhone(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(max-width: 820px)').matches;
+}
 
 /** La apertura sólo se ve una vez por visita, al llegar a la portada desde
  *  arriba, y nunca con "reducir movimiento" ni con ahorro de datos. */
@@ -41,6 +51,8 @@ export default function IntroOverlay({
 }) {
   const [open, setOpen] = useState(true);
   const finished = useRef(false);
+  const phone = useRef(isPhone()).current;
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const finish = () => {
     if (finished.current) return;
@@ -69,8 +81,12 @@ export default function IntroOverlay({
       if (e.key === 'Escape') finish();
     };
     // Si la animación no arranca (red lenta, bloqueada), no se queda la pantalla.
-    const readyTimer = window.setTimeout(finish, 5000);
+    // En el celular el video tiene 4 s para empezar a reproducirse.
+    const readyTimer = window.setTimeout(finish, phone ? 4000 : 5000);
     const hardStop = window.setTimeout(finish, 15000);
+    const v = videoRef.current;
+    const onPlaying = () => window.clearTimeout(readyTimer);
+    v?.addEventListener('playing', onPlaying);
 
     window.addEventListener('message', onMsg);
     window.addEventListener('keydown', onKey);
@@ -78,6 +94,7 @@ export default function IntroOverlay({
       html.style.overflow = prev;
       window.clearTimeout(readyTimer);
       window.clearTimeout(hardStop);
+      v?.removeEventListener('playing', onPlaying);
       window.removeEventListener('message', onMsg);
       window.removeEventListener('keydown', onKey);
     };
@@ -95,13 +112,29 @@ export default function IntroOverlay({
           transition={{ duration: 0.5, ease: 'easeOut' }}
           className="fixed inset-0 z-[2000] bg-klein"
         >
-          <iframe
-            src={SRC}
-            title="Animación de apertura de Out"
-            aria-hidden
-            tabIndex={-1}
-            className="absolute inset-0 w-full h-full border-0"
-          />
+          {phone ? (
+            <video
+              ref={videoRef}
+              src={VIDEO}
+              poster={POSTER}
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              aria-hidden
+              onEnded={() => window.setTimeout(finish, 500)}
+              onError={finish}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          ) : (
+            <iframe
+              src={SRC}
+              title="Animación de apertura de Out"
+              aria-hidden
+              tabIndex={-1}
+              className="absolute inset-0 w-full h-full border-0"
+            />
+          )}
           <button
             type="button"
             onClick={finish}

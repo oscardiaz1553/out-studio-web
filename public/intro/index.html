@@ -288,7 +288,9 @@
       });
       /* auto=0: espera la orden "play" del padre (la animación del pie arranca
          al entrar en pantalla). static=1: se queda en el cuadro final. */
-      const AUTO = params.get("auto") !== "0";
+      const RENDER = params.has("render"); /* modo captura: no arranca solo y expone la línea de tiempo */
+      if (RENDER) window.__tl = tl;
+      const AUTO = params.get("auto") !== "0" && !RENDER;
       const STATIC = params.has("static");
       window.addEventListener("message", (e) => {
         if (e.origin !== location.origin) return;
@@ -296,6 +298,7 @@
       });
       (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
         parent.postMessage({ source: "out-intro", type: "ready" }, "*");
+        if (RENDER) { tl.pause(0); window.__ready = true; return; }
         if (STATIC) { tl.progress(1).pause(); return; }
         if (AUTO) tl.play(0);
         else tl.pause(0);

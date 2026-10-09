@@ -1,13 +1,52 @@
 import { useInView, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { isPhone } from './IntroOverlay';
 
 // La animación de marca (la misma de la apertura, sin las palabras) en el
 // pie: arranca al entrar en pantalla y se queda en el cuadro final, "Out" y
 // el lema. Es una sola pieza en vivo que se adapta al formato: en pantalla
 // ancha usa el encuadre horizontal y en el celular se reacomoda al alto.
 const BASE = import.meta.env.BASE_URL;
+const VIDEO = `${BASE}intro-movil.mp4`;
+const POSTER = `${BASE}intro-movil-poster.webp`;
 
-export default function FooterAnimation() {
+/** En el celular: el video vertical liviano (la pieza en vivo es demasiado
+ *  pesada para el teléfono). */
+function FooterVideo() {
+  const reduceMotion = useReducedMotion();
+  const box = useRef<HTMLDivElement>(null);
+  const vid = useRef<HTMLVideoElement>(null);
+  const inView = useInView(box, { amount: 0.6 });
+
+  useEffect(() => {
+    const v = vid.current;
+    if (!v || reduceMotion || !inView) return;
+    v.currentTime = 0;
+    void v.play().catch(() => undefined);
+  }, [inView, reduceMotion]);
+
+  return (
+    <div
+      ref={box}
+      role="img"
+      aria-label="Out. Never the usual."
+      className="relative overflow-hidden rounded-2xl bg-klein aspect-[9/16] w-full max-w-[320px] mx-auto"
+    >
+      <video
+        ref={vid}
+        src={VIDEO}
+        poster={POSTER}
+        muted
+        playsInline
+        preload="none"
+        aria-hidden
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+    </div>
+  );
+}
+
+function FooterLive() {
   const reduceMotion = useReducedMotion();
   const box = useRef<HTMLDivElement>(null);
   const frame = useRef<HTMLIFrameElement>(null);
@@ -53,4 +92,9 @@ export default function FooterAnimation() {
       />
     </div>
   );
+}
+
+export default function FooterAnimation() {
+  const phone = useRef(isPhone()).current;
+  return phone ? <FooterVideo /> : <FooterLive />;
 }
