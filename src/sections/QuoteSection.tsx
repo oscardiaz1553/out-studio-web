@@ -6,6 +6,7 @@ import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import LogoOut from '../components/LogoOut';
 import RevealText from '../components/RevealText';
+import SymbolField from '../components/SymbolField';
 import { AZULEJO, AZULEJO_BAND } from '../data/botanica';
 import {
   Answer,
@@ -564,8 +565,17 @@ export default function QuoteSection() {
   return (
     <section
       id="cotizacion"
-      className="bg-klein-deep px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
+      className="relative overflow-hidden bg-klein-deep px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
+      <SymbolField
+        color="#C8CDF0"
+        opacity={0.09}
+        items={[
+          { kind: 'angle', x: 88, y: 18, size: 'clamp(6rem, 14vw, 14rem)', rot: -8, dur: 13 },
+          { kind: 'square', x: 52, y: 6, size: 'clamp(5rem, 10vw, 10rem)', rot: 6, dur: 15, delay: 2, desktopOnly: true },
+          { kind: 'paren', x: 5, y: 60, size: 'clamp(5rem, 11vw, 11rem)', rot: 8, dur: 12, delay: 1, desktopOnly: true },
+        ]}
+      />
       <div className="relative max-w-[1400px] mx-auto">
         {/* El mono programando, sobre un panel de azulejo: lo nuevo (el mono)
             apoyado en lo de siempre (el patrón con la fruta que se sale). */}

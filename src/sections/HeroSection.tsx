@@ -7,11 +7,11 @@ import {
 import { useEffect } from 'react';
 import AccentButton from '../components/AccentButton';
 import { BOTANICA } from '../data/botanica';
+import SymbolField from '../components/SymbolField';
 import Magnetic from '../components/Magnetic';
 import RotatingWord from '../components/RotatingWord';
 
 const MONO = `${import.meta.env.BASE_URL}mono-asoma.webp`;
-const MANGO = `${import.meta.env.BASE_URL}mango-hero.webp`;
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -76,39 +76,6 @@ function MonoHero() {
   );
 }
 
-/** El mango cortado: el objeto de siempre de la marca, flotando arriba a la
- *  derecha, sobre la cabeza del mono (que se lo "mira"). */
-function MangoCorte() {
-  const reduceMotion = useReducedMotion();
-  return (
-    <motion.img
-      aria-hidden
-      src={MANGO}
-      alt=""
-      width={1147}
-      height={930}
-      className="absolute z-[2] pointer-events-none select-none left-[-8%] bottom-[-2%] w-[40vw] sm:left-auto sm:bottom-auto sm:right-[-4%] sm:top-[15%] sm:w-[clamp(180px,20vw,330px)]"
-      style={{ filter: 'drop-shadow(0 24px 40px rgba(10,14,50,0.4))' }}
-      initial={{ opacity: 0, scale: 0.7, rotate: -20 }}
-      animate={
-        reduceMotion
-          ? { opacity: 1, scale: 1, rotate: -12 }
-          : { opacity: 1, scale: 1, rotate: -12, y: [0, -12, 0] }
-      }
-      transition={
-        reduceMotion
-          ? { delay: 0.5, duration: 0.8, ease: EASE }
-          : {
-              opacity: { delay: 0.5, duration: 0.8, ease: EASE },
-              scale: { delay: 0.5, duration: 0.8, ease: EASE },
-              rotate: { delay: 0.5, duration: 0.8, ease: EASE },
-              y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1.4 },
-            }
-      }
-    />
-  );
-}
-
 function ScrollCue() {
   const reduceMotion = useReducedMotion();
   return (
@@ -162,13 +129,21 @@ export default function HeroSection() {
             'linear-gradient(to left, #000 25%, rgba(0,0,0,0.5) 60%, transparent 100%)',
         }}
       />
+      <SymbolField
+        opacity={0.11}
+        items={[
+          { kind: 'square', x: 56, y: 14, size: 'clamp(7rem, 17vw, 17rem)', rot: -8, dur: 13 },
+          { kind: 'curly', x: 6, y: 74, size: 'clamp(6rem, 13vw, 13rem)', rot: 6, dur: 15, delay: 1 },
+          { kind: 'angle', x: 42, y: 78, size: 'clamp(6rem, 14vw, 14rem)', rot: 10, dur: 11, delay: 2, desktopOnly: true },
+          { kind: 'paren', x: 90, y: 8, size: 'clamp(5rem, 11vw, 11rem)', rot: 12, dur: 14, delay: 3 },
+        ]}
+      />
       <div
         aria-hidden
         className="absolute inset-0 bg-gradient-to-b from-klein-deep/40 via-transparent to-klein-deep/55 pointer-events-none"
       />
 
       <MonoHero />
-      <MangoCorte />
 
       <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-10 lg:px-16 pt-24 pb-[220px] sm:pb-[260px] lg:py-28 md:pt-28">
         <motion.div

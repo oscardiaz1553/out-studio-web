@@ -1,3 +1,4 @@
+import SymbolField from '../components/SymbolField';
 import TitleFrame from '../components/TitleFrame';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BrandDot } from '../components/Brand';
@@ -143,9 +144,16 @@ export default function ProjectsSection() {
     <section
       id="proyectos"
       data-nav-bg="dark"
-      className="relative z-10 bg-klein px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
+      className="relative z-10 overflow-hidden bg-klein px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
-      <div className="max-w-[1400px] mx-auto">
+      <SymbolField
+        opacity={0.09}
+        items={[
+          { kind: 'curly', x: 94, y: 14, size: 'clamp(6rem, 13vw, 13rem)', rot: 8, dur: 14 },
+          { kind: 'square', x: 4, y: 88, size: 'clamp(5rem, 11vw, 11rem)', rot: -6, dur: 12, delay: 2, desktopOnly: true },
+        ]}
+      />
+      <div className="relative max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between gap-4 mb-8 sm:mb-10">
           <TitleFrame kind="curly" tone="light" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
