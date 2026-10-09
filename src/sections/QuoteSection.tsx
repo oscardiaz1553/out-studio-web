@@ -579,7 +579,7 @@ export default function QuoteSection() {
         />
         <div className="flex items-baseline gap-4 mb-3">
           <span className="text-[11px] tracking-[0.06em] text-carne">
-            03
+            04
           </span>
           <TitleFrame kind="angle" tone="light" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText

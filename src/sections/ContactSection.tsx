@@ -71,7 +71,7 @@ export default function ContactSection() {
         <div>
           <div className="flex items-baseline gap-4 mb-6 sm:mb-8">
             <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
-              07
+              08
             </span>
             <TitleFrame kind="curly" tone="warm" fontSize="clamp(2.4rem, 6vw, 5rem)">
             <RevealText
