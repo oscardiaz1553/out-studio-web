@@ -114,7 +114,7 @@ function CaseVideo() {
         aria-pressed={!muted}
         className="absolute bottom-3 right-3 rounded-full bg-paper-pure/95 text-klein-deep text-xs font-medium px-4 py-2 shadow-[0_6px_20px_rgba(20,20,60,0.3)] hover:bg-paper-pure active:scale-[0.97] transition"
       >
-        {muted ? 'Activar sonido' : 'Silenciar'}
+        {muted ? '🔈 Activar sonido' : '🔊 Silenciar'}
       </button>
     </div>
   );

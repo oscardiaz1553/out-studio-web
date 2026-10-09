@@ -93,7 +93,7 @@ const TYPE_PROMPT: Prompt = {
 };
 
 const GREETING =
-  '¡Quihubo! Soy Mango. Te hago unas preguntas rápidas y te enviamos una cotización a la medida en 24 a 48 horas.';
+  '¡Quihubo! Soy Mango 🥭 Te hago unas preguntas rápidas y te enviamos una cotización a la medida en 24 a 48 horas.';
 
 /** Estado del chat. Vive fuera del panel para que, si lo cierras y lo vuelves
  *  a abrir, retomes donde ibas. */
@@ -369,7 +369,7 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
 
         {success && (
           <Bubble from="bot">
-            {`¡Recibimos tu solicitud${firstName ? `, ${firstName}` : ''}!\nRevisamos tu caso y te escribimos a ${form.contact.email} en las próximas 24 a 48 horas.`}
+            {`¡Recibimos tu solicitud${firstName ? `, ${firstName}` : ''}! 🥭\nRevisamos tu caso y te escribimos a ${form.contact.email} en las próximas 24 a 48 horas.`}
           </Bubble>
         )}
       </div>
