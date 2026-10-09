@@ -1,4 +1,5 @@
 import TitleFrame from '../components/TitleFrame';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { BrandDot } from '../components/Brand';
 import ProjectMedia from '../components/ProjectMedia';
 import RevealText from '../components/RevealText';
@@ -18,7 +19,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const hasImage = Boolean(project.rightImage);
 
   return (
-    <article className="group flex flex-col rounded-2xl overflow-hidden bg-klein-deep text-paper-pure">
+    <article className="group flex flex-col shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] rounded-2xl overflow-hidden bg-klein-deep text-paper-pure">
       {hasImage ? (
         <ProjectMedia
           src={project.rightImage}
@@ -81,7 +82,63 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   );
 }
 
+function Arrow({
+  dir,
+  disabled,
+  onClick,
+}: {
+  dir: 'prev' | 'next';
+  disabled: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={dir === 'prev' ? 'Proyecto anterior' : 'Proyecto siguiente'}
+      className="w-11 h-11 rounded-full border border-paper-pure/40 text-paper-pure flex items-center justify-center transition hover:bg-paper-pure hover:text-klein disabled:opacity-30 disabled:pointer-events-none active:scale-95"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <path
+          d={dir === 'prev' ? 'M19 12H5M11 6l-6 6 6 6' : 'M5 12h14M13 6l6 6-6 6'}
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </button>
+  );
+}
+
 export default function ProjectsSection() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = useState({ start: true, end: false });
+
+  const measure = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    setEdges({
+      start: el.scrollLeft < 8,
+      end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 8,
+    });
+  }, []);
+
+  useEffect(() => {
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [measure]);
+
+  // Mueve el carrusel una tarjeta (con el gap) hacia cada lado.
+  const go = (dir: 1 | -1) => {
+    const el = trackRef.current;
+    const card = el?.querySelector('article');
+    if (!el || !card) return;
+    el.scrollBy({ left: dir * (card.clientWidth + 20), behavior: 'smooth' });
+  };
+
   return (
     <section
       id="proyectos"
@@ -89,9 +146,8 @@ export default function ProjectsSection() {
       className="relative z-10 bg-klein px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <div className="max-w-[1400px] mx-auto">
-        <div className="flex items-baseline justify-between gap-4 mb-8 sm:mb-10">
-          <div className="flex items-baseline gap-4">
-            <TitleFrame kind="curly" tone="light" fontSize="clamp(2rem, 4vw, 3.4rem)">
+        <div className="flex items-center justify-between gap-4 mb-8 sm:mb-10">
+          <TitleFrame kind="curly" tone="light" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
               as="h2"
               text="Proyectos"
@@ -99,17 +155,30 @@ export default function ProjectsSection() {
               style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
             />
           </TitleFrame>
+          <div className="flex items-center gap-4 sm:gap-6">
+            <a
+              href={PROJECTS_URL}
+              className="text-carne font-medium text-sm sm:text-base hover:text-paper-pure transition-colors duration-200 whitespace-nowrap"
+            >
+              Ver todos →
+            </a>
+            <div className="hidden sm:flex gap-2">
+              <Arrow dir="prev" disabled={edges.start} onClick={() => go(-1)} />
+              <Arrow dir="next" disabled={edges.end} onClick={() => go(1)} />
+            </div>
           </div>
-          <a
-            href={PROJECTS_URL}
-            className="text-carne font-medium text-sm sm:text-base hover:text-paper-pure transition-colors duration-200 whitespace-nowrap"
-          >
-            Ver todos →
-          </a>
         </div>
 
         {FEATURED_PROJECTS.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+          <div
+            ref={trackRef}
+            onScroll={measure}
+            tabIndex={0}
+            role="region"
+            aria-label="Carrusel de proyectos"
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory overscroll-x-contain pb-2 [&::-webkit-scrollbar]:hidden"
+            style={{ scrollbarWidth: 'none' }}
+          >
             {FEATURED_PROJECTS.map((p, i) => (
               <ProjectCard key={p.number} project={p} index={i} />
             ))}
