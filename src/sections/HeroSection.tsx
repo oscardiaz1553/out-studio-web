@@ -6,8 +6,7 @@ import {
 } from 'framer-motion';
 import { useEffect } from 'react';
 import AccentButton from '../components/AccentButton';
-import { BOTANICA } from '../data/botanica';
-import SymbolField from '../components/SymbolField';
+import MorphBrackets from '../components/MorphBrackets';
 import Magnetic from '../components/Magnetic';
 import RotatingWord from '../components/RotatingWord';
 
@@ -111,33 +110,9 @@ export default function HeroSection() {
       data-nav-bg="dark"
       className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-klein"
     >
-      {/* La lámina botánica (florales azules y fruta naranja) como fondo: el
-          mono sale de ella. Se funde hacia la izquierda para no pelear con el
-          titular. */}
-      <div
-        aria-hidden
-        className="absolute inset-y-0 right-0 w-[100%] lg:w-[72%] pointer-events-none"
-        style={{
-          backgroundImage: `url(${BOTANICA})`,
-          backgroundSize: 'cover',
-          backgroundPosition: '60% 45%',
-          mixBlendMode: 'soft-light',
-          opacity: 0.85,
-          WebkitMaskImage:
-            'linear-gradient(to left, #000 25%, rgba(0,0,0,0.5) 60%, transparent 100%)',
-          maskImage:
-            'linear-gradient(to left, #000 25%, rgba(0,0,0,0.5) 60%, transparent 100%)',
-        }}
-      />
-      <SymbolField
-        opacity={0.11}
-        items={[
-          { kind: 'square', x: 56, y: 14, size: 'clamp(7rem, 17vw, 17rem)', rot: -8, dur: 13 },
-          { kind: 'curly', x: 6, y: 74, size: 'clamp(6rem, 13vw, 13rem)', rot: 6, dur: 15, delay: 1 },
-          { kind: 'angle', x: 42, y: 78, size: 'clamp(6rem, 14vw, 14rem)', rot: 10, dur: 11, delay: 2, desktopOnly: true },
-          { kind: 'paren', x: 90, y: 8, size: 'clamp(5rem, 11vw, 11rem)', rot: 12, dur: 14, delay: 3 },
-        ]}
-      />
+      {/* Los símbolos de la marca cambiando de forma, de fondo; el mono los
+          corta por abajo. */}
+      <MorphBrackets className="absolute z-[1] right-[-4%] top-[6%] w-[70%] sm:w-[58%] lg:w-[50%] opacity-[0.17] sm:opacity-[0.24]" />
       <div
         aria-hidden
         className="absolute inset-0 bg-gradient-to-b from-klein-deep/40 via-transparent to-klein-deep/55 pointer-events-none"

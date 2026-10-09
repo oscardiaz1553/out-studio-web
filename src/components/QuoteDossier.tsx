@@ -3,7 +3,7 @@ import LogoOut from './LogoOut';
 import TitleFrame, { FrameKind, Sym } from './TitleFrame';
 import { AnswerGroup } from '../data/quote';
 import { EMAIL, PHONE_DISPLAY } from '../data/site';
-import { AZULEJO, AZULEJO_BAND, BOTANICA } from '../data/botanica';
+import { AZULEJO, AZULEJO_BAND } from '../data/botanica';
 
 export interface QuoteItem {
   id: string;
@@ -65,7 +65,6 @@ const lines = (text: string) =>
 const BASE = import.meta.env.BASE_URL;
 const MONO_ASOMA = `${BASE}mono-asoma.webp`;
 const MONO_LAPTOP = `${BASE}mono-laptop.webp`;
-const MANGO = `${BASE}mango-hero.webp`;
 
 function Page({
   children,
@@ -138,32 +137,8 @@ export default function QuoteDossier({
     <div className="dossier">
       {/* Portada */}
       <Page folio={draft.folio} chrome={false}>
-        <div className="absolute inset-0 bg-klein-deep" />
-        {/* La lámina botánica de siempre, teñida de azul Klein */}
-        <img
-          src={BOTANICA}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: '52% 42%' }}
-        />
-        <div className="absolute inset-0 bg-klein mix-blend-multiply opacity-[0.6]" />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(180deg, rgba(20,30,92,.45) 0%, rgba(20,30,92,.1) 35%, rgba(20,30,92,.5) 65%, rgba(20,30,92,.92) 100%)',
-          }}
-        />
-        {/* El mango cortado y el mono, a sangre por los bordes */}
-        <img
-          src={MANGO}
-          alt=""
-          aria-hidden
-          className="absolute w-[58mm] h-auto"
-          style={{ right: '-6mm', top: '30mm', transform: 'rotate(-12deg)' }}
-        />
+        {/* Fondo azul Klein plano; sólo el mono asoma por el borde. */}
+        <div className="absolute inset-0 bg-klein" />
         <img
           src={MONO_ASOMA}
           alt=""
