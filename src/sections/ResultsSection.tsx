@@ -4,8 +4,26 @@ import FadeIn from '../components/FadeIn';
 import RevealText from '../components/RevealText';
 import TitleFrame from '../components/TitleFrame';
 
-const VIDEO = `${import.meta.env.BASE_URL}diario-deportes.mp4`;
-const POSTER = `${import.meta.env.BASE_URL}diario-deportes-poster.webp`;
+const BASE = import.meta.env.BASE_URL;
+const VIDEO = `${BASE}diario-deportes.mp4`;
+const POSTER = `${BASE}diario-deportes-poster.webp`;
+// En el celular se usa la versión vertical (9:16), pensada para esa pantalla.
+const VIDEO_V = `${BASE}diario-deportes-vertical.mp4`;
+const POSTER_V = `${BASE}diario-deportes-vertical-poster.webp`;
+
+function useIsPhone() {
+  const query = '(max-width: 639px)';
+  const [phone, setPhone] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(query).matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const on = () => setPhone(mq.matches);
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return phone;
+}
 
 // Los seis puntos que resuelve el rediseño, tal como los cuenta el video.
 const FIXES = [
@@ -22,6 +40,7 @@ const FIXES = [
  *  de datos no arranca solo: muestra el póster y un botón de reproducir. */
 function CaseVideo() {
   const reduceMotion = useReducedMotion();
+  const vertical = useIsPhone();
   const ref = useRef<HTMLVideoElement>(null);
   const box = useRef<HTMLDivElement>(null);
   const inView = useInView(box, { amount: 0.5 });
@@ -59,12 +78,15 @@ function CaseVideo() {
   return (
     <div
       ref={box}
-      className="relative overflow-hidden rounded-2xl bg-klein-deep aspect-video shadow-[0_24px_60px_rgba(20,30,92,0.25)]"
+      className={`relative overflow-hidden rounded-2xl bg-klein-deep shadow-[0_24px_60px_rgba(20,30,92,0.25)] ${
+        vertical ? 'aspect-[9/16] w-full max-w-[340px] mx-auto' : 'aspect-video'
+      }`}
     >
       <video
+        key={vertical ? 'v' : 'h'}
         ref={ref}
-        src={VIDEO}
-        poster={POSTER}
+        src={vertical ? VIDEO_V : VIDEO}
+        poster={vertical ? POSTER_V : POSTER}
         muted
         loop
         playsInline
