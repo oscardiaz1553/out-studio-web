@@ -5,7 +5,7 @@
 // Variables (Settings → Variables and Secrets):
 //   RESEND_API_KEY   (Secret)  API key de Resend.
 //   SEND_PASSPHRASE  (Secret)  Clave que escribes en el generador para poder enviar.
-//   FROM             (Text, opcional)  Remitente. Por defecto: Out. Studio <cotizaciones@outstudio.online>
+//   FROM             (Text, opcional)  Remitente. Por defecto: Out Studio <cotizaciones@outstudio.online>
 //   BCC              (Text, opcional)  Copia oculta. Por defecto: oscar.diaz@outstudio.online
 //   REPLY_TO         (Text, opcional)  A dónde llegan las respuestas. Por defecto: oscar.diaz@outstudio.online
 
@@ -89,7 +89,7 @@ export default {
     const replyTo = env.REPLY_TO || 'oscar.diaz@outstudio.online';
     const html = `<!doctype html><html><body style="margin:0;background:#F3EDE7;padding:24px;font-family:Arial,Helvetica,sans-serif;color:#141E5C">
 <table role="presentation" width="100%" style="max-width:560px;margin:0 auto;background:#FBF8F5;border-radius:16px"><tr><td style="padding:32px">
-<p style="margin:0 0 20px;font-size:22px;font-weight:700;color:#1B2FCC">Out. Studio</p>
+<p style="margin:0 0 20px;font-size:22px;font-weight:700;color:#1B2FCC">Out Studio</p>
 <div style="font-size:15px;line-height:1.6;color:#141E5C">${escapeHtml(message).replace(/\n/g, '<br>')}</div>
 <p style="margin:24px 0 0;font-size:13px;color:#585D88">Adjuntamos la propuesta en PDF. Puedes responder directamente a este correo.</p>
 </td></tr></table></body></html>`;
@@ -101,7 +101,7 @@ export default {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: env.FROM || 'Out. Studio <cotizaciones@outstudio.online>',
+        from: env.FROM || 'Out Studio <cotizaciones@outstudio.online>',
         to: [to],
         bcc: [env.BCC || 'oscar.diaz@outstudio.online'],
         reply_to: replyTo,

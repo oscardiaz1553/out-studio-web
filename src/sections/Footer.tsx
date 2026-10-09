@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
 
         <div className="site-footer__legal">
-          <p>© 2026 Out. Studio. Todos los derechos reservados.</p>
+          <p>© 2026 Out Studio. Todos los derechos reservados.</p>
           <a href="#privacidad">Aviso de Privacidad</a>
           <a href="#terminos">Términos de Uso</a>
         </div>

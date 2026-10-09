@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import LogoOut from './LogoOut';
+import TitleFrame, { FrameKind, Sym } from './TitleFrame';
 import { AnswerGroup } from '../data/quote';
 import { EMAIL, PHONE_DISPLAY } from '../data/site';
 
@@ -60,7 +61,10 @@ const lines = (text: string) =>
     .map((l) => l.trim())
     .filter(Boolean);
 
-const BOTANICA = `${import.meta.env.BASE_URL}botanica.png`;
+const BASE = import.meta.env.BASE_URL;
+const MONO_ASOMA = `${BASE}mono-asoma.webp`;
+const MONO_LAPTOP = `${BASE}mono-laptop.webp`;
+const MANGO = `${BASE}mango-hero.webp`;
 
 function Page({
   children,
@@ -74,17 +78,17 @@ function Page({
   return (
     <section className="dossier-page relative bg-paper-pure text-klein-deep shadow-[0_8px_40px_rgba(20,30,92,0.12)] mx-auto mb-8 w-full max-w-[210mm] min-h-[297mm] flex flex-col overflow-hidden">
       {chrome && (
-        <header className="flex items-center justify-between px-[16mm] pt-[12mm]">
+        <header className="relative flex items-center justify-between px-[16mm] pt-[12mm]">
           <LogoOut decorative className="h-9 w-auto text-klein" />
           <span className="text-[11px] text-muted">
             Propuesta {folio}
           </span>
         </header>
       )}
-      <div className="flex-1 px-[16mm] py-[10mm]">{children}</div>
+      <div className="relative flex-1 px-[16mm] py-[10mm]">{children}</div>
       {chrome && (
         <footer className="mx-[16mm] mb-[10mm] pt-3 flex items-center justify-between text-[10px] text-muted border-t border-klein-deep/10">
-          <span>Out. Studio</span>
+          <span>Out Studio · outstudio.online</span>
           <span>
             {EMAIL} · {PHONE_DISPLAY}
           </span>
@@ -94,11 +98,15 @@ function Page({
   );
 }
 
-function H2({ children }: { children: ReactNode }) {
+function H2({ children, kind = 'square' }: { children: ReactNode; kind?: FrameKind }) {
   return (
-    <h2 className="font-display font-semibold text-klein tracking-[-0.03em] text-[26px] leading-tight mb-6">
-      {children}
-    </h2>
+    <div className="mb-6">
+      <TitleFrame kind={kind} tone="warm" fontSize="26px">
+        <h2 className="font-display font-semibold text-klein tracking-[-0.03em] text-[26px] leading-tight">
+          {children}
+        </h2>
+      </TitleFrame>
+    </div>
   );
 }
 
@@ -118,34 +126,47 @@ export default function QuoteDossier({
     <div className="dossier">
       {/* Portada */}
       <Page folio={draft.folio} chrome={false}>
-        <div className="absolute inset-0 bg-klein-deep" />
-        <img
-          src={BOTANICA}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: '52% 42%' }}
-        />
-        <div className="absolute inset-0 bg-klein mix-blend-multiply opacity-[0.6]" />
+        <div className="absolute inset-0 bg-klein" />
+        {/* Retícula de puntos de la marca */}
         <div
           aria-hidden
-          className="absolute inset-0"
+          className="absolute inset-0 opacity-[0.22]"
           style={{
-            background:
-              'linear-gradient(180deg, rgba(20,30,92,.5) 0%, rgba(20,30,92,.1) 35%, rgba(20,30,92,.55) 65%, rgba(20,30,92,.95) 100%)',
+            backgroundImage:
+              'radial-gradient(circle, #C8CDF0 1.4px, transparent 1.6px)',
+            backgroundSize: '9mm 9mm',
           }}
         />
+        {/* El mango cortado y el mono, a sangre por los bordes */}
+        <img
+          src={MANGO}
+          alt=""
+          aria-hidden
+          className="absolute w-[58mm] h-auto"
+          style={{ right: '-6mm', top: '30mm', transform: 'rotate(-12deg)' }}
+        />
+        <img
+          src={MONO_ASOMA}
+          alt=""
+          aria-hidden
+          className="absolute w-[150mm] h-auto"
+          style={{ right: '-3mm', bottom: '-6mm' }}
+        />
         <div className="relative h-full min-h-[277mm] flex flex-col justify-between text-paper-pure">
-          <LogoOut decorative className="h-14 w-auto text-paper-pure self-start" />
-          <div>
-            <p className="text-xs text-carne mb-4">
-              Propuesta de cotización
-            </p>
-            <h1 className="font-display font-extrabold tracking-[-0.035em] leading-[0.95] text-[54px] mb-6">
+          <div className="flex items-start justify-between">
+            <LogoOut decorative className="h-14 w-auto text-paper-pure" />
+          </div>
+          <div className="max-w-[128mm]">
+            <p className="text-sm text-carne mb-5">Propuesta de cotización</p>
+            <div className="flex items-center gap-[3mm] text-carne mb-4" style={{ fontSize: '30px' }}>
+              <Sym kind="square" />
+              <Sym kind="square" flip />
+            </div>
+            <h1 className="font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[54px] mb-6">
               {client}
             </h1>
             {projectTitles.length > 0 && (
-              <p className="text-lg text-paper-pure/90 max-w-[120mm] leading-snug">
+              <p className="text-lg text-paper-pure/90 leading-snug">
                 {projectTitles.join(' · ')}
               </p>
             )}
@@ -153,25 +174,13 @@ export default function QuoteDossier({
               Never the usual.
             </p>
           </div>
-          <dl className="grid grid-cols-3 gap-6 text-sm border-t border-paper-pure/30 pt-5">
-            <div>
-              <dt className="text-[11px] text-carne mb-1">
-                Folio
-              </dt>
-              <dd>{draft.folio}</dd>
-            </div>
-            <div>
-              <dt className="text-[11px] text-carne mb-1">
-                Fecha
-              </dt>
-              <dd>{formatDate(draft.date)}</dd>
-            </div>
-            <div>
-              <dt className="text-[11px] text-carne mb-1">
-                Válida hasta
-              </dt>
-              <dd>{validUntil(draft.date, draft.validDays)}</dd>
-            </div>
+          <dl className="grid grid-cols-[26mm_1fr] gap-x-4 gap-y-2 text-sm border-t border-paper-pure/30 pt-5 max-w-[92mm]">
+            <dt className="text-xs text-carne pt-0.5">Folio</dt>
+            <dd>{draft.folio}</dd>
+            <dt className="text-xs text-carne pt-0.5">Fecha</dt>
+            <dd>{formatDate(draft.date)}</dd>
+            <dt className="text-xs text-carne pt-0.5">Válida hasta</dt>
+            <dd>{validUntil(draft.date, draft.validDays)}</dd>
           </dl>
         </div>
       </Page>
@@ -179,7 +188,7 @@ export default function QuoteDossier({
       {/* Lo que entendimos */}
       {groups.length > 0 && (
         <Page folio={draft.folio}>
-          <H2>Lo que entendimos de tu proyecto</H2>
+          <H2 kind="paren">Lo que entendimos de tu proyecto</H2>
           <p className="text-sm text-ink-2 leading-relaxed mb-8 max-w-[140mm]">
             Estas son las respuestas que nos compartiste. Esta propuesta se
             construye sobre ellas; si algo no está bien, avísanos y lo
@@ -187,7 +196,7 @@ export default function QuoteDossier({
           </p>
           <div className="flex flex-col gap-7">
             {groups.map((g) => (
-              <div key={g.title} className="break-inside-avoid">
+              <div key={g.title} className="break-inside-avoid rounded-xl bg-paper px-6 py-5">
                 <h3 className="font-display font-semibold text-klein text-base mb-3 pb-2 border-b border-klein-deep/15">
                   {g.title}
                 </h3>
@@ -210,7 +219,7 @@ export default function QuoteDossier({
 
       {/* Alcance e inversión */}
       <Page folio={draft.folio}>
-        <H2>Alcance de la propuesta</H2>
+        <H2 kind="square">Alcance de la propuesta</H2>
         <div className="flex flex-col gap-6 mb-10">
           {draft.items.map((item) => (
             <div key={item.id} className="break-inside-avoid">
@@ -236,7 +245,7 @@ export default function QuoteDossier({
         </div>
 
         <div className="break-inside-avoid">
-          <H2>Inversión</H2>
+          <H2 kind="curly">Inversión</H2>
           <table className="w-full text-[13px] border-collapse">
             <tbody>
               {draft.items.map((item) => (
@@ -283,7 +292,7 @@ export default function QuoteDossier({
 
       {/* Tiempos, condiciones y cierre */}
       <Page folio={draft.folio}>
-        <H2>Forma de pago y tiempos</H2>
+        <H2 kind="angle">Forma de pago y tiempos</H2>
         <div className="grid grid-cols-2 gap-8 mb-10 text-[13px] leading-relaxed">
           <div>
             <h3 className="font-display font-semibold text-klein mb-2">
@@ -327,18 +336,29 @@ export default function QuoteDossier({
           </div>
         )}
 
-        <div className="break-inside-avoid rounded-xl border border-klein/30 px-6 py-6">
-          <h3 className="font-display font-semibold text-klein text-lg mb-2">
-            Siguientes pasos
-          </h3>
-          <p className="text-[13px] leading-relaxed text-ink-2 mb-4">
-            Si la propuesta te hace sentido, respóndenos a este correo o por
-            WhatsApp y coordinamos el anticipo para arrancar. Con gusto
-            resolvemos cualquier duda antes.
-          </p>
-          <p className="text-[13px] font-medium text-klein">
-            {EMAIL} · {PHONE_DISPLAY}
-          </p>
+        <div className="break-inside-avoid relative overflow-hidden rounded-xl bg-klein-deep text-paper-pure px-6 py-7 min-h-[62mm]">
+          <img
+            src={MONO_LAPTOP}
+            alt=""
+            aria-hidden
+            className="absolute w-[70mm] h-auto"
+            style={{ right: '-4mm', bottom: '-8mm' }}
+          />
+          <div className="relative max-w-[100mm]">
+            <h3 className="font-display font-extrabold text-carne text-2xl tracking-[-0.03em] mb-2">
+              ¿Arrancamos?
+            </h3>
+            <p className="text-[13px] leading-relaxed text-paper-pure/90 mb-4">
+              Si la propuesta te hace sentido, respóndenos a este correo o por
+              WhatsApp y coordinamos el anticipo para arrancar. Con gusto
+              resolvemos cualquier duda antes.
+            </p>
+            <p className="text-[13px] font-medium text-paper-pure">
+              {EMAIL}
+              <br />
+              {PHONE_DISPLAY}
+            </p>
+          </div>
         </div>
       </Page>
     </div>

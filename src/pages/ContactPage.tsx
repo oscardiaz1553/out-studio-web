@@ -16,7 +16,7 @@ export default function ContactPage() {
 
       <footer className="mt-auto px-6 md:px-10 lg:px-16 py-10 border-t border-klein-deep/15">
         <p className="text-muted text-sm">
-          © 2026 Out. Studio. Todos los derechos reservados.
+          © 2026 Out Studio. Todos los derechos reservados.
         </p>
       </footer>
 

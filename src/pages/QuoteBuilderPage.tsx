@@ -50,7 +50,7 @@ function hashString(s: string) {
 
 function defaultEmailMessage(name: string) {
   const first = name.trim().split(' ')[0];
-  return `Hola${first ? ` ${first}` : ''},\n\nGracias por contarnos sobre tu proyecto. Te compartimos nuestra propuesta de cotización, con el alcance, la inversión y los tiempos.\n\nCualquier duda la resolvemos con gusto.\n\nOscar Díaz\nOut. Studio`;
+  return `Hola${first ? ` ${first}` : ''},\n\nGracias por contarnos sobre tu proyecto. Te compartimos nuestra propuesta de cotización, con el alcance, la inversión y los tiempos.\n\nCualquier duda la resolvemos con gusto.\n\nOscar Díaz\nOut Studio`;
 }
 
 function initialDraft(payload: QuotePayload | null): QuoteDraft {
@@ -191,7 +191,7 @@ export default function QuoteBuilderPage() {
 
   const { total } = totals(draft);
 
-  const subject = `Propuesta de cotización ${draft.folio} — Out. Studio`;
+  const subject = `Propuesta de cotización ${draft.folio} — Out Studio`;
   const pdfName = `Cotización ${draft.folio} - ${draft.clientCompany || draft.clientName || 'Out'}.pdf`;
 
   const mailto = () => {
