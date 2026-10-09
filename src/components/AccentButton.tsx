@@ -9,6 +9,8 @@ interface AccentButtonProps {
   className?: string;
   onClick?: () => void;
   disabled?: boolean;
+  target?: string;
+  rel?: string;
 }
 
 // Primary CTA: Klein blue with paper text (8.5:1, AAA). On blue backgrounds
@@ -29,12 +31,14 @@ export default function AccentButton({
   className,
   onClick,
   disabled,
+  target,
+  rel,
 }: AccentButtonProps) {
   const classes = `${BASE} ${onBlue ? ON_BLUE : ON_PAPER} ${className ?? ''}`;
 
   if (href) {
     return (
-      <a href={href} className={classes} onClick={onClick}>
+      <a href={href} className={classes} onClick={onClick} target={target} rel={rel}>
         {children}
       </a>
     );

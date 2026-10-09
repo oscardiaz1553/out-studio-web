@@ -9,7 +9,6 @@ import ServicesSection from './sections/ServicesSection';
 import ProjectsSection from './sections/ProjectsSection';
 import MethodSection from './sections/MethodSection';
 import ReviewsSection from './sections/ReviewsSection';
-import AboutSection from './sections/AboutSection';
 import QuoteSection from './sections/QuoteSection';
 import ResultsSection from './sections/ResultsSection';
 import ContactSection from './sections/ContactSection';
@@ -36,7 +35,6 @@ export default function App() {
       <QuoteSection />
       <MethodSection />
       <ReviewsSection />
-      <AboutSection />
       <ContactSection />
       <Footer />
       <MangoBot />

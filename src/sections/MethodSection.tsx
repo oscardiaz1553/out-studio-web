@@ -188,10 +188,7 @@ function MethodSteps() {
         })}
       </ol>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-        <p className="text-sm text-muted">
-          Un paso a la vez, con avances que puedes ver y aprobar.
-        </p>
+      <div className="mt-6 flex flex-wrap items-center gap-4">
         <AccentButton href="#cotizacion">Empieza con tu cotización</AccentButton>
       </div>
     </div>
@@ -205,7 +202,7 @@ export default function MethodSection() {
       className="bg-paper px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20 border-t border-klein-deep/15"
     >
       <div className="max-w-[1400px] mx-auto">
-        <div className="flex items-baseline gap-4 mb-3">
+        <div className="flex items-baseline gap-4 mb-8 sm:mb-10">
           <TitleFrame kind="paren" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
             as="h2"
@@ -215,13 +212,6 @@ export default function MethodSection() {
           />
           </TitleFrame>
         </div>
-
-        <p
-          className="font-display font-extrabold text-klein tracking-[-0.04em] leading-[1] max-w-[22ch] mt-6 mb-8 sm:mb-10"
-          style={{ fontSize: 'clamp(1.8rem, 4.2vw, 3.6rem)' }}
-        >
-          Cuatro pasos. Sin sorpresas.
-        </p>
 
         <MethodSteps />
       </div>

@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useInView, useReducedMotion } from 'framer-motion';
+import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
+import { PROJECTS } from '../data/projects';
 import RevealText from '../components/RevealText';
 import TitleFrame from '../components/TitleFrame';
+
+// El enlace sale de src/data/projects.ts: cuando cambie el sitio de Diario
+// Deportes, se actualiza allá.
+const CASE_URL = PROJECTS.find((p) => p.name === 'Diario Deportes')?.url;
 
 const BASE = import.meta.env.BASE_URL;
 const VIDEO = `${BASE}diario-deportes.mp4`;
@@ -24,16 +30,6 @@ function useIsPhone() {
   }, []);
   return phone;
 }
-
-// Los seis puntos que resuelve el rediseño, tal como los cuenta el video.
-const FIXES = [
-  'Menú ordenado',
-  'Un solo render',
-  'Publicidad con lugar',
-  'Datos con diseño propio',
-  'Una nota principal',
-  'Accesible',
-];
 
 /** Video del caso: arranca solo y en silencio cuando entra en pantalla, se
  *  pausa al salir, y deja activar el sonido. Con "reducir movimiento" o ahorro
@@ -144,17 +140,14 @@ export default function ResultsSection() {
           <FadeIn>
             <p className="inline-flex items-center gap-2 text-xs text-carne-tinta mb-4">
               Caso · Diario Deportes
-              <span className="rounded-full border border-carne-tinta/30 px-2 py-0.5 text-[10px] normal-case tracking-normal">
-                En desarrollo
-              </span>
             </p>
             <h3
               className="font-display font-extrabold text-klein tracking-[-0.04em] leading-[1.02]"
               style={{ fontSize: 'clamp(1.9rem, 3.6vw, 3.2rem)' }}
             >
-              Seis problemas.
+              Una solución
               <br />
-              Un sistema.
+              necesaria.
             </h3>
             <p className="text-ink-2 leading-relaxed mt-5 max-w-[46ch]">
               Un medio deportivo con diez secciones al mismo nivel, módulos
@@ -162,16 +155,16 @@ export default function ResultsSection() {
               visita encuentre primero lo importante: la nota principal, el
               partido al frente y la publicidad en su lugar.
             </p>
-            <ul className="mt-6 flex flex-wrap gap-2">
-              {FIXES.map((f) => (
-                <li
-                  key={f}
-                  className="rounded-full border border-klein-deep/20 bg-paper px-3.5 py-1.5 text-[13px] text-klein-deep"
-                >
-                  {f}
-                </li>
-              ))}
-            </ul>
+            {CASE_URL && (
+              <AccentButton
+                href={CASE_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-7"
+              >
+                Mira el caso Diario Deportes ↗
+              </AccentButton>
+            )}
           </FadeIn>
 
           <FadeIn>
