@@ -2,7 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { MangOutChat, useChatState } from './MangOutChat';
 
-const AVATAR = `${import.meta.env.BASE_URL}mango-bot-3d.webp`;
+const AVATAR = `${import.meta.env.BASE_URL}mono-avatar.webp`;
 
 // Dónde NO mostrarlo: ya estás en la cotización/contacto.
 const HIDE_ON = ['#cotizacion', '#contacto'];
@@ -20,7 +20,7 @@ function readDismissed() {
 }
 
 /**
- * "MangOut", el asistente flotante. Un mango partido sobre azul como avatar y
+ * "MangOut", el asistente flotante. El mono sobre azul como avatar y
  * un globo con un solo mensaje. Al tocarlo se abre un chat flotante que hace
  * las mismas preguntas de la encuesta, una a una. La encuesta de pantalla
  * completa (sección Cotización) sigue siendo la otra vía.
@@ -32,12 +32,14 @@ export default function MangoBot() {
   const [hidden, setHidden] = useState(false);
   const [bubbleOff, setBubbleOff] = useState(readDismissed);
 
-  // Aparece a los 3 s o en cuanto se empieza a hacer scroll.
+  // En la portada ya hay un mono y un botón de cotizar: MangOut aparece al
+  // dejar atrás la mitad de la portada, o a los 12 s si la persona se queda.
   useEffect(() => {
-    const t = window.setTimeout(() => setReady(true), 3000);
+    const t = window.setTimeout(() => setReady(true), 12000);
     const onScroll = () => {
-      if (window.scrollY > 200) setReady(true);
+      if (window.scrollY > window.innerHeight * 0.5) setReady(true);
     };
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       window.clearTimeout(t);
@@ -142,17 +144,16 @@ export default function MangoBot() {
                 <motion.img
                   src={AVATAR}
                   alt=""
-                  width={240}
-                  height={240}
+                  width={480}
+                  height={640}
                   draggable={false}
-                  className="w-[114%] max-w-none h-auto select-none"
+                  className="w-full h-full object-cover object-top select-none"
                   animate={
                     reduceMotion
                       ? undefined
                       : {
-                          y: [0, -6, 0, -2, 0],
-                          scaleY: [1, 1.06, 0.92, 1.02, 1],
-                          rotate: [0, -8, 6, -3, 0],
+                          y: [0, -3, 0, -1, 0],
+                          rotate: [0, -6, 5, -2, 0],
                         }
                   }
                   transition={{

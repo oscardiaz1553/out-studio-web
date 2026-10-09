@@ -565,7 +565,17 @@ export default function QuoteSection() {
       id="cotizacion"
       className="bg-klein-deep px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
-      <div className="max-w-[1400px] mx-auto">
+      <div className="relative max-w-[1400px] mx-auto">
+        {/* El mono programando: acompaña a la cotización en escritorio. */}
+        <img
+          src={`${import.meta.env.BASE_URL}mono-laptop.webp`}
+          alt=""
+          aria-hidden
+          width={1000}
+          height={750}
+          loading="lazy"
+          className="hidden min-[1360px]:block absolute right-0 bottom-0 w-[min(30vw,470px)] h-auto pointer-events-none select-none"
+        />
         <div className="flex items-baseline gap-4 mb-3">
           <span className="text-[11px] tracking-[0.06em] text-carne">
             03

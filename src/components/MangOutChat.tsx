@@ -11,7 +11,7 @@ import {
 import { EMAIL } from '../data/site';
 import { useQuoteForm } from '../lib/useQuoteForm';
 
-const AVATAR = `${import.meta.env.BASE_URL}mango-bot-3d.webp`;
+const AVATAR = `${import.meta.env.BASE_URL}mono-avatar.webp`;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Una "pregunta" del chat: las mismas de la encuesta de pantalla completa
@@ -287,13 +287,13 @@ export function MangOutChat({ chat, onClose }: { chat: ChatState; onClose: () =>
       {/* Cabecera */}
       <header className="shrink-0 flex items-center gap-3 px-4 py-3 bg-klein text-paper-pure">
         <span className="relative shrink-0">
-          <span className="w-9 h-12 rounded-lg bg-klein-deep flex items-center justify-center overflow-hidden ring-2 ring-paper-pure/60">
+          <span className="w-10 h-[52px] rounded-lg bg-klein-deep flex items-center justify-center overflow-hidden ring-2 ring-paper-pure/60">
             <img
               src={AVATAR}
               alt=""
-              width={240}
-              height={240}
-              className="w-[100%] h-auto"
+              width={480}
+              height={640}
+              className="w-full h-full object-cover object-top"
             />
           </span>
           <span

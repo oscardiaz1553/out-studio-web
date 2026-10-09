@@ -10,7 +10,7 @@ import Magnetic from '../components/Magnetic';
 import RotatingWord from '../components/RotatingWord';
 import { PROJECTS } from '../data/projects';
 
-const MANGO = `${import.meta.env.BASE_URL}mango-hero.webp`;
+const MONO = `${import.meta.env.BASE_URL}mono-asoma.webp`;
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -25,13 +25,11 @@ const LIVE_PROJECTS = PROJECTS.filter((p) => p.status === 'launched').map(
   (p) => p.name,
 );
 
-/** El mango partido: objeto 3D grande a un lado, como el H de Huge —
- *  pero on-brand (azul Klein sólido detrás, no negro). Sangra por el
- *  borde superior/derecho, con un halo suave y una deriva lenta. */
-function MangoHero() {
+/** El mono aullador asomándose por el borde derecho de la portada, con gafas
+ *  de sol y sonrisa: la mascota de Out. Pegado al borde, con parallax suave
+ *  con el mouse y un balanceo lento. */
+function MonoHero() {
   const reduceMotion = useReducedMotion();
-  // Parallax con el mouse: el mango se desplaza y se inclina un poco hacia
-  // donde mira el cursor (solo con mouse; en táctil queda quieto).
   const px = useMotionValue(0);
   const py = useMotionValue(0);
   const x = useSpring(px, { stiffness: 80, damping: 18 });
@@ -41,8 +39,8 @@ function MangoHero() {
     if (reduceMotion) return;
     const onMove = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
-      px.set((e.clientX / window.innerWidth - 0.5) * -34);
-      py.set((e.clientY / window.innerHeight - 0.5) * -26);
+      px.set((e.clientX / window.innerWidth - 0.5) * -22);
+      py.set((e.clientY / window.innerHeight - 0.5) * -16);
     };
     window.addEventListener('pointermove', onMove);
     return () => window.removeEventListener('pointermove', onMove);
@@ -51,40 +49,31 @@ function MangoHero() {
   return (
     <motion.div
       aria-hidden
-      className="absolute right-[-6%] top-[-4%] sm:top-[-2%] z-[2] pointer-events-none select-none"
-      style={{ width: 'clamp(240px, 36vw, 640px)', x, y }}
+      className="absolute right-0 top-[10%] sm:top-[8%] lg:top-auto lg:bottom-0 z-[2] pointer-events-none select-none"
+      style={{ width: 'clamp(300px, 52vw, 780px)', x, y }}
     >
-      {/* Halo: separa el mango del azul plano detrás */}
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background:
-            'radial-gradient(closest-side, rgba(245,227,179,0.22), transparent 72%)',
-          transform: 'scale(1.35)',
-        }}
-      />
       <motion.img
-        src={MANGO}
+        src={MONO}
         alt=""
+        width={1200}
+        height={900}
         loading="eager"
-        className="relative w-full h-auto"
-        style={{
-          filter: 'drop-shadow(0 40px 70px rgba(10,14,50,0.45))',
-        }}
-        initial={{ opacity: 0, scale: 0.82, rotate: -8 }}
+        // En pantallas chicas el cuerpo se desvanece hacia abajo; en grandes
+        // el mono se apoya en el borde inferior de la portada.
+        className="relative w-full h-auto [mask-image:linear-gradient(to_bottom,#000_70%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,#000_70%,transparent)] lg:[mask-image:none] lg:[-webkit-mask-image:none]"
+        initial={{ opacity: 0, x: 80 }}
         animate={
           reduceMotion
-            ? { opacity: 1, scale: 1, rotate: -4 }
-            : { opacity: 1, scale: 1, rotate: -4, y: [0, -14, 0] }
+            ? { opacity: 1, x: 0 }
+            : { opacity: 1, x: 0, rotate: [0, -1.5, 0, 1.5, 0] }
         }
         transition={
           reduceMotion
-            ? { delay: 0.3, duration: 0.9, ease: EASE }
+            ? { delay: 0.3, duration: 0.8, ease: EASE }
             : {
-                opacity: { delay: 0.3, duration: 0.9, ease: EASE },
-                scale: { delay: 0.3, duration: 0.9, ease: EASE },
-                rotate: { delay: 0.3, duration: 0.9, ease: EASE },
-                y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1.2 },
+                opacity: { delay: 0.3, duration: 0.8, ease: EASE },
+                x: { delay: 0.3, duration: 0.9, ease: EASE },
+                rotate: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1.4 },
               }
         }
       />
@@ -115,7 +104,7 @@ function ScrollCue() {
 
 /**
  * Hero estilo "Huge": tipografía enorme dominando el fold, sobre azul Klein
- * sólido con el mango partido a sangre por el borde superior derecho. La
+ * sólido con el mono aullador asomándose por el borde derecho. La
  * promesa es el titular ("Hacemos que tu [marca] sea imposible de ignorar"),
  * con la palabra central rotando entre lo que Out hace. Un solo CTA primario
  * (cotizar), uno secundario (ver proyectos) y prueba social real: los
@@ -133,7 +122,7 @@ export default function HeroSection() {
         className="absolute inset-0 bg-gradient-to-b from-klein-deep/40 via-transparent to-klein-deep/55 pointer-events-none"
       />
 
-      <MangoHero />
+      <MonoHero />
 
       <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-10 lg:px-16 py-24 md:py-28">
         <motion.div
@@ -146,11 +135,11 @@ export default function HeroSection() {
           </span>
         </motion.div>
 
-        <div className="my-10 md:my-14">
+        <div className="my-8 md:my-10">
           <h1
             className="font-display font-extrabold tracking-[-0.04em]"
             style={{
-              fontSize: 'clamp(2.5rem, 7.2vw, 7.6rem)',
+              fontSize: 'clamp(2.5rem, 6.2vw, 6.8rem)',
               lineHeight: 0.96,
             }}
           >
@@ -190,7 +179,7 @@ export default function HeroSection() {
           </h1>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
+        <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-7 max-w-[52ch]">
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -231,7 +220,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.05, duration: 0.7 }}
-            className="flex flex-col gap-2 lg:items-end lg:text-right"
+            className="flex flex-col gap-2"
           >
             <span className="text-[11px] tracking-[0.1em] uppercase text-carne">
               Ya en línea
