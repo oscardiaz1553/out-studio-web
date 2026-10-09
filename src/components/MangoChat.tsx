@@ -168,21 +168,20 @@ function Bubble({ from, children }: { from: 'bot' | 'user'; children: React.Reac
   );
 }
 
+// "Escribiendo…": el cursor | de la marca, parpadeando.
 function TypingDots() {
   const reduceMotion = useReducedMotion();
   return (
     <div
       aria-label="Mango está escribiendo"
-      className="self-start rounded-2xl rounded-bl-sm bg-paper px-4 py-3.5 flex gap-1"
+      className="self-start rounded-2xl rounded-bl-sm bg-paper px-4 py-3 flex items-center h-[42px]"
     >
-      {[0, 1, 2].map((d) => (
-        <motion.span
-          key={d}
-          className="w-1.5 h-1.5 rounded-full bg-klein"
-          animate={reduceMotion ? undefined : { y: [0, -3, 0] }}
-          transition={{ duration: 0.6, repeat: Infinity, delay: d * 0.12 }}
-        />
-      ))}
+      <motion.span
+        aria-hidden
+        className="block w-[3px] h-[18px] bg-klein"
+        animate={reduceMotion ? undefined : { opacity: [1, 1, 0, 0] }}
+        transition={{ duration: 0.9, repeat: Infinity, ease: 'linear', times: [0, 0.5, 0.5, 1] }}
+      />
     </div>
   );
 }

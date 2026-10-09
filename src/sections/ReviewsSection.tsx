@@ -1,3 +1,4 @@
+import TitleFrame from '../components/TitleFrame';
 import { FormEvent, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import AccentButton from '../components/AccentButton';
@@ -266,13 +267,15 @@ export default function ReviewsSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             05
           </span>
-          <RevealText
+          <TitleFrame kind="square" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
+            <RevealText
             as="h2"
             text="Reseñas"
             unit="char"
             className="font-display font-semibold text-klein tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
           />
+          </TitleFrame>
         </div>
 
         {hasReviews ? (

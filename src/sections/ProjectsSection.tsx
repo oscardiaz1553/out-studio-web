@@ -1,3 +1,4 @@
+import TitleFrame from '../components/TitleFrame';
 import { BrandDot } from '../components/Brand';
 import ProjectMedia from '../components/ProjectMedia';
 import RevealText from '../components/RevealText';
@@ -91,12 +92,14 @@ export default function ProjectsSection() {
         <div className="flex items-baseline justify-between gap-4 mb-8 sm:mb-10">
           <div className="flex items-baseline gap-4">
             <span className="text-[11px] tracking-[0.06em] text-carne">02</span>
+            <TitleFrame kind="curly" tone="light" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
               as="h2"
               text="Proyectos"
               className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
               style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
             />
+          </TitleFrame>
           </div>
           <a
             href={PROJECTS_URL}

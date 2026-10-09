@@ -1,3 +1,4 @@
+import TitleFrame from '../components/TitleFrame';
 import { useRef, useState } from 'react';
 import AccentButton from '../components/AccentButton';
 import RevealText from '../components/RevealText';
@@ -205,12 +206,14 @@ export default function MethodSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             04
           </span>
-          <RevealText
+          <TitleFrame kind="paren" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
+            <RevealText
             as="h2"
             text="Nuestro método"
             className="font-display font-semibold text-klein tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
           />
+          </TitleFrame>
         </div>
 
         <p

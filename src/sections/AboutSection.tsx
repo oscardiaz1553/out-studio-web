@@ -1,3 +1,4 @@
+import TitleFrame from '../components/TitleFrame';
 import AnimatedText from '../components/AnimatedText';
 import FadeIn from '../components/FadeIn';
 import RevealText from '../components/RevealText';
@@ -23,13 +24,15 @@ export default function AboutSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             06
           </span>
-          <RevealText
+          <TitleFrame kind="angle" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
+            <RevealText
             as="h2"
             text="Nosotros"
             unit="char"
             className="font-display font-semibold text-klein tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
           />
+          </TitleFrame>
         </div>
 
         <div>

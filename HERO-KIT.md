@@ -1,3 +1,8 @@
+> **Nota (9 oct 2026):** este kit es anterior a la dirección actual. Donde
+> hable del wordmark `Out●` con punto, del rosado `#F2C6B4` o del mango como
+> pieza hero, rige `BRAND.md` (§2 y §2b): logo «Out» sin «studio», símbolos
+> `[ ] { } < >`, mono aullador como mascota y crema `#F5E3B3` como acento claro.
+
 # Out. — Kit del Hero para el portafolio personal
 
 > Complemento de `BRAND.md`. Contiene TODO el código del hero de Out. Studio

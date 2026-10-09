@@ -1,3 +1,4 @@
+import TitleFrame from '../components/TitleFrame';
 import { FormEvent, useState } from 'react';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
@@ -72,6 +73,7 @@ export default function ContactSection() {
             <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
               07
             </span>
+            <TitleFrame kind="curly" tone="warm" fontSize="clamp(2.4rem, 6vw, 5rem)">
             <RevealText
               as="h2"
               text="Contacto"
@@ -79,6 +81,7 @@ export default function ContactSection() {
               className="font-display font-semibold text-klein tracking-[-0.035em]"
               style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}
             />
+          </TitleFrame>
           </div>
 
           <FadeIn delay={0.15} y={20}>

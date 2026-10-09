@@ -1,3 +1,4 @@
+import TitleFrame from '../components/TitleFrame';
 import {
   motion,
   useMotionValue,
@@ -91,13 +92,15 @@ export default function ServicesSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             01
           </span>
-          <RevealText
+          <TitleFrame kind="square" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
+            <RevealText
             as="h2"
             text="Servicios"
             unit="char"
             className="font-display font-semibold text-klein tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
           />
+          </TitleFrame>
         </div>
 
         <ul

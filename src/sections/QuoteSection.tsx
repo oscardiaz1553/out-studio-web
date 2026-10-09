@@ -1,3 +1,4 @@
+import TitleFrame from '../components/TitleFrame';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
@@ -580,13 +581,15 @@ export default function QuoteSection() {
           <span className="text-[11px] tracking-[0.06em] text-carne">
             03
           </span>
-          <RevealText
+          <TitleFrame kind="angle" tone="light" fontSize="clamp(2rem, 4vw, 3.4rem)">
+            <RevealText
             as="h2"
             text="Cotización"
             unit="char"
             className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
           />
+          </TitleFrame>
         </div>
 
         <p className="text-paper-pure/80 leading-relaxed max-w-xl mt-4 mb-10 sm:mb-12">
