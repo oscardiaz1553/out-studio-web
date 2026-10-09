@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 126.12 91.76" xmlns="http://www.w3.org/2000/svg">
+  <title>&lt;/ &gt; cierre de etiqueta</title>
+  <defs><clipPath id="c"><rect x="18.58" y="21.7" width="19.61" height="48.4"/></clipPath><clipPath id="cy"><rect x="-40" y="21.7" width="200" height="48.4"/></clipPath></defs>
+  <g transform="translate(0 1.9)" fill="none" stroke="currentColor" stroke-width="9.4" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt">
+    <g transform="translate(-17 0)"><g clip-path="url(#c)"><path d="M46,21 L23.3,45.9 L46,70.8"/></g></g>
+    <g clip-path="url(#cy)"><path d="M30,70.1 L37,21.7"/></g>
+    <g transform="matrix(-1 0 0 1 123.11 0)"><g clip-path="url(#c)"><path d="M46,21 L23.3,45.9 L46,70.8"/></g></g>
+  </g>
+</svg>

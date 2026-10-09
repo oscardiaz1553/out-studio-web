@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 126.12 91.76" xmlns="http://www.w3.org/2000/svg">
+  <title>[ ] corchetes cuadrados (mismo grosor y corte plano que los de Logo out-06)</title>
+  <g transform="translate(0 1.9)" fill="none" stroke="currentColor" stroke-width="9.4" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt">
+    <path d="M38.19,26.4 H23.28 V65.4 H38.19"/>
+    <path transform="matrix(-1 0 0 1 123.11 0)" d="M38.19,26.4 H23.28 V65.4 H38.19"/>
+  </g>
+</svg>

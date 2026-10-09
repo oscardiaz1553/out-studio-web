@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 126.12 91.76" xmlns="http://www.w3.org/2000/svg">
+  <title>/ / barras (expresión regular)</title>
+  <defs><clipPath id="cy"><rect x="-40" y="21.7" width="200" height="48.4"/></clipPath></defs>
+  <g transform="translate(0 1.9)" fill="none" stroke="currentColor" stroke-width="9.4" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt" clip-path="url(#cy)">
+    <path d="M24,70.1 L33,21.7"/>
+    <path transform="translate(66.9 0)" d="M24,70.1 L33,21.7"/>
+  </g>
+</svg>

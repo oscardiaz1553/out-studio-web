@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+      @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-500.woff2") format("woff2"); font-weight: 500; }
+      :root {
+        --paper: #F3EDE7; --pure: #FBF8F5; --klein: #1B2FCC; --deep: #141E5C;
+        --mid: #4A55C4; --soft: #C8CDF0; --carne: #F2C6B4; --warm: #BC6039;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper); }
+      #main { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Instrument Sans", sans-serif; }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .display { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.95; }
+      .w { display: inline-block; white-space: nowrap; }
+      .ch { display: inline-block; will-change: transform; }
+      .ln { display: block; }
+
+      /* transiciones */
+      #tp { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: var(--carne); z-index: 60; }
+      #ww { position: absolute; inset: 0; background: var(--warm); z-index: 55; clip-path: circle(0px at 1352px 624px); }
+
+      /* escena 1 */
+      #s1 { background: var(--paper); }
+      #cam1 { position: absolute; inset: 0; }
+      .dot { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--soft); }
+      #warm { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: var(--warm); }
+      #hook { position: absolute; left: 110px; top: 300px; font-size: 270px; color: var(--klein); }
+      #hook .ln + .ln { margin-top: -10px; }
+      #s1logo { position: absolute; left: 120px; bottom: 80px; width: 150px; }
+
+      /* escena 2 */
+      #s2 { background: var(--deep); }
+      #s2label { position: absolute; left: 90px; top: 70px; font-size: 34px; font-weight: 500; color: var(--soft); letter-spacing: 0.02em; }
+      #vold { position: absolute; left: 90px; top: 150px; width: 1120px; height: 630px; border-radius: 20px; object-fit: cover; z-index: 3; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+      #counter { position: absolute; left: 90px; top: 815px; font-size: 200px; color: var(--pure); z-index: 4; display: flex; align-items: flex-end; }
+      #counter small { font-family: "Instrument Sans", sans-serif; font-weight: 500; font-size: 44px; letter-spacing: 0; margin: 0 0 22px 28px; color: var(--soft); }
+      #num { display: inline-grid; }
+      #num span { grid-area: 1/1; }
+      #chips { position: absolute; left: 1290px; top: 150px; width: 560px; z-index: 4; }
+      .chip { margin-bottom: 20px; padding: 24px 28px; border-radius: 16px; background: var(--pure); color: var(--deep); font-size: 34px; font-weight: 500; line-height: 1.15; border-left: 12px solid var(--warm); }
+      .chip b { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; color: var(--warm); margin-right: 14px; }
+
+      /* escena 3 */
+      #s3 { background: var(--klein); }
+      #s3title { position: absolute; left: 110px; top: 70px; font-size: 215px; color: var(--paper); }
+      #s3title .ln + .ln { color: var(--carne); margin-top: -8px; }
+      .card { position: absolute; left: 0; top: 0; width: 540px; height: 170px; border-radius: 18px; background: var(--paper); color: var(--deep); padding: 24px 34px; font-size: 38px; font-weight: 500; line-height: 1.15; }
+      .card b { display: block; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 56px; color: var(--klein); margin-bottom: 4px; letter-spacing: -0.045em; }
+
+      /* escena 4 */
+      #s4bg { background: var(--paper); }
+      .vid { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; z-index: 1; transform-origin: 30% 50%; }
+      #vnew { clip-path: inset(0 100% 0 0); }
+      #bar { position: absolute; top: -40px; left: 0; width: 10px; height: 1160px; background: var(--carne); z-index: 3; transform: skewX(-12deg); box-shadow: 0 0 50px rgba(242,198,180,.9); opacity: 0; }
+      .tag { position: absolute; top: 56px; padding: 14px 40px 20px; border-radius: 999px; font-size: 68px; z-index: 4; }
+      #tagold { left: 60px; background: var(--deep); color: var(--pure); }
+      #tagnew { right: 60px; background: var(--klein); color: var(--pure); }
+      .pill { position: absolute; left: 60px; padding: 12px 38px 18px; border-radius: 20px; background: var(--pure); color: var(--deep); font-size: 62px; z-index: 4; border-left: 16px solid var(--warm); }
+
+      /* escena 5 */
+      #s5 { background: var(--deep); z-index: 5; }
+      #s5title { position: absolute; left: 90px; top: 70px; font-size: 190px; color: var(--paper); }
+      #s5title .ln + .ln { color: var(--carne); margin-top: -6px; }
+      .dv { position: absolute; top: 560px; width: 560px; height: 315px; border-radius: 18px; object-fit: cover; z-index: 6; box-shadow: 0 30px 70px rgba(0,0,0,.4); }
+      .dl { position: absolute; top: 905px; width: 560px; font-size: 38px; font-weight: 500; color: var(--soft); z-index: 6; }
+      .dl b { color: var(--carne); font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; margin-right: 12px; }
+
+      /* cierre */
+      #s6 { background: var(--paper); z-index: 7; }
+      #endtitle { position: absolute; left: 110px; top: 100px; font-size: 205px; color: var(--klein); }
+      #endtitle .ln + .ln { margin-top: -6px; }
+      #endtitle .ln:last-child .w:last-child { color: var(--warm); }
+      #endlogo { position: absolute; left: 120px; bottom: 90px; width: 250px; }
+      #endmeta { position: absolute; left: 470px; bottom: 112px; font-size: 40px; font-weight: 500; color: var(--deep); line-height: 1.35; }
+      #endwarm { position: absolute; width: 34px; height: 34px; border-radius: 50%; background: var(--warm); left: 1560px; top: 760px; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="31.8" data-width="1920" data-height="1080">
+
+      <!-- Escena 2 · 4.5–11 s -->
+      <div id="s2" class="scene clip" data-start="5.95" data-duration="6.5" data-track-index="0">
+        <div id="s2label">Diario Deportes · el sitio de antes</div>
+        <div id="counter" class="display"><span id="num"><span>0</span><span class="nn">1</span><span class="nn">2</span><span class="nn">3</span><span class="nn">4</span><span class="nn">5</span><span class="nn">6</span></span><small>problemas</small></div>
+        <div id="chips">
+          <div class="chip" id="c1"><b>1</b>10 secciones al mismo nivel</div>
+          <div class="chip" id="c2"><b>2</b>Módulos repetidos en la portada</div>
+          <div class="chip" id="c3"><b>3</b>7+ banners sin etiqueta</div>
+          <div class="chip" id="c4"><b>4</b>Widgets ajenos con estilos ajenos</div>
+          <div class="chip" id="c5"><b>5</b>Sin nota principal</div>
+          <div class="chip" id="c6"><b>6</b>Accesibilidad floja</div>
+        </div>
+      </div>
+      <video id="vold" class="clip" src="assets/video/antes.mp4" muted playsinline data-start="5.95" data-duration="6.5" data-track-index="1"></video>
+
+      <!-- Escena 3 · 11–15.5 s -->
+      <div id="s3" class="scene clip" data-start="12.45" data-duration="4.5" data-track-index="0">
+        <h2 id="s3title" class="display"><span class="ln" data-split>Seis problemas.</span><span class="ln" data-split>Un sistema.</span></h2>
+        <div class="card" id="k1"><b>01</b>Menú ordenado</div>
+        <div class="card" id="k2"><b>02</b>Un solo render</div>
+        <div class="card" id="k3"><b>03</b>Publicidad con lugar</div>
+        <div class="card" id="k4"><b>04</b>Datos con diseño propio</div>
+        <div class="card" id="k5"><b>05</b>Una nota principal</div>
+        <div class="card" id="k6"><b>06</b>Accesible</div>
+      </div>
+
+      <!-- Escena 4 · 15.5–20 s -->
+      <div id="s4bg" class="scene clip" data-start="16.95" data-duration="4.5" data-track-index="0">
+        <div id="tagold" class="tag display">Antes</div>
+        <div id="tagnew" class="tag display">Después</div>
+        <div id="bar"></div>
+        <div class="pill display" id="p1" style="top:690px">Una nota principal.</div>
+        <div class="pill display" id="p2" style="top:810px">El partido al frente.</div>
+        <div class="pill display" id="p3" style="top:930px">Publicidad con su lugar.</div>
+      </div>
+      <video id="vold2" class="clip vid" src="assets/video/antes.mp4" muted playsinline data-start="16.95" data-duration="4.5" data-track-index="2"></video>
+      <video id="vnew" class="clip vid" src="assets/video/despues.mp4" muted playsinline data-start="16.95" data-duration="4.5" data-track-index="3"></video>
+
+      <!-- Escena 5 · 20–24.5 s -->
+      <div id="s5" class="scene clip" data-start="21.45" data-duration="4.5" data-track-index="0">
+        <h2 id="s5title" class="display"><span class="ln" data-split>Cada detalle.</span><span class="ln" data-split>Una decisión.</span></h2>
+        <div class="dl" id="dl1" style="left:90px"><b>01</b>Mega menú</div>
+        <div class="dl" id="dl2" style="left:680px"><b>02</b>Tira de partidos</div>
+        <div class="dl" id="dl3" style="left:1270px"><b>03</b>Banda de YouTube</div>
+      </div>
+      <video id="dv1" class="clip dv" style="left:90px" src="assets/video/megamenu-fpc.mp4" muted playsinline data-start="21.45" data-duration="4.5" data-track-index="4"></video>
+      <video id="dv2" class="clip dv" style="left:680px" src="assets/video/tira-selector-calendario.mp4" muted playsinline data-start="21.45" data-duration="4.5" data-track-index="5"></video>
+      <video id="dv3" class="clip dv" style="left:1270px" src="assets/video/banda-youtube.mp4" muted playsinline data-start="21.45" data-duration="4.5" data-track-index="6"></video>
+
+      <audio id="musica" src="assets/audio/musica.mp3" data-start="0" data-duration="31.8" data-track-index="10" data-volume="1"></audio>
+      <video id="vopen" class="clip" src="assets/video/logo-v5b.mp4" muted playsinline data-start="0" data-duration="5.95" data-media-start="0" data-track-index="8" style="position:absolute;left:0;top:0;width:1920px;height:1080px;z-index:2"></video>
+      <video id="vclose" class="clip" src="assets/video/logo-v5b.mp4" muted playsinline data-start="25.85" data-duration="5.95" data-media-start="5.95" data-track-index="9" style="position:absolute;left:0;top:0;width:1920px;height:1080px;z-index:8"></video>
+      <div id="contact" style="position:absolute;left:0;right:0;top:985px;text-align:center;font-size:36px;font-weight:500;color:#141E5C;z-index:9;opacity:0">Diseño y desarrollo: Out. · outstudio.online</div>
+      <div id="tp"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const body = gsap.timeline();
+      gsap.set("#tp", { xPercent: -101 });
+      const E = "expo.out";
+
+      /* divide cada línea en palabras y letras (determinista) */
+      function split(el) {
+        const words = el.textContent.split(" ");
+        el.textContent = "";
+        const chars = [];
+        words.forEach((w, wi) => {
+          const sw = document.createElement("span");
+          sw.className = "w";
+          [...w].forEach((c) => {
+            const sc = document.createElement("span");
+            sc.className = "ch";
+            sc.textContent = c;
+            sw.appendChild(sc);
+            chars.push(sc);
+          });
+          el.appendChild(sw);
+          if (wi < words.length - 1) el.appendChild(document.createTextNode(" "));
+        });
+        return chars;
+      }
+      function kinetic(sel, t, step) {
+        const out = [];
+        document.querySelectorAll(sel + " [data-split]").forEach((ln) => out.push(...split(ln)));
+        out.forEach((c, i) => {
+          const dy = 180 + ((i * 37) % 5) * 40;
+          const rot = ((i * 53) % 21 - 10) * 2.2;
+          body.fromTo(c, { y: dy, rotation: rot, opacity: 0, scale: 0.55 }, { y: 0, rotation: 0, opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, t + i * step);
+        });
+        return out;
+      }
+      /* barrido de color entre escenas */
+      function sweep(t, color) {
+        body.set("#tp", { background: color }, t - 0.5);
+        body.fromTo("#tp", { xPercent: -101 }, { xPercent: 0, duration: 0.4, ease: "power3.in" }, t - 0.4);
+        body.to("#tp", { xPercent: 101, duration: 0.45, ease: "power3.out" }, t + 0.05);
+      }
+      body.set("#tp", { xPercent: -101 }, 0);
+      sweep(4.5, "#F2C6B4");
+
+      /* ---------- Escena 2 ---------- */
+      body.fromTo("#vold", { scale: 0.88, rotationY: -12, transformPerspective: 1500, transformOrigin: "50% 50%" }, { scale: 1.04, rotationY: -3, duration: 6.4, ease: "power1.inOut" }, 4.6);
+      body.fromTo("#s2label", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: E }, 5.0);
+      body.fromTo("#counter", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: E }, 5.2);
+      const nn = document.querySelectorAll("#num .nn");
+      for (let i = 1; i <= 6; i++) {
+        const t = 5.5 + (i - 1) * 0.85;
+        body.fromTo("#c" + i, { x: 700, rotation: 8, skewX: -14, opacity: 0 }, { x: 0, rotation: 0, skewX: 0, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }, t);
+        body.fromTo(nn[i - 1], { opacity: 0 }, { opacity: 1, duration: 0.02 }, t);
+        body.to(i > 1 ? nn[i - 2] : "#num > span:first-child", { opacity: 0, duration: 0.02 }, t);
+        body.fromTo("#num", { scale: 1.45, transformOrigin: "50% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(2)" }, t);
+        body.fromTo("#vold", { boxShadow: "0 0 0 0px rgba(242,198,180,0)" }, { boxShadow: "0 0 0 14px rgba(242,198,180,0.9)", duration: 0.12, yoyo: true, repeat: 1 }, t + 0.1);
+      }
+      body.to(".chip", { x: -30, opacity: 0, duration: 0.3, ease: "power2.in", stagger: 0.04 }, 10.55);
+
+      /* ---------- Escena 3 ---------- */
+      sweep(11, "#F2C6B4");
+      kinetic("#s3title", 11.2, 0.04);
+      for (let i = 1; i <= 6; i++) {
+        const el = "#k" + i;
+        const col = (i - 1) % 3, row = Math.floor((i - 1) / 3);
+        const gx = 110 + col * 580, gy = 640 + row * 200;
+        body.set(el, { x: gx, y: 1150, rotationX: -70, transformPerspective: 900, opacity: 0 }, 11);
+        body.to(el, { opacity: 1, duration: 0.2 }, 12.0 + i * 0.12);
+        body.to(el, { y: gy, rotationX: 0, duration: 0.8, ease: E }, 12.0 + i * 0.12);
+      }
+      body.fromTo("#s3title", { scale: 1 }, { scale: 1.05, transformOrigin: "0% 0%", duration: 4, ease: "none" }, 11.4);
+
+      /* ---------- Escena 4: antes → después ---------- */
+      sweep(15.5, "#1B2FCC");
+      body.fromTo(["#vold2", "#vnew"], { scale: 1 }, { scale: 1.12, duration: 4.5, ease: "power1.inOut" }, 15.5);
+      body.fromTo("#tagold", { y: -140, scale: 0.4, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.7, ease: "back.out(1.8)" }, 15.9);
+      const prog = { p: 0 };
+      body.set("#bar", { opacity: 1 }, 16.4);
+      body.to(prog, { p: 1, duration: 1.8, ease: "power2.inOut", onUpdate: () => {
+        const x = prog.p * 2100 - 90;
+        const s = gsap.getProperty("#vnew", "scale") || 1;
+        const ox = 0.3 * 1920;
+        const local = ox + (x - ox) / s;
+        const right = Math.max(0, Math.min(1920, 1920 - local));
+        document.getElementById("vnew").style.clipPath = "inset(0 " + right + "px 0 0)";
+        document.getElementById("bar").style.left = x - 5 + "px";
+      } }, 16.4);
+      body.set("#bar", { opacity: 0 }, 18.25);
+      body.fromTo("#tagnew", { y: -140, scale: 0.4, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.7, ease: "back.out(1.8)" }, 17.6);
+      body.to("#tagold", { x: -400, opacity: 0, duration: 0.4, ease: "power2.in" }, 18.0);
+      ["#p1", "#p2", "#p3"].forEach((p, i) => {
+        body.fromTo(p, { x: -900, skewX: 18, opacity: 0 }, { x: 0, skewX: 0, opacity: 1, duration: 0.6, ease: E }, 18.4 + i * 0.4);
+      });
+
+      /* ---------- Escena 5: detalles ---------- */
+      sweep(20, "#F2C6B4");
+      kinetic("#s5title", 20.2, 0.04);
+      [["#dv1", "#dl1", 0], ["#dv2", "#dl2", 1], ["#dv3", "#dl3", 2]].forEach(([v, l, i]) => {
+        body.set(v, { y: 900, rotationX: -60, rotationZ: (i - 1) * 6, transformPerspective: 1100, opacity: 0 }, 20);
+        body.to(v, { opacity: 1, duration: 0.2 }, 20.7 + i * 0.25);
+        body.to(v, { y: 0, rotationX: 0, rotationZ: 0, duration: 0.9, ease: E }, 20.7 + i * 0.25);
+        body.to(v, { y: -24, duration: 2.2, ease: "sine.inOut" }, 21.7 + i * 0.25);
+        body.fromTo(l, { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: E }, 21.1 + i * 0.25);
+      });
+
+      sweep(24.5, "#1B2FCC");
+      tl.add(body, 1.45);
+      tl.fromTo("#contact", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "expo.out" }, 30.85);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

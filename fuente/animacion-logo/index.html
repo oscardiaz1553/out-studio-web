@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+      @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-500.woff2") format("woff2"); font-weight: 500; }
+      :root { --paper:#F3EDE7; --klein:#1B2FCC; --deep:#141E5C; --soft:#C8CDF0; --mid:#4A55C4; --carne:#F2C6B4; --warm:#BC6039; }
+      * { margin:0; padding:0; box-sizing:border-box; }
+      html, body { width:1920px; height:1080px; overflow:hidden; background:var(--klein); }
+      #main { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--klein); font-family:"Instrument Sans",sans-serif; }
+      #world { position:absolute; left:0; top:0; width:1920px; height:1080px; transform-origin:960px 540px; --logo:#F3EDE7; --br:#F3EDE7; --dotc:#4A55C4; }
+      #bgc { position:absolute; left:-2000px; top:-2000px; width:5920px; height:5080px; background:var(--klein); }
+      #wipe { position:absolute; left:-2000px; top:-2000px; width:5920px; height:5080px; background:var(--paper); clip-path:circle(0px at 2643px 2540px); }
+      .dot { position:absolute; width:10px; height:10px; margin:-5px 0 0 -5px; border-radius:50%; background:var(--dotc); opacity:.6; }
+      #logo { position:absolute; left:289px; top:63px; width:1440px; height:920px; overflow:visible; }
+      .p { fill:var(--logo); }
+      .b { fill:var(--br); }
+      .bs { fill:none; stroke:var(--br); stroke-width:9.4; stroke-linejoin:miter; stroke-miterlimit:10; stroke-linecap:butt; }
+      #ring { position:absolute; left:543px; top:440px; width:200px; height:200px; border-radius:50%; border:16px solid var(--paper); opacity:0; }
+      .sl { position:absolute; left:0; height:8px; width:900px; background:var(--paper); opacity:0; border-radius:4px; }
+      #tag { position:absolute; left:0; right:0; top:860px; text-align:center; font-family:"Bricolage Grotesque",sans-serif; font-weight:800; letter-spacing:-0.045em; font-size:96px; color:var(--klein); }
+      .grp { position:absolute; left:0; top:0; width:1920px; height:1080px; display:flex; align-items:center; justify-content:center; gap:34px; opacity:0; }
+      .wd { font-family:"Bricolage Grotesque",sans-serif; font-weight:800; letter-spacing:-0.045em; font-size:240px; line-height:1; white-space:nowrap; padding-bottom:22px; }
+      .bk { width:122px; height:300px; overflow:visible; }
+      .bs2 { fill:none; stroke-width:9.4; stroke-linejoin:miter; stroke-miterlimit:10; stroke-linecap:butt; }
+      .ch { display:inline-block; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="11.9" data-width="1920" data-height="1080">
+      <div id="world">
+        <div id="bgc"></div>
+        <div id="wipe"></div>
+        <div id="lattice"></div>
+        <div id="ring"></div>
+        <svg id="logo" viewBox="-6 0 144 92" xmlns="http://www.w3.org/2000/svg">
+          <defs><clipPath id="clY"><rect x="-40" y="21.7" width="200" height="48.4"/></clipPath><clipPath id="cl"><rect x="18.58" y="21.7" width="19.61" height="48.4"/></clipPath></defs>
+          <g id="trail"></g>
+          <g id="g">
+            <g id="gO"><path class="p" id="pO" d="M29.19,72.04c-3.3,0-6.27-.52-8.93-1.55-2.66-1.04-4.93-2.57-6.82-4.59-1.88-2.02-3.32-4.54-4.31-7.56-.99-3.01-1.48-6.47-1.48-10.38,0-5.55,.93-10.13,2.79-13.74,1.86-3.6,4.45-6.3,7.77-8.09,3.32-1.79,7.12-2.68,11.41-2.68,3.34,0,6.33,.51,8.97,1.52,2.64,1.01,4.9,2.53,6.78,4.56,1.88,2.02,3.32,4.55,4.31,7.59,.99,3.04,1.48,6.56,1.48,10.56s-.52,7.6-1.55,10.66c-1.04,3.06-2.53,5.6-4.48,7.63-1.95,2.02-4.27,3.54-6.96,4.56-2.68,1.01-5.67,1.52-8.97,1.52Zm.42-9.25c2.17,0,3.98-.54,5.44-1.62,1.46-1.08,2.54-2.71,3.25-4.87,.71-2.16,1.06-4.85,1.06-8.05,0-3.44-.38-6.29-1.13-8.55-.75-2.26-1.87-3.98-3.35-5.16-1.48-1.18-3.35-1.77-5.61-1.77-2.12,0-3.91,.57-5.37,1.7-1.46,1.13-2.57,2.8-3.32,5.01-.75,2.21-1.13,4.97-1.13,8.26,0,2.45,.21,4.63,.64,6.53,.42,1.91,1.07,3.48,1.94,4.73,.87,1.25,1.94,2.19,3.21,2.82,1.27,.64,2.73,.95,4.38,.95Z"/></g>
+            <g id="gL"><path class="b" d="M47.75,32.35c-1.86,3.6-2.79,8.18-2.79,13.73,0,3.91,.49,7.37,1.48,10.38,.99,3.02,2.43,5.54,4.31,7.56,1.88,2.02,4.16,3.56,6.82,4.59,2.13,.83,4.46,1.33,7,1.48v-9.43c-.72-.15-1.39-.39-2.02-.7-1.28-.64-2.35-1.58-3.22-2.83-.87-1.24-1.52-2.82-1.94-4.73-.42-1.9-.64-4.08-.64-6.53,0-3.3,.38-6.05,1.13-8.26,.76-2.22,1.86-3.89,3.32-5.02,.98-.76,2.1-1.26,3.37-1.5v-9.42c-3.33,.27-6.35,1.13-9.05,2.59-3.32,1.79-5.91,4.48-7.77,8.09Z"/></g>
+            <g id="gR"><path class="b" d="M87.07,35.24c-.99-3.04-2.42-5.57-4.31-7.59-1.88-2.02-4.14-3.54-6.78-4.56-1.74-.67-3.65-1.12-5.71-1.34v9.78c.73,.27,1.4,.65,2.01,1.13,1.48,1.18,2.6,2.9,3.35,5.16s1.13,5.11,1.13,8.54c0,3.21-.35,5.89-1.06,8.05-.71,2.17-1.79,3.8-3.25,4.88-.66,.48-1.38,.86-2.18,1.12v9.53c1.88-.24,3.64-.67,5.29-1.29,2.68-1.02,5-2.53,6.96-4.56,1.95-2.02,3.44-4.57,4.48-7.63,1.04-3.06,1.55-6.61,1.55-10.66s-.49-7.52-1.48-10.56Z"/></g>
+            <!-- corchetes cuadrados [ ] -->
+            <g transform="translate(0 1.9)">
+              <g id="sqL"><path class="bs" d="M38.19,26.4 H23.28 V65.4 H38.19"/></g>
+              <g transform="matrix(-1 0 0 1 123.11 0)"><g id="sqR"><path class="bs" d="M38.19,26.4 H23.28 V65.4 H38.19"/></g></g>
+              <!-- llaves { } -->
+              <g id="cuL"><path class="bs" d="M38.19,26.4 H34 Q29,26.4 29,31.4 V40.9 Q29,45.9 23.3,45.9 Q29,45.9 29,50.9 V60.4 Q29,65.4 34,65.4 H38.19"/></g>
+              <g transform="matrix(-1 0 0 1 123.11 0)"><g id="cuR"><path class="bs" d="M38.19,26.4 H34 Q29,26.4 29,31.4 V40.9 Q29,45.9 23.3,45.9 Q29,45.9 29,50.9 V60.4 Q29,65.4 34,65.4 H38.19"/></g></g>
+              <!-- ángulos < > -->
+              <g id="anL"><g clip-path="url(#cl)"><path class="bs" d="M46,21 L23.3,45.9 L46,70.8"/></g></g>
+              <g transform="matrix(-1 0 0 1 123.11 0)"><g id="anR"><g clip-path="url(#cl)"><path class="bs" d="M46,21 L23.3,45.9 L46,70.8"/></g></g></g>
+              <!-- barra de «</» y barras de «/ /» -->
+              <g clip-path="url(#clY)">
+                <g id="slC"><path class="bs" d="M30,70.1 L37,21.7"/></g>
+                <g id="slL"><path class="bs" d="M24,70.1 L33,21.7"/></g>
+                <g transform="translate(66.9 0)"><g id="slR"><path class="bs" d="M24,70.1 L33,21.7"/></g></g>
+              </g>
+            </g>
+            <rect id="caret" class="b" x="86" y="26.5" width="5.5" height="45.5" opacity="0"/>
+            <g id="gU"><path class="p" d="M65.42,72.04c-4.19,0-7.3-1.44-9.32-4.31-2.02-2.87-3.04-7.27-3.04-13.21v-20.76h11.44v20.27c0,2.92,.42,5.01,1.27,6.29s2.09,1.91,3.74,1.91c1.08,0,2.07-.28,2.97-.85,.89-.56,1.67-1.41,2.33-2.54,.66-1.13,1.15-2.53,1.48-4.2,.33-1.67,.49-3.61,.49-5.83v-15.04h11.44v37.29h-9.53l-.07-13.63h-.78c-.38,3.39-1.07,6.17-2.08,8.33-1.01,2.17-2.38,3.76-4.1,4.77-1.72,1.01-3.8,1.52-6.25,1.52Z"/></g>
+            <g id="gT"><path class="p" d="M113.05,65.87c0-1.83,.51-3.55,1.4-5.01-.59,.31-1.24,.55-1.94,.73-.73,.19-1.45,.28-2.15,.28-1.41,0-2.54-.37-3.39-1.13s-1.27-2-1.27-3.74v-14.05h8.69v-9.18h-8.69v-8.47h-6.57l-.05,1.36c-.02,.5-.06,1.01-.16,1.5-.36,1.89-1,2.57-2.01,3.47-1.21,1.09-2.99,1.85-5.49,2.13h-1.27l-.07,8.9h4.45v15.25c0,4.8,1.06,8.33,3.18,10.59,2.12,2.26,5.37,3.39,9.75,3.39,.9,0,1.92-.06,3.07-.18,1.14-.12,2.45-.38,3.93-.8-.9-1.48-1.42-3.21-1.42-5.06Z"/></g>
+          </g>
+        </svg>
+<svg width="0" height="0" style="position:absolute"><defs><clipPath id="cw"><rect x="44.96" y="21.7" width="19.61" height="48.4"/></clipPath></defs></svg>
+<div class="grp" id="w1" style="color:#F3EDE7"><svg class="bk" viewBox="44.96 21.7 19.61 48.4"><path style="fill:#F2C6B4" d="M47.75,32.35c-1.86,3.6-2.79,8.18-2.79,13.73,0,3.91,.49,7.37,1.48,10.38,.99,3.02,2.43,5.54,4.31,7.56,1.88,2.02,4.16,3.56,6.82,4.59,2.13,.83,4.46,1.33,7,1.48v-9.43c-.72-.15-1.39-.39-2.02-.7-1.28-.64-2.35-1.58-3.22-2.83-.87-1.24-1.52-2.82-1.94-4.73-.42-1.9-.64-4.08-.64-6.53,0-3.3,.38-6.05,1.13-8.26,.76-2.22,1.86-3.89,3.32-5.02,.98-.76,2.1-1.26,3.37-1.5v-9.42c-3.33,.27-6.35,1.13-9.05,2.59-3.32,1.79-5.91,4.48-7.77,8.09Z"/></svg><span class="wd">diseño</span><svg class="bk" viewBox="44.96 21.7 19.61 48.4"><g transform="matrix(-1 0 0 1 109.53 0)"><path style="fill:#F2C6B4" d="M47.75,32.35c-1.86,3.6-2.79,8.18-2.79,13.73,0,3.91,.49,7.37,1.48,10.38,.99,3.02,2.43,5.54,4.31,7.56,1.88,2.02,4.16,3.56,6.82,4.59,2.13,.83,4.46,1.33,7,1.48v-9.43c-.72-.15-1.39-.39-2.02-.7-1.28-.64-2.35-1.58-3.22-2.83-.87-1.24-1.52-2.82-1.94-4.73-.42-1.9-.64-4.08-.64-6.53,0-3.3,.38-6.05,1.13-8.26,.76-2.22,1.86-3.89,3.32-5.02,.98-.76,2.1-1.26,3.37-1.5v-9.42c-3.33,.27-6.35,1.13-9.05,2.59-3.32,1.79-5.91,4.48-7.77,8.09Z"/></g></svg></div>
+<div class="grp" id="w2" style="color:#141E5C"><svg class="bk" viewBox="44.96 21.7 19.61 48.4"><path class="bs2" style="stroke:#1B2FCC" d="M64.57,26.4 H49.66 V65.4 H64.57"/></svg><span class="wd">desarrollo</span><svg class="bk" viewBox="44.96 21.7 19.61 48.4"><g transform="matrix(-1 0 0 1 109.53 0)"><path class="bs2" style="stroke:#1B2FCC" d="M64.57,26.4 H49.66 V65.4 H64.57"/></g></svg></div>
+<div class="grp" id="w3" style="color:#F3EDE7"><svg class="bk" viewBox="44.96 21.7 19.61 48.4"><path class="bs2" style="stroke:#F2C6B4" d="M64.57,26.4 H60.4 Q55.4,26.4 55.4,31.4 V40.9 Q55.4,45.9 49.7,45.9 Q55.4,45.9 55.4,50.9 V60.4 Q55.4,65.4 60.4,65.4 H64.57"/></svg><span class="wd">marca</span><svg class="bk" viewBox="44.96 21.7 19.61 48.4"><g transform="matrix(-1 0 0 1 109.53 0)"><path class="bs2" style="stroke:#F2C6B4" d="M64.57,26.4 H60.4 Q55.4,26.4 55.4,31.4 V40.9 Q55.4,45.9 49.7,45.9 Q55.4,45.9 55.4,50.9 V60.4 Q55.4,65.4 60.4,65.4 H64.57"/></g></svg></div>
+<div class="grp" id="w4" style="color:#1B2FCC"><svg class="bk" viewBox="44.96 21.7 19.61 48.4"><g clip-path="url(#cw)"><path class="bs2" style="stroke:#BC6039" d="M72.4,21 L49.7,45.9 L72.4,70.8"/></g></svg><span class="wd">tú</span><svg class="bk" viewBox="44.96 21.7 19.61 48.4"><g transform="matrix(-1 0 0 1 109.53 0)"><g clip-path="url(#cw)"><path class="bs2" style="stroke:#BC6039" d="M72.4,21 L49.7,45.9 L72.4,70.8"/></g></g></svg></div>
+      </div>
+      <div class="sl" id="sl1" style="top:210px"></div>
+      <div class="sl" id="sl2" style="top:430px"></div>
+      <div class="sl" id="sl3" style="top:640px"></div>
+      <div class="sl" id="sl4" style="top:820px"></div>
+      <div id="tag">Never the usual.</div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const E = "expo.out", EI = "expo.inOut", P4 = "power4.out";
+      const SVGNS = "http://www.w3.org/2000/svg";
+
+      /* retícula */
+      const lat = document.getElementById("lattice");
+      for (let r = -8; r < 28; r++) for (let c = -12; c < 48; c++) {
+        const d = document.createElement("div");
+        d.className = "dot";
+        d.style.left = 8 + c * 56 + "px";
+        d.style.top = 8 + r * 56 + "px";
+        lat.appendChild(d);
+      }
+
+      /* cámara */
+      const cam = { s: 5, fx: 643, fy: 300, r: 0, sx: 0, sy: 0 };
+      function apply() {
+        gsap.set("#world", { scale: cam.s, rotation: cam.r, x: -cam.s * (cam.fx - 960) + cam.sx, y: -cam.s * (cam.fy - 540) + cam.sy });
+      }
+      const move = (vars, t) => tl.to(cam, { ...vars, onUpdate: apply }, t);
+      apply();
+      const shake = (t, a) => tl.to(cam, { keyframes: { sx: [0, -a, a * 0.8, -a * 0.5, a * 0.25, 0], sy: [0, a * 0.5, -a * 0.6, a * 0.3, -a * 0.1, 0] }, duration: 0.32, ease: "none", onUpdate: apply }, t);
+
+      /* estados iniciales */
+      gsap.set("#gL", { x: -51.35, y: 1.9 });
+      gsap.set("#gR", { x: -23.35, y: 1.9 });
+      gsap.set("#gO", { opacity: 0 });
+      gsap.set(["#gU", "#gT"], { opacity: 0, y: 60 });
+      gsap.set(["#sqL", "#sqR", "#cuL", "#cuR", "#anL", "#anR", "#slC", "#slL", "#slR"], { opacity: 0 });
+      gsap.set("#tag", { opacity: 0 });
+
+      /* cambio de fondo con barrido circular desde el impacto */
+      function flip(t, bg, logo, br, dotc, cx) {
+        tl.set("#wipe", { backgroundColor: bg, clipPath: "circle(0px at " + (cx + 2000) + "px 2540px)" }, t);
+        tl.to("#wipe", { clipPath: "circle(3600px at " + (cx + 2000) + "px 2540px)", duration: 0.5, ease: "power3.out" }, t);
+        tl.set("#bgc", { backgroundColor: bg }, t + 0.52);
+        tl.set("#wipe", { clipPath: "circle(0px at " + (cx + 2000) + "px 2540px)" }, t + 0.52);
+        tl.set("#world", { "--logo": logo, "--br": br, "--dotc": dotc }, t);
+      }
+
+      /* ===== PLANO 1 · 0–1.3 · choque y cámara que se aleja ===== */
+      tl.to("#gL", { x: -37.35, duration: 0.45, ease: "power3.in" }, 0.05);
+      tl.to("#gR", { x: -37.35, duration: 0.45, ease: "power3.in" }, 0.05);
+      tl.fromTo("#ring", { scale: 0.2, opacity: 1 }, { scale: 12, opacity: 0, duration: 0.8, ease: "power3.out", immediateRender: false }, 0.5);
+      flip(0.5, "#F3EDE7", "#1B2FCC", "#1B2FCC", "#C8CDF0", 643);
+      shake(0.5, 26);
+      move({ s: 1, fx: 960, fy: 540, duration: 0.95, ease: P4 }, 0.5);
+      tl.to(["#gU", "#gT"], { y: 0, opacity: 1, duration: 0.55, ease: "back.out(2)", stagger: 0.07 }, 0.75);
+
+      /* ===== PLANO 2 · 1.35–2.4 · se abre y la u entra ===== */
+      ["#sl1", "#sl2", "#sl3", "#sl4"].forEach((id, i) => {
+        tl.fromTo(id, { x: -1000, opacity: 0.9 }, { x: 2800, opacity: 0.9, duration: 0.42, ease: "power2.in" }, 1.35 + i * 0.05);
+        tl.set(id, { opacity: 0 }, 1.95);
+      });
+      move({ s: 1.55, r: -7, fx: 900, fy: 520, duration: 0.55, ease: "power3.out" }, 1.35);
+      tl.to("#gL", { x: -26.38, duration: 0.6, ease: EI }, 1.4);
+      tl.to("#gR", { x: 15.98, duration: 0.6, ease: EI }, 1.4);
+      tl.to("#gR", { y: -14, duration: 0.3, ease: "sine.out" }, 1.4);
+      tl.to("#gR", { y: 1.9, duration: 0.3, ease: "sine.in" }, 1.7);
+      tl.to("#gU", { x: -9.26, duration: 0.6, ease: EI }, 1.45);
+      tl.to("#gT", { x: 19, duration: 0.6, ease: EI }, 1.4);
+      tl.to("#g", { x: -12, duration: 0.6, ease: EI }, 1.4);
+      move({ s: 1.0, r: 3, fx: 890, fy: 540, duration: 0.45, ease: "back.out(2.2)" }, 1.95);
+      shake(2.0, 14);
+
+      /* ===== PLANO 3 · 2.5–6.2 · los corchetes cambian de forma: [ ] { } < > </ > / / y el cursor ===== */
+      const OUT = (id, dx, t, d) => tl.to(id, { x: dx, opacity: 0, scaleX: 0.3, duration: d || 0.2, ease: "power3.in" }, t);
+      const IN = (id, from, t) => tl.fromTo(id, { x: from, opacity: 0, scaleX: 1.4 }, { x: 0, opacity: 1, scaleX: 1, duration: 0.3, ease: P4, immediateRender: false }, t);
+      const boom = (t, cx) => {
+        tl.set("#ring", { x: cx - 643 }, t);
+        tl.fromTo("#ring", { scale: 0.2, opacity: 1 }, { scale: 9, opacity: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+        shake(t, 16);
+      };
+      /* 2.55 · ( ) → [ ] */
+      flip(2.55, "#1B2FCC", "#F3EDE7", "#F2C6B4", "#4A55C4", 844);
+      OUT("#gL", -26.38 - 34, 2.55); OUT("#gR", 15.98 + 34, 2.55);
+      IN("#sqL", -46, 2.73); IN("#sqR", 46, 2.73); boom(2.73, 844);
+      move({ s: 1.35, r: -4, fx: 860, fy: 540, duration: 0.4, ease: "power3.out" }, 2.55);
+      /* 3.15 · [ ] → { } */
+      flip(3.15, "#F2C6B4", "#141E5C", "#1B2FCC", "#E9B5A0", 844);
+      OUT("#sqL", -34, 3.15); OUT("#sqR", 34, 3.15);
+      IN("#cuL", -46, 3.33); IN("#cuR", 46, 3.33); boom(3.33, 844);
+      move({ s: 1.2, r: 5, fx: 1000, fy: 540, duration: 0.4, ease: "power3.out" }, 3.15);
+      /* 3.75 · { } → < > */
+      flip(3.75, "#141E5C", "#F3EDE7", "#F2C6B4", "#4A55C4", 844);
+      OUT("#cuL", -34, 3.75); OUT("#cuR", 34, 3.75);
+      IN("#anL", -46, 3.93); IN("#anR", 46, 3.93); boom(3.93, 844);
+      move({ s: 1.7, r: -3, fx: 844, fy: 540, duration: 0.45, ease: "power3.out" }, 3.75);
+      /* 4.35 · < > → </ > : aparece la barra y el ángulo se corre */
+      flip(4.35, "#F3EDE7", "#1B2FCC", "#BC6039", "#C8CDF0", 844);
+      tl.to("#anL", { x: -17, duration: 0.25, ease: P4 }, 4.4);
+      tl.fromTo("#slC", { scale: 0, opacity: 0, transformOrigin: "50% 50%" }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 4.45);
+      boom(4.45, 844);
+      move({ s: 1.35, r: 4, fx: 800, fy: 540, duration: 0.45, ease: "power3.out" }, 4.35);
+      /* 4.95 · </ > → / / (como una expresión regular) */
+      flip(4.95, "#1B2FCC", "#F3EDE7", "#F2C6B4", "#4A55C4", 844);
+      OUT("#anL", -17 - 34, 4.95); OUT("#anR", 34, 4.95); OUT("#slC", -20, 4.95);
+      IN("#slL", -46, 5.13); IN("#slR", 46, 5.13); boom(5.13, 844);
+      move({ s: 1.15, r: -4, fx: 900, fy: 540, duration: 0.45, ease: "power3.out" }, 4.95);
+      /* 5.55 · todo se va y queda el cursor parpadeando */
+      flip(5.55, "#F3EDE7", "#1B2FCC", "#BC6039", "#C8CDF0", 844);
+      OUT("#slL", -34, 5.55); OUT("#slR", 34, 5.55);
+      move({ s: 1.9, r: 0, fx: 940, fy: 540, duration: 0.55, ease: "power3.out" }, 5.55);
+      [5.75, 5.95].forEach((t) => { tl.set("#caret", { opacity: 1 }, t); tl.set("#caret", { opacity: 0 }, t + 0.12); });
+      tl.set("#caret", { opacity: 1 }, 5.75);
+
+      /* ===== PLANO 3b · 6.05–8.45 · el cursor «escribe» los servicios, un símbolo por palabra ===== */
+      const W = 6.05;
+      tl.set("#logo", { opacity: 0 }, W);
+      tl.set("#caret", { opacity: 0 }, W);
+      tl.set("#g", { x: 0 }, W);
+      tl.set(["#gU", "#gT"], { x: 0 }, W);
+      const words = [
+        { id: "#w1", bg: "#1B2FCC", dot: "#4A55C4", r: -5 },
+        { id: "#w2", bg: "#F2C6B4", dot: "#E9B5A0", r: 5 },
+        { id: "#w3", bg: "#141E5C", dot: "#4A55C4", r: -4 },
+        { id: "#w4", bg: "#F3EDE7", dot: "#C8CDF0", r: 4 },
+      ];
+      function splitWd(el) {
+        const t = el.textContent; el.textContent = "";
+        return [...t].map((c) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; el.appendChild(s); return s; });
+      }
+      words.forEach((b, i) => {
+        const t = W + i * 0.6;
+        const g = document.querySelector(b.id);
+        const bl = g.children[0], br = g.children[2];
+        const chars = splitWd(g.children[1]);
+        flip(t, b.bg, "#F3EDE7", "#F2C6B4", b.dot, 960);
+        tl.set(b.id, { opacity: 1 }, t);
+        tl.fromTo(bl, { x: -1100, scaleX: 1.6 }, { x: 0, scaleX: 1, duration: 0.4, ease: P4, immediateRender: false }, t + 0.05);
+        tl.fromTo(br, { x: 1100, scaleX: 1.6 }, { x: 0, scaleX: 1, duration: 0.4, ease: P4, immediateRender: false }, t + 0.05);
+        chars.forEach((c, k) => tl.fromTo(c, { y: 160, rotation: ((k * 53) % 21 - 10) * 2, opacity: 0, scale: 0.6 }, { y: 0, rotation: 0, opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)", immediateRender: false }, t + 0.15 + k * 0.022));
+        tl.set(cam, { s: 1.22, r: b.r, fx: 960, fy: 540, onUpdate: apply }, t + 0.01);
+        move({ s: 1, r: 0, fx: 960, fy: 540, duration: 0.5, ease: P4 }, t + 0.02);
+        shake(t + 0.25, 14);
+        if (i < words.length - 1) {
+          tl.to(bl, { x: -300, opacity: 0, scaleX: 0.3, duration: 0.15, ease: "power3.in" }, t + 0.45);
+          tl.to(br, { x: 300, opacity: 0, scaleX: 0.3, duration: 0.15, ease: "power3.in" }, t + 0.45);
+          tl.to(g.children[1], { opacity: 0, y: -40, duration: 0.15, ease: "power2.in" }, t + 0.45);
+          tl.set(b.id, { opacity: 0 }, t + 0.6);
+        }
+      });
+      /* «tú»: los ángulos se cierran sobre la palabra, el fondo vuelve a papel y queda «ut» */
+      const T4 = W + 3 * 0.6 + 0.8;
+      const g4 = document.querySelector("#w4");
+      tl.to(g4.children[0], { x: 300, duration: 0.25, ease: "power4.in" }, T4);
+      tl.to(g4.children[2], { x: -300, duration: 0.25, ease: "power4.in" }, T4);
+      tl.to(g4.children[1], { scale: 0.2, opacity: 0, duration: 0.25, ease: "power4.in" }, T4);
+      flip(T4 + 0.22, "#F3EDE7", "#1B2FCC", "#BC6039", "#C8CDF0", 960);
+      tl.set("#logo", { opacity: 1 }, T4 + 0.5);
+      tl.set("#w4", { opacity: 0 }, T4 + 0.5);
+
+      /* ===== PLANO 4 · sin corte: la O llega ===== */
+      const S = T4 + 0.5;
+      tl.set("#ring", { borderColor: "#BC6039", x: 0 }, S);
+      tl.set("#gO", { opacity: 1, x: 150, y: -95 }, S);
+      tl.set("#pO", { fill: "#BC6039" }, S);
+      tl.to("#g", { x: 0, duration: 0.55, ease: "power3.inOut" }, S);
+      tl.to("#gU", { x: 0, duration: 0.55, ease: "power3.inOut" }, S);
+      tl.to("#gT", { x: 0, duration: 0.55, ease: "power3.inOut" }, S);
+      const tr = document.getElementById("trail");
+      for (let i = 1; i <= 6; i++) {
+        const c = document.querySelector("#pO").cloneNode(true);
+        c.removeAttribute("id"); c.removeAttribute("class"); c.style.fill = "#BC6039";
+        const g = document.createElementNS(SVGNS, "g"); g.appendChild(c); tr.appendChild(g);
+        gsap.set(g, { opacity: 0, x: 150, y: -95 });
+        tl.set(g, { opacity: 0.5 - i * 0.07 }, S);
+        tl.to(g, { x: 0, duration: 0.5 + i * 0.03, ease: "power4.in" }, S);
+        tl.to(g, { y: 0, duration: 0.5 + i * 0.03, ease: "power2.in" }, S);
+        tl.set(g, { opacity: 0 }, S + 0.53 + i * 0.03);
+      }
+      tl.to("#gO", { x: 0, duration: 0.5, ease: "power4.in" }, S);
+      tl.to("#gO", { y: 0, duration: 0.5, ease: "power2.in" }, S);
+      move({ s: 1.0, r: 0, fx: 960, fy: 540, duration: 0.55, ease: "power3.inOut" }, S);
+      /* impacto */
+      tl.fromTo("#ring", { scale: 0.2, opacity: 1 }, { scale: 14, opacity: 0, duration: 0.8, ease: "power3.out", immediateRender: false }, S + 0.5);
+      tl.to("#pO", { fill: "#1B2FCC", duration: 0.3 }, S + 0.54);
+      shake(S + 0.5, 32);
+      /* lema */
+      const tag = document.getElementById("tag");
+      const txt = tag.textContent; tag.textContent = "";
+      [...txt].forEach((ch, i) => {
+        const sp = document.createElement("span"); sp.className = "ch"; sp.textContent = ch === " " ? "\u00a0" : ch; tag.appendChild(sp);
+        tl.fromTo(sp, { y: 120, rotation: ((i * 53) % 21 - 10) * 2, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, S + 1.08 + i * 0.03);
+      });
+      tl.set("#tag", { opacity: 1 }, S + 1.07);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
