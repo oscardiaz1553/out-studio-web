@@ -20,7 +20,7 @@ const KINDS = {
 
 export type FrameKind = keyof typeof KINDS;
 
-function Sym({ kind, flip }: { kind: FrameKind; flip?: boolean }) {
+export function Sym({ kind, flip }: { kind: FrameKind; flip?: boolean }) {
   const k = KINDS[kind] as { d?: string; fill?: string; view?: string };
   return (
     <svg

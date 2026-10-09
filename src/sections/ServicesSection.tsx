@@ -1,4 +1,5 @@
 import TitleFrame from '../components/TitleFrame';
+import WordStage from '../components/WordStage';
 import {
   motion,
   useMotionValue,
@@ -101,6 +102,10 @@ export default function ServicesSection() {
             style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
           />
           </TitleFrame>
+        </div>
+
+        <div className="mt-6 sm:mt-8">
+          <WordStage />
         </div>
 
         <ul

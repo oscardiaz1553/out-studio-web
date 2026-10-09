@@ -11,6 +11,7 @@ import RotatingWord from '../components/RotatingWord';
 import { PROJECTS } from '../data/projects';
 
 const MONO = `${import.meta.env.BASE_URL}mono-asoma.webp`;
+const MANGO = `${import.meta.env.BASE_URL}mango-hero.webp`;
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -80,6 +81,39 @@ function MonoHero() {
   );
 }
 
+/** El mango cortado: el objeto de siempre de la marca, flotando arriba a la
+ *  derecha, sobre la cabeza del mono (que se lo "mira"). */
+function MangoCorte() {
+  const reduceMotion = useReducedMotion();
+  return (
+    <motion.img
+      aria-hidden
+      src={MANGO}
+      alt=""
+      width={1147}
+      height={930}
+      className="absolute z-[2] pointer-events-none select-none left-[-8%] bottom-[-2%] w-[40vw] sm:left-auto sm:bottom-auto sm:right-[-4%] sm:top-[15%] sm:w-[clamp(180px,20vw,330px)]"
+      style={{ filter: 'drop-shadow(0 24px 40px rgba(10,14,50,0.4))' }}
+      initial={{ opacity: 0, scale: 0.7, rotate: -20 }}
+      animate={
+        reduceMotion
+          ? { opacity: 1, scale: 1, rotate: -12 }
+          : { opacity: 1, scale: 1, rotate: -12, y: [0, -12, 0] }
+      }
+      transition={
+        reduceMotion
+          ? { delay: 0.5, duration: 0.8, ease: EASE }
+          : {
+              opacity: { delay: 0.5, duration: 0.8, ease: EASE },
+              scale: { delay: 0.5, duration: 0.8, ease: EASE },
+              rotate: { delay: 0.5, duration: 0.8, ease: EASE },
+              y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1.4 },
+            }
+      }
+    />
+  );
+}
+
 function ScrollCue() {
   const reduceMotion = useReducedMotion();
   return (
@@ -122,6 +156,7 @@ export default function HeroSection() {
       />
 
       <MonoHero />
+      <MangoCorte />
 
       <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-10 lg:px-16 pt-24 pb-[220px] sm:pb-[260px] lg:py-28 md:pt-28">
         <motion.div
