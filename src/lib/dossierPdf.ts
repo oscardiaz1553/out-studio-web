@@ -2,9 +2,27 @@ import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import QuoteDossier, { QuoteDraft } from '../components/QuoteDossier';
 import { AnswerGroup } from '../data/quote';
+import { AZULEJO, AZULEJO_BAND } from '../data/botanica';
 
 const PAGE_W_MM = 210;
 const PAGE_H_MM = 297;
+
+// Las imágenes de fondo (CSS) no las espera imagesLoaded: se precargan aparte.
+// Sin esto, la primera captura en frío podía salir en blanco.
+const CSS_BACKGROUNDS = [AZULEJO, AZULEJO_BAND];
+
+function preload(url: string) {
+  return new Promise<void>((res) => {
+    const img = new Image();
+    img.onload = () => res();
+    img.onerror = () => res();
+    img.src = url;
+  });
+}
+
+// Una hoja con contenido pesa mucho más que una en blanco (que comprime a un
+// par de KB). Por debajo de esto la captura se considera fallida.
+const MIN_PAGE_JPEG_CHARS = 30000;
 
 async function imagesLoaded(root: HTMLElement) {
   await Promise.all(
@@ -43,7 +61,7 @@ export async function buildDossierPdf(
     root.render(createElement(QuoteDossier, { draft, groups }));
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     await document.fonts.ready;
-    await imagesLoaded(host);
+    await Promise.all([imagesLoaded(host), ...CSS_BACKGROUNDS.map(preload)]);
 
     const pdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
     const pages = Array.from(host.querySelectorAll<HTMLElement>('.dossier-page'));
@@ -52,14 +70,25 @@ export async function buildDossierPdf(
     for (const page of pages) {
       const w = page.offsetWidth;
       const h = page.offsetHeight;
-      const jpg = await toJpeg(page, {
-        quality: 0.92,
-        pixelRatio: 2,
-        width: w,
-        height: h,
-        backgroundColor: '#FBF8F5',
-        style: { margin: '0', boxShadow: 'none' },
-      });
+      const capture = () =>
+        toJpeg(page, {
+          quality: 0.92,
+          pixelRatio: 2,
+          width: w,
+          height: h,
+          backgroundColor: '#FBF8F5',
+          style: { margin: '0', boxShadow: 'none' },
+        });
+      // La primera captura puede salir sin imágenes o en blanco: se repite
+      // y, si sigue fallando, se aborta (mejor error que mandar un PDF vacío).
+      let jpg = await capture();
+      for (let attempt = 0; jpg.length < MIN_PAGE_JPEG_CHARS && attempt < 3; attempt++) {
+        await new Promise((r) => setTimeout(r, 400));
+        jpg = await capture();
+      }
+      if (jpg.length < MIN_PAGE_JPEG_CHARS) {
+        throw new Error('La captura de una hoja salió vacía.');
+      }
       // Si el contenido de una hoja se pasa de A4, continúa en otra página.
       const imgH = (PAGE_W_MM * h) / w;
       const slices = Math.max(1, Math.ceil(imgH / PAGE_H_MM - 0.02));

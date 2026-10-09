@@ -7,7 +7,7 @@
   Para subirla: GitHub → carpeta public/ → Add file → Upload files →
   renómbrala "botanica.png" → commit. El deploy la publica automáticamente.
 */
-export const BOTANICA = `${import.meta.env.BASE_URL}botanica.png`;
+export const BOTANICA = `${import.meta.env.BASE_URL}botanica.webp`;
 
 /*
   Segunda lámina botánica: los mangos fugados (el naranja que se sale del

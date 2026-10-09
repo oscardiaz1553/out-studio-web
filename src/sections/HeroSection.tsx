@@ -6,6 +6,7 @@ import {
 } from 'framer-motion';
 import { useEffect } from 'react';
 import AccentButton from '../components/AccentButton';
+import { BOTANICA } from '../data/botanica';
 import Magnetic from '../components/Magnetic';
 import RotatingWord from '../components/RotatingWord';
 
@@ -134,8 +135,7 @@ function ScrollCue() {
  * sólido con el mono aullador asomándose por el borde derecho. La
  * promesa es el titular ("Hacemos que tu [marca] sea imposible de ignorar"),
  * con la palabra central rotando entre lo que Out hace. Un solo CTA primario
- * (cotizar), uno secundario (ver proyectos) y prueba social real: los
- * Decorativo vía aria-hidden, con la frase
+ * (cotizar) y uno secundario (ver proyectos). Decorativo vía aria-hidden, con la frase
  * completa en un sr-only para lectores de pantalla y buscadores.
  */
 export default function HeroSection() {
@@ -144,6 +144,24 @@ export default function HeroSection() {
       data-nav-bg="dark"
       className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-klein"
     >
+      {/* La lámina botánica (florales azules y fruta naranja) como fondo: el
+          mono sale de ella. Se funde hacia la izquierda para no pelear con el
+          titular. */}
+      <div
+        aria-hidden
+        className="absolute inset-y-0 right-0 w-[100%] lg:w-[72%] pointer-events-none"
+        style={{
+          backgroundImage: `url(${BOTANICA})`,
+          backgroundSize: 'cover',
+          backgroundPosition: '60% 45%',
+          mixBlendMode: 'soft-light',
+          opacity: 0.85,
+          WebkitMaskImage:
+            'linear-gradient(to left, #000 25%, rgba(0,0,0,0.5) 60%, transparent 100%)',
+          maskImage:
+            'linear-gradient(to left, #000 25%, rgba(0,0,0,0.5) 60%, transparent 100%)',
+        }}
+      />
       <div
         aria-hidden
         className="absolute inset-0 bg-gradient-to-b from-klein-deep/40 via-transparent to-klein-deep/55 pointer-events-none"

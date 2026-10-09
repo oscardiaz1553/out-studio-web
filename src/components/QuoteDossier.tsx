@@ -3,6 +3,7 @@ import LogoOut from './LogoOut';
 import TitleFrame, { FrameKind, Sym } from './TitleFrame';
 import { AnswerGroup } from '../data/quote';
 import { EMAIL, PHONE_DISPLAY } from '../data/site';
+import { AZULEJO, AZULEJO_BAND, BOTANICA } from '../data/botanica';
 
 export interface QuoteItem {
   id: string;
@@ -87,6 +88,17 @@ function Page({
       )}
       <div className="relative flex-1 px-[16mm] py-[10mm]">{children}</div>
       {chrome && (
+        <div
+          aria-hidden
+          className="mx-[16mm] mb-[3mm] h-[6mm] rounded-sm"
+          style={{
+            backgroundImage: `url(${AZULEJO_BAND})`,
+            backgroundRepeat: 'repeat-x',
+            backgroundSize: 'auto 100%',
+          }}
+        />
+      )}
+      {chrome && (
         <footer className="mx-[16mm] mb-[10mm] pt-3 flex items-center justify-between text-[10px] text-muted border-t border-klein-deep/10">
           <span>Out Studio · outstudio.online</span>
           <span>
@@ -126,15 +138,22 @@ export default function QuoteDossier({
     <div className="dossier">
       {/* Portada */}
       <Page folio={draft.folio} chrome={false}>
-        <div className="absolute inset-0 bg-klein" />
-        {/* Retícula de puntos de la marca */}
+        <div className="absolute inset-0 bg-klein-deep" />
+        {/* La lámina botánica de siempre, teñida de azul Klein */}
+        <img
+          src={BOTANICA}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: '52% 42%' }}
+        />
+        <div className="absolute inset-0 bg-klein mix-blend-multiply opacity-[0.6]" />
         <div
           aria-hidden
-          className="absolute inset-0 opacity-[0.22]"
+          className="absolute inset-0"
           style={{
-            backgroundImage:
-              'radial-gradient(circle, #C8CDF0 1.4px, transparent 1.6px)',
-            backgroundSize: '9mm 9mm',
+            background:
+              'linear-gradient(180deg, rgba(20,30,92,.45) 0%, rgba(20,30,92,.1) 35%, rgba(20,30,92,.5) 65%, rgba(20,30,92,.92) 100%)',
           }}
         />
         {/* El mango cortado y el mono, a sangre por los bordes */}
@@ -337,6 +356,14 @@ export default function QuoteDossier({
         )}
 
         <div className="break-inside-avoid relative overflow-hidden rounded-xl bg-klein-deep text-paper-pure px-6 py-7 min-h-[62mm]">
+          <div
+            aria-hidden
+            className="absolute inset-0 opacity-[0.13]"
+            style={{
+              backgroundImage: `url(${AZULEJO})`,
+              backgroundSize: '70mm',
+            }}
+          />
           <img
             src={MONO_LAPTOP}
             alt=""
