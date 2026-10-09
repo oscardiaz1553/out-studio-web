@@ -14,7 +14,7 @@ export default function ClientsStrip() {
     >
       <h2
         id="marcas-confian"
-        className="px-6 md:px-10 lg:px-16 mb-6 sm:mb-8 text-[11px] tracking-[0.1em] uppercase text-carne-tinta"
+        className="px-6 md:px-10 lg:px-16 mb-6 sm:mb-8 text-xs text-carne-tinta"
       >
         Marcas que confían en Out
       </h2>

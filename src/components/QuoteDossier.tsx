@@ -76,7 +76,7 @@ function Page({
       {chrome && (
         <header className="flex items-center justify-between px-[16mm] pt-[12mm]">
           <LogoOut decorative className="h-9 w-auto text-klein" />
-          <span className="text-[10px] tracking-[0.08em] uppercase text-muted">
+          <span className="text-[11px] text-muted">
             Propuesta {folio}
           </span>
         </header>
@@ -138,7 +138,7 @@ export default function QuoteDossier({
         <div className="relative h-full min-h-[277mm] flex flex-col justify-between text-paper-pure">
           <LogoOut decorative className="h-14 w-auto text-paper-pure self-start" />
           <div>
-            <p className="text-[11px] tracking-[0.12em] uppercase text-carne mb-4">
+            <p className="text-xs text-carne mb-4">
               Propuesta de cotización
             </p>
             <h1 className="font-display font-extrabold tracking-[-0.035em] leading-[0.95] text-[54px] mb-6">
@@ -155,19 +155,19 @@ export default function QuoteDossier({
           </div>
           <dl className="grid grid-cols-3 gap-6 text-sm border-t border-paper-pure/30 pt-5">
             <div>
-              <dt className="text-[10px] tracking-[0.1em] uppercase text-carne mb-1">
+              <dt className="text-[11px] text-carne mb-1">
                 Folio
               </dt>
               <dd>{draft.folio}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.1em] uppercase text-carne mb-1">
+              <dt className="text-[11px] text-carne mb-1">
                 Fecha
               </dt>
               <dd>{formatDate(draft.date)}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.1em] uppercase text-carne mb-1">
+              <dt className="text-[11px] text-carne mb-1">
                 Válida hasta
               </dt>
               <dd>{validUntil(draft.date, draft.validDays)}</dd>
@@ -266,7 +266,7 @@ export default function QuoteDossier({
             </tbody>
           </table>
           <div className="mt-5 rounded-xl bg-klein text-paper-pure px-6 py-5 flex items-baseline justify-between gap-4">
-            <span className="text-[11px] tracking-[0.1em] uppercase text-carne">
+            <span className="text-xs text-carne">
               Total{draft.tax === 'none' ? '' : ' con IVA'}
             </span>
             <span className="font-display font-extrabold text-[28px] leading-none">

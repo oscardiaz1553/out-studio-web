@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IntroOverlay, { shouldPlayIntro } from './components/IntroOverlay';
 import SiteNav from './components/SiteNav';
 import ScrollToTop from './components/ScrollToTop';
 import MangoBot from './components/MangoBot';
 import HeroSection from './sections/HeroSection';
 import ClientsStrip from './sections/ClientsStrip';
-import WhyOut from './sections/WhyOut';
 import ServicesSection from './sections/ServicesSection';
 import ProjectsSection from './sections/ProjectsSection';
 import MethodSection from './sections/MethodSection';
@@ -21,13 +20,16 @@ export default function App() {
   // Al terminar la apertura se reinicia la portada para que entre con su
   // propia animación (el mono, el titular) justo cuando se descubre.
   const [heroKey, setHeroKey] = useState(0);
+  useEffect(() => {
+    // La portada se vuelve a montar: el menú debe volver a medir qué hay detrás.
+    if (heroKey > 0) window.dispatchEvent(new Event('resize'));
+  }, [heroKey]);
 
   return (
     <main className="min-h-screen bg-paper" style={{ overflowX: 'clip' }}>
       <SiteNav />
       <HeroSection key={heroKey} />
       <ClientsStrip />
-      <WhyOut />
       <ServicesSection />
       <ProjectsSection />
       <ResultsSection />

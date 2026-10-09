@@ -130,7 +130,6 @@ export default function ResultsSection() {
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-8 sm:mb-10">
-          <span className="text-[11px] tracking-[0.06em] text-carne-tinta">03</span>
           <TitleFrame kind="paren" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
               as="h2"
@@ -143,7 +142,7 @@ export default function ResultsSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.4fr] gap-8 lg:gap-14 items-center">
           <FadeIn>
-            <p className="inline-flex items-center gap-2 text-[11px] tracking-[0.08em] uppercase text-carne-tinta mb-4">
+            <p className="inline-flex items-center gap-2 text-xs text-carne-tinta mb-4">
               Caso · Diario Deportes
               <span className="rounded-full border border-carne-tinta/30 px-2 py-0.5 text-[10px] normal-case tracking-normal">
                 En desarrollo
@@ -164,12 +163,11 @@ export default function ResultsSection() {
               partido al frente y la publicidad en su lugar.
             </p>
             <ul className="mt-6 flex flex-wrap gap-2">
-              {FIXES.map((f, i) => (
+              {FIXES.map((f) => (
                 <li
                   key={f}
                   className="rounded-full border border-klein-deep/20 bg-paper px-3.5 py-1.5 text-[13px] text-klein-deep"
                 >
-                  <span className="text-carne-tinta mr-1.5">0{i + 1}</span>
                   {f}
                 </li>
               ))}

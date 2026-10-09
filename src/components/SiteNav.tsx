@@ -157,31 +157,33 @@ export default function SiteNav() {
   }, [menuOpen]);
 
   // Detecta qué hay realmente detrás del nav: cualquier sección marcada
-  // data-nav-bg="dark" que cruce una franja fina a la altura del header
-  // (rootMargin en % se recalcula solo con el alto del viewport).
+  // data-nav-bg="dark" que cruce la altura del header. Se mide por posición
+  // (y se vuelve a buscar la sección cada vez) para que siga funcionando si
+  // una sección se vuelve a montar, como la portada al terminar la apertura.
   useLayoutEffect(() => {
-    const targets = Array.from(
-      document.querySelectorAll<HTMLElement>('[data-nav-bg="dark"]')
-    );
-    if (targets.length === 0) {
-      setDarkBehind(false);
-      return;
-    }
-
-    const intersecting = new Set<Element>();
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) intersecting.add(entry.target);
-          else intersecting.delete(entry.target);
-        }
-        setDarkBehind(intersecting.size > 0);
-      },
-      { rootMargin: '-60px 0px -100% 0px', threshold: 0 }
-    );
-
-    targets.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const NAV_Y = 60;
+    let raf = 0;
+    const measure = () => {
+      const dark = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-nav-bg="dark"]'),
+      ).some((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top <= NAV_Y && r.bottom > NAV_Y;
+      });
+      setDarkBehind(dark);
+    };
+    const schedule = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
   }, []);
 
   return (

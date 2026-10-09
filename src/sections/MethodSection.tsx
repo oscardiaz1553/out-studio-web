@@ -2,13 +2,14 @@ import TitleFrame from '../components/TitleFrame';
 import { useRef, useState } from 'react';
 import AccentButton from '../components/AccentButton';
 import RevealText from '../components/RevealText';
+import { Sym } from '../components/TitleFrame';
 
 // Cuatro pasos, cada uno con un verbo (lo que hacemos), lo que necesitamos de
 // ti y lo que recibes al terminar. Cada panel tiene su propio color: el
 // recorrido va de lo claro (conversar) a lo profundo (un sitio ya en marcha).
 const STEPS = [
   {
-    step: '01',
+    kind: 'paren' as const,
     verb: 'Escuchamos',
     title: 'Diagnóstico',
     result: 'Sabes qué vamos a hacer, cuánto cuesta y cuándo.',
@@ -21,7 +22,7 @@ const STEPS = [
     rule: 'border-klein-deep/15',
   },
   {
-    step: '02',
+    kind: 'square' as const,
     verb: 'Construimos',
     title: 'Diseño y desarrollo',
     result: 'Ves tu proyecto tomar forma. Nada de mockups sueltos.',
@@ -34,7 +35,7 @@ const STEPS = [
     rule: 'border-paper-pure/25',
   },
   {
-    step: '03',
+    kind: 'curly' as const,
     verb: 'Lanzamos',
     title: 'Lanzamiento',
     result: 'Tu negocio en línea y listo para vender.',
@@ -47,7 +48,7 @@ const STEPS = [
     rule: 'border-paper-pure/25',
   },
   {
-    step: '04',
+    kind: 'angle' as const,
     verb: 'Seguimos',
     title: 'Soporte',
     result: 'No desaparecemos: seguimos mejorando contigo.',
@@ -91,7 +92,7 @@ function MethodSteps() {
           const open = i === active;
           return (
             <li
-              key={s.step}
+              key={s.verb}
               onPointerEnter={(e) => onEnter(i, e)}
               onPointerLeave={onLeave}
               className={`relative overflow-hidden rounded-2xl transition-[flex-grow] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${s.card} ${
@@ -107,10 +108,12 @@ function MethodSteps() {
                 className="w-full xl:h-full text-left p-5 sm:p-6 xl:p-6 flex xl:flex-col items-center xl:items-stretch gap-4 xl:gap-0 xl:justify-between"
               >
                 <span
-                  className={`font-display font-extrabold leading-none tracking-[-0.04em] ${s.accent}`}
-                  style={{ fontSize: 'clamp(2.4rem, 5vw, 4.2rem)' }}
+                  aria-hidden
+                  className={`flex gap-[0.3em] ${s.accent}`}
+                  style={{ fontSize: 'clamp(2.6rem, 5vw, 4.4rem)' }}
                 >
-                  {s.step}
+                  <Sym kind={s.kind} />
+                  <Sym kind={s.kind} flip />
                 </span>
                 <span className="flex-1 xl:flex-none min-w-0">
                   <span
@@ -120,7 +123,7 @@ function MethodSteps() {
                     {s.verb}.
                   </span>
                   <span
-                    className={`mt-1.5 block text-xs tracking-[0.06em] uppercase ${s.muted}`}
+                    className={`mt-1.5 block text-sm ${s.muted}`}
                   >
                     {s.title}
                   </span>
@@ -167,7 +170,7 @@ function MethodSteps() {
                           className={`grid grid-cols-[4.5rem_1fr] gap-3 py-3 border-t ${s.rule}`}
                         >
                           <dt
-                            className={`text-[11px] tracking-[0.08em] uppercase pt-0.5 ${s.accent}`}
+                            className={`text-xs font-medium pt-0.5 ${s.accent}`}
                           >
                             {b.label}
                           </dt>
@@ -203,9 +206,6 @@ export default function MethodSection() {
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">
-          <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
-            05
-          </span>
           <TitleFrame kind="paren" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
             as="h2"

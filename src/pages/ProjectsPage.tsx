@@ -1,6 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useMemo, useState } from 'react';
-import { BrandDot } from '../components/Brand';
 import SiteNav from '../components/SiteNav';
 import ScrollToTop from '../components/ScrollToTop';
 import ProjectMedia from '../components/ProjectMedia';
@@ -49,10 +48,6 @@ function ProjectGridCard({ project }: { project: Project }) {
 
       <div className="flex flex-col gap-2 flex-1 p-5 sm:p-6">
         <div className="flex items-center gap-3">
-          <span className="font-display font-extrabold text-klein leading-none flex items-baseline text-xl">
-            {project.number}
-            <BrandDot />
-          </span>
           <span className="text-muted tracking-[0.04em] text-[11px]">
             {categoryLabel(project.type)}
           </span>
@@ -105,7 +100,6 @@ export default function ProjectsPage() {
       <section className="px-6 md:px-10 lg:px-16 pt-16 sm:pt-20 md:pt-24 pb-24 flex-1">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex items-baseline gap-4 mb-4">
-            <span className="text-[11px] tracking-[0.06em] text-carne-tinta">02</span>
             <RevealText
               as="h1"
               text="Proyectos"

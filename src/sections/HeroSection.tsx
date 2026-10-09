@@ -8,7 +8,6 @@ import { useEffect } from 'react';
 import AccentButton from '../components/AccentButton';
 import Magnetic from '../components/Magnetic';
 import RotatingWord from '../components/RotatingWord';
-import { PROJECTS } from '../data/projects';
 
 const MONO = `${import.meta.env.BASE_URL}mono-asoma.webp`;
 const MANGO = `${import.meta.env.BASE_URL}mango-hero.webp`;
@@ -20,11 +19,6 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 // (tienda, sitio, app, marca). El texto completo vive en un sr-only.
 const SUBJECTS = ['marca', 'tienda online', 'sitio web', 'negocio', 'app'];
 const SR_HEADLINE = `Hacemos que tu ${SUBJECTS.join(', tu ')} sea imposible de ignorar.`;
-
-// Prueba social real: proyectos ya en línea.
-const LIVE_PROJECTS = PROJECTS.filter((p) => p.status === 'launched').map(
-  (p) => p.name,
-);
 
 /** El mono aullador agarrado del borde de la portada: la imagen sangra por
  *  el borde derecho y el inferior (se pasa unos píxeles de la pantalla), así
@@ -141,7 +135,7 @@ function ScrollCue() {
  * promesa es el titular ("Hacemos que tu [marca] sea imposible de ignorar"),
  * con la palabra central rotando entre lo que Out hace. Un solo CTA primario
  * (cotizar), uno secundario (ver proyectos) y prueba social real: los
- * proyectos que ya están en línea. Decorativo vía aria-hidden, con la frase
+ * Decorativo vía aria-hidden, con la frase
  * completa en un sr-only para lectores de pantalla y buscadores.
  */
 export default function HeroSection() {
@@ -250,22 +244,14 @@ export default function HeroSection() {
             </motion.div>
           </div>
 
-          <motion.div
+          <motion.span
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.05, duration: 0.7 }}
-            className="flex flex-col gap-2"
+            className="font-display font-semibold text-carne text-sm tracking-[-0.01em]"
           >
-            <span className="text-[11px] tracking-[0.1em] uppercase text-carne">
-              Ya en línea
-            </span>
-            <p className="font-display font-semibold text-paper-pure text-lg sm:text-xl tracking-[-0.01em]">
-              {LIVE_PROJECTS.join(' · ')}
-            </p>
-            <span className="font-display font-semibold text-carne text-sm tracking-[-0.01em]">
-              Never the usual.
-            </span>
-          </motion.div>
+            Never the usual.
+          </motion.span>
         </div>
       </div>
 

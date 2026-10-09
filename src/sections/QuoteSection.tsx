@@ -578,9 +578,6 @@ export default function QuoteSection() {
           className="hidden min-[1360px]:block absolute right-0 bottom-0 w-[min(30vw,470px)] h-auto pointer-events-none select-none"
         />
         <div className="flex items-baseline gap-4 mb-3">
-          <span className="text-[11px] tracking-[0.06em] text-carne">
-            04
-          </span>
           <TitleFrame kind="angle" tone="light" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
             as="h2"

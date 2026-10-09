@@ -90,9 +90,6 @@ export default function ServicesSection() {
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">
-          <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
-            01
-          </span>
           <TitleFrame kind="square" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
             as="h2"
@@ -126,9 +123,6 @@ export default function ServicesSection() {
               className="group flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-12 py-4 sm:py-5 border-t border-klein-deep/25 last:border-b cursor-default"
             >
               <div className="flex items-baseline gap-4 sm:gap-6">
-                <span className="text-[11px] tracking-[0.06em] text-carne-tinta shrink-0">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
                 <h3
                   className="font-display font-extrabold text-klein tracking-[-0.04em] leading-[1.02] transition-transform duration-500 ease-out sm:group-hover:translate-x-3"
                   style={{ fontSize: 'clamp(1.6rem, 3.4vw, 2.8rem)' }}

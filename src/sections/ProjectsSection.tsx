@@ -49,7 +49,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <div className="flex flex-1 flex-col gap-3 p-6 sm:p-7 border-t border-paper-pure/10">
         <div className="flex items-center gap-2.5 flex-wrap">
           <span className="text-[11px] tracking-[0.06em] text-carne">
-            {project.number} · {categoryLabel(project.type)}
+            {categoryLabel(project.type)}
           </span>
           {project.status === 'in-progress' && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-carne/40 px-2.5 py-0.5 text-[10px] font-medium text-carne">
@@ -91,7 +91,6 @@ export default function ProjectsSection() {
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline justify-between gap-4 mb-8 sm:mb-10">
           <div className="flex items-baseline gap-4">
-            <span className="text-[11px] tracking-[0.06em] text-carne">02</span>
             <TitleFrame kind="curly" tone="light" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
               as="h2"

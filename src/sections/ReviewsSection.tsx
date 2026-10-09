@@ -264,9 +264,6 @@ export default function ReviewsSection() {
     >
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">
-          <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
-            06
-          </span>
           <TitleFrame kind="square" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
             as="h2"
