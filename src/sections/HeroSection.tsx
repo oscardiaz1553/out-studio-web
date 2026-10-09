@@ -25,32 +25,32 @@ const LIVE_PROJECTS = PROJECTS.filter((p) => p.status === 'launched').map(
   (p) => p.name,
 );
 
-/** El mono aullador asomándose por el borde derecho de la portada, con gafas
- *  de sol y sonrisa: la mascota de Out. Pegado al borde, con parallax suave
- *  con el mouse y un balanceo lento. */
+/** El mono aullador agarrado del borde de la portada: la imagen sangra por
+ *  el borde derecho y el inferior (se pasa unos píxeles de la pantalla), así
+ *  la mano queda realmente "agarrada" y nunca se ve un corte ni una
+ *  separación. Se inclina hacia el mouse girando sobre su esquina de agarre,
+ *  de modo que los bordes siguen pegados al encuadre. */
 function MonoHero() {
   const reduceMotion = useReducedMotion();
-  const px = useMotionValue(0);
-  const py = useMotionValue(0);
-  const x = useSpring(px, { stiffness: 80, damping: 18 });
-  const y = useSpring(py, { stiffness: 80, damping: 18 });
+  const tilt = useMotionValue(0);
+  const rotate = useSpring(tilt, { stiffness: 70, damping: 16 });
 
   useEffect(() => {
     if (reduceMotion) return;
     const onMove = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
-      px.set((e.clientX / window.innerWidth - 0.5) * -22);
-      py.set((e.clientY / window.innerHeight - 0.5) * -16);
+      // Máximo ±1°: lo que se abre en los bordes lo cubre el sangrado.
+      tilt.set((e.clientX / window.innerWidth - 0.5) * -2);
     };
     window.addEventListener('pointermove', onMove);
     return () => window.removeEventListener('pointermove', onMove);
-  }, [reduceMotion, px, py]);
+  }, [reduceMotion, tilt]);
 
   return (
     <motion.div
       aria-hidden
-      className="absolute right-0 top-[10%] sm:top-[8%] lg:top-auto lg:bottom-0 z-[2] pointer-events-none select-none"
-      style={{ width: 'clamp(300px, 52vw, 780px)', x, y }}
+      className="absolute right-[-10px] bottom-[-24px] z-[2] w-[min(82vw,420px)] sm:w-[min(60vw,560px)] lg:w-[min(52vw,780px)] pointer-events-none select-none"
+      style={{ rotate, transformOrigin: '100% 100%' }}
     >
       <motion.img
         src={MONO}
@@ -58,14 +58,13 @@ function MonoHero() {
         width={1200}
         height={900}
         loading="eager"
-        // En pantallas chicas el cuerpo se desvanece hacia abajo; en grandes
-        // el mono se apoya en el borde inferior de la portada.
-        className="relative w-full h-auto [mask-image:linear-gradient(to_bottom,#000_70%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,#000_70%,transparent)] lg:[mask-image:none] lg:[-webkit-mask-image:none]"
-        initial={{ opacity: 0, x: 80 }}
+        className="w-full h-auto"
+        style={{ transformOrigin: '100% 100%' }}
+        initial={{ opacity: 0, x: 90 }}
         animate={
           reduceMotion
             ? { opacity: 1, x: 0 }
-            : { opacity: 1, x: 0, rotate: [0, -1.5, 0, 1.5, 0] }
+            : { opacity: 1, x: 0, rotate: [0, -0.8, 0, 0.8, 0] }
         }
         transition={
           reduceMotion
@@ -124,7 +123,7 @@ export default function HeroSection() {
 
       <MonoHero />
 
-      <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-10 lg:px-16 py-24 md:py-28">
+      <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-10 lg:px-16 pt-24 pb-[220px] sm:pb-[260px] lg:py-28 md:pt-28">
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}

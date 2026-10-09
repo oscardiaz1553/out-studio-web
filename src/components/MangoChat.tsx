@@ -93,7 +93,7 @@ const TYPE_PROMPT: Prompt = {
 };
 
 const GREETING =
-  '¡Quihubo! Soy MangOut 🥭 Te hago unas preguntas rápidas y te enviamos una cotización a la medida en 24 a 48 horas.';
+  '¡Quihubo! Soy Mango 🥭 Te hago unas preguntas rápidas y te enviamos una cotización a la medida en 24 a 48 horas.';
 
 /** Estado del chat. Vive fuera del panel para que, si lo cierras y lo vuelves
  *  a abrir, retomes donde ibas. */
@@ -113,7 +113,7 @@ export function useChatState() {
     ];
   }, [form.selected]);
 
-  // Cada vez que avanza o retrocede, MangOut "escribe" un instante.
+  // Cada vez que avanza o retrocede, Mango "escribe" un instante.
   const first = useRef(true);
   useEffect(() => {
     if (first.current) {
@@ -172,7 +172,7 @@ function TypingDots() {
   const reduceMotion = useReducedMotion();
   return (
     <div
-      aria-label="MangOut está escribiendo"
+      aria-label="Mango está escribiendo"
       className="self-start rounded-2xl rounded-bl-sm bg-paper px-4 py-3.5 flex gap-1"
     >
       {[0, 1, 2].map((d) => (
@@ -190,7 +190,7 @@ function TypingDots() {
 const CHIP =
   'rounded-full border px-3.5 py-2 text-[13px] leading-snug text-left transition-colors duration-150 active:scale-[0.97]';
 
-export function MangOutChat({ chat, onClose }: { chat: ChatState; onClose: () => void }) {
+export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => void }) {
   const { form, cursor, setCursor, typing, prompts } = chat;
   const reduceMotion = useReducedMotion();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -276,7 +276,7 @@ export function MangOutChat({ chat, onClose }: { chat: ChatState; onClose: () =>
     <motion.div
       ref={rootRef}
       role="dialog"
-      aria-label="Chat de cotización con MangOut"
+      aria-label="Chat de cotización con Mango"
       initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -302,7 +302,7 @@ export function MangOutChat({ chat, onClose }: { chat: ChatState; onClose: () =>
           />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="font-display font-bold leading-tight">MangOut</p>
+          <p className="font-display font-bold leading-tight">Mango</p>
           <p className="text-xs text-paper-pure/80 leading-tight">
             Cotiza tu proyecto en unos 3 minutos
           </p>

@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { MangOutChat, useChatState } from './MangOutChat';
+import { MangoChat, useChatState } from './MangoChat';
 
 const AVATAR = `${import.meta.env.BASE_URL}mono-avatar.webp`;
 
@@ -20,7 +20,7 @@ function readDismissed() {
 }
 
 /**
- * "MangOut", el asistente flotante. El mono sobre azul como avatar y
+ * "Mango", el asistente flotante. El mono sobre azul como avatar y
  * un globo con un solo mensaje. Al tocarlo se abre un chat flotante que hace
  * las mismas preguntas de la encuesta, una a una. La encuesta de pantalla
  * completa (sección Cotización) sigue siendo la otra vía.
@@ -32,7 +32,7 @@ export default function MangoBot() {
   const [hidden, setHidden] = useState(false);
   const [bubbleOff, setBubbleOff] = useState(readDismissed);
 
-  // En la portada ya hay un mono y un botón de cotizar: MangOut aparece al
+  // En la portada ya hay un mono y un botón de cotizar: Mango aparece al
   // dejar atrás la mitad de la portada, o a los 12 s si la persona se queda.
   useEffect(() => {
     const t = window.setTimeout(() => setReady(true), 12000);
@@ -111,7 +111,7 @@ export default function MangoBot() {
                 className="block w-full text-left pl-4 pr-9 py-3 text-sm leading-snug min-h-[44px]"
               >
                 <span className="block text-xs font-bold tracking-[-0.01em] text-klein mb-0.5">
-                  MangOut
+                  Mango
                 </span>
                 <span className="block font-medium">{MESSAGE}</span>
               </button>
@@ -131,7 +131,7 @@ export default function MangoBot() {
               key="avatar"
               type="button"
               onClick={openChat}
-              aria-label="MangOut: abrir el chat de cotización"
+              aria-label="Mango: abrir el chat de cotización"
               initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.4, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.6 }}
@@ -175,7 +175,7 @@ export default function MangoBot() {
       </div>
 
       <AnimatePresence>
-        {chat.open && <MangOutChat chat={chat} onClose={() => chat.setOpen(false)} />}
+        {chat.open && <MangoChat chat={chat} onClose={() => chat.setOpen(false)} />}
       </AnimatePresence>
     </>
   );
