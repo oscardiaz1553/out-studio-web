@@ -30,7 +30,7 @@ function FooterVideo() {
       ref={box}
       role="img"
       aria-label="Out. Never the usual."
-      className="relative overflow-hidden rounded-2xl bg-klein aspect-[9/16] w-full max-w-[320px] mx-auto"
+      className="relative overflow-hidden rounded-2xl bg-klein aspect-[9/16] w-full max-w-[250px] mx-auto"
     >
       <video
         ref={vid}
