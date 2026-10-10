@@ -183,11 +183,10 @@ export default function Footer() {
         <div className="mt-10 sm:mt-14 grid grid-cols-2 lg:grid-cols-[1fr_1fr_1.4fr] gap-x-6 gap-y-10 pt-10 border-t border-paper-pure/15">
           <LinkColumn title="Servicios" links={SERVICES} />
           <LinkColumn title="Estudio" links={STUDIO} />
-          <div className="col-span-2 lg:col-span-1 flex flex-col gap-3.5 lg:items-end">
-            <span className="text-sm text-carne/70">Dónde estamos</span>
-            <p className="text-paper-pure/90 font-medium lg:text-right">Colombia, atendemos todo el país</p>
-            {socials.length > 0 && (
-              <div className="flex gap-2.5 mt-1">
+          {socials.length > 0 && (
+            <div className="col-span-2 lg:col-span-1 flex flex-col gap-3.5 lg:items-end">
+              <span className="text-sm text-carne/70">Redes</span>
+              <div className="flex gap-2.5">
                 {socials.map((k) => (
                   <a
                     key={k}
@@ -201,8 +200,8 @@ export default function Footer() {
                   </a>
                 ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         <div className="site-footer__brand-row">
