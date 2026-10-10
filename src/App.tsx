@@ -12,6 +12,7 @@ import ReviewsSection from './sections/ReviewsSection';
 import QuoteSection from './sections/QuoteSection';
 import ResultsSection from './sections/ResultsSection';
 import ContactSection from './sections/ContactSection';
+import BlogTeaser from './sections/BlogTeaser';
 import Footer from './sections/Footer';
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
       <QuoteSection />
       <MethodSection />
       <ReviewsSection />
+      <BlogTeaser />
       <ContactSection />
       <Footer />
       <MangoBot />

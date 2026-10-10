@@ -1,7 +1,8 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import AccentButton from '../components/AccentButton';
-import { SCENES } from '../components/ServiceScenes';
+import { FrameKind, Sym } from '../components/TitleFrame';
+import { AZULEJO } from '../data/botanica';
 import ScrollToTop from '../components/ScrollToTop';
 import SiteNav from '../components/SiteNav';
 import data from '../data/services.json';
@@ -20,7 +21,7 @@ const STEPS = [
 
 /** Ruta de navegación cuyo último paso es un selector: desde una página de
  *  servicio se salta directo a cualquier otro servicio. */
-function ServiceSwitcher({ current }: { current: ServiceData }) {
+function ServiceSwitcher({ current, dark }: { current: ServiceData; dark: boolean }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -47,7 +48,9 @@ function ServiceSwitcher({ current }: { current: ServiceData }) {
         aria-haspopup="true"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex items-center gap-1.5 rounded-full bg-paper-pure/15 hover:bg-paper-pure/25 px-3 py-1 text-paper-pure font-medium transition-colors"
+        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium transition-colors ${
+          dark ? 'bg-paper-pure/15 hover:bg-paper-pure/25 text-paper-pure' : 'bg-klein-deep/10 hover:bg-klein-deep/15 text-klein-deep'
+        }`}
       >
         <span aria-current="page">{current.nav}</span>
         <svg
@@ -83,33 +86,109 @@ function ServiceSwitcher({ current }: { current: ServiceData }) {
   );
 }
 
-/** La lámina del servicio (la misma del hover de la portada), grande y con
- *  un vaivén suave. */
-function SceneCard({ page }: { page: ServiceData }) {
+// El diseño de cada servicio sale de su lámina del hover de la portada: el
+// mismo color de fondo, el mismo par de símbolos y el mismo personaje, pero
+// llevados a la página completa (no la lámina pegada tal cual).
+type Theme = {
+  /** Fondo de la cabecera y del cierre. */
+  bg: string;
+  dark: boolean;
+  text: string;
+  muted: string;
+  /** Color del par de símbolos y de los acentos. */
+  accent: string;
+  kind: FrameKind;
+  /** Imagen que sangra por el borde de la cabecera. */
+  art: string;
+  artClass: string;
+  artRotate: number;
+  /** Textura de azulejo de fondo. */
+  tile?: boolean;
+};
+
+const IMG = {
+  mango: `${HOME}mango-hero.webp`,
+  monoCara: `${HOME}mono-avatar.webp`,
+  monoAsoma: `${HOME}mono-asoma.webp`,
+  monoLaptop: `${HOME}mono-laptop.webp`,
+};
+
+const THEMES: Record<string, Theme> = {
+  shopify: {
+    bg: '#F5E3B3', dark: false, text: '#1B2FCC', muted: 'rgba(20,30,92,0.78)', accent: '#1B2FCC',
+    kind: 'curly', art: IMG.mango, artRotate: -10,
+    artClass: 'right-[-14%] bottom-[-10%] w-[78vw] max-w-[360px] sm:right-[-6%] sm:bottom-[-14%] sm:max-w-none sm:w-[46vw] lg:w-[min(42vw,620px)]',
+  },
+  wordpress: {
+    bg: '#1B2FCC', dark: true, text: '#FBF8F5', muted: 'rgba(251,248,245,0.88)', accent: '#F5E3B3',
+    kind: 'square', art: IMG.monoCara, artRotate: 4,
+    artClass: 'right-[6%] bottom-[-6%] w-[46vw] max-w-[220px] sm:right-[9%] sm:bottom-[-4%] sm:max-w-none sm:w-[22vw] lg:w-[min(20vw,300px)]',
+  },
+  landing: {
+    bg: '#141E5C', dark: true, text: '#FBF8F5', muted: 'rgba(251,248,245,0.85)', accent: '#F5E3B3',
+    kind: 'angle', art: IMG.monoAsoma, artRotate: 0,
+    artClass: 'right-[-12px] bottom-[-24px] w-[78vw] max-w-[380px] sm:max-w-none sm:w-[52vw] lg:w-[min(46vw,700px)]',
+  },
+  branding: {
+    bg: '#F3EDE7', dark: false, text: '#1B2FCC', muted: 'rgba(20,30,92,0.78)', accent: '#BC6039',
+    kind: 'paren', art: IMG.mango, artRotate: 14,
+    artClass: 'right-[-16%] bottom-[-12%] w-[66vw] max-w-[300px] sm:right-[-8%] sm:bottom-[-16%] sm:max-w-none sm:w-[36vw] lg:w-[min(32vw,480px)]',
+  },
+  apps: {
+    bg: '#1B2FCC', dark: true, text: '#FBF8F5', muted: 'rgba(251,248,245,0.88)', accent: '#F5E3B3',
+    kind: 'square', art: IMG.monoLaptop, artRotate: 0, tile: true,
+    artClass: 'right-[-6%] bottom-[-3%] w-[86vw] max-w-[400px] sm:right-[-2%] sm:max-w-none sm:w-[50vw] lg:w-[min(44vw,660px)]',
+  },
+};
+
+function HeroArt({ theme }: { theme: Theme }) {
   const reduceMotion = useReducedMotion();
   return (
-    <motion.div
-      aria-hidden
-      initial={reduceMotion ? false : { opacity: 0, y: 30, rotate: 0 }}
-      animate={
-        reduceMotion
-          ? { rotate: page.tilt }
-          : { opacity: 1, y: [0, -10, 0], rotate: page.tilt }
-      }
-      transition={
-        reduceMotion
-          ? undefined
-          : {
-              opacity: { duration: 0.6 },
-              rotate: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-              y: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.8 },
-            }
-      }
-      className="relative w-[min(70vw,250px)] sm:w-[280px] lg:w-[340px] aspect-[4/5] rounded-[28px] overflow-hidden ring-[6px] ring-paper-pure shadow-[0_30px_80px_rgba(10,14,50,0.45)] bg-paper-pure"
-      style={{ containerType: 'inline-size' }}
-    >
-      {SCENES[page.scene]}
-    </motion.div>
+    <>
+      {theme.tile && (
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-[0.14] pointer-events-none"
+          style={{
+            backgroundImage: `url(${AZULEJO})`,
+            backgroundSize: '320px',
+            backgroundPosition: 'center',
+            WebkitMaskImage: 'linear-gradient(to left, #000 30%, transparent 75%)',
+            maskImage: 'linear-gradient(to left, #000 30%, transparent 75%)',
+          }}
+        />
+      )}
+      {/* El par de símbolos del servicio, enorme, de fondo. */}
+      <motion.span
+        aria-hidden
+        className="absolute flex gap-[0.4em] pointer-events-none select-none right-[-10%] top-[8%] sm:right-[-2%] sm:top-[6%]"
+        style={{
+          color: theme.accent,
+          opacity: theme.dark ? 0.22 : 0.16,
+          fontSize: 'clamp(16rem, 44vw, 40rem)',
+        }}
+        animate={reduceMotion ? undefined : { rotate: [-3, 3, -3], y: [0, -14, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <Sym kind={theme.kind} />
+        <Sym kind={theme.kind} flip />
+      </motion.span>
+      {/* El personaje (mango o mono), sangrando por el borde. */}
+      <motion.img
+        aria-hidden
+        src={theme.art}
+        alt=""
+        className={`absolute z-[1] h-auto pointer-events-none select-none ${theme.artClass}`}
+        style={{ filter: 'drop-shadow(0 30px 50px rgba(10,14,50,0.35))', rotate: theme.artRotate }}
+        initial={reduceMotion ? false : { opacity: 0, x: 60 }}
+        animate={reduceMotion ? undefined : { opacity: 1, x: 0, y: [0, -8, 0] }}
+        transition={{
+          opacity: { duration: 0.7 },
+          x: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+          y: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.9 },
+        }}
+      />
+    </>
   );
 }
 
@@ -120,48 +199,52 @@ function SceneCard({ page }: { page: ServiceData }) {
  */
 export default function ServicePage({ page }: { page: ServiceData }) {
   const related = data.pages.filter((p) => page.related.includes(p.slug));
+  const theme = THEMES[page.scene] ?? THEMES.apps;
 
   return (
     <main className="min-h-screen bg-paper" style={{ overflowX: 'clip' }}>
       <SiteNav />
 
-      {/* Cabecera */}
+      {/* Cabecera, con el diseño de la lámina del servicio */}
       <header
-        data-nav-bg="dark"
-        className="relative overflow-hidden bg-klein text-paper-pure px-6 md:px-10 lg:px-16 pt-32 sm:pt-40 pb-16 sm:pb-24"
+        {...(theme.dark ? { 'data-nav-bg': 'dark' } : {})}
+        className="relative overflow-hidden px-6 md:px-10 lg:px-16 pt-32 sm:pt-40 pb-[300px] sm:pb-28 lg:pb-32 lg:min-h-[86vh] flex items-center"
+        style={{ background: theme.bg, color: theme.text }}
       >
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1.25fr_0.75fr] gap-12 lg:gap-10 items-center">
-          <div>
-          <nav aria-label="Ruta de navegación" className="text-sm text-paper-pure/75 mb-6 flex flex-wrap items-center">
-            <a href={HOME} className="hover:text-paper-pure underline-offset-4 hover:underline">Inicio</a>
-            <span aria-hidden className="mx-2">/</span>
-            <a href={`${HOME}#servicios`} className="hover:text-paper-pure underline-offset-4 hover:underline">Servicios</a>
-            <span aria-hidden className="mx-2">/</span>
-            <ServiceSwitcher current={page} />
-          </nav>
-          <h1
-            className="font-display font-extrabold tracking-[-0.04em] leading-[1] max-w-[22ch]"
-            style={{ fontSize: 'clamp(2.2rem, 5.4vw, 4.6rem)' }}
-          >
-            {page.h1}
-          </h1>
-          <p className="mt-6 sm:mt-8 max-w-[60ch] text-lg sm:text-xl leading-relaxed text-paper-pure/90">
-            {page.lead}
-          </p>
-          <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <AccentButton href={`${HOME}#cotizar`} onBlue>
-              Cotiza tu proyecto
-            </AccentButton>
-            <a
-              href={`${HOME}proyectos.html`}
-              className="text-paper-pure font-medium underline underline-offset-[6px] decoration-paper-pure/40 hover:decoration-carne"
+        <HeroArt theme={theme} />
+        <div className="relative z-[2] w-full max-w-[1200px] mx-auto">
+          <div className="max-w-[640px] lg:max-w-[700px]">
+            <nav
+              aria-label="Ruta de navegación"
+              className="text-sm mb-6 flex flex-wrap items-center"
+              style={{ color: theme.muted }}
             >
-              Ver proyectos
-            </a>
-          </div>
-          </div>
-          <div className="flex justify-center lg:justify-end">
-            <SceneCard page={page} />
+              <a href={HOME} className="underline-offset-4 hover:underline">Inicio</a>
+              <span aria-hidden className="mx-2">/</span>
+              <a href={`${HOME}#servicios`} className="underline-offset-4 hover:underline">Servicios</a>
+              <span aria-hidden className="mx-2">/</span>
+              <ServiceSwitcher current={page} dark={theme.dark} />
+            </nav>
+            <h1
+              className="font-display font-extrabold tracking-[-0.04em] leading-[1]"
+              style={{ fontSize: 'clamp(2.2rem, 5.2vw, 4.4rem)' }}
+            >
+              {page.h1}
+            </h1>
+            <p className="mt-6 sm:mt-8 max-w-[56ch] text-lg sm:text-xl leading-relaxed" style={{ color: theme.muted }}>
+              {page.lead}
+            </p>
+            <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+              <AccentButton href={`${HOME}#cotizar`} onBlue={theme.dark}>
+                Cotiza tu proyecto
+              </AccentButton>
+              <a
+                href={`${HOME}proyectos.html`}
+                className="font-medium underline underline-offset-[6px] decoration-current/40"
+              >
+                Ver proyectos
+              </a>
+            </div>
           </div>
         </div>
       </header>
@@ -169,13 +252,23 @@ export default function ServicePage({ page }: { page: ServiceData }) {
       {/* Qué incluye */}
       <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20 bg-paper-pure">
         <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-10 md:gap-16">
-          <h2 className="font-display font-semibold text-klein tracking-[-0.03em] leading-tight" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.4rem)' }}>
-            {page.includesTitle}
-          </h2>
+          <div>
+            <span
+              aria-hidden
+              className="flex gap-[0.35em] mb-4"
+              style={{ color: theme.dark ? theme.bg : theme.accent, fontSize: '2.6rem' }}
+            >
+              <Sym kind={theme.kind} />
+              <Sym kind={theme.kind} flip />
+            </span>
+            <h2 className="font-display font-semibold text-klein tracking-[-0.03em] leading-tight" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.4rem)' }}>
+              {page.includesTitle}
+            </h2>
+          </div>
           <ul className="flex flex-col gap-3">
             {page.includes.map((item) => (
               <li key={item} className="flex gap-3 text-klein-deep leading-relaxed text-base sm:text-lg">
-                <span aria-hidden className="mt-[0.7em] w-1.5 h-1.5 rounded-full bg-carne-deep shrink-0" />
+                <span aria-hidden className="mt-[0.7em] w-1.5 h-1.5 rounded-full shrink-0" style={{ background: theme.dark ? theme.bg : theme.accent }} />
                 {item}
               </li>
             ))}
@@ -259,17 +352,21 @@ export default function ServicePage({ page }: { page: ServiceData }) {
       </section>
 
       {/* Llamado final */}
-      <section data-nav-bg="dark" className="bg-klein-deep text-paper-pure px-6 md:px-10 lg:px-16 py-16 sm:py-20">
+      <section
+        {...(theme.dark ? { 'data-nav-bg': 'dark' } : {})}
+        className="relative overflow-hidden px-6 md:px-10 lg:px-16 py-16 sm:py-20"
+        style={{ background: theme.bg, color: theme.text }}
+      >
         <div className="max-w-[1100px] mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
           <div>
             <h2 className="font-display font-extrabold tracking-[-0.04em] leading-[1]" style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)' }}>
               Cuéntanos tu proyecto.
             </h2>
-            <p className="mt-3 text-paper-pure/85 max-w-[50ch]">
+            <p className="mt-3 max-w-[50ch] opacity-85">
               Te enviamos una cotización a la medida en 24 a 48 horas.
             </p>
           </div>
-          <AccentButton href={`${HOME}#cotizar`} onBlue>
+          <AccentButton href={`${HOME}#cotizar`} onBlue={theme.dark}>
             Cotiza tu proyecto
           </AccentButton>
         </div>
