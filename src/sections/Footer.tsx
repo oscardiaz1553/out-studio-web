@@ -2,7 +2,7 @@ import './footer.css';
 import type { ReactNode } from 'react';
 import { AZULEJO_BAND } from '../data/botanica';
 import FooterAnimation from '../components/FooterAnimation';
-import { EMAIL, PHONE_DISPLAY, PHONE_TEL, SOCIAL, WHATSAPP_URL } from '../data/site';
+import { SOCIAL, WHATSAPP_URL } from '../data/site';
 
 // Copias suficientes para cubrir pantallas anchas; el loop mueve -50%,
 // así que el track son dos mitades idénticas (8 + 8).
@@ -49,17 +49,6 @@ const ICONS = {
       <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.86 9.86 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.24-.64.8-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z" />
     </svg>
   ),
-  email: (
-    <Icon>
-      <rect x="3" y="5" width="18" height="14" rx="2.5" />
-      <path d="m4 7 8 6 8-6" />
-    </Icon>
-  ),
-  phone: (
-    <Icon>
-      <path d="M5 4h3.2l1.6 4-2 1.3a10.5 10.5 0 0 0 4.9 4.9l1.3-2 4 1.6V19a1.6 1.6 0 0 1-1.7 1.6A15.4 15.4 0 0 1 3.4 5.7 1.6 1.6 0 0 1 5 4Z" />
-    </Icon>
-  ),
   instagram: (
     <Icon>
       <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
@@ -94,8 +83,6 @@ const SOCIAL_LABELS: Record<keyof typeof SOCIAL, string> = {
 
 const CONTACT = [
   { key: 'whatsapp', label: 'WhatsApp', value: 'Escríbenos', href: WHATSAPP_URL, external: true },
-  { key: 'email', label: 'Correo', value: EMAIL, href: `mailto:${EMAIL}` },
-  { key: 'phone', label: 'Teléfono', value: PHONE_DISPLAY, href: `tel:${PHONE_TEL}` },
 ] as const;
 
 function LinkColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
@@ -159,14 +146,14 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Contacto directo, con íconos. */}
-        <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {/* Contacto directo: WhatsApp. */}
+        <div className="mt-10 sm:mt-12 flex">
           {CONTACT.map((c) => (
             <a
               key={c.key}
               href={c.href}
               {...('external' in c ? { target: '_blank', rel: 'noreferrer' } : {})}
-              className="group flex items-center gap-4 rounded-2xl bg-paper-pure/[0.07] hover:bg-paper-pure/[0.12] p-4 transition-colors"
+              className="group w-full sm:w-auto sm:min-w-[320px] flex items-center gap-4 rounded-2xl bg-paper-pure/[0.07] hover:bg-paper-pure/[0.12] p-4 pr-8 transition-colors"
             >
               <span className="w-11 h-11 shrink-0 rounded-full bg-carne text-klein-deep flex items-center justify-center transition-transform group-hover:scale-105">
                 {ICONS[c.key]}
