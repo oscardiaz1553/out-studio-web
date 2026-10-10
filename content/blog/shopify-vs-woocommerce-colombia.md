@@ -61,4 +61,4 @@ No hay una respuesta única. Para la mayoría de marcas que quieren vender en l�
 
 Lo importante es decidir con tu caso sobre la mesa: qué vendes, cuántos productos tienes, cómo cobras, quién va a administrar la tienda y hacia dónde quieres crecer.
 
-Si quieres, lo revisamos contigo: [cuéntanos tu proyecto](/#cotizar) y te recomendamos la plataforma que mejor encaja, con una cotización a la medida en 24 a 48 horas.
+Si quieres, lo revisamos contigo: [cuéntanos tu proyecto](/#cotizar) y te recomendamos la plataforma que mejor encaja, con una cotización a la medida en 6 a 24 horas.

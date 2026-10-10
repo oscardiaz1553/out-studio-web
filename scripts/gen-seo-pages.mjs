@@ -109,7 +109,7 @@ writeFileSync(
   head({
     title: 'Desarrollo web y tiendas Shopify en Colombia | Out Studio',
     description:
-      'Estudio de desarrollo web en Colombia: tiendas Shopify, e-commerce, sitios WordPress, landing pages y branding a medida con código propio. Cotiza en 24 a 48 h.',
+      'Estudio de desarrollo web en Colombia: tiendas Shopify, e-commerce, sitios WordPress, landing pages y branding a medida con código propio. Cotiza en 6 a 24 h.',
     path: '/',
     extra: [ld(organization), ld(website)],
   }) + body('main'),
@@ -140,7 +140,7 @@ writeFileSync(
   head({
     title: 'Contacto y cotización de proyectos web | Out Studio',
     description:
-      'Escríbenos para cotizar tu sitio web, tienda Shopify, landing page o tu marca. Respondemos en 24 a 48 horas. Out Studio, Colombia.',
+      'Escríbenos para cotizar tu sitio web, tienda Shopify, landing page o tu marca. Respondemos en 6 a 24 horas. Out Studio, Colombia.',
     path: '/contacto.html',
     extra: [
       ld({

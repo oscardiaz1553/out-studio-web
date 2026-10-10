@@ -72,4 +72,4 @@ Con esa información, cualquier equipo serio puede darte una propuesta realista,
 
 El precio de una tienda online en Colombia lo definen la plataforma, el diseño, el tamaño del catálogo, las integraciones y lo que necesites después del lanzamiento. Desconfía de las cifras cerradas sin conocer tu caso.
 
-Nosotros no damos una cifra al azar: [cuéntanos tu proyecto](/#cotizar) y te enviamos una cotización a la medida en 24 a 48 horas. Si quieres ver qué incluye, revisa nuestro servicio de [tiendas Shopify](/servicios/tiendas-shopify/).
+Nosotros no damos una cifra al azar: [cuéntanos tu proyecto](/#cotizar) y te enviamos una cotización a la medida en 6 a 24 horas. Si quieres ver qué incluye, revisa nuestro servicio de [tiendas Shopify](/servicios/tiendas-shopify/).

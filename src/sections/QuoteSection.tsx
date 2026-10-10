@@ -357,7 +357,7 @@ function QuoteScreen({
                       <p className="text-ink-2 leading-relaxed mb-8 max-w-lg">
                         Cada proyecto es distinto, así que no te damos una
                         cifra al azar: cuéntanos y te enviamos una cotización a
-                        la medida en 24 a 48 horas. Elige la opción que más
+                        la medida en 6 a 24 horas. Elige la opción que más
                         se acerque.
                       </p>
                       <TypeCards
@@ -615,7 +615,7 @@ export default function QuoteSection() {
         <p className="text-paper-pure/80 leading-relaxed max-w-xl mt-4 mb-10 sm:mb-12">
           Cada proyecto es distinto, así que no te damos una cifra al azar.
           Cuéntanos qué necesitas y te enviamos una cotización a la medida en
-          24 a 48 horas.
+          6 a 24 horas.
         </p>
 
         <FadeIn y={20}>

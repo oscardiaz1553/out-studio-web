@@ -363,7 +363,7 @@ export default function ServicePage({ page }: { page: ServiceData }) {
               Cuéntanos tu proyecto.
             </h2>
             <p className="mt-3 max-w-[50ch] opacity-85">
-              Te enviamos una cotización a la medida en 24 a 48 horas.
+              Te enviamos una cotización a la medida en 6 a 24 horas.
             </p>
           </div>
           <AccentButton href={`${HOME}#cotizar`} onBlue={theme.dark}>

@@ -133,7 +133,7 @@ export function BlogPost({ post }: { post: Post }) {
             <p className="font-display font-extrabold tracking-[-0.03em] text-2xl sm:text-3xl">
               ¿Tienes un proyecto en mente?
             </p>
-            <p className="mt-2 text-paper-pure/85">Te enviamos una cotización a la medida en 24 a 48 horas.</p>
+            <p className="mt-2 text-paper-pure/85">Te enviamos una cotización a la medida en 6 a 24 horas.</p>
           </div>
           <AccentButton href={`${HOME}#cotizar`} onBlue>
             Cotiza tu proyecto

@@ -1,6 +1,6 @@
 # Out Studio
 
-> Estudio de desarrollo web en Colombia (atendemos todo el país). Diseñamos y desarrollamos tiendas Shopify, e-commerce, sitios WordPress, landing pages y branding, con código propio y sin plantillas. Cotización a la medida en 24 a 48 horas.
+> Estudio de desarrollo web en Colombia (atendemos todo el país). Diseñamos y desarrollamos tiendas Shopify, e-commerce, sitios WordPress, landing pages y branding, con código propio y sin plantillas. Cotización a la medida en 6 a 24 horas.
 
 ## Servicios
 - [Desarrollo web a medida](https://outstudio.online/servicios/desarrollo-web/): visión general de lo que construimos.
