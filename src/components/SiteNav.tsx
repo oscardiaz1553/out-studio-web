@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import AccentButton from './AccentButton';
 import LogoOut from './LogoOut';
 import Magnetic from './Magnetic';
+import { SCENES } from './ServiceScenes';
 
 // Navbar compartido por todas las páginas (home, contacto, proyectos).
 // Estilo "Huge": flota sobre el contenido (fixed, no sticky) en tres
@@ -18,13 +19,16 @@ import Magnetic from './Magnetic';
 // sobre las láminas claras que el detector marcaba como oscuras.
 const HOME = import.meta.env.BASE_URL;
 
-type NavLink = { label: string; href: string };
+type NavLink = { label: string; href: string; scene: string; tilt: number };
 
+// Cada opción lleva su lámina en el menú del celular: la fruta para
+// Servicios, el mono trabajando para Proyectos, el logo para el Blog y el mono
+// entre corchetes para Contacto.
 const NAV_LINKS: NavLink[] = [
-  { label: 'Servicios', href: `${HOME}#servicios` },
-  { label: 'Proyectos', href: `${HOME}proyectos.html` },
-  { label: 'Blog', href: `${HOME}blog/` },
-  { label: 'Contacto', href: `${HOME}contacto.html` },
+  { label: 'Servicios', href: `${HOME}#servicios`, scene: 'shopify', tilt: -2.5 },
+  { label: 'Proyectos', href: `${HOME}proyectos.html`, scene: 'apps', tilt: 2 },
+  { label: 'Blog', href: `${HOME}blog/`, scene: 'branding', tilt: 1.5 },
+  { label: 'Contacto', href: `${HOME}contacto.html`, scene: 'wordpress', tilt: -2 },
 ];
 
 const QUOTE_URL = `${HOME}#cotizar`;
@@ -35,7 +39,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 bg-klein flex flex-col px-6 pt-6 pb-10"
+      className="fixed inset-0 z-50 bg-klein-deep flex flex-col px-6 pt-6 pb-10 overflow-y-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.15, ease: 'easeOut' } }}
@@ -58,19 +62,31 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
 
       <nav
         aria-label="Navegación móvil"
-        className="flex-1 flex flex-col justify-center gap-6"
+        className="flex-1 grid grid-cols-2 content-center gap-x-4 gap-y-6 py-6"
       >
         {NAV_LINKS.map((link, i) => (
           <motion.a
             key={link.label}
             href={link.href}
             onClick={onClose}
-            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 + i * 0.05, duration: 0.3, ease: EASE_OUT }}
-            className="font-display font-extrabold tracking-[-0.03em] text-paper-pure text-5xl leading-none"
+            initial={
+              reduceMotion ? { opacity: 0 } : { opacity: 0, y: 28, rotate: 0, scale: 0.92 }
+            }
+            animate={{ opacity: 1, y: 0, rotate: reduceMotion ? 0 : link.tilt, scale: 1 }}
+            whileTap={{ scale: 0.96, rotate: 0 }}
+            transition={{ delay: 0.06 + i * 0.06, type: 'spring', stiffness: 260, damping: 22 }}
+            className="group flex flex-col gap-2.5"
           >
-            {link.label}
+            <span
+              aria-hidden
+              className="relative block w-full aspect-[4/5] [@media(max-height:700px)]:aspect-[1/1] rounded-[20px] overflow-hidden shadow-[0_14px_34px_rgba(10,15,50,0.45)]"
+              style={{ containerType: 'inline-size' }}
+            >
+              {SCENES[link.scene]}
+            </span>
+            <span className="font-display font-extrabold tracking-[-0.03em] text-paper-pure text-[1.7rem] leading-none pl-1">
+              {link.label}
+            </span>
           </motion.a>
         ))}
       </nav>
