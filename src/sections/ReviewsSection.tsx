@@ -5,7 +5,7 @@ import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import RevealText from '../components/RevealText';
 import { DEMO_REVIEWS, REVIEWS } from '../data/reviews';
-import { EMAIL, WEB3FORMS_ACCESS_KEY } from '../data/site';
+import { EMAIL, GOOGLE_REVIEW_URL, WEB3FORMS_ACCESS_KEY } from '../data/site';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -339,6 +339,16 @@ export default function ReviewsSection() {
                 <AccentButton onClick={() => setFormOpen(true)}>
                   Deja tu reseña
                 </AccentButton>
+                {GOOGLE_REVIEW_URL && (
+                  <a
+                    href={GOOGLE_REVIEW_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-full border border-klein text-klein font-medium px-7 py-2.5 text-sm transition-colors duration-200 hover:bg-klein hover:text-paper-pure active:scale-[0.97]"
+                  >
+                    Reseñar en Google
+                  </a>
+                )}
                 <p className="text-sm text-muted">
                   ¿Trabajaste con Out? Cuéntanos cómo te fue.
                 </p>

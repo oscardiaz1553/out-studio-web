@@ -11,3 +11,8 @@ export const WEB3FORMS_ACCESS_KEY = 'd7b8bdbb-5202-4264-b1d3-d80b7b60f854';
 // (ver worker/cotizaciones.js). Mientras esté vacía, el generador solo ofrece
 // "Descargar PDF" y "Preparar correo".
 export const QUOTE_WORKER_URL = 'https://out-cotizaciones.oscar-diaz-dc0.workers.dev/';
+
+// Enlace para dejar una reseña en el perfil de Google de Out (Google Business
+// Profile → "Pedir reseñas" → copiar el enlace). Mientras esté vacío, el botón
+// de Google no aparece y queda sólo el formulario propio.
+export const GOOGLE_REVIEW_URL = '';
