@@ -9,7 +9,8 @@ const HIDE_ON = ['#cotizacion', '#contacto'];
 
 // Un solo mensaje, siempre el mismo.
 const MESSAGE = 'Te ayudo con tu cotización en cualquier momento.';
-const DISMISS_KEY = 'out-mango-dismissed';
+// Clave nueva: una anterior (v1) quedó marcada por el viejo cierre automático.
+const DISMISS_KEY = 'out-mango-dismissed-v2';
 
 function readDismissed() {
   try {
@@ -88,26 +89,6 @@ export default function MangoBot() {
     }
   };
 
-  // El globo no se queda fijo: se muestra 9 s, descansa 35 s y vuelve, para
-  // que Mango siempre termine diciendo algo sin tapar el contenido. La "x" lo
-  // oculta de verdad durante la visita (bubbleOff).
-  const visibleNow = ready && !hidden && !chat.open;
-  const [bubbleOn, setBubbleOn] = useState(true);
-  useEffect(() => {
-    if (!visibleNow || bubbleOff) return;
-    let timer = 0;
-    const show = () => {
-      setBubbleOn(true);
-      timer = window.setTimeout(hide, 9000);
-    };
-    const hide = () => {
-      setBubbleOn(false);
-      timer = window.setTimeout(show, 35000);
-    };
-    show();
-    return () => window.clearTimeout(timer);
-  }, [visibleNow, bubbleOff]);
-
   const openChat = () => chat.setOpen(true);
   const visible = ready && !hidden && !chat.open;
 
@@ -115,7 +96,7 @@ export default function MangoBot() {
     <>
       <div className="fixed bottom-0 right-0 z-40 flex items-end pointer-events-none max-w-[100vw]">
         <AnimatePresence>
-          {visible && !bubbleOff && bubbleOn && (
+          {visible && !bubbleOff && (
             <motion.div
               key="bubble"
               initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85, x: 12 }}
