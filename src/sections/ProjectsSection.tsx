@@ -184,8 +184,14 @@ export default function ProjectsSection() {
             tabIndex={0}
             role="region"
             aria-label="Carrusel de proyectos"
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory overscroll-x-contain pb-2 [&::-webkit-scrollbar]:hidden"
-            style={{ scrollbarWidth: 'none' }}
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-px-6 md:scroll-px-10 lg:scroll-px-[max(4rem,calc((100vw-1400px)/2))] overscroll-x-contain pb-2 [&::-webkit-scrollbar]:hidden"
+            // A todo el ancho de la pantalla: la pista sale del contenedor hasta los
+            // bordes y el relleno deja la primera tarjeta alineada con el título.
+            style={{
+              scrollbarWidth: 'none',
+              marginInline: 'calc(50% - 50vw)',
+              paddingInline: 'calc(50vw - 50%)',
+            }}
           >
             {FEATURED_PROJECTS.map((p, i) => (
               <ProjectCard key={p.number} project={p} index={i} />
