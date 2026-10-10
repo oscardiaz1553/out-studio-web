@@ -27,7 +27,11 @@ function htmlFiles(dir) {
   return out;
 }
 
-const files = htmlFiles(DIST).filter((f) => !SKIP.has(relative(DIST, f)));
+// Fuera del sitemap y del prerender: lo marcado como noindex (redirecciones,
+// páginas internas) y los archivos de SKIP.
+const files = htmlFiles(DIST).filter(
+  (f) => !SKIP.has(relative(DIST, f)) && !/<meta name="robots" content="noindex/.test(readFileSync(f, 'utf8')),
+);
 const urlFor = (f) => {
   const rel = relative(DIST, f).replace(/\\/g, '/');
   if (rel === 'index.html') return '/';
