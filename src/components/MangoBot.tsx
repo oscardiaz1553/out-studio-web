@@ -88,14 +88,24 @@ export default function MangoBot() {
     }
   };
 
-  // El globo se muestra un rato y se retira solo, para no tapar el contenido
-  // (sobre todo en el celular). El avatar se queda.
+  // El globo no se queda fijo: se muestra 9 s, descansa 35 s y vuelve, para
+  // que Mango siempre termine diciendo algo sin tapar el contenido. La "x" lo
+  // oculta de verdad durante la visita (bubbleOff).
   const visibleNow = ready && !hidden && !chat.open;
+  const [bubbleOn, setBubbleOn] = useState(true);
   useEffect(() => {
     if (!visibleNow || bubbleOff) return;
-    const t = window.setTimeout(dismissBubble, 8000);
-    return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    let timer = 0;
+    const show = () => {
+      setBubbleOn(true);
+      timer = window.setTimeout(hide, 9000);
+    };
+    const hide = () => {
+      setBubbleOn(false);
+      timer = window.setTimeout(show, 35000);
+    };
+    show();
+    return () => window.clearTimeout(timer);
   }, [visibleNow, bubbleOff]);
 
   const openChat = () => chat.setOpen(true);
@@ -105,7 +115,7 @@ export default function MangoBot() {
     <>
       <div className="fixed bottom-0 right-0 z-40 flex items-end pointer-events-none max-w-[100vw]">
         <AnimatePresence>
-          {visible && !bubbleOff && (
+          {visible && !bubbleOff && bubbleOn && (
             <motion.div
               key="bubble"
               initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85, x: 12 }}
@@ -113,7 +123,7 @@ export default function MangoBot() {
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               style={{ transformOrigin: 'bottom right' }}
-              className="pointer-events-auto relative mb-16 sm:mb-24 -mr-10 sm:-mr-12 max-w-[190px] sm:max-w-[250px] rounded-2xl rounded-br-sm bg-paper-pure text-klein-deep shadow-[0_10px_30px_rgba(20,30,92,0.25)] ring-1 ring-klein-deep/10"
+              className="pointer-events-auto relative z-10 mb-16 sm:mb-24 -mr-10 sm:-mr-12 max-w-[190px] sm:max-w-[250px] rounded-2xl rounded-br-sm bg-paper-pure text-klein-deep shadow-[0_10px_30px_rgba(20,30,92,0.25)] ring-1 ring-klein-deep/10"
             >
               <button
                 type="button"

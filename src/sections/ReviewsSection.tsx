@@ -140,7 +140,7 @@ function ReviewForm({ onDone }: { onDone: () => void }) {
             autoComplete="organization-title"
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            placeholder="Ej: Fundadora, BARCI"
+            placeholder="Ej: Gerente, nombre de tu empresa"
             className={INPUT}
           />
         </label>
