@@ -29,13 +29,13 @@ export default function Footer() {
             <a href={`${import.meta.env.BASE_URL}servicios/branding/`}>Branding</a>
             <a href={`${import.meta.env.BASE_URL}proyectos.html`}>Proyectos</a>
             <a href={`${import.meta.env.BASE_URL}blog/`}>Blog</a>
-            <a href="#contacto">Contacto</a>
+            <a href={`${import.meta.env.BASE_URL}contacto.html`}>Contacto</a>
           </nav>
 
           <nav className="site-footer__nav" aria-label="Contacto">
             <a href="mailto:oscar.diaz@outstudio.online">Email</a>
             <a href="tel:+573188888392">Teléfono</a>
-            <a href="#contacto">Hablar</a>
+            <a href={`${import.meta.env.BASE_URL}contacto.html`}>Hablar</a>
           </nav>
         </div>
 
