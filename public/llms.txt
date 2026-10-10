@@ -1,0 +1,17 @@
+# Out Studio
+
+> Estudio de desarrollo web en Colombia (atendemos todo el país). Diseñamos y desarrollamos tiendas Shopify, e-commerce, sitios WordPress, landing pages, apps y software a medida, y branding, con código propio y sin plantillas. Cotización a la medida en 24 a 48 horas.
+
+## Servicios
+- [Desarrollo web a medida](https://outstudio.online/servicios/desarrollo-web/): visión general de lo que construimos.
+- [Tiendas Shopify y e-commerce](https://outstudio.online/servicios/tiendas-shopify/): tiendas online con pagos, envíos y migración.
+- [Sitios WordPress](https://outstudio.online/servicios/sitios-wordpress/): sitios a medida que el cliente administra solo.
+- [Landing pages](https://outstudio.online/servicios/landing-pages/): páginas de campaña para convertir.
+- [Apps y software a medida](https://outstudio.online/servicios/apps-y-software-a-medida/): aplicaciones, plataformas e integraciones.
+- [Branding](https://outstudio.online/servicios/branding/): logo e identidad visual.
+
+## Más
+- [Proyectos](https://outstudio.online/proyectos.html)
+- [Contacto](https://outstudio.online/contacto.html)
+
+Contacto: oscar.diaz@outstudio.online · +57 318 888 8392

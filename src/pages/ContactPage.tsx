@@ -12,7 +12,7 @@ export default function ContactPage() {
     <main className="min-h-screen bg-paper flex flex-col" style={{ overflowX: 'clip' }}>
       <SiteNav />
 
-      <ContactSection />
+      <ContactSection titleAs="h1" />
 
       <footer className="mt-auto px-6 md:px-10 lg:px-16 py-10 border-t border-klein-deep/15">
         <p className="text-muted text-sm">

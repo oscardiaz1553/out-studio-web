@@ -22,7 +22,12 @@ export default function Footer() {
           <h2>Never the usual.</h2>
 
           <nav className="site-footer__nav" aria-label="Navegación del footer">
-            <a href="#servicios">Servicios</a>
+            <a href={`${import.meta.env.BASE_URL}servicios/desarrollo-web/`}>Desarrollo web</a>
+            <a href={`${import.meta.env.BASE_URL}servicios/tiendas-shopify/`}>Tiendas Shopify</a>
+            <a href={`${import.meta.env.BASE_URL}servicios/sitios-wordpress/`}>Sitios WordPress</a>
+            <a href={`${import.meta.env.BASE_URL}servicios/landing-pages/`}>Landing pages</a>
+            <a href={`${import.meta.env.BASE_URL}servicios/apps-y-software-a-medida/`}>Apps y software</a>
+            <a href={`${import.meta.env.BASE_URL}servicios/branding/`}>Branding</a>
             <a href={`${import.meta.env.BASE_URL}proyectos.html`}>Proyectos</a>
             <a href="#contacto">Contacto</a>
           </nav>

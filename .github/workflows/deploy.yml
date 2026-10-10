@@ -24,6 +24,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      # Navegador para generar el contenido estático para buscadores (SEO). Si
+      # falla, el sitio se publica igual, sólo sin ese contenido estático.
+      - run: npx playwright install --with-deps chromium
+        continue-on-error: true
       - run: npm run build
       - uses: actions/configure-pages@v5
         with:

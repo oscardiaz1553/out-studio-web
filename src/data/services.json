@@ -1,0 +1,264 @@
+{
+  "site": {
+    "name": "Out Studio",
+    "url": "https://outstudio.online",
+    "email": "oscar.diaz@outstudio.online",
+    "phone": "+573188888392",
+    "locality": "Bogotá",
+    "country": "CO"
+  },
+  "pages": [
+    {
+      "slug": "desarrollo-web",
+      "nav": "Desarrollo web",
+      "metaTitle": "Desarrollo web a medida en Colombia | Out Studio",
+      "metaDescription": "Desarrollo web a medida en Colombia: tiendas Shopify, sitios WordPress, landing pages y apps con código propio. Cotización a la medida en 24 a 48 horas.",
+      "h1": "Desarrollo web a medida en Colombia",
+      "lead": "Diseñamos y desarrollamos sitios web, tiendas online y aplicaciones con código propio, sin plantillas, para negocios y marcas de toda Colombia. Cada proyecto parte de un objetivo claro: que quien llega compre, escriba o reserve.",
+      "includesTitle": "Qué podemos construir",
+      "includes": [
+        "Tiendas Shopify y e-commerce listas para vender desde el primer día",
+        "Sitios web corporativos, portafolios, catálogos y blogs en WordPress",
+        "Landing pages de campaña pensadas para convertir",
+        "Aplicaciones, plataformas y paneles internos a medida",
+        "Integraciones y automatizaciones entre tus herramientas",
+        "Identidad visual y branding para que te reconozcan a la primera"
+      ],
+      "whyTitle": "Por qué código propio y no plantillas",
+      "why": [
+        "Una plantilla te obliga a adaptar tu negocio a su diseño. Con código propio es al revés: el sitio se construye alrededor de tu marca, de lo que vendes y de cómo compran tus clientes.",
+        "Además es más rápido, más limpio y más fácil de hacer crecer: sin código de sobra, sin funciones que no usas y sin depender de que un tercero actualice un tema."
+      ],
+      "forWho": "Negocios, marcas y emprendedores que quieren un sitio web profesional, una tienda online o una herramienta digital hecha para su caso, y que buscan un equipo que los acompañe desde la idea hasta después del lanzamiento.",
+      "faq": [
+        {
+          "q": "¿Cuánto cuesta un sitio web?",
+          "a": "Depende del alcance, así que no damos una cifra al azar. Nos cuentas qué necesitas (tipo de proyecto, funciones, contenido) y te enviamos una cotización a la medida en 24 a 48 horas."
+        },
+        {
+          "q": "¿Cuánto tarda en estar listo?",
+          "a": "Depende del tipo de proyecto y de cuánto contenido ya tengas. En la cotización te damos un cronograma por etapas, con avances reales que puedes ver y aprobar."
+        },
+        {
+          "q": "¿Trabajan con clientes en toda Colombia?",
+          "a": "Sí. Trabajamos en remoto con negocios y marcas de cualquier ciudad de Colombia: Bogotá, Medellín, Cali, Barranquilla y el resto del país."
+        },
+        {
+          "q": "¿Qué pasa después del lanzamiento?",
+          "a": "No desaparecemos. Ofrecemos soporte, mantenimiento, ajustes y mejoras a partir de cómo se usa tu sitio."
+        },
+        {
+          "q": "¿Podré administrar el sitio yo mismo?",
+          "a": "Sí. En WordPress y Shopify te dejamos todo listo para administrarlo y, si lo necesitas, te capacitamos."
+        }
+      ],
+      "related": ["tiendas-shopify", "sitios-wordpress", "landing-pages", "apps-y-software-a-medida", "branding"]
+    },
+    {
+      "slug": "tiendas-shopify",
+      "nav": "Tiendas Shopify",
+      "metaTitle": "Tiendas Shopify y e-commerce en Colombia | Out Studio",
+      "metaDescription": "Creamos tiendas Shopify a medida en Colombia: diseño propio, pagos y envíos configurados, migración y soporte. Vende desde el primer día.",
+      "h1": "Tiendas Shopify y e-commerce en Colombia",
+      "lead": "Diseñamos y configuramos tu tienda online en Shopify con un diseño propio, pasarela de pagos, envíos y todo lo necesario para vender desde el primer día, no cuando por fin quede lista.",
+      "includesTitle": "Qué incluye tu tienda Shopify",
+      "includes": [
+        "Diseño de la tienda a medida y adaptado a móvil",
+        "Configuración de Shopify: productos, colecciones, páginas y menús",
+        "Pasarela de pagos (como Wompi, Mercado Pago o PayU) y métodos de envío",
+        "Carga inicial de productos",
+        "SEO básico y analítica instalada",
+        "Capacitación para administrar la tienda"
+      ],
+      "whyTitle": "Una tienda hecha para vender",
+      "why": [
+        "Una tienda online no es solo un catálogo bonito: es el recorrido que hace una persona desde que llega hasta que paga. Cuidamos cada paso para que comprar sea claro, rápido y confiable.",
+        "Podemos crear tu tienda desde cero, migrarla desde otra plataforma o rediseñar y mejorar una tienda Shopify que ya tienes. También integramos facturación electrónica, inventarios y otras herramientas que uses."
+      ],
+      "forWho": "Marcas y negocios que quieren empezar a vender en línea, migrar su tienda a Shopify o dar un salto de diseño y conversión en una tienda que ya existe.",
+      "faq": [
+        {
+          "q": "¿Shopify o WooCommerce: cuál me conviene?",
+          "a": "Shopify es ideal si quieres una tienda estable, rápida y fácil de administrar, con pagos y envíos bien resueltos. WooCommerce (WordPress) da más control y personalización si ya trabajas en WordPress. En el diagnóstico te recomendamos la que mejor encaja con tu caso."
+        },
+        {
+          "q": "¿Puedo recibir pagos en Colombia?",
+          "a": "Sí. Configuramos pasarelas de pago habituales en Colombia, como Wompi, Mercado Pago o PayU, según lo que necesites."
+        },
+        {
+          "q": "¿Pueden migrar mi tienda actual a Shopify?",
+          "a": "Sí. Migramos tu catálogo y rediseñamos la experiencia para que la nueva tienda venda mejor que la anterior."
+        },
+        {
+          "q": "¿Cuántos productos puede tener mi tienda?",
+          "a": "Desde unos pocos hasta catálogos de cientos o miles de productos. Lo definimos contigo al cotizar."
+        },
+        {
+          "q": "¿Se puede conectar con facturación electrónica o inventario?",
+          "a": "Sí, integramos tu tienda con herramientas de facturación electrónica, inventarios y otros sistemas, según lo que uses."
+        }
+      ],
+      "related": ["desarrollo-web", "landing-pages", "branding", "apps-y-software-a-medida"]
+    },
+    {
+      "slug": "sitios-wordpress",
+      "nav": "Sitios WordPress",
+      "metaTitle": "Diseño de sitios web en WordPress a medida | Out Studio",
+      "metaDescription": "Diseño y desarrollo de sitios web en WordPress a medida, rápidos y fáciles de administrar tú mismo. Corporativos, portafolios, blogs y más, en Colombia.",
+      "h1": "Diseño de sitios web en WordPress a medida",
+      "lead": "Un sitio web profesional, rápido y con diseño propio que actualizas tú mismo, sin depender de nadie. Desarrollamos en WordPress sin plantillas genéricas.",
+      "includesTitle": "Qué incluye tu sitio WordPress",
+      "includes": [
+        "Diseño a medida y adaptado a móvil",
+        "Desarrollo en WordPress con un panel fácil de administrar",
+        "Formularios conectados a tu correo o CRM y optimización de velocidad",
+        "SEO técnico básico",
+        "Capacitación de uso"
+      ],
+      "whyTitle": "WordPress, pero sin parecer WordPress",
+      "why": [
+        "WordPress es la plataforma más usada del mundo para sitios web, y con razón: es flexible y fácil de administrar. El problema son las plantillas que hacen que todos los sitios se vean iguales.",
+        "Nosotros partimos de tu marca y construimos el diseño y el código a medida: sitios corporativos, portafolios, catálogos, blogs, tiendas con WooCommerce, cursos o membresías."
+      ],
+      "forWho": "Empresas, profesionales y proyectos que necesitan un sitio web serio, que puedan actualizar por su cuenta y que crezca con el negocio.",
+      "faq": [
+        {
+          "q": "¿Podré editar el contenido yo mismo?",
+          "a": "Sí. Te dejamos un panel claro y, si quieres, una capacitación corta para que cambies textos, imágenes y páginas sin ayuda."
+        },
+        {
+          "q": "¿Pueden rediseñar o migrar mi sitio actual?",
+          "a": "Sí. Rediseñamos sitios en WordPress y migramos desde otras plataformas, cuidando que no pierdas el contenido ni el posicionamiento que ya tienes."
+        },
+        {
+          "q": "¿Incluye dominio y hosting?",
+          "a": "Te asesoramos para elegirlos y dejarlos bien configurados. Si ya tienes dominio y hosting, trabajamos sobre ellos."
+        },
+        {
+          "q": "¿Se puede vender en un sitio WordPress?",
+          "a": "Sí, con WooCommerce. Si tu foco es vender, también te explicamos cuándo conviene más una tienda Shopify."
+        }
+      ],
+      "related": ["desarrollo-web", "tiendas-shopify", "landing-pages", "branding"]
+    },
+    {
+      "slug": "landing-pages",
+      "nav": "Landing pages",
+      "metaTitle": "Diseño de landing pages que convierten | Out Studio",
+      "metaDescription": "Diseñamos landing pages de campaña con un solo objetivo: que la gente actúe. Formulario, WhatsApp, pixel y analítica listos. Rápidas y adaptadas a móvil.",
+      "h1": "Diseño de landing pages que convierten",
+      "lead": "Páginas de campaña con un solo objetivo: que quien llega actúe. Una propuesta clara, un recorrido sin distracciones y todo medible desde el primer día.",
+      "includesTitle": "Qué incluye tu landing page",
+      "includes": [
+        "Diseño y desarrollo de la página",
+        "Formulario y botón de WhatsApp conectados",
+        "Pixel y analítica instalados (Meta y Google Analytics)",
+        "Optimización de velocidad y adaptación a móvil"
+      ],
+      "whyTitle": "Menos ruido, más resultados",
+      "why": [
+        "Una landing page no es una página de inicio resumida. Está pensada para una campaña concreta: captar contactos, vender un producto o servicio, promocionar un lanzamiento o una app.",
+        "Si vas a pautar con Meta Ads o Google Ads, la landing es donde se gana o se pierde esa inversión. Por eso cuidamos el mensaje, la velocidad y la medición."
+      ],
+      "forWho": "Negocios que van a lanzar una campaña, promocionar un producto o servicio, captar leads o presentar una app.",
+      "faq": [
+        {
+          "q": "¿En qué se diferencia una landing de un sitio web?",
+          "a": "Un sitio web presenta todo tu negocio. Una landing page se enfoca en una sola acción para una campaña específica, así que es más corta, más directa y más fácil de medir."
+        },
+        {
+          "q": "¿Pueden conectarla con mi CRM o mi correo?",
+          "a": "Sí. Conectamos el formulario a tu correo o a tu CRM, y el botón de WhatsApp si lo necesitas."
+        },
+        {
+          "q": "¿Incluye redacción de los textos?",
+          "a": "Si ya tienes los textos, los usamos. Si necesitas ayuda para redactarlos, lo definimos en la cotización."
+        },
+        {
+          "q": "¿Sirve para campañas de Meta Ads o Google Ads?",
+          "a": "Sí. La dejamos con pixel y analítica para que midas qué funciona y optimices tu pauta."
+        }
+      ],
+      "related": ["desarrollo-web", "tiendas-shopify", "sitios-wordpress", "branding"]
+    },
+    {
+      "slug": "apps-y-software-a-medida",
+      "nav": "Apps y software a medida",
+      "metaTitle": "Desarrollo de apps y software a medida | Out Studio",
+      "metaDescription": "Desarrollo de apps, plataformas y software a medida, de la idea al lanzamiento. Integraciones y automatizaciones que te quitan trabajo repetitivo.",
+      "h1": "Desarrollo de apps y software a medida",
+      "lead": "Aplicaciones, plataformas y sistemas desde cero, de la idea al lanzamiento. Y, si lo que buscas es quitarte trabajo repetitivo, integraciones y automatizaciones que conectan tus herramientas.",
+      "includesTitle": "Qué incluye el desarrollo a medida",
+      "includes": [
+        "Descubrimiento y definición del alcance",
+        "Diseño de interfaz y experiencia (UI/UX)",
+        "Desarrollo del producto",
+        "Pruebas y puesta en producción",
+        "Documentación y entrega",
+        "Integraciones y automatizaciones entre tus herramientas, con pruebas sobre datos reales"
+      ],
+      "whyTitle": "De la idea al producto funcionando",
+      "why": [
+        "Si tienes una idea para una app web o móvil, una plataforma o un panel interno, nos sentamos contigo a definir qué debe hacer y construimos una primera versión para validarla.",
+        "También conectamos herramientas como tu tienda, CRM, facturación electrónica, WhatsApp Business u hojas de cálculo para que los procesos repetitivos se hagan solos."
+      ],
+      "forWho": "Emprendedores con una idea que validar, empresas que necesitan una plataforma o un panel interno, y equipos que quieren automatizar procesos manuales.",
+      "faq": [
+        {
+          "q": "¿Necesito saber de tecnología para empezar?",
+          "a": "No. Cuéntanos la idea con tus palabras: nosotros la traducimos en alcance, diseño y desarrollo."
+        },
+        {
+          "q": "¿Pueden construir un MVP para validar mi idea?",
+          "a": "Sí. Empezamos por lo esencial para que pruebes tu idea con usuarios reales antes de invertir en todo el producto."
+        },
+        {
+          "q": "¿Qué tipo de automatizaciones hacen?",
+          "a": "Conexiones entre herramientas como tiendas en línea, CRM, facturación electrónica, WhatsApp Business, hojas de cálculo y correo, para evitar copiar y pegar datos a mano."
+        },
+        {
+          "q": "¿Incluyen inteligencia artificial?",
+          "a": "Cuando aporta valor al producto, sí. Lo evaluamos contigo durante la definición del alcance."
+        }
+      ],
+      "related": ["desarrollo-web", "tiendas-shopify", "landing-pages", "branding"]
+    },
+    {
+      "slug": "branding",
+      "nav": "Branding",
+      "metaTitle": "Diseño de logo e identidad visual (branding) | Out Studio",
+      "metaDescription": "Diseño de logo e identidad visual con carácter: paleta, tipografías, manual de marca y aplicaciones para que tu marca se reconozca a la primera.",
+      "h1": "Diseño de logo e identidad visual para tu marca",
+      "lead": "Logo e identidad visual con carácter: que te reconozcan a la primera y que tu marca se vea igual de bien en tu sitio web, tus redes y tus empaques.",
+      "includesTitle": "Qué incluye el branding",
+      "includes": [
+        "Investigación y definición de la marca",
+        "Diseño del logo con sus variantes",
+        "Paleta de color, tipografías y estilo visual",
+        "Manual de marca",
+        "Aplicaciones (papelería, redes sociales, empaques) según lo acordado"
+      ],
+      "whyTitle": "Una marca que se reconoce sin nombre",
+      "why": [
+        "Una buena identidad no es solo un logo: es un sistema que hace reconocible a tu marca en cualquier lugar, y que le da coherencia a todo lo que haces.",
+        "Podemos crear una marca nueva, rediseñarla por completo o actualizar la que ya tienes, y luego llevarla a tu sitio web o tu tienda online."
+      ],
+      "forWho": "Marcas nuevas que necesitan nacer con identidad, y marcas existentes que quieren renovarse.",
+      "faq": [
+        {
+          "q": "¿Pueden rediseñar mi logo actual?",
+          "a": "Sí. Puede ser una actualización de lo que ya tienes o un rediseño completo (rebranding), según lo que necesite tu marca."
+        },
+        {
+          "q": "¿Incluye manual de marca?",
+          "a": "Sí. El manual de marca recoge el logo, los colores, las tipografías y las reglas de uso."
+        },
+        {
+          "q": "¿Pueden aplicar la marca a mi sitio web o mi tienda?",
+          "a": "Sí. Podemos llevar la identidad al diseño de tu sitio, tu tienda Shopify, tus redes y tus piezas impresas."
+        }
+      ],
+      "related": ["desarrollo-web", "sitios-wordpress", "tiendas-shopify", "landing-pages"]
+    }
+  ]
+}

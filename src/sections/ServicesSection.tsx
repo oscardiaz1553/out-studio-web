@@ -18,40 +18,48 @@ import RevealText from '../components/RevealText';
 const SERVICES = [
   {
     name: 'Tiendas Shopify',
+    slug: 'tiendas-shopify',
     description:
       'Tu tienda vendiendo desde el primer día, no cuando por fin quede lista.',
     tilt: -4,
   },
   {
     name: 'Sitios WordPress',
+    slug: 'sitios-wordpress',
     description:
       'Una web profesional que actualizas tú mismo, sin depender de nadie.',
     tilt: 3,
   },
   {
     name: 'Landing Pages',
+    slug: 'landing-pages',
     description:
       'Páginas de campaña con un solo objetivo: que la gente actúe.',
     tilt: -3,
   },
   {
     name: 'Branding',
+    slug: 'branding',
     description:
       'Logo e identidad visual con carácter: que te reconozcan a la primera.',
     tilt: 4,
   },
   {
     name: 'Apps & Integraciones',
+    slug: 'apps-y-software-a-medida',
     description:
       'Productos a medida y herramientas conectadas para que el trabajo repetitivo se haga solo.',
     tilt: -2,
   },
   {
     name: 'Soporte & Optimización',
+    slug: 'desarrollo-web',
     description: 'No desaparecemos después del lanzamiento. Seguimos contigo.',
     tilt: 3,
   },
 ];
+
+const HOME = import.meta.env.BASE_URL;
 
 export default function ServicesSection() {
   const reduceMotion = useReducedMotion();
@@ -95,6 +103,15 @@ export default function ServicesSection() {
           </TitleFrame>
         </div>
 
+        <p className="mt-4 max-w-[62ch] text-ink-2 leading-relaxed text-base sm:text-lg">
+          Hacemos desarrollo web a medida para negocios de toda Colombia: tiendas
+          Shopify y e-commerce, sitios WordPress, landing pages, apps y branding,
+          con código propio.{' '}
+          <a href={`${HOME}servicios/desarrollo-web/`} className="text-klein font-medium underline underline-offset-4">
+            Ver todo el desarrollo web
+          </a>
+        </p>
+
         <div className="mt-6 sm:mt-8">
           <WordStage />
         </div>
@@ -121,7 +138,12 @@ export default function ServicesSection() {
                   className="font-display font-extrabold text-klein tracking-[-0.04em] leading-[1.02] transition-transform duration-500 ease-out sm:group-hover:translate-x-3"
                   style={{ fontSize: 'clamp(1.6rem, 3.4vw, 2.8rem)' }}
                 >
-                  {service.name}
+                  <a
+                    href={`${HOME}servicios/${service.slug}/`}
+                    className="hover:underline decoration-[0.06em] underline-offset-[0.12em]"
+                  >
+                    {service.name}
+                  </a>
                 </h3>
               </div>
               <p className="text-sm sm:text-base leading-relaxed text-klein-deep/80 sm:text-right sm:pt-2 sm:max-w-[34ch]">

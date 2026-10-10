@@ -16,7 +16,7 @@ const INPUT_CLASSES =
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
-export default function ContactSection() {
+export default function ContactSection({ titleAs = "h2" }: { titleAs?: "h1" | "h2" }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -72,7 +72,7 @@ export default function ContactSection() {
           <div className="flex items-baseline gap-4 mb-6 sm:mb-8">
             <TitleFrame kind="curly" tone="warm" fontSize="clamp(2.4rem, 6vw, 5rem)">
             <RevealText
-              as="h2"
+              as={titleAs}
               text="Contacto"
               unit="char"
               className="font-display font-semibold text-klein tracking-[-0.035em]"

@@ -1,0 +1,19 @@
+# Out Studio — outstudio.online
+User-agent: *
+Allow: /
+Disallow: /cotizar.html
+
+# Rastreadores de IA: se permite que lean y citen el sitio.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://outstudio.online/sitemap.xml

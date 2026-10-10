@@ -18,7 +18,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 // ignorar." Cada rotación se lee completa y apunta a un servicio real
 // (tienda, sitio, app, marca). El texto completo vive en un sr-only.
 const SUBJECTS = ['marca', 'tienda online', 'sitio web', 'negocio', 'app'];
-const SR_HEADLINE = `Hacemos que tu ${SUBJECTS.join(', tu ')} sea imposible de ignorar.`;
+const SR_HEADLINE = `Desarrollo web y tiendas Shopify en Colombia. Hacemos que tu ${SUBJECTS.join(', tu ')} sea imposible de ignorar.`;
 
 /** El mango partido: el objeto de siempre de la marca, grande a un lado. Flota
  *  despacio y se desplaza un poco con el mouse (parallax; en táctil queda
@@ -128,7 +128,7 @@ export default function HeroSection() {
           transition={{ delay: 0.1, duration: 0.6 }}
         >
           <span className="text-paper-pure/75 text-sm sm:text-base tracking-[0.02em]">
-            Estudio digital · Bogotá, Colombia
+            Desarrollo web y tiendas Shopify · Colombia
           </span>
         </motion.div>
 
