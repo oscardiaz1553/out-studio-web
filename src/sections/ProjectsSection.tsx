@@ -45,16 +45,11 @@ function ProjectRow({
         {...(live ? { href: project.url, target: '_blank', rel: 'noreferrer' } : {})}
         onPointerEnter={(e: React.PointerEvent) => e.pointerType === 'mouse' && onHover(index)}
         onPointerLeave={(e: React.PointerEvent) => e.pointerType === 'mouse' && onHover(null)}
-        className={`group grid grid-cols-1 lg:grid-cols-[4.5rem_1fr_19rem] items-center gap-x-6 gap-y-3 py-6 sm:py-8 ${
+        className={`group grid grid-cols-1 lg:grid-cols-[5rem_1fr_19rem] items-center gap-x-6 gap-y-3 py-6 sm:py-8 ${
           live ? 'lg:cursor-none' : ''
         }`}
       >
-        <div className="flex items-center gap-3 text-xs text-carne-tinta lg:flex-col lg:items-start lg:gap-1">
-          <span className="font-display font-bold text-sm tabular-nums text-klein-deep">
-            {String(index + 1).padStart(2, '0')}
-          </span>
-          <span>{categoryLabel(project.type)}</span>
-        </div>
+        <span className="text-xs text-carne-tinta">{categoryLabel(project.type)}</span>
 
         <div className="relative min-w-0 px-[0.62em]" style={{ fontSize: NAME_SIZE }}>
           <span className="relative inline-flex items-center">

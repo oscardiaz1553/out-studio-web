@@ -10,15 +10,15 @@ La pasarela de pagos es la parte de tu tienda online que recibe el dinero. Si fa
 
 En Colombia hay varias opciones conocidas, como **Wompi**, **Mercado Pago** y **PayU**, entre otras. En lugar de decirte "la mejor", te dejamos los criterios para elegir la que le sirve a tu negocio.
 
-## 1. Los medios de pago que usan tus clientes
+## Los medios de pago que usan tus clientes
 
 Empieza por tus clientes, no por la pasarela. En Colombia, además de las tarjetas de crédito y débito, son muy usados medios como **PSE** (pagos desde la cuenta bancaria) y otras alternativas locales. Revisa qué medios ofrece cada pasarela y si cubren los que tu público prefiere.
 
-## 2. Comisiones y costos
+## Comisiones y costos
 
 Cada pasarela cobra una comisión por transacción, y algunas tienen costos adicionales según el medio de pago. Las condiciones cambian con el tiempo, así que **compara siempre las tarifas vigentes** en el sitio oficial de cada proveedor y calcula cuánto te costaría con tu ticket promedio y tu volumen de ventas.
 
-## 3. Integración con tu plataforma
+## Integración con tu plataforma
 
 No todas las pasarelas se integran igual con todas las plataformas:
 
@@ -27,11 +27,11 @@ No todas las pasarelas se integran igual con todas las plataformas:
 
 Una integración bien hecha evita errores en el pago y hace que los pedidos queden registrados correctamente.
 
-## 4. Tiempos de desembolso
+## Tiempos de desembolso
 
 ¿Cuándo llega el dinero a tu cuenta? Cada pasarela tiene sus propios tiempos y condiciones para transferir lo recaudado. Para el flujo de caja de tu negocio, este punto puede ser tan importante como la comisión.
 
-## 5. Experiencia de pago
+## Experiencia de pago
 
 El pago debe ser rápido, claro y confiable, sobre todo en el celular, que es donde ocurre buena parte de las compras. Fíjate en:
 
@@ -39,7 +39,7 @@ El pago debe ser rápido, claro y confiable, sobre todo en el celular, que es do
 - Si el proceso funciona bien en móvil.
 - Si los mensajes de error son claros cuando algo falla.
 
-## 6. Soporte y requisitos
+## Soporte y requisitos
 
 Para activar una pasarela normalmente necesitas documentación de tu negocio y una cuenta bancaria a nombre de la empresa o persona. Revisa los requisitos con anticipación para que no retrasen el lanzamiento, y ten en cuenta qué tan fácil es contactar al soporte si algo falla.
 

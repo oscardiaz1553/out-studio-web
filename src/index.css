@@ -180,6 +180,6 @@ a {
 .prose-out a { color: #1b2fcc; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
 .prose-out ul, .prose-out ol { padding-left: 1.3em; }
 .prose-out ul { list-style: disc; }
-.prose-out ol { list-style: decimal; }
+.prose-out ol { list-style: disc; }
 .prose-out li + li { margin-top: 0.4em; }
 .prose-out li::marker { color: #bc6039; }
