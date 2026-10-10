@@ -39,24 +39,56 @@ function CaseVideo() {
   const vertical = useIsPhone();
   const ref = useRef<HTMLVideoElement>(null);
   const box = useRef<HTMLDivElement>(null);
-  const inView = useInView(box, { amount: 0.5 });
+  const inView = useInView(box, { amount: 0.3 });
   const [muted, setMuted] = useState(true);
   const [playing, setPlaying] = useState(false);
+  // iOS bloquea el autoplay en modo de bajo consumo: si el navegador lo
+  // rechaza, se muestra el botón de reproducir y se intenta con el primer toque.
+  const [blocked, setBlocked] = useState(false);
   const saveData = Boolean(
     (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
       ?.saveData,
   );
   const autoplay = !reduceMotion && !saveData;
 
+  // React no escribe el atributo `muted` en el HTML, y sin él iOS no deja
+  // arrancar el video solo: se fija a mano en el elemento.
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true;
+    v.defaultMuted = true;
+    v.setAttribute('muted', '');
+  }, [vertical]);
+
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
     if (inView && (autoplay || playing)) {
-      void v.play().catch(() => undefined);
+      v.play()
+        .then(() => setBlocked(false))
+        .catch(() => setBlocked(true));
     } else {
       v.pause();
     }
-  }, [inView, autoplay, playing]);
+  }, [inView, autoplay, playing, vertical]);
+
+  // Si el autoplay fue bloqueado, el primer toque en la página lo arranca.
+  useEffect(() => {
+    if (!blocked || !inView) return;
+    const kick = () => {
+      ref.current
+        ?.play()
+        .then(() => setBlocked(false))
+        .catch(() => undefined);
+    };
+    document.addEventListener('touchend', kick, { once: true });
+    document.addEventListener('click', kick, { once: true });
+    return () => {
+      document.removeEventListener('touchend', kick);
+      document.removeEventListener('click', kick);
+    };
+  }, [blocked, inView]);
 
   const toggleSound = () => {
     const v = ref.current;
@@ -88,15 +120,21 @@ function CaseVideo() {
         playsInline
         preload="metadata"
         aria-label="Video del caso Diario Deportes: del sitio de antes al rediseño"
-        onPlay={() => setPlaying(true)}
+        onPlay={() => {
+          setPlaying(true);
+          setBlocked(false);
+        }}
         className="absolute inset-0 w-full h-full object-cover"
       />
-      {!autoplay && !playing && (
+      {((!autoplay && !playing) || blocked) && (
         <button
           type="button"
           onClick={() => {
             setPlaying(true);
-            void ref.current?.play();
+            ref.current
+              ?.play()
+              .then(() => setBlocked(false))
+              .catch(() => undefined);
           }}
           aria-label="Reproducir el video"
           className="absolute inset-0 flex items-center justify-center bg-klein-deep/30 hover:bg-klein-deep/20 transition-colors"
