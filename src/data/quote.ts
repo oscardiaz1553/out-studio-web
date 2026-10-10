@@ -228,65 +228,6 @@ export const PROJECT_TYPES: ProjectType[] = [
     ],
   },
   {
-    id: 'app',
-    label: 'App o desarrollo a medida',
-    blurb: 'Aplicaciones, plataformas y sistemas desde cero.',
-    questions: [
-      {
-        id: 'tipo',
-        label: '¿Qué tipo de producto tienes en mente?',
-        kind: 'single',
-        required: true,
-        options: [
-          'App web',
-          'App móvil (iOS / Android)',
-          'Plataforma o panel interno',
-          'MVP para validar una idea',
-          'Otro',
-        ],
-      },
-      {
-        id: 'problema',
-        label: '¿Qué problema resuelve o qué debe hacer?',
-        help: 'Cuéntanos la idea con tus palabras, no hace falta que sea técnico.',
-        kind: 'long',
-        required: true,
-        placeholder: 'Ej: una app para que mis clientes agenden y paguen…',
-      },
-      {
-        id: 'usuarios',
-        label: '¿Quién la va a usar?',
-        kind: 'single',
-        required: true,
-        options: ['Solo mi equipo', 'Mis clientes', 'Ambos'],
-      },
-      {
-        id: 'funciones',
-        label: '¿Qué funciones clave imaginas?',
-        help: 'Marca todo lo que aplique.',
-        kind: 'multi',
-        options: [
-          'Registro e inicio de sesión',
-          'Pagos o suscripciones',
-          'Panel de administración',
-          'Notificaciones',
-          'Mapas y geolocalización',
-          'Chat o mensajería',
-          'Reportes y analítica',
-          'Inteligencia artificial',
-          'Conexión con otros sistemas (APIs)',
-        ],
-      },
-      {
-        id: 'diseno',
-        label: '¿Ya tienes diseño, prototipo o documento de requisitos?',
-        kind: 'single',
-        required: true,
-        options: ['Sí, completo', 'Algo básico', 'No, partimos de cero'],
-      },
-    ],
-  },
-  {
     id: 'automatizacion',
     label: 'Integraciones y automatizaciones',
     blurb: 'Conectar tus herramientas y quitarte trabajo repetitivo.',
@@ -440,6 +381,27 @@ export const PROJECT_TYPES: ProjectType[] = [
       },
     ],
   },
+  {
+    id: 'otro',
+    label: 'Otro proyecto',
+    blurb: '¿Tienes algo distinto en mente? Cuéntanos qué es.',
+    questions: [
+      {
+        id: 'idea',
+        label: '¿Qué tienes en mente?',
+        help: 'Descríbelo con tus palabras: qué necesitas, para qué y para quién.',
+        kind: 'long',
+        required: true,
+        placeholder: 'Ej: necesito una plataforma para que mis clientes reserven y paguen en línea…',
+      },
+      {
+        id: 'referencias',
+        label: '¿Tienes algún ejemplo o referencia?',
+        help: 'Opcional. Links o nombres de algo parecido a lo que buscas.',
+        kind: 'long',
+      },
+    ],
+  },
 ];
 
 export const COMMON_QUESTIONS: Question[] = [
@@ -547,6 +509,7 @@ export function buildBrief(
 
 /** Entregables por defecto de cada tipo: punto de partida editable en el dossier. */
 export const DEFAULT_SCOPE: Record<string, string[]> = {
+  otro: ['Alcance a definir según lo conversado'],
   shopify: [
     'Diseño de la tienda a medida y adaptado a móvil',
     'Configuración de Shopify: productos, colecciones, páginas y menús',
