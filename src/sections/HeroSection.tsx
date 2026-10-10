@@ -122,15 +122,8 @@ export default function HeroSection() {
       <MangoHero />
 
       <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-10 lg:px-16 pt-24 pb-[220px] sm:pb-[260px] lg:py-28 md:pt-28">
-        <motion.div
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.6 }}
-        >
-          <span className="text-paper-pure/75 text-sm sm:text-base tracking-[0.02em]">
-            Desarrollo web y tiendas Shopify · Colombia
-          </span>
-        </motion.div>
+        {/* Separador vacío: conserva la distribución vertical de la portada. */}
+        <div aria-hidden />
 
         <div className="my-8 md:my-10">
           <h1
