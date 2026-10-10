@@ -104,7 +104,7 @@ export default function MangoBot() {
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               style={{ transformOrigin: 'bottom right' }}
-              className="pointer-events-auto relative z-10 mb-16 sm:mb-24 -mr-10 sm:-mr-12 max-w-[190px] sm:max-w-[250px] rounded-2xl rounded-br-sm bg-paper-pure text-klein-deep shadow-[0_10px_30px_rgba(20,30,92,0.25)] ring-1 ring-klein-deep/10"
+              className="pointer-events-auto relative z-10 mb-20 sm:mb-28 -mr-[84px] sm:-mr-[108px] max-w-[190px] sm:max-w-[250px] rounded-2xl rounded-br-sm bg-paper-pure text-klein-deep shadow-[0_10px_30px_rgba(20,30,92,0.25)] ring-1 ring-klein-deep/10"
             >
               <button
                 type="button"
