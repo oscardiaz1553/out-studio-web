@@ -90,7 +90,7 @@ function CloseTag({ color }: { color: string }) {
   );
 }
 
-export const SERVICE_SCENES: ReactNode[] = [
+const SCENE_LIST: ReactNode[] = [
   // Tiendas Shopify: la fruta que se vende, entre llaves.
   <Scene key="shopify" bg={CREMA}>
     <Pair kind="curly" size="34cqw" color="#1B2FCC" className="absolute left-1/2 top-[7%] -translate-x-1/2" />
@@ -179,3 +179,14 @@ export const SERVICE_SCENES: ReactNode[] = [
     />
   </Scene>,
 ];
+
+// Cada lámina por clave, para usarla en el hover de Servicios y en la cabecera
+// de la página de cada servicio.
+export const SCENES: Record<string, ReactNode> = {
+  shopify: SCENE_LIST[0],
+  wordpress: SCENE_LIST[1],
+  landing: SCENE_LIST[2],
+  branding: SCENE_LIST[3],
+  apps: SCENE_LIST[4],
+  soporte: SCENE_LIST[5],
+};

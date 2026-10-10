@@ -17,7 +17,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 // Promesa + palabra rotativa: "Hacemos que tu [marca] sea imposible de
 // ignorar." Cada rotación se lee completa y apunta a un servicio real
 // (tienda, sitio, app, marca). El texto completo vive en un sr-only.
-const SUBJECTS = ['marca', 'tienda online', 'sitio web', 'negocio', 'app'];
+const SUBJECTS = ['marca', 'tienda online', 'sitio web', 'negocio'];
 const SR_HEADLINE = `Desarrollo web y tiendas Shopify en Colombia. Hacemos que tu ${SUBJECTS.join(', tu ')} sea imposible de ignorar.`;
 
 /** El mango partido: el objeto de siempre de la marca, grande a un lado. Flota
@@ -185,7 +185,7 @@ export default function HeroSection() {
               className="text-paper-pure/90 leading-relaxed text-base sm:text-lg"
             >
               Diseño y desarrollo a medida, con código propio: tiendas
-              Shopify, sitios WordPress, apps y branding pensados para
+              Shopify, sitios WordPress, landing pages y branding pensados para
               convertir visitas en clientes.
             </motion.p>
 

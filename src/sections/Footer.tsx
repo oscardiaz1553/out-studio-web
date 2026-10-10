@@ -26,9 +26,9 @@ export default function Footer() {
             <a href={`${import.meta.env.BASE_URL}servicios/tiendas-shopify/`}>Tiendas Shopify</a>
             <a href={`${import.meta.env.BASE_URL}servicios/sitios-wordpress/`}>Sitios WordPress</a>
             <a href={`${import.meta.env.BASE_URL}servicios/landing-pages/`}>Landing pages</a>
-            <a href={`${import.meta.env.BASE_URL}servicios/apps-y-software-a-medida/`}>Apps y software</a>
             <a href={`${import.meta.env.BASE_URL}servicios/branding/`}>Branding</a>
             <a href={`${import.meta.env.BASE_URL}proyectos.html`}>Proyectos</a>
+            <a href={`${import.meta.env.BASE_URL}blog/`}>Blog</a>
             <a href="#contacto">Contacto</a>
           </nav>
 

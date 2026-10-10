@@ -1,4 +1,7 @@
+import { motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import AccentButton from '../components/AccentButton';
+import { SCENES } from '../components/ServiceScenes';
 import ScrollToTop from '../components/ScrollToTop';
 import SiteNav from '../components/SiteNav';
 import data from '../data/services.json';
@@ -14,6 +17,101 @@ const STEPS = [
   { verb: 'Lanzamos', text: 'Probamos todo antes de salir: velocidad, SEO técnico, pagos y formularios funcionando.' },
   { verb: 'Seguimos', text: 'No desaparecemos después del lanzamiento: soporte, ajustes y mejoras continuas.' },
 ];
+
+/** Ruta de navegación cuyo último paso es un selector: desde una página de
+ *  servicio se salta directo a cualquier otro servicio. */
+function ServiceSwitcher({ current }: { current: ServiceData }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('pointerdown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative inline-block">
+      <button
+        type="button"
+        aria-haspopup="true"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        className="inline-flex items-center gap-1.5 rounded-full bg-paper-pure/15 hover:bg-paper-pure/25 px-3 py-1 text-paper-pure font-medium transition-colors"
+      >
+        <span aria-current="page">{current.nav}</span>
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          aria-hidden
+          className={`transition-transform ${open ? 'rotate-180' : ''}`}
+        >
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {open && (
+        <ul className="absolute left-0 top-full mt-2 z-30 min-w-[230px] rounded-2xl bg-paper-pure text-klein-deep shadow-[0_18px_50px_rgba(10,14,50,0.35)] ring-1 ring-klein-deep/10 p-2">
+          {data.pages.map((p) => (
+            <li key={p.slug}>
+              <a
+                href={servicePath(p.slug)}
+                aria-current={p.slug === current.slug ? 'page' : undefined}
+                className={`block rounded-xl px-4 py-2.5 text-sm transition-colors ${
+                  p.slug === current.slug
+                    ? 'bg-klein text-paper-pure font-medium'
+                    : 'hover:bg-klein-deep/5 text-klein-deep'
+                }`}
+              >
+                {p.nav}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** La lámina del servicio (la misma del hover de la portada), grande y con
+ *  un vaivén suave. */
+function SceneCard({ page }: { page: ServiceData }) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <motion.div
+      aria-hidden
+      initial={reduceMotion ? false : { opacity: 0, y: 30, rotate: 0 }}
+      animate={
+        reduceMotion
+          ? { rotate: page.tilt }
+          : { opacity: 1, y: [0, -10, 0], rotate: page.tilt }
+      }
+      transition={
+        reduceMotion
+          ? undefined
+          : {
+              opacity: { duration: 0.6 },
+              rotate: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+              y: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.8 },
+            }
+      }
+      className="relative w-[min(70vw,250px)] sm:w-[280px] lg:w-[340px] aspect-[4/5] rounded-[28px] overflow-hidden ring-[6px] ring-paper-pure shadow-[0_30px_80px_rgba(10,14,50,0.45)] bg-paper-pure"
+      style={{ containerType: 'inline-size' }}
+    >
+      {SCENES[page.scene]}
+    </motion.div>
+  );
+}
 
 /**
  * Página de servicio (una por servicio): contenido real y específico para
@@ -32,13 +130,14 @@ export default function ServicePage({ page }: { page: ServiceData }) {
         data-nav-bg="dark"
         className="relative overflow-hidden bg-klein text-paper-pure px-6 md:px-10 lg:px-16 pt-32 sm:pt-40 pb-16 sm:pb-24"
       >
-        <div className="max-w-[1100px] mx-auto">
-          <nav aria-label="Ruta de navegación" className="text-sm text-paper-pure/75 mb-6">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1.25fr_0.75fr] gap-12 lg:gap-10 items-center">
+          <div>
+          <nav aria-label="Ruta de navegación" className="text-sm text-paper-pure/75 mb-6 flex flex-wrap items-center">
             <a href={HOME} className="hover:text-paper-pure underline-offset-4 hover:underline">Inicio</a>
             <span aria-hidden className="mx-2">/</span>
             <a href={`${HOME}#servicios`} className="hover:text-paper-pure underline-offset-4 hover:underline">Servicios</a>
             <span aria-hidden className="mx-2">/</span>
-            <span aria-current="page" className="text-paper-pure">{page.nav}</span>
+            <ServiceSwitcher current={page} />
           </nav>
           <h1
             className="font-display font-extrabold tracking-[-0.04em] leading-[1] max-w-[22ch]"
@@ -59,6 +158,10 @@ export default function ServicePage({ page }: { page: ServiceData }) {
             >
               Ver proyectos
             </a>
+          </div>
+          </div>
+          <div className="flex justify-center lg:justify-end">
+            <SceneCard page={page} />
           </div>
         </div>
       </header>
@@ -181,6 +284,7 @@ export default function ServicePage({ page }: { page: ServiceData }) {
               </a>
             ))}
             <a href={`${HOME}proyectos.html`} className="hover:text-klein">Proyectos</a>
+            <a href={`${HOME}blog/`} className="hover:text-klein">Blog</a>
             <a href={`${HOME}contacto.html`} className="hover:text-klein">Contacto</a>
           </nav>
           <p>© 2026 Out Studio. Colombia.</p>

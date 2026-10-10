@@ -1,6 +1,6 @@
 import TitleFrame from '../components/TitleFrame';
 import WordStage from '../components/WordStage';
-import { SERVICE_SCENES } from '../components/ServiceScenes';
+import { SCENES } from '../components/ServiceScenes';
 import {
   motion,
   useMotionValue,
@@ -18,6 +18,7 @@ import RevealText from '../components/RevealText';
 const SERVICES = [
   {
     name: 'Tiendas Shopify',
+    scene: 'shopify',
     slug: 'tiendas-shopify',
     description:
       'Tu tienda vendiendo desde el primer día, no cuando por fin quede lista.',
@@ -25,6 +26,7 @@ const SERVICES = [
   },
   {
     name: 'Sitios WordPress',
+    scene: 'wordpress',
     slug: 'sitios-wordpress',
     description:
       'Una web profesional que actualizas tú mismo, sin depender de nadie.',
@@ -32,6 +34,7 @@ const SERVICES = [
   },
   {
     name: 'Landing Pages',
+    scene: 'landing',
     slug: 'landing-pages',
     description:
       'Páginas de campaña con un solo objetivo: que la gente actúe.',
@@ -39,20 +42,15 @@ const SERVICES = [
   },
   {
     name: 'Branding',
+    scene: 'branding',
     slug: 'branding',
     description:
       'Logo e identidad visual con carácter: que te reconozcan a la primera.',
     tilt: 4,
   },
   {
-    name: 'Apps & Integraciones',
-    slug: 'apps-y-software-a-medida',
-    description:
-      'Productos a medida y herramientas conectadas para que el trabajo repetitivo se haga solo.',
-    tilt: -2,
-  },
-  {
     name: 'Soporte & Optimización',
+    scene: 'soporte',
     slug: 'desarrollo-web',
     description: 'No desaparecemos después del lanzamiento. Seguimos contigo.',
     tilt: 3,
@@ -105,7 +103,7 @@ export default function ServicesSection() {
 
         <p className="mt-4 max-w-[62ch] text-ink-2 leading-relaxed text-base sm:text-lg">
           Hacemos desarrollo web a medida para negocios de toda Colombia: tiendas
-          Shopify y e-commerce, sitios WordPress, landing pages, apps y branding,
+          Shopify y e-commerce, sitios WordPress, landing pages y branding,
           con código propio.{' '}
           <a href={`${HOME}servicios/desarrollo-web/`} className="text-klein font-medium underline underline-offset-4">
             Ver todo el desarrollo web
@@ -170,7 +168,7 @@ export default function ServicesSection() {
                   className="relative w-[240px] lg:w-[280px] aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_24px_60px_rgba(20,30,92,0.35)] ring-4 ring-paper-pure bg-paper-pure"
                   style={{ containerType: 'inline-size' }}
                 >
-                  {SERVICE_SCENES.map((scene, i) => (
+                  {SERVICES.map((svc, i) => (
                     <div
                       key={i}
                       aria-hidden
@@ -178,7 +176,7 @@ export default function ServicesSection() {
                         active === i ? 'opacity-100' : 'opacity-0'
                       }`}
                     >
-                      {scene}
+                      {SCENES[svc.scene]}
                     </div>
                   ))}
                 </motion.div>

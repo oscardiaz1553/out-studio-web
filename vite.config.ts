@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 
 // Una página de entrada por servicio (ver src/data/services.json).
 const services = JSON.parse(
@@ -13,6 +13,18 @@ const servicePages = Object.fromEntries(
     fileURLToPath(new URL(`./servicios/${s.slug}/index.html`, import.meta.url)),
   ]),
 );
+
+// El blog: un índice y una página por artículo (ver content/blog/).
+const blogPages = Object.fromEntries([
+  ['blog', fileURLToPath(new URL('./blog/index.html', import.meta.url))],
+  ...readdirSync(new URL('./content/blog', import.meta.url))
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => f.replace(/\.md$/, ''))
+    .map((slug) => [
+      `blog-${slug}`,
+      fileURLToPath(new URL(`./blog/${slug}/index.html`, import.meta.url)),
+    ]),
+]);
 
 export default defineConfig({
   // Dominio propio (out-studio.net): el sitio vive en la raíz.
@@ -28,6 +40,7 @@ export default defineConfig({
         proyectos: fileURLToPath(new URL('./proyectos.html', import.meta.url)),
         cotizar: fileURLToPath(new URL('./cotizar.html', import.meta.url)),
         ...servicePages,
+        ...blogPages,
       },
     },
   },

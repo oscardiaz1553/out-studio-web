@@ -12,16 +12,15 @@
       "slug": "desarrollo-web",
       "nav": "Desarrollo web",
       "metaTitle": "Desarrollo web a medida en Colombia | Out Studio",
-      "metaDescription": "Desarrollo web a medida en Colombia: tiendas Shopify, sitios WordPress, landing pages y apps con código propio. Cotización a la medida en 24 a 48 horas.",
+      "metaDescription": "Desarrollo web a medida en Colombia: tiendas Shopify, e-commerce, sitios WordPress y landing pages con código propio. Cotización a la medida en 24 a 48 horas.",
       "h1": "Desarrollo web a medida en Colombia",
-      "lead": "Diseñamos y desarrollamos sitios web, tiendas online y aplicaciones con código propio, sin plantillas, para negocios y marcas de toda Colombia. Cada proyecto parte de un objetivo claro: que quien llega compre, escriba o reserve.",
+      "lead": "Diseñamos y desarrollamos sitios web y tiendas online con código propio, sin plantillas, para negocios y marcas de toda Colombia. Cada proyecto parte de un objetivo claro: que quien llega compre, escriba o reserve.",
       "includesTitle": "Qué podemos construir",
       "includes": [
         "Tiendas Shopify y e-commerce listas para vender desde el primer día",
         "Sitios web corporativos, portafolios, catálogos y blogs en WordPress",
         "Landing pages de campaña pensadas para convertir",
-        "Aplicaciones, plataformas y paneles internos a medida",
-        "Integraciones y automatizaciones entre tus herramientas",
+        "Soporte, mantenimiento y optimización después del lanzamiento",
         "Identidad visual y branding para que te reconozcan a la primera"
       ],
       "whyTitle": "Por qué código propio y no plantillas",
@@ -29,7 +28,7 @@
         "Una plantilla te obliga a adaptar tu negocio a su diseño. Con código propio es al revés: el sitio se construye alrededor de tu marca, de lo que vendes y de cómo compran tus clientes.",
         "Además es más rápido, más limpio y más fácil de hacer crecer: sin código de sobra, sin funciones que no usas y sin depender de que un tercero actualice un tema."
       ],
-      "forWho": "Negocios, marcas y emprendedores que quieren un sitio web profesional, una tienda online o una herramienta digital hecha para su caso, y que buscan un equipo que los acompañe desde la idea hasta después del lanzamiento.",
+      "forWho": "Negocios, marcas y emprendedores que quieren un sitio web profesional o una tienda online hecha para su caso, y que buscan un equipo que los acompañe desde la idea hasta después del lanzamiento.",
       "faq": [
         {
           "q": "¿Cuánto cuesta un sitio web?",
@@ -52,7 +51,14 @@
           "a": "Sí. En WordPress y Shopify te dejamos todo listo para administrarlo y, si lo necesitas, te capacitamos."
         }
       ],
-      "related": ["tiendas-shopify", "sitios-wordpress", "landing-pages", "apps-y-software-a-medida", "branding"]
+      "related": [
+        "tiendas-shopify",
+        "sitios-wordpress",
+        "landing-pages",
+        "branding"
+      ],
+      "scene": "apps",
+      "tilt": 3
     },
     {
       "slug": "tiendas-shopify",
@@ -98,7 +104,13 @@
           "a": "Sí, integramos tu tienda con herramientas de facturación electrónica, inventarios y otros sistemas, según lo que uses."
         }
       ],
-      "related": ["desarrollo-web", "landing-pages", "branding", "apps-y-software-a-medida"]
+      "related": [
+        "desarrollo-web",
+        "landing-pages",
+        "branding"
+      ],
+      "scene": "shopify",
+      "tilt": -4
     },
     {
       "slug": "sitios-wordpress",
@@ -139,7 +151,14 @@
           "a": "Sí, con WooCommerce. Si tu foco es vender, también te explicamos cuándo conviene más una tienda Shopify."
         }
       ],
-      "related": ["desarrollo-web", "tiendas-shopify", "landing-pages", "branding"]
+      "related": [
+        "desarrollo-web",
+        "tiendas-shopify",
+        "landing-pages",
+        "branding"
+      ],
+      "scene": "wordpress",
+      "tilt": 3
     },
     {
       "slug": "landing-pages",
@@ -157,10 +176,10 @@
       ],
       "whyTitle": "Menos ruido, más resultados",
       "why": [
-        "Una landing page no es una página de inicio resumida. Está pensada para una campaña concreta: captar contactos, vender un producto o servicio, promocionar un lanzamiento o una app.",
+        "Una landing page no es una página de inicio resumida. Está pensada para una campaña concreta: captar contactos, vender un producto o servicio o promocionar un lanzamiento.",
         "Si vas a pautar con Meta Ads o Google Ads, la landing es donde se gana o se pierde esa inversión. Por eso cuidamos el mensaje, la velocidad y la medición."
       ],
-      "forWho": "Negocios que van a lanzar una campaña, promocionar un producto o servicio, captar leads o presentar una app.",
+      "forWho": "Negocios que van a lanzar una campaña, promocionar un producto o servicio o captar contactos.",
       "faq": [
         {
           "q": "¿En qué se diferencia una landing de un sitio web?",
@@ -179,49 +198,14 @@
           "a": "Sí. La dejamos con pixel y analítica para que midas qué funciona y optimices tu pauta."
         }
       ],
-      "related": ["desarrollo-web", "tiendas-shopify", "sitios-wordpress", "branding"]
-    },
-    {
-      "slug": "apps-y-software-a-medida",
-      "nav": "Apps y software a medida",
-      "metaTitle": "Desarrollo de apps y software a medida | Out Studio",
-      "metaDescription": "Desarrollo de apps, plataformas y software a medida, de la idea al lanzamiento. Integraciones y automatizaciones que te quitan trabajo repetitivo.",
-      "h1": "Desarrollo de apps y software a medida",
-      "lead": "Aplicaciones, plataformas y sistemas desde cero, de la idea al lanzamiento. Y, si lo que buscas es quitarte trabajo repetitivo, integraciones y automatizaciones que conectan tus herramientas.",
-      "includesTitle": "Qué incluye el desarrollo a medida",
-      "includes": [
-        "Descubrimiento y definición del alcance",
-        "Diseño de interfaz y experiencia (UI/UX)",
-        "Desarrollo del producto",
-        "Pruebas y puesta en producción",
-        "Documentación y entrega",
-        "Integraciones y automatizaciones entre tus herramientas, con pruebas sobre datos reales"
+      "related": [
+        "desarrollo-web",
+        "tiendas-shopify",
+        "sitios-wordpress",
+        "branding"
       ],
-      "whyTitle": "De la idea al producto funcionando",
-      "why": [
-        "Si tienes una idea para una app web o móvil, una plataforma o un panel interno, nos sentamos contigo a definir qué debe hacer y construimos una primera versión para validarla.",
-        "También conectamos herramientas como tu tienda, CRM, facturación electrónica, WhatsApp Business u hojas de cálculo para que los procesos repetitivos se hagan solos."
-      ],
-      "forWho": "Emprendedores con una idea que validar, empresas que necesitan una plataforma o un panel interno, y equipos que quieren automatizar procesos manuales.",
-      "faq": [
-        {
-          "q": "¿Necesito saber de tecnología para empezar?",
-          "a": "No. Cuéntanos la idea con tus palabras: nosotros la traducimos en alcance, diseño y desarrollo."
-        },
-        {
-          "q": "¿Pueden construir un MVP para validar mi idea?",
-          "a": "Sí. Empezamos por lo esencial para que pruebes tu idea con usuarios reales antes de invertir en todo el producto."
-        },
-        {
-          "q": "¿Qué tipo de automatizaciones hacen?",
-          "a": "Conexiones entre herramientas como tiendas en línea, CRM, facturación electrónica, WhatsApp Business, hojas de cálculo y correo, para evitar copiar y pegar datos a mano."
-        },
-        {
-          "q": "¿Incluyen inteligencia artificial?",
-          "a": "Cuando aporta valor al producto, sí. Lo evaluamos contigo durante la definición del alcance."
-        }
-      ],
-      "related": ["desarrollo-web", "tiendas-shopify", "landing-pages", "branding"]
+      "scene": "landing",
+      "tilt": -3
     },
     {
       "slug": "branding",
@@ -258,7 +242,14 @@
           "a": "Sí. Podemos llevar la identidad al diseño de tu sitio, tu tienda Shopify, tus redes y tus piezas impresas."
         }
       ],
-      "related": ["desarrollo-web", "sitios-wordpress", "tiendas-shopify", "landing-pages"]
+      "related": [
+        "desarrollo-web",
+        "sitios-wordpress",
+        "tiendas-shopify",
+        "landing-pages"
+      ],
+      "scene": "branding",
+      "tilt": 4
     }
   ]
 }

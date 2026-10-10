@@ -2,7 +2,8 @@
 // servicio) con todo el SEO de <head>: título, descripción, canonical, Open
 // Graph, Twitter y datos estructurados (JSON-LD). La fuente del contenido de
 // los servicios es src/data/services.json. Ejecutar con: node scripts/gen-seo-pages.mjs
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { marked } from 'marked';
 
 const data = JSON.parse(readFileSync('src/data/services.json', 'utf8'));
 const { site, pages } = data;
@@ -22,7 +23,7 @@ const organization = {
   logo: `${site.url}/logo-out.png`,
   image: OG,
   description:
-    'Estudio de desarrollo web en Colombia: tiendas Shopify, e-commerce, sitios WordPress, landing pages, apps y branding a medida, con código propio.',
+    'Estudio de desarrollo web en Colombia: tiendas Shopify, e-commerce, sitios WordPress, landing pages y branding a medida, con código propio.',
   email: site.email,
   telephone: site.phone,
   slogan: 'Never the usual.',
@@ -57,7 +58,7 @@ const website = {
   publisher: { '@id': ORG_ID },
 };
 
-function head({ title, description, path, extra = [], robots = 'index, follow, max-image-preview:large' }) {
+function head({ title, description, path, extra = [], robots = 'index, follow, max-image-preview:large', type = 'website', meta = [] }) {
   const url = `${site.url}${path}`;
   return `<!doctype html>
 <html lang="es">
@@ -77,7 +78,7 @@ function head({ title, description, path, extra = [], robots = 'index, follow, m
     <link rel="apple-touch-icon" href="/favicon-180.png" />
     <meta property="og:site_name" content="${site.name}" />
     <meta property="og:locale" content="es_CO" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="${type}" />
     <meta property="og:title" content="${esc(title)}" />
     <meta property="og:description" content="${esc(description)}" />
     <meta property="og:url" content="${url}" />
@@ -89,13 +90,14 @@ function head({ title, description, path, extra = [], robots = 'index, follow, m
     <meta name="twitter:title" content="${esc(title)}" />
     <meta name="twitter:description" content="${esc(description)}" />
     <meta name="twitter:image" content="${OG}" />
+${meta.join('\n')}
 ${extra.join('\n')}
   </head>
 `;
 }
 
 const body = (entry, slug) => `  <body>
-    <div id="root"${slug ? ` data-slug="${slug}"` : ''}></div>
+    <div id="root"${slug !== undefined ? ` data-slug="${slug}"` : ''}></div>
     <script type="module" src="/src/${entry}.tsx"></script>
   </body>
 </html>
@@ -107,7 +109,7 @@ writeFileSync(
   head({
     title: 'Desarrollo web y tiendas Shopify en Colombia | Out Studio',
     description:
-      'Estudio de desarrollo web en Colombia: tiendas Shopify, e-commerce, sitios WordPress, landing pages y apps a medida con código propio. Cotiza en 24 a 48 h.',
+      'Estudio de desarrollo web en Colombia: tiendas Shopify, e-commerce, sitios WordPress, landing pages y branding a medida con código propio. Cotiza en 24 a 48 h.',
     path: '/',
     extra: [ld(organization), ld(website)],
   }) + body('main'),
@@ -119,7 +121,7 @@ writeFileSync(
   head({
     title: 'Proyectos de desarrollo web y tiendas online | Out Studio',
     description:
-      'Casos de Out Studio: sitios web, tiendas Shopify y apps desarrollados a medida para marcas y negocios en Colombia.',
+      'Casos de Out Studio: sitios web y tiendas Shopify desarrollados a medida para marcas y negocios en Colombia.',
     path: '/proyectos.html',
     extra: [
       ld({
@@ -138,7 +140,7 @@ writeFileSync(
   head({
     title: 'Contacto y cotización de proyectos web | Out Studio',
     description:
-      'Escríbenos para cotizar tu sitio web, tienda Shopify, landing page o app. Respondemos en 24 a 48 horas. Out Studio, Colombia.',
+      'Escríbenos para cotizar tu sitio web, tienda Shopify, landing page o tu marca. Respondemos en 24 a 48 horas. Out Studio, Colombia.',
     path: '/contacto.html',
     extra: [
       ld({
@@ -192,4 +194,110 @@ for (const p of pages) {
   mkdirSync(`servicios/${p.slug}`, { recursive: true });
   writeFileSync(`servicios/${p.slug}/index.html`, html);
 }
-console.log(`OK: portada, proyectos, contacto y ${pages.length} servicios`);
+// --- Blog: un archivo Markdown por artículo en content/blog/ (con un bloque
+// de datos al inicio: title, description, date, category, related).
+function parsePost(file) {
+  const raw = readFileSync(`content/blog/${file}`, 'utf8');
+  const m = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!m) throw new Error(`Falta el bloque de datos en ${file}`);
+  const meta = {};
+  for (const line of m[1].split('\n')) {
+    const i = line.indexOf(':');
+    if (i > 0) meta[line.slice(0, i).trim()] = line.slice(i + 1).trim().replace(/^"(.*)"$/, '$1');
+  }
+  const md = m[2].trim();
+  const words = md.split(/\s+/).length;
+  return {
+    slug: file.replace(/\.md$/, ''),
+    title: meta.title,
+    description: meta.description,
+    date: meta.date,
+    category: meta.category || 'Blog',
+    related: (meta.related || '').split(',').map((x) => x.trim()).filter(Boolean),
+    readingMin: Math.max(1, Math.round(words / 200)),
+    html: marked.parse(md),
+  };
+}
+const posts = readdirSync('content/blog')
+  .filter((f) => f.endsWith('.md'))
+  .map(parsePost)
+  .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.title.localeCompare(b.title)));
+writeFileSync('src/data/blog.json', JSON.stringify({ posts }, null, 2) + '\n');
+
+const author = { '@type': 'Person', name: 'Oscar Díaz', jobTitle: 'UX/UI Specialist y desarrollador WordPress y Shopify', url: `${site.url}/` };
+
+mkdirSync('blog', { recursive: true });
+writeFileSync(
+  'blog/index.html',
+  head({
+    title: 'Blog de desarrollo web y e-commerce | Out Studio',
+    description:
+      'Guías prácticas sobre tiendas online, Shopify, WordPress, pagos y diseño web para negocios en Colombia, escritas por el equipo de Out Studio.',
+    path: '/blog/',
+    extra: [
+      ld({
+        '@context': 'https://schema.org',
+        '@type': 'Blog',
+        name: 'Blog de Out Studio',
+        url: `${site.url}/blog/`,
+        inLanguage: 'es-CO',
+        publisher: { '@id': ORG_ID },
+        blogPost: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${site.url}/blog/${p.slug}/`, datePublished: p.date })),
+      }),
+      ld({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` },
+          { '@type': 'ListItem', position: 2, name: 'Blog', item: `${site.url}/blog/` },
+        ],
+      }),
+    ],
+  }) + body('blog', ''),
+);
+for (const p of posts) {
+  const url = `${site.url}/blog/${p.slug}/`;
+  mkdirSync(`blog/${p.slug}`, { recursive: true });
+  writeFileSync(
+    `blog/${p.slug}/index.html`,
+    head({
+      title: `${p.title} | Out Studio`.length <= 70 ? `${p.title} | Out Studio` : p.title,
+      description: p.description,
+      path: `/blog/${p.slug}/`,
+      type: 'article',
+      meta: [
+        `    <meta property="article:published_time" content="${p.date}" />`,
+        `    <meta property="article:author" content="Oscar Díaz" />`,
+        `    <meta property="article:section" content="${esc(p.category)}" />`,
+      ],
+      extra: [
+        ld({
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: p.title,
+          description: p.description,
+          url,
+          mainEntityOfPage: url,
+          datePublished: p.date,
+          dateModified: p.date,
+          inLanguage: 'es-CO',
+          image: OG,
+          articleSection: p.category,
+          author,
+          publisher: { '@id': ORG_ID },
+        }),
+        ld({
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` },
+            { '@type': 'ListItem', position: 2, name: 'Blog', item: `${site.url}/blog/` },
+            { '@type': 'ListItem', position: 3, name: p.title, item: url },
+          ],
+        }),
+      ],
+    }) + body('blog', p.slug),
+  );
+}
+
+console.log(`OK: portada, proyectos, contacto, ${pages.length} servicios y ${posts.length} artículos del blog`);
