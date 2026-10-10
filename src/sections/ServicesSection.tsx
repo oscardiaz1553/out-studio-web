@@ -130,7 +130,7 @@ export default function ServicesSection() {
             <a
               key={service.name}
               href={`${HOME}servicios/${service.slug}/`}
-              className="shrink-0 snap-start w-[78%] max-w-[320px] flex flex-col rounded-[24px] overflow-hidden bg-paper border border-klein-deep/15 active:scale-[0.99] transition-transform"
+              className="shrink-0 snap-start w-[78%] max-w-[320px] flex flex-col rounded-[24px] overflow-hidden bg-paper active:scale-[0.99] transition-transform"
             >
               <div
                 aria-hidden
