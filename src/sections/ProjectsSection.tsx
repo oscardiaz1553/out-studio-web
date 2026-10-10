@@ -20,7 +20,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const hasImage = Boolean(project.rightImage);
 
   return (
-    <article className="group flex flex-col shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] rounded-2xl overflow-hidden bg-klein-deep text-paper-pure">
+    <article className="group flex flex-col shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] rounded-2xl overflow-hidden bg-klein text-paper-pure">
       {hasImage ? (
         <ProjectMedia
           src={project.rightImage}
@@ -98,7 +98,7 @@ function Arrow({
       onClick={onClick}
       disabled={disabled}
       aria-label={dir === 'prev' ? 'Proyecto anterior' : 'Proyecto siguiente'}
-      className="w-11 h-11 rounded-full border border-paper-pure/40 text-paper-pure flex items-center justify-center transition hover:bg-paper-pure hover:text-klein disabled:opacity-30 disabled:pointer-events-none active:scale-95"
+      className="w-11 h-11 rounded-full border border-klein/40 text-klein flex items-center justify-center transition hover:bg-klein hover:text-paper-pure disabled:opacity-30 disabled:pointer-events-none active:scale-95"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
         <path
@@ -143,11 +143,11 @@ export default function ProjectsSection() {
   return (
     <section
       id="proyectos"
-      data-nav-bg="dark"
-      className="relative z-10 overflow-hidden bg-klein px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
+      className="relative z-10 overflow-hidden bg-carne px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <SymbolField
-        opacity={0.09}
+        color="#1B2FCC"
+        opacity={0.08}
         items={[
           { kind: 'curly', x: 94, y: 14, size: 'clamp(6rem, 13vw, 13rem)', rot: 8, dur: 14 },
           { kind: 'square', x: 4, y: 88, size: 'clamp(5rem, 11vw, 11rem)', rot: -6, dur: 12, delay: 2, desktopOnly: true },
@@ -155,18 +155,18 @@ export default function ProjectsSection() {
       />
       <div className="relative max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between gap-4 mb-8 sm:mb-10">
-          <TitleFrame kind="curly" tone="light" fontSize="clamp(2rem, 4vw, 3.4rem)">
+          <TitleFrame kind="curly" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText
               as="h2"
               text="Proyectos"
-              className="font-display font-semibold text-paper-pure tracking-[-0.035em]"
+              className="font-display font-semibold text-klein tracking-[-0.035em]"
               style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}
             />
           </TitleFrame>
           <div className="flex items-center gap-4 sm:gap-6">
             <a
               href={PROJECTS_URL}
-              className="text-carne font-medium text-sm sm:text-base hover:text-paper-pure transition-colors duration-200 whitespace-nowrap"
+              className="text-klein font-medium text-sm sm:text-base hover:underline underline-offset-4 whitespace-nowrap"
             >
               Ver todos
             </a>
