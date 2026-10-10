@@ -7,7 +7,8 @@ import { isPhone } from './IntroOverlay';
 // el lema. Es una sola pieza en vivo que se adapta al formato: en pantalla
 // ancha usa el encuadre horizontal y en el celular se reacomoda al alto.
 const BASE = import.meta.env.BASE_URL;
-const VIDEO = `${BASE}intro-movil.mp4`;
+const VIDEO_MP4 = `${BASE}intro-movil.mp4`;
+const VIDEO_WEBM = `${BASE}intro-movil.webm`;
 const POSTER = `${BASE}intro-movil-poster.webp`;
 
 /** En el celular: el video vertical liviano (la pieza en vivo es demasiado
@@ -15,7 +16,7 @@ const POSTER = `${BASE}intro-movil-poster.webp`;
 function FooterVideo() {
   const reduceMotion = useReducedMotion();
   const box = useRef<HTMLDivElement>(null);
-  const vid = useRef<HTMLVideoElement>(null);
+  const vid = useRef<HTMLVideoElement | null>(null);
   const inView = useInView(box, { amount: 0.6 });
 
   useEffect(() => {
@@ -33,15 +34,27 @@ function FooterVideo() {
       className="relative overflow-hidden rounded-2xl bg-klein aspect-[9/16] w-full max-w-[250px] mx-auto"
     >
       <video
-        ref={vid}
-        src={VIDEO}
+        ref={(el) => {
+          vid.current = el;
+          if (el) {
+            el.muted = true;
+            el.defaultMuted = true;
+            el.setAttribute('muted', '');
+            el.setAttribute('playsinline', '');
+          }
+        }}
         poster={POSTER}
         muted
         playsInline
         preload="none"
+        controls={false}
+        disablePictureInPicture
         aria-hidden
-        className="absolute inset-0 w-full h-full object-cover"
-      />
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      >
+        <source src={VIDEO_MP4} type="video/mp4" />
+        <source src={VIDEO_WEBM} type="video/webm" />
+      </video>
     </div>
   );
 }

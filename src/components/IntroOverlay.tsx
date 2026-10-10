@@ -10,7 +10,8 @@ const SRC = `${BASE}intro/index.html?nowords=1&speed=${SPEED}`;
 // En el celular NO se corre la animación en vivo (capas gigantes que hacen
 // que el navegador del teléfono se quede sin memoria y recargue la página):
 // se reproduce el video vertical, liviano.
-const VIDEO = `${BASE}intro-movil.mp4`;
+const VIDEO_MP4 = `${BASE}intro-movil.mp4`;
+const VIDEO_WEBM = `${BASE}intro-movil.webm`;
 const POSTER = `${BASE}intro-movil-poster.webp`;
 
 export function isPhone(): boolean {
@@ -52,7 +53,7 @@ export default function IntroOverlay({
   const [open, setOpen] = useState(true);
   const finished = useRef(false);
   const phone = useRef(isPhone()).current;
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const finish = () => {
     if (finished.current) return;
@@ -87,6 +88,15 @@ export default function IntroOverlay({
     const v = videoRef.current;
     const onPlaying = () => window.clearTimeout(readyTimer);
     v?.addEventListener('playing', onPlaying);
+    // Arranca ya. Si el teléfono bloquea la reproducción automática (ahorro de
+    // batería), NO se pide un toque: se salta la apertura.
+    if (v) {
+      v.muted = true;
+      const pr = v.play();
+      // Sólo el bloqueo real (NotAllowedError) salta la apertura; un AbortError
+      // (el navegador cambió de fuente de video) no es un fallo.
+      if (pr) pr.catch((err: { name?: string }) => err?.name === 'NotAllowedError' && finish());
+    }
 
     window.addEventListener('message', onMsg);
     window.addEventListener('keydown', onKey);
@@ -114,18 +124,36 @@ export default function IntroOverlay({
         >
           {phone ? (
             <video
-              ref={videoRef}
-              src={VIDEO}
+              ref={(el) => {
+                videoRef.current = el;
+                // React no refleja `muted` como atributo del DOM, y Safari lo
+                // exige para dejar arrancar solo: se fija a mano.
+                if (el) {
+                  el.muted = true;
+                  el.defaultMuted = true;
+                  el.setAttribute('muted', '');
+                  el.setAttribute('playsinline', '');
+                  el.setAttribute('webkit-playsinline', '');
+                }
+              }}
               poster={POSTER}
               autoPlay
               muted
               playsInline
               preload="auto"
+              controls={false}
+              disablePictureInPicture
+              disableRemotePlayback
               aria-hidden
-              onEnded={() => window.setTimeout(finish, 500)}
-              onError={finish}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
+              onEnded={() => window.setTimeout(finish, 400)}
+              // Sin onError: React lo dispara también cuando falla una <source>
+              // (p. ej. un navegador sin H.264 antes de pasar al webm). Si ninguna
+              // fuente sirve, el temporizador de arranque cierra la apertura.
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            >
+              <source src={VIDEO_MP4} type="video/mp4" />
+              <source src={VIDEO_WEBM} type="video/webm" />
+            </video>
           ) : (
             <iframe
               src={SRC}

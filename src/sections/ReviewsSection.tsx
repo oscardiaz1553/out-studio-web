@@ -260,9 +260,20 @@ export default function ReviewsSection() {
   return (
     <section
       id="resenas"
-      className="bg-paper-pure border-t border-klein-deep/15 px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
+      className="relative overflow-hidden bg-paper-pure border-t border-klein-deep/15 px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
-      <div className="max-w-[1400px] mx-auto">
+      {/* El mono asoma por el borde: la mascota de Out, junto a lo que dicen
+          los clientes. Sólo en pantallas medianas y grandes. */}
+      <img
+        src={`${import.meta.env.BASE_URL}mono-asoma.webp`}
+        alt=""
+        aria-hidden
+        width={1200}
+        height={900}
+        loading="lazy"
+        className="hidden md:block absolute right-[-10px] bottom-[-24px] w-[min(42vw,560px)] h-auto pointer-events-none select-none"
+      />
+      <div className="relative max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-4 mb-3">
           <TitleFrame kind="square" tone="warm" fontSize="clamp(2rem, 4vw, 3.4rem)">
             <RevealText

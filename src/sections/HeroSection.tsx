@@ -10,7 +10,7 @@ import MorphBrackets from '../components/MorphBrackets';
 import Magnetic from '../components/Magnetic';
 import RotatingWord from '../components/RotatingWord';
 
-const MONO = `${import.meta.env.BASE_URL}mono-asoma.webp`;
+const MANGO = `${import.meta.env.BASE_URL}mango-hero.webp`;
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -20,54 +20,56 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 const SUBJECTS = ['marca', 'tienda online', 'sitio web', 'negocio', 'app'];
 const SR_HEADLINE = `Hacemos que tu ${SUBJECTS.join(', tu ')} sea imposible de ignorar.`;
 
-/** El mono aullador agarrado del borde de la portada: la imagen sangra por
- *  el borde derecho y el inferior (se pasa unos píxeles de la pantalla), así
- *  la mano queda realmente "agarrada" y nunca se ve un corte ni una
- *  separación. Se inclina hacia el mouse girando sobre su esquina de agarre,
- *  de modo que los bordes siguen pegados al encuadre. */
-function MonoHero() {
+/** El mango partido: el objeto de siempre de la marca, grande a un lado. Flota
+ *  despacio y se desplaza un poco con el mouse (parallax; en táctil queda
+ *  quieto). En escritorio sangra por el borde derecho; en el celular se
+ *  apoya abajo a la derecha. */
+function MangoHero() {
   const reduceMotion = useReducedMotion();
-  const tilt = useMotionValue(0);
-  const rotate = useSpring(tilt, { stiffness: 70, damping: 16 });
+  const px = useMotionValue(0);
+  const py = useMotionValue(0);
+  const x = useSpring(px, { stiffness: 80, damping: 18 });
+  const y = useSpring(py, { stiffness: 80, damping: 18 });
 
   useEffect(() => {
     if (reduceMotion) return;
     const onMove = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
-      // Máximo ±1°: lo que se abre en los bordes lo cubre el sangrado.
-      tilt.set((e.clientX / window.innerWidth - 0.5) * -2);
+      px.set((e.clientX / window.innerWidth - 0.5) * -34);
+      py.set((e.clientY / window.innerHeight - 0.5) * -26);
     };
     window.addEventListener('pointermove', onMove);
     return () => window.removeEventListener('pointermove', onMove);
-  }, [reduceMotion, tilt]);
+  }, [reduceMotion, px, py]);
 
   return (
     <motion.div
       aria-hidden
-      className="absolute right-[-10px] bottom-[-24px] z-[2] w-[min(82vw,420px)] sm:w-[min(60vw,560px)] lg:w-[min(52vw,780px)] pointer-events-none select-none"
-      style={{ rotate, transformOrigin: '100% 100%' }}
+      className="absolute z-[2] pointer-events-none select-none right-[-20%] bottom-[-2%] w-[min(70vw,340px)] sm:right-[-9%] sm:bottom-auto sm:top-[16%] sm:w-[clamp(300px,37vw,620px)]"
+      style={{ x, y }}
     >
       <motion.img
-        src={MONO}
+        src={MANGO}
         alt=""
-        width={1200}
-        height={900}
+        width={1147}
+        height={930}
         loading="eager"
         className="w-full h-auto"
-        style={{ transformOrigin: '100% 100%' }}
-        initial={{ opacity: 0, x: 90 }}
+        style={{ filter: 'drop-shadow(0 40px 70px rgba(10,14,50,0.45))' }}
+        initial={{ opacity: 0, scale: 0.82, rotate: -8 }}
         animate={
           reduceMotion
-            ? { opacity: 1, x: 0 }
-            : { opacity: 1, x: 0, rotate: [0, -0.8, 0, 0.8, 0] }
+            ? { opacity: 1, scale: 1, rotate: -4 }
+            : { opacity: 1, scale: 1, rotate: -4, y: [0, -14, 0] }
         }
         transition={
           reduceMotion
-            ? { delay: 0.3, duration: 0.8, ease: EASE }
+            ? { delay: 0.3, duration: 0.9, ease: EASE }
             : {
-                opacity: { delay: 0.3, duration: 0.8, ease: EASE },
-                x: { delay: 0.3, duration: 0.9, ease: EASE },
-                rotate: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1.4 },
+                opacity: { delay: 0.3, duration: 0.9, ease: EASE },
+                scale: { delay: 0.3, duration: 0.9, ease: EASE },
+                rotate: { delay: 0.3, duration: 0.9, ease: EASE },
+                y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1.2 },
               }
         }
       />
@@ -97,7 +99,7 @@ function ScrollCue() {
 
 /**
  * Hero estilo "Huge": tipografía enorme dominando el fold, sobre azul Klein
- * sólido con el mono aullador asomándose por el borde derecho. La
+ * sólido con el mango partido a un lado. La
  * promesa es el titular ("Hacemos que tu [marca] sea imposible de ignorar"),
  * con la palabra central rotando entre lo que Out hace. Un solo CTA primario
  * (cotizar) y uno secundario (ver proyectos). Decorativo vía aria-hidden, con la frase
@@ -109,15 +111,15 @@ export default function HeroSection() {
       data-nav-bg="dark"
       className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-klein"
     >
-      {/* Los símbolos de la marca cambiando de forma, de fondo; el mono los
-          corta por abajo. */}
+      {/* Los símbolos de la marca cambiando de forma, de fondo; el mango queda
+          por delante. */}
       <MorphBrackets className="absolute z-[1] right-[-4%] top-[6%] w-[70%] sm:w-[58%] lg:w-[50%] opacity-[0.17] sm:opacity-[0.24]" />
       <div
         aria-hidden
         className="absolute inset-0 bg-gradient-to-b from-klein-deep/40 via-transparent to-klein-deep/55 pointer-events-none"
       />
 
-      <MonoHero />
+      <MangoHero />
 
       <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-10 lg:px-16 pt-24 pb-[220px] sm:pb-[260px] lg:py-28 md:pt-28">
         <motion.div
