@@ -55,24 +55,6 @@ export const PROJECTS: Project[] = [
   },
   {
     number: '03',
-    name: 'Rugs N Home',
-    type: 'Web',
-    status: 'in-progress',
-    summary:
-      'Tienda en línea para una marca de alfombras y decoración para el hogar.',
-    url: 'https://rugsnhome.mx',
-  },
-  {
-    number: '04',
-    name: 'Eticolor',
-    type: 'Web',
-    status: 'launched',
-    summary: 'Sitio web para Eticolor, en línea y funcionando.',
-    url: 'https://eticolor.com',
-    featured: true,
-  },
-  {
-    number: '05',
     name: 'Habla Deportes',
     type: 'Web',
     status: 'in-progress',
@@ -81,15 +63,7 @@ export const PROJECTS: Project[] = [
     url: 'https://habladeportes.co',
   },
   {
-    number: '06',
-    name: 'La Mejor Estación',
-    type: 'Web',
-    status: 'in-progress',
-    summary: 'Sitio web para una estación de radio, de principio a fin.',
-    url: 'https://www.lamejorestacion.com.co',
-  },
-  {
-    number: '07',
+    number: '04',
     name: 'Maison Caviar',
     type: 'Web',
     status: 'launched',
@@ -97,7 +71,7 @@ export const PROJECTS: Project[] = [
     url: 'https://maisoncaviar.com.co',
   },
   {
-    number: '08',
+    number: '05',
     name: 'Volta',
     type: 'Web',
     status: 'launched',
