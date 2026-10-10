@@ -20,52 +20,46 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const hasImage = Boolean(project.rightImage);
 
   return (
-    <article className="group flex flex-col shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] rounded-2xl overflow-hidden bg-klein text-paper-pure">
+    <article className="group flex flex-col shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] rounded-2xl overflow-hidden bg-paper-pure text-klein-deep shadow-[0_12px_40px_rgba(20,30,92,0.10)]">
       {hasImage ? (
         <ProjectMedia
           src={project.rightImage}
           alt={`${project.name}, vista principal`}
           label={project.name.charAt(0)}
-          className="w-full h-40 sm:h-64 object-cover"
+          className="w-full h-40 sm:h-56 object-cover"
         />
       ) : (
-        <div className="relative h-40 sm:h-64 overflow-hidden flex items-end p-6 sm:p-7">
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-[0.12]"
-            style={{
-              backgroundImage: `url(${AZULEJO})`,
-              backgroundSize: '170%',
-              backgroundPosition: `${index * 33}% 40%`,
-            }}
-          />
-          <p
-            className="relative font-display font-extrabold tracking-[-0.045em] leading-[0.95]"
-            style={{ fontSize: 'clamp(2.2rem, 4.4vw, 3.6rem)' }}
-          >
-            {project.name}
-          </p>
-        </div>
+        // Sin capturas: una franja del azulejo de la marca, en su color.
+        <div
+          aria-hidden
+          className="h-36 sm:h-48"
+          style={{
+            backgroundImage: `url(${AZULEJO})`,
+            backgroundSize: '150%',
+            backgroundPosition: `${index * 33}% 40%`,
+          }}
+        />
       )}
 
-      <div className="flex flex-1 flex-col gap-3 p-6 sm:p-7 border-t border-paper-pure/10">
+      <div className="flex flex-1 flex-col gap-3 p-6 sm:p-7">
         <div className="flex items-center gap-2.5 flex-wrap">
-          <span className="text-[11px] tracking-[0.06em] text-carne">
+          <span className="text-[11px] tracking-[0.06em] text-carne-tinta">
             {categoryLabel(project.type)}
           </span>
           {project.status === 'in-progress' && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-carne/40 px-2.5 py-0.5 text-[10px] font-medium text-carne">
-              <span className="w-1.5 h-1.5 rounded-full bg-carne" />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-carne px-2.5 py-0.5 text-[10px] font-medium text-klein-deep">
+              <span className="w-1.5 h-1.5 rounded-full bg-carne-deep" />
               En desarrollo
             </span>
           )}
         </div>
-        {hasImage && (
-          <h3 className="font-display font-semibold text-xl tracking-[-0.02em]">
-            {project.name}
-          </h3>
-        )}
-        <p className="text-paper-pure/80 leading-relaxed text-sm sm:text-base">
+        <h3
+          className="font-display font-extrabold text-klein tracking-[-0.04em] leading-[0.95]"
+          style={{ fontSize: 'clamp(1.9rem, 3.2vw, 2.8rem)' }}
+        >
+          {project.name}
+        </h3>
+        <p className="text-ink-2 leading-relaxed text-sm sm:text-base">
           {project.summary}
         </p>
         {live && (
@@ -73,7 +67,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             href={project.url}
             target="_blank"
             rel="noreferrer"
-            className="mt-auto pt-2 self-start font-medium text-carne hover:text-paper-pure transition-colors duration-200"
+            className="mt-auto pt-2 self-start font-medium text-klein underline underline-offset-4 decoration-klein/30 hover:decoration-klein transition-colors duration-200"
           >
             Ver sitio
           </a>
