@@ -20,7 +20,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const hasImage = Boolean(project.rightImage);
 
   return (
-    <article className="group flex flex-col shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] rounded-2xl overflow-hidden bg-paper-pure text-klein-deep shadow-[0_12px_40px_rgba(20,30,92,0.10)]">
+    <article className="group flex flex-col shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] rounded-2xl overflow-hidden bg-paper-pure text-klein-deep shadow-[0_2px_6px_rgba(20,30,92,0.06),0_18px_44px_rgba(20,30,92,0.12)]">
       {hasImage ? (
         <ProjectMedia
           src={project.rightImage}
@@ -137,11 +137,11 @@ export default function ProjectsSection() {
   return (
     <section
       id="proyectos"
-      className="relative z-10 overflow-hidden bg-carne px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
+      className="relative z-10 overflow-hidden bg-paper-pure border-t border-klein-deep/15 px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <SymbolField
         color="#1B2FCC"
-        opacity={0.08}
+        opacity={0.06}
         items={[
           { kind: 'curly', x: 94, y: 14, size: 'clamp(6rem, 13vw, 13rem)', rot: 8, dur: 14 },
           { kind: 'square', x: 4, y: 88, size: 'clamp(5rem, 11vw, 11rem)', rot: -6, dur: 12, delay: 2, desktopOnly: true },
@@ -178,7 +178,7 @@ export default function ProjectsSection() {
             tabIndex={0}
             role="region"
             aria-label="Carrusel de proyectos"
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-px-6 md:scroll-px-10 lg:scroll-px-[max(4rem,calc((100vw-1400px)/2))] overscroll-x-contain pb-2 [&::-webkit-scrollbar]:hidden"
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-px-6 md:scroll-px-10 lg:scroll-px-[max(4rem,calc((100vw-1400px)/2))] overscroll-x-contain pt-4 pb-14 -mt-4 -mb-12 [&::-webkit-scrollbar]:hidden"
             // A todo el ancho de la pantalla: la pista sale del contenedor hasta los
             // bordes y el relleno deja la primera tarjeta alineada con el título.
             style={{
