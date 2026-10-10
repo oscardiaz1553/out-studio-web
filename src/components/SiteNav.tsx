@@ -91,9 +91,36 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
         ))}
       </nav>
 
-      <AccentButton href={QUOTE_URL} onBlue onClick={onClose} className="self-start">
-        Cotiza tu proyecto
-      </AccentButton>
+      {/* La acción principal del menú: a todo el ancho, en crema. */}
+      <motion.div
+        initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.34, type: 'spring', stiffness: 240, damping: 22 }}
+        className="flex flex-col items-center gap-2.5"
+      >
+        <motion.a
+          href={QUOTE_URL}
+          onClick={onClose}
+          whileTap={{ scale: 0.97 }}
+          className="w-full flex items-center justify-between gap-4 rounded-full bg-carne pl-7 pr-2 py-2 shadow-[0_16px_40px_rgba(245,227,179,0.22)]"
+        >
+          <span className="font-display font-extrabold tracking-[-0.03em] text-klein-deep text-[clamp(1.1rem,5.6vw,1.4rem)] leading-none whitespace-nowrap">
+            Cotiza tu proyecto
+          </span>
+          <span className="w-12 h-12 shrink-0 rounded-full bg-klein text-paper-pure flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path
+                d="M5 12h14M13 6l6 6-6 6"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </motion.a>
+        <span className="text-xs text-paper-pure/65">Respuesta en 6 a 24 horas</span>
+      </motion.div>
     </motion.div>
   );
 }
