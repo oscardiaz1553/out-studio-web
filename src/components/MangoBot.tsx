@@ -2,7 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { MangoChat, useChatState } from './MangoChat';
 
-const AVATAR = `${import.meta.env.BASE_URL}mono-avatar.webp`;
+const AVATAR = `${import.meta.env.BASE_URL}mono-asoma.webp`;
 
 // Dónde NO mostrarlo: ya estás en la cotización/contacto.
 const HIDE_ON = ['#cotizacion', '#contacto'];
@@ -103,7 +103,7 @@ export default function MangoBot() {
 
   return (
     <>
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex items-end gap-3 pointer-events-none max-w-[calc(100vw-2rem)]">
+      <div className="fixed bottom-0 right-0 z-40 flex items-end pointer-events-none max-w-[100vw]">
         <AnimatePresence>
           {visible && !bubbleOff && (
             <motion.div
@@ -113,7 +113,7 @@ export default function MangoBot() {
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               style={{ transformOrigin: 'bottom right' }}
-              className="pointer-events-auto relative mb-2 max-w-[210px] sm:max-w-[250px] rounded-2xl rounded-br-sm bg-paper-pure text-klein-deep shadow-[0_10px_30px_rgba(20,30,92,0.25)] ring-1 ring-klein-deep/10"
+              className="pointer-events-auto relative mb-16 sm:mb-24 -mr-10 sm:-mr-12 max-w-[190px] sm:max-w-[250px] rounded-2xl rounded-br-sm bg-paper-pure text-klein-deep shadow-[0_10px_30px_rgba(20,30,92,0.25)] ring-1 ring-klein-deep/10"
             >
               <button
                 type="button"
@@ -142,42 +142,35 @@ export default function MangoBot() {
               type="button"
               onClick={openChat}
               aria-label="Mango: abrir el chat de cotización"
-              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.4, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.6 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 18 }}
-              whileHover={reduceMotion ? undefined : { scale: 1.08, rotate: -6 }}
-              whileTap={{ scale: 0.94 }}
-              className="pointer-events-auto relative shrink-0 w-[56px] h-[76px] sm:w-[64px] sm:h-[88px] rounded-2xl bg-klein ring-[3px] ring-paper-pure shadow-[0_10px_30px_rgba(20,30,92,0.4)]"
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 120 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 80 }}
+              transition={{ type: 'spring', stiffness: 220, damping: 20 }}
+              whileHover={reduceMotion ? undefined : { scale: 1.05, rotate: -2 }}
+              whileTap={{ scale: 0.97 }}
+              style={{ transformOrigin: '100% 100%' }}
+              className="pointer-events-auto relative shrink-0 w-[190px] sm:w-[250px] -mb-3 -mr-2"
             >
-              <span className="absolute inset-0 rounded-[13px] overflow-hidden flex items-center justify-center">
-                <motion.img
-                  src={AVATAR}
-                  alt=""
-                  width={480}
-                  height={640}
-                  draggable={false}
-                  className="w-full h-full object-cover object-top select-none"
-                  animate={
-                    reduceMotion
-                      ? undefined
-                      : {
-                          y: [0, -3, 0, -1, 0],
-                          rotate: [0, -6, 5, -2, 0],
-                        }
-                  }
-                  transition={{
-                    duration: 1.1,
-                    repeat: Infinity,
-                    repeatDelay: 4.5,
-                    ease: 'easeOut',
-                  }}
-                />
-              </span>
-              {/* Punto "en línea" */}
-              <span
-                aria-hidden
-                className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#2FBF71] ring-2 ring-paper-pure"
+              {/* El mono asoma desde la esquina, sin fondo: se agarra del
+                  borde de la pantalla. */}
+              <motion.img
+                src={AVATAR}
+                alt=""
+                width={1200}
+                height={900}
+                draggable={false}
+                className="w-full h-auto select-none"
+                style={{
+                  transformOrigin: '100% 100%',
+                  filter: 'drop-shadow(0 10px 18px rgba(20,30,92,0.35))',
+                }}
+                animate={reduceMotion ? undefined : { rotate: [0, -3, 2, 0], y: [0, -3, 0, 0] }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  repeatDelay: 5,
+                  ease: 'easeOut',
+                }}
               />
             </motion.button>
           )}

@@ -286,18 +286,12 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
       {/* Cabecera */}
       <header className="shrink-0 flex items-center gap-3 px-4 py-3 bg-klein text-paper-pure">
         <span className="relative shrink-0">
-          <span className="w-10 h-[52px] rounded-lg bg-klein-deep flex items-center justify-center overflow-hidden ring-2 ring-paper-pure/60">
-            <img
-              src={AVATAR}
-              alt=""
-              width={480}
-              height={640}
-              className="w-full h-full object-cover object-top"
-            />
-          </span>
-          <span
-            aria-hidden
-            className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#2FBF71] ring-2 ring-klein"
+          <img
+            src={AVATAR}
+            alt=""
+            width={480}
+            height={640}
+            className="w-10 h-[52px] object-contain object-bottom"
           />
         </span>
         <div className="min-w-0 flex-1">
