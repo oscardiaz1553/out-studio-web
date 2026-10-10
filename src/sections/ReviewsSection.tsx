@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import RevealText from '../components/RevealText';
-import { REVIEWS } from '../data/reviews';
+import { DEMO_REVIEWS, REVIEWS } from '../data/reviews';
 import { EMAIL, WEB3FORMS_ACCESS_KEY } from '../data/site';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -255,7 +255,12 @@ function ReviewForm({ onDone }: { onDone: () => void }) {
 export default function ReviewsSection() {
   const reduceMotion = useReducedMotion();
   const [formOpen, setFormOpen] = useState(false);
-  const hasReviews = REVIEWS.length > 0;
+  // ?resenas=demo muestra reseñas de ejemplo (ficticias) para ver el diseño.
+  const demo =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('resenas') === 'demo';
+  const reviews = REVIEWS.length > 0 ? REVIEWS : demo ? DEMO_REVIEWS : [];
+  const hasReviews = reviews.length > 0;
 
   return (
     <section
@@ -277,7 +282,7 @@ export default function ReviewsSection() {
 
         {hasReviews ? (
           <div className="mt-12 sm:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {REVIEWS.map((r, i) => (
+            {reviews.map((r, i) => (
               <FadeIn
                 key={`${r.name}-${i}`}
                 delay={i * 0.06}
