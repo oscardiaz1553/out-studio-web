@@ -108,7 +108,7 @@ export default function BlogTeaser() {
           {posts.map((p) => (
             <article
               key={p.slug}
-              className="group relative shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] flex flex-col rounded-2xl border border-klein-deep/15 bg-paper p-6 sm:p-7 transition-colors hover:border-klein"
+              className="group relative shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] flex flex-col rounded-2xl bg-paper p-6 sm:p-7 transition-colors hover:bg-[#ECE4DC]"
             >
               <p className="text-xs text-carne-tinta mb-3">
                 {p.category} · {p.readingMin} min de lectura

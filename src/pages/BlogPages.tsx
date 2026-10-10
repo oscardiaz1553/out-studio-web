@@ -37,7 +37,7 @@ function BlogFooter() {
 
 function PostCard({ post }: { post: Post }) {
   return (
-    <article className="group flex flex-col rounded-2xl border border-klein-deep/15 bg-paper-pure p-6 sm:p-7 transition-colors hover:border-klein">
+    <article className="group flex flex-col rounded-2xl bg-paper-pure p-6 sm:p-7 transition-colors hover:bg-white/70">
       <p className="text-xs text-carne-tinta mb-3">
         {post.category} · {post.readingMin} min de lectura
       </p>

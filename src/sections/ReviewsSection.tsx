@@ -63,7 +63,7 @@ export default function ReviewsSection() {
             {reviews.map((r, i) => (
               <FadeIn
                 key={`${r.name}-${i}`}
-                className="rounded-2xl border border-klein-deep/15 bg-paper p-7 flex flex-col gap-5"
+                className="rounded-2xl bg-paper p-7 flex flex-col gap-5"
               >
                 {r.rating ? <Stars value={r.rating} /> : null}
                 <p className="font-display font-semibold text-klein tracking-[-0.02em] leading-snug text-xl">
