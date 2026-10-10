@@ -139,8 +139,14 @@ export default function MangoBot() {
               transition={{ type: 'spring', stiffness: 220, damping: 20 }}
               whileHover={reduceMotion ? undefined : { scale: 1.05, rotate: -2 }}
               whileTap={{ scale: 0.97 }}
-              style={{ transformOrigin: '100% 100%' }}
-              className="pointer-events-auto relative shrink-0 w-[190px] sm:w-[250px] -mb-3 -mr-2"
+              style={{
+                transformOrigin: '100% 100%',
+                // La ilustración termina en seco abajo: el cuerpo se desvanece
+                // para que no se vea cortado sobre la barra del navegador.
+                maskImage: 'linear-gradient(to bottom, #000 72%, transparent 98%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, #000 72%, transparent 98%)',
+              }}
+              className="pointer-events-auto relative shrink-0 w-[190px] sm:w-[250px] -mr-2"
             >
               {/* El mono asoma desde la esquina, sin fondo: se agarra del
                   borde de la pantalla. */}
@@ -153,7 +159,6 @@ export default function MangoBot() {
                 className="w-full h-auto select-none"
                 style={{
                   transformOrigin: '100% 100%',
-                  filter: 'drop-shadow(0 10px 18px rgba(20,30,92,0.35))',
                 }}
                 animate={reduceMotion ? undefined : { rotate: [0, -3, 2, 0], y: [0, -3, 0, 0] }}
                 transition={{
