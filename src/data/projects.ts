@@ -64,14 +64,6 @@ export const PROJECTS: Project[] = [
   },
   {
     number: '04',
-    name: 'Maison Caviar',
-    type: 'Web',
-    status: 'launched',
-    summary: 'Sitio web para una marca de caviar de lujo, en línea y funcionando.',
-    url: 'https://maisoncaviar.com.co',
-  },
-  {
-    number: '05',
     name: 'Volta',
     type: 'Web',
     status: 'launched',
