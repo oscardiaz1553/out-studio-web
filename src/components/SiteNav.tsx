@@ -39,7 +39,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 bg-klein-deep flex flex-col px-6 pt-6 pb-10 overflow-y-auto"
+      className="fixed inset-0 z-[960] bg-klein-deep flex flex-col px-6 pt-6 pb-10 overflow-y-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.15, ease: 'easeOut' } }}

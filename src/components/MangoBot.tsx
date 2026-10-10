@@ -4,8 +4,9 @@ import { MangoChat, useChatState } from './MangoChat';
 
 const AVATAR = `${import.meta.env.BASE_URL}mono-asoma.webp`;
 
-// Dónde NO mostrarlo: ya estás en la cotización/contacto.
-const HIDE_ON = ['#cotizacion', '#contacto'];
+// Dónde NO mostrarlo: la cotización, el contacto y el footer (que ya tiene
+// su botón de cotizar).
+const HIDE_ON = ['#cotizacion', '#contacto', '.site-footer'];
 
 // Un solo mensaje, siempre el mismo.
 const MESSAGE = 'Te ayudo con tu cotización en cualquier momento.';
