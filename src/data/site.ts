@@ -15,4 +15,4 @@ export const QUOTE_WORKER_URL = 'https://out-cotizaciones.oscar-diaz-dc0.workers
 // Enlace para dejar una reseña en el perfil de Google de Out (Google Business
 // Profile → "Pedir reseñas" → copiar el enlace). Mientras esté vacío, el botón
 // de Google no aparece y queda sólo el formulario propio.
-export const GOOGLE_REVIEW_URL = '';
+export const GOOGLE_REVIEW_URL = 'https://g.page/r/Cdj6HJbUUYDlEAI/review';
