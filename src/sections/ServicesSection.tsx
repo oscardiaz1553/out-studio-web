@@ -114,11 +114,49 @@ export default function ServicesSection() {
           <WordStage />
         </div>
 
+        {/* Celular: las láminas de cada servicio, grandes, en un carrusel. */}
+        <div
+          role="region"
+          aria-label="Servicios"
+          tabIndex={0}
+          className="md:hidden mt-8 flex gap-4 overflow-x-auto snap-x snap-mandatory overscroll-x-contain scroll-px-6 pb-2 [&::-webkit-scrollbar]:hidden"
+          style={{
+            scrollbarWidth: 'none',
+            marginInline: 'calc(50% - 50vw)',
+            paddingInline: 'calc(50vw - 50%)',
+          }}
+        >
+          {SERVICES.map((service) => (
+            <a
+              key={service.name}
+              href={`${HOME}servicios/${service.slug}/`}
+              className="shrink-0 snap-start w-[78%] max-w-[320px] flex flex-col rounded-[24px] overflow-hidden bg-paper border border-klein-deep/15 active:scale-[0.99] transition-transform"
+            >
+              <div
+                aria-hidden
+                className="relative w-full aspect-[4/5]"
+                style={{ containerType: 'inline-size' }}
+              >
+                {SCENES[service.scene]}
+              </div>
+              <div className="flex flex-1 flex-col gap-2 p-5">
+                <h3 className="font-display font-extrabold text-klein tracking-[-0.03em] leading-tight text-2xl">
+                  {service.name}
+                </h3>
+                <p className="text-sm leading-relaxed text-klein-deep/80">{service.description}</p>
+                <span className="mt-auto pt-2 text-sm font-medium text-klein underline underline-offset-4">
+                  Ver servicio
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+
         <ul
           ref={listRef}
           onPointerMove={onMove}
           onPointerLeave={() => setActive(null)}
-          className="relative mt-8 sm:mt-10"
+          className="relative hidden md:block mt-10"
         >
           {SERVICES.map((service, i) => (
             <FadeIn
