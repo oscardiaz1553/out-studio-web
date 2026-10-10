@@ -189,9 +189,40 @@ function TypingDots() {
 const CHIP =
   'rounded-full border px-3.5 py-2 text-[13px] leading-snug text-left transition-colors duration-150 active:scale-[0.97]';
 
+
+/** En el celular el chat ocupa la pantalla visible: cuando sale el teclado se
+ *  encoge a lo que queda arriba de él (visualViewport), en vez de quedar
+ *  tapado o de obligar a hacer zoom. También bloquea el scroll de fondo. */
+function usePhoneViewport() {
+  const [box, setBox] = useState<{ top: number; height: number } | null>(null);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)');
+    const vv = window.visualViewport;
+    const update = () => {
+      if (!mq.matches) return setBox(null);
+      setBox({ top: vv ? vv.offsetTop : 0, height: vv ? vv.height : window.innerHeight });
+    };
+    update();
+    const html = document.documentElement;
+    const prev = html.style.overflow;
+    if (mq.matches) html.style.overflow = 'hidden';
+    vv?.addEventListener('resize', update);
+    vv?.addEventListener('scroll', update);
+    mq.addEventListener('change', update);
+    return () => {
+      html.style.overflow = prev;
+      vv?.removeEventListener('resize', update);
+      vv?.removeEventListener('scroll', update);
+      mq.removeEventListener('change', update);
+    };
+  }, []);
+  return box;
+}
+
 export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => void }) {
   const { form, cursor, setCursor, typing, prompts } = chat;
   const reduceMotion = useReducedMotion();
+  const phoneBox = usePhoneViewport();
   const scrollRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement & HTMLInputElement>(null);
@@ -221,7 +252,7 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
       behavior: reduceMotion ? 'auto' : 'smooth',
     });
     if (!typing) inputRef.current?.focus({ preventScroll: true });
-  }, [cursor, typing, form.status, reduceMotion]);
+  }, [cursor, typing, form.status, reduceMotion, phoneBox?.height]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -280,8 +311,8 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 16, scale: 0.97 }}
       transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-      style={{ transformOrigin: 'bottom right' }}
-      className="fixed z-[900] inset-x-2 bottom-2 sm:inset-x-auto sm:right-6 sm:bottom-6 sm:w-[390px] h-[min(640px,calc(100dvh-1rem))] sm:h-[min(620px,calc(100dvh-3rem))] flex flex-col overflow-hidden rounded-2xl bg-paper-pure text-klein-deep shadow-[0_20px_70px_rgba(20,30,92,0.45)] ring-1 ring-klein-deep/15"
+      style={phoneBox ? { transformOrigin: 'bottom right', top: phoneBox.top, height: phoneBox.height } : { transformOrigin: 'bottom right' }}
+      className="fixed z-[900] inset-x-0 top-0 h-[100dvh] sm:top-auto sm:inset-x-auto sm:right-6 sm:bottom-6 sm:w-[390px] sm:h-[min(620px,calc(100dvh-3rem))] flex flex-col overflow-hidden sm:rounded-2xl bg-paper-pure text-klein-deep shadow-[0_20px_70px_rgba(20,30,92,0.45)] ring-1 ring-klein-deep/15"
     >
       {/* Cabecera */}
       <header className="shrink-0 flex items-center gap-3 px-4 py-3 bg-klein text-paper-pure">
@@ -473,7 +504,7 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
                   rows={3}
                   placeholder={current!.placeholder ?? 'Escribe aquí…'}
                   aria-label={current!.ask}
-                  className="flex-1 min-w-0 resize-none rounded-xl border border-klein-deep/25 bg-paper px-3 py-2.5 text-[14px] text-klein-deep placeholder-muted focus:border-klein"
+                  className="flex-1 min-w-0 resize-none rounded-xl border border-klein-deep/25 bg-paper px-3 py-2.5 text-base sm:text-[14px] text-klein-deep placeholder-muted focus:border-klein"
                 />
               ) : (
                 <input
@@ -496,7 +527,7 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
                   }}
                   placeholder={current!.placeholder ?? 'Escribe aquí…'}
                   aria-label={current!.ask}
-                  className="flex-1 min-w-0 rounded-xl border border-klein-deep/25 bg-paper px-3 py-2.5 text-[14px] text-klein-deep placeholder-muted focus:border-klein"
+                  className="flex-1 min-w-0 rounded-xl border border-klein-deep/25 bg-paper px-3 py-2.5 text-base sm:text-[14px] text-klein-deep placeholder-muted focus:border-klein"
                 />
               )}
               <button
