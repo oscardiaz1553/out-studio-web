@@ -81,6 +81,14 @@ const CONTACT_PROMPTS: Prompt[] = [
     required: false,
     target: { type: 'contact', field: 'company' },
   },
+  {
+    id: 'contact.referral',
+    ask: '¿Alguien te recomendó Out? Escribe su nombre y tu cotización llega con descuento. (opcional)',
+    kind: 'text',
+    placeholder: 'Quién te recomendó',
+    required: false,
+    target: { type: 'contact', field: 'referral' },
+  },
 ];
 
 const TYPE_PROMPT: Prompt = {

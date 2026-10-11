@@ -24,6 +24,10 @@ export interface QuoteDraft {
   validDays: number;
   items: QuoteItem[];
   tax: 'none' | 'iva';
+  /** Quién recomendó al cliente (vacío si nadie). */
+  referral: string;
+  /** Descuento por referido, en porcentaje (0 = sin descuento). */
+  referralDiscount: number;
   payment: string;
   timeline: string;
   terms: string;
@@ -33,6 +37,8 @@ export interface QuoteDraft {
 }
 
 export const IVA_RATE = 0.19;
+/** Descuento por referido que se propone por defecto (editable en el generador). */
+export const REFERRAL_DISCOUNT = 10;
 
 export function formatCOP(amount: number): string {
   return `$${new Intl.NumberFormat('es-CO').format(Math.round(amount))} COP`;
@@ -52,8 +58,11 @@ export function validUntil(iso: string, days: number): string {
 
 export function totals(draft: QuoteDraft) {
   const subtotal = draft.items.reduce((sum, i) => sum + (i.price || 0), 0);
-  const iva = draft.tax === 'iva' ? subtotal * IVA_RATE : 0;
-  return { subtotal, iva, total: subtotal + iva };
+  const pct = Math.min(100, Math.max(0, draft.referralDiscount || 0));
+  const discount = Math.round((subtotal * pct) / 100);
+  const base = subtotal - discount;
+  const iva = draft.tax === 'iva' ? base * IVA_RATE : 0;
+  return { subtotal, discount, pct, iva, total: base + iva };
 }
 
 const lines = (text: string) =>
@@ -128,7 +137,7 @@ export default function QuoteDossier({
   draft: QuoteDraft;
   groups: AnswerGroup[];
 }) {
-  const { subtotal, iva, total } = totals(draft);
+  const { subtotal, discount, pct, iva, total } = totals(draft);
   const client = draft.clientCompany || draft.clientName || 'tu proyecto';
   const projectTitles = draft.items.map((i) => i.title).filter(Boolean);
   const terms = lines(draft.terms);
@@ -250,14 +259,33 @@ export default function QuoteDossier({
                   </td>
                 </tr>
               ))}
+              {(draft.tax === 'iva' || discount > 0) && (
+                <tr className="border-b border-klein-deep/12">
+                  <td className="py-3 pr-4 text-muted">Subtotal</td>
+                  <td className="py-3 text-right whitespace-nowrap">
+                    {formatCOP(subtotal)}
+                  </td>
+                </tr>
+              )}
+              {discount > 0 && (
+                <tr className="border-b border-klein-deep/12">
+                  <td className="py-3 pr-4">
+                    <span className="text-carne-tinta font-medium">
+                      Descuento por referido ({pct}%)
+                    </span>
+                    {draft.referral.trim() && (
+                      <span className="block text-[11px] text-muted">
+                        Recomendado por {draft.referral.trim()}. Gracias por llegar de su mano.
+                      </span>
+                    )}
+                  </td>
+                  <td className="py-3 text-right whitespace-nowrap text-carne-tinta font-medium">
+                    − {formatCOP(discount)}
+                  </td>
+                </tr>
+              )}
               {draft.tax === 'iva' && (
                 <>
-                  <tr className="border-b border-klein-deep/12">
-                    <td className="py-3 pr-4 text-muted">Subtotal</td>
-                    <td className="py-3 text-right whitespace-nowrap">
-                      {formatCOP(subtotal)}
-                    </td>
-                  </tr>
                   <tr className="border-b border-klein-deep/12">
                     <td className="py-3 pr-4 text-muted">IVA (19%)</td>
                     <td className="py-3 text-right whitespace-nowrap">

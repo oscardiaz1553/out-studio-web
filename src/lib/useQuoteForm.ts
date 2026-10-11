@@ -14,7 +14,7 @@ import { EMAIL, WEB3FORMS_ACCESS_KEY } from '../data/site';
 
 export type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
-export const EMPTY_CONTACT: Contact = { name: '', email: '', phone: '', company: '' };
+export const EMPTY_CONTACT: Contact = { name: '', email: '', phone: '', company: '', referral: '' };
 
 /** Estado de la encuesta: vive fuera de la pantalla para que, si el cliente
  *  cierra y vuelve a abrir, retome donde iba. */

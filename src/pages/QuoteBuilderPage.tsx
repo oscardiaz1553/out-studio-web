@@ -4,6 +4,7 @@ import { QUOTE_WORKER_URL } from '../data/site';
 import QuoteDossier, {
   QuoteDraft,
   QuoteItem,
+  REFERRAL_DISCOUNT,
   formatCOP,
   totals,
 } from '../components/QuoteDossier';
@@ -73,6 +74,9 @@ function initialDraft(payload: QuotePayload | null): QuoteDraft {
     validDays: 15,
     items: items.length ? items : [{ id: uid(), title: '', scope: '', price: 0 }],
     tax: 'none',
+    referral: payload?.contact.referral?.trim() ?? '',
+    // Si el cliente llegó recomendado, el descuento viene activado.
+    referralDiscount: payload?.contact.referral?.trim() ? REFERRAL_DISCOUNT : 0,
     payment: DEFAULT_PAYMENT,
     timeline: `${
       typeof plazo === 'string' ? `Plazo que nos indicaste: ${plazo.toLowerCase()}. ` : ''
@@ -189,7 +193,7 @@ export default function QuoteBuilderPage() {
       draft.items.map((i) => (i.id === id ? { ...i, ...patch } : i)),
     );
 
-  const { total } = totals(draft);
+  const { total, discount } = totals(draft);
 
   const subject = `Propuesta de cotización ${draft.folio} — Out Studio`;
   const pdfName = `Cotización ${draft.folio} - ${draft.clientCompany || draft.clientName || 'Out'}.pdf`;
@@ -340,6 +344,46 @@ export default function QuoteBuilderPage() {
                 <option value="iva">Más IVA (19%)</option>
               </select>
             </Field>
+            <div className="rounded-xl border border-klein-deep/15 p-3 flex flex-col gap-3">
+              <span className={LABEL}>
+                Descuento por referido{draft.referral.trim() ? ' · el cliente llegó recomendado' : ''}
+              </span>
+              <div className="grid grid-cols-[1fr_96px] gap-3">
+                <input
+                  className={INPUT}
+                  value={draft.referral}
+                  onChange={(e) => set('referral', e.target.value)}
+                  placeholder="Quién lo recomendó"
+                  aria-label="Quién lo recomendó"
+                />
+                <div className="relative">
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    className={`${INPUT} pr-7`}
+                    value={draft.referralDiscount || ''}
+                    onChange={(e) =>
+                      set('referralDiscount', Math.min(100, Math.max(0, Number(e.target.value) || 0)))
+                    }
+                    placeholder="0"
+                    aria-label="Porcentaje de descuento"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted">%</span>
+                </div>
+              </div>
+              <label className="flex items-center gap-2 text-sm text-klein-deep">
+                <input
+                  type="checkbox"
+                  checked={draft.referralDiscount > 0}
+                  onChange={(e) => set('referralDiscount', e.target.checked ? REFERRAL_DISCOUNT : 0)}
+                />
+                Aplicar descuento por referido
+              </label>
+              {discount > 0 && (
+                <p className="text-xs text-carne-tinta">Descuento: − {formatCOP(discount)}</p>
+              )}
+            </div>
             <p className="text-sm font-medium text-klein-deep">Total: {formatCOP(total)}</p>
           </Group>
 

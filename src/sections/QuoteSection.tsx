@@ -335,7 +335,7 @@ function QuoteScreen({
             </h2>
             <p className="text-ink-2 leading-relaxed text-lg max-w-md">
               Gracias, {contact.name.split(' ')[0]}. Revisamos tu caso y te
-              enviamos la cotización a {contact.email} en las próximas 24 a 48
+              enviamos la cotización a {contact.email} en las próximas 6 a 24
               horas.
             </p>
             <AccentButton onClick={finish} className="mt-4">
@@ -483,6 +483,23 @@ function QuoteScreen({
                             />
                           </label>
                         </div>
+                        <label className="flex flex-col gap-2">
+                          <span className="text-[11px] tracking-[0.04em] text-muted">
+                            ¿Alguien te recomendó Out?
+                          </span>
+                          <input
+                            type="text"
+                            value={contact.referral ?? ''}
+                            onChange={(e) =>
+                              form.setContact({ ...contact, referral: e.target.value })
+                            }
+                            placeholder="Nombre de quien te recomendó (opcional)"
+                            className={INPUT_CLASSES}
+                          />
+                          <span className="text-xs text-ink-2">
+                            Si vienes recomendado, tu cotización llega con un descuento.
+                          </span>
+                        </label>
                         <input
                           type="checkbox"
                           name="botcheck"

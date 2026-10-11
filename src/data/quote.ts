@@ -482,6 +482,8 @@ export interface Contact {
   email: string;
   phone: string;
   company: string;
+  /** Quién lo recomendó (opcional). Activa el descuento por referido. */
+  referral?: string;
 }
 
 /** Arma el brief completo en texto plano, listo para llegar al correo. */
@@ -496,6 +498,7 @@ export function buildBrief(
     `Email: ${contact.email}`,
     `WhatsApp / teléfono: ${contact.phone || '—'}`,
     `Empresa o marca: ${contact.company || '—'}`,
+    `Referido por: ${contact.referral?.trim() || '—'}`,
     `Proyectos solicitados: ${types.map((t) => t.label).join(', ')}`,
     ...types.map((t) => section(t.label, t.questions, t.id, answers)),
     section('Sobre el proyecto', COMMON_QUESTIONS, 'comun', answers),
