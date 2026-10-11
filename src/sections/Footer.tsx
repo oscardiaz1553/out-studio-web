@@ -10,6 +10,7 @@ const TILE_COPIES = 16;
 const HOME = import.meta.env.BASE_URL;
 
 const SERVICES = [
+  { label: 'Todos los servicios', href: `${HOME}servicios/` },
   { label: 'Tiendas Shopify', href: `${HOME}servicios/tiendas-shopify/` },
   { label: 'Sitios WordPress', href: `${HOME}servicios/sitios-wordpress/` },
   { label: 'Landing pages', href: `${HOME}servicios/landing-pages/` },

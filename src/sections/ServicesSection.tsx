@@ -105,8 +105,8 @@ export default function ServicesSection() {
           Hacemos desarrollo web a medida para negocios de toda Colombia: tiendas
           Shopify y e-commerce, sitios WordPress, landing pages y branding,
           con código propio.{' '}
-          <a href={`${HOME}servicios/desarrollo-web/`} className="text-klein font-medium underline underline-offset-4">
-            Ver todo el desarrollo web
+          <a href={`${HOME}servicios/`} className="text-klein font-medium underline underline-offset-4">
+            Ver todos los servicios
           </a>
         </p>
 

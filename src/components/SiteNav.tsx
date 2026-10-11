@@ -25,7 +25,7 @@ type NavLink = { label: string; href: string; scene: string; tilt: number };
 // Servicios, el mono trabajando para Proyectos, el logo para el Blog y el mono
 // entre corchetes para Contacto.
 const NAV_LINKS: NavLink[] = [
-  { label: 'Servicios', href: `${HOME}#servicios`, scene: 'shopify', tilt: -2.5 },
+  { label: 'Servicios', href: `${HOME}servicios/`, scene: 'shopify', tilt: -2.5 },
   { label: 'Proyectos', href: `${HOME}proyectos.html`, scene: 'apps', tilt: 2 },
   { label: 'Blog', href: `${HOME}blog/`, scene: 'branding', tilt: 1.5 },
   { label: 'Contacto', href: `${HOME}contacto.html`, scene: 'wordpress', tilt: -2 },

@@ -12,7 +12,7 @@ export type ServiceData = (typeof data.pages)[number];
 const HOME = import.meta.env.BASE_URL;
 export const servicePath = (slug: string) => `${HOME}servicios/${slug}/`;
 
-const STEPS = [
+export const STEPS = [
   { verb: 'Escuchamos', text: 'Entendemos tu negocio y lo que tiene que lograr tu proyecto. Recibes una propuesta clara, con alcance y tiempos.' },
   { verb: 'Construimos', text: 'Diseñamos y desarrollamos con código propio, compartiendo avances reales que puedes ver y aprobar.' },
   { verb: 'Lanzamos', text: 'Probamos todo antes de salir: velocidad, SEO técnico, pagos y formularios funcionando.' },
@@ -89,7 +89,7 @@ function ServiceSwitcher({ current, dark }: { current: ServiceData; dark: boolea
 // El diseño de cada servicio sale de su lámina del hover de la portada: el
 // mismo color de fondo, el mismo par de símbolos y el mismo personaje, pero
 // llevados a la página completa (no la lámina pegada tal cual).
-type Theme = {
+export type Theme = {
   /** Fondo de la cabecera y del cierre. */
   bg: string;
   dark: boolean;
@@ -113,7 +113,7 @@ const IMG = {
   monoLaptop: `${HOME}mono-laptop.webp`,
 };
 
-const THEMES: Record<string, Theme> = {
+export const THEMES: Record<string, Theme> = {
   shopify: {
     bg: '#F5E3B3', dark: false, text: '#1B2FCC', muted: 'rgba(20,30,92,0.78)', accent: '#1B2FCC',
     kind: 'curly', art: IMG.mango, artRotate: -10,
@@ -221,7 +221,7 @@ export default function ServicePage({ page }: { page: ServiceData }) {
             >
               <a href={HOME} className="underline-offset-4 hover:underline">Inicio</a>
               <span aria-hidden className="mx-2">/</span>
-              <a href={`${HOME}#servicios`} className="underline-offset-4 hover:underline">Servicios</a>
+              <a href={`${HOME}servicios/`} className="underline-offset-4 hover:underline">Servicios</a>
               <span aria-hidden className="mx-2">/</span>
               <ServiceSwitcher current={page} dark={theme.dark} />
             </nav>

@@ -39,6 +39,7 @@ export default defineConfig({
         contacto: fileURLToPath(new URL('./contacto.html', import.meta.url)),
         proyectos: fileURLToPath(new URL('./proyectos.html', import.meta.url)),
         cotizar: fileURLToPath(new URL('./cotizar.html', import.meta.url)),
+        servicios: fileURLToPath(new URL('./servicios/index.html', import.meta.url)),
         ...servicePages,
         ...blogPages,
       },

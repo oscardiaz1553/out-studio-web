@@ -153,6 +153,38 @@ writeFileSync(
   }) + body('contacto'),
 );
 
+// --- Índice de servicios
+writeFileSync(
+  'servicios/index.html',
+  head({
+    title: 'Servicios de desarrollo web, Shopify y branding en Colombia | Out Studio',
+    description:
+      'Tiendas Shopify, sitios WordPress, landing pages, branding y desarrollo web a medida para negocios de toda Colombia. Cotiza en 6 a 24 horas.',
+    path: '/servicios/',
+    extra: [
+      ld({
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'Servicios de Out Studio',
+        itemListElement: pages.map((p, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: p.nav,
+          url: `${site.url}/servicios/${p.slug}/`,
+        })),
+      }),
+      ld({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` },
+          { '@type': 'ListItem', position: 2, name: 'Servicios', item: `${site.url}/servicios/` },
+        ],
+      }),
+    ],
+  }) + body('servicios'),
+);
+
 // --- Una página por servicio
 for (const p of pages) {
   const url = `${site.url}/servicios/${p.slug}/`;
@@ -177,7 +209,8 @@ for (const p of pages) {
           '@type': 'BreadcrumbList',
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` },
-            { '@type': 'ListItem', position: 2, name: p.nav, item: url },
+            { '@type': 'ListItem', position: 2, name: 'Servicios', item: `${site.url}/servicios/` },
+            { '@type': 'ListItem', position: 3, name: p.nav, item: url },
           ],
         }),
         ld({
@@ -300,4 +333,4 @@ for (const p of posts) {
   );
 }
 
-console.log(`OK: portada, proyectos, contacto, ${pages.length} servicios y ${posts.length} artículos del blog`);
+console.log(`OK: portada, proyectos, contacto, índice de servicios, ${pages.length} servicios y ${posts.length} artículos del blog`);
