@@ -132,7 +132,7 @@ export default function Footer() {
               href={`${HOME}#cotizar`}
               className="group w-full sm:w-auto flex items-center justify-between gap-5 rounded-full bg-carne pl-7 pr-2 py-2 shadow-[0_16px_40px_rgba(245,227,179,0.18)] transition-transform active:scale-[0.98] hover:-translate-y-0.5"
             >
-              <span className="font-display font-extrabold tracking-[-0.03em] text-klein-deep leading-none whitespace-nowrap" style={{ fontSize: 'clamp(1.1rem, 5.6vw, 1.4rem)' }}>
+              <span className="font-display font-extrabold tracking-[-0.03em] text-klein leading-none whitespace-nowrap" style={{ fontSize: 'clamp(1.1rem, 5.6vw, 1.4rem)' }}>
                 Cotiza tu proyecto
               </span>
               <span className="w-12 h-12 shrink-0 rounded-full bg-klein text-paper-pure flex items-center justify-center transition-transform group-hover:translate-x-0.5">
