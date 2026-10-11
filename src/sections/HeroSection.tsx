@@ -167,16 +167,11 @@ export default function HeroSection() {
               sea imposible de ignorar.
             </motion.span>
           </h1>
-        </div>
-
-        <div className="flex flex-col gap-10">
-          <div className="flex flex-col gap-7 max-w-[52ch]">
-
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.7 }}
-              className="flex flex-wrap items-center gap-x-7 gap-y-4"
+              className="mt-8 sm:mt-10 flex flex-wrap items-center gap-x-7 gap-y-4"
             >
               <Magnetic>
                 <AccentButton
@@ -194,7 +189,9 @@ export default function HeroSection() {
                 Ver proyectos
               </a>
             </motion.div>
-          </div>
+        </div>
+
+        <div className="flex flex-col gap-10">
 
           <motion.span
             initial={{ opacity: 0, y: 16 }}
