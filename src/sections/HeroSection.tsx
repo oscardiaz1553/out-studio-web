@@ -18,7 +18,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 // ignorar." Cada rotación se lee completa y apunta a un servicio real
 // (tienda, sitio, app, marca). El texto completo vive en un sr-only.
 const SUBJECTS = ['marca', 'tienda online', 'sitio web', 'negocio'];
-const SR_HEADLINE = `Desarrollo web y tiendas Shopify en Colombia. Hacemos que tu ${SUBJECTS.join(', tu ')} sea imposible de ignorar.`;
+const SR_HEADLINE = `Diseño UX/UI, desarrollo web y tiendas Shopify en Colombia. Hacemos que tu ${SUBJECTS.join(', tu ')} sea imposible de ignorar.`;
 
 /** El mango partido: el objeto de siempre de la marca, grande a un lado. Flota
  *  despacio y se desplaza un poco con el mouse (parallax; en táctil queda
@@ -171,17 +171,6 @@ export default function HeroSection() {
 
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-7 max-w-[52ch]">
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.75, duration: 0.7 }}
-              className="text-paper-pure/90 leading-relaxed text-base sm:text-lg"
-            >
-              <span className="text-carne font-medium">Especialistas en diseño UX/UI.</span>{' '}
-              Diseñamos y desarrollamos a medida, con código propio: tiendas
-              Shopify, sitios WordPress, landing pages y branding pensados para
-              convertir visitas en clientes.
-            </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 16 }}
