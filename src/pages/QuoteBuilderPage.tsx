@@ -76,7 +76,7 @@ function initialDraft(payload: QuotePayload | null): QuoteDraft {
     tax: 'none',
     referral: payload?.contact.referral?.trim() ?? '',
     // Si el cliente llegó recomendado, el descuento viene activado.
-    referralDiscount: payload?.contact.referral?.trim() ? REFERRAL_DISCOUNT : 0,
+    referralDiscount: payload?.contact.referral?.trim() ? defaultReferralPct() : 0,
     payment: DEFAULT_PAYMENT,
     timeline: `${
       typeof plazo === 'string' ? `Plazo que nos indicaste: ${plazo.toLowerCase()}. ` : ''
@@ -85,6 +85,26 @@ function initialDraft(payload: QuotePayload | null): QuoteDraft {
     note: '',
     emailMessage: defaultEmailMessage(payload?.contact.name ?? ''),
   };
+}
+
+// El porcentaje de referido que usaste la última vez queda como el valor
+// propuesto para la siguiente cotización (en este navegador).
+const PCT_KEY = 'out-referral-pct';
+function defaultReferralPct() {
+  try {
+    const n = Number(localStorage.getItem(PCT_KEY));
+    return n > 0 && n <= 100 ? n : REFERRAL_DISCOUNT;
+  } catch {
+    return REFERRAL_DISCOUNT;
+  }
+}
+function rememberReferralPct(n: number) {
+  if (n <= 0) return;
+  try {
+    localStorage.setItem(PCT_KEY, String(n));
+  } catch {
+    /* ignorar */
+  }
 }
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
@@ -363,9 +383,11 @@ export default function QuoteBuilderPage() {
                     max={100}
                     className={`${INPUT} pr-7`}
                     value={draft.referralDiscount || ''}
-                    onChange={(e) =>
-                      set('referralDiscount', Math.min(100, Math.max(0, Number(e.target.value) || 0)))
-                    }
+                    onChange={(e) => {
+                      const n = Math.min(100, Math.max(0, Number(e.target.value) || 0));
+                      rememberReferralPct(n);
+                      set('referralDiscount', n);
+                    }}
                     placeholder="0"
                     aria-label="Porcentaje de descuento"
                   />
@@ -376,7 +398,7 @@ export default function QuoteBuilderPage() {
                 <input
                   type="checkbox"
                   checked={draft.referralDiscount > 0}
-                  onChange={(e) => set('referralDiscount', e.target.checked ? REFERRAL_DISCOUNT : 0)}
+                  onChange={(e) => set('referralDiscount', e.target.checked ? defaultReferralPct() : 0)}
                 />
                 Aplicar descuento por referido
               </label>
