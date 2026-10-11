@@ -102,9 +102,9 @@ export default function ServicesSection() {
         </div>
 
         <p className="mt-4 max-w-[62ch] text-ink-2 leading-relaxed text-base sm:text-lg">
-          Hacemos desarrollo web a medida para negocios de toda Colombia: tiendas
-          Shopify y e-commerce, sitios WordPress, landing pages y branding,
-          con código propio.{' '}
+          Somos especialistas en diseño UX/UI y hacemos desarrollo web a medida
+          para negocios de toda Colombia: tiendas Shopify y e-commerce, sitios
+          WordPress, landing pages y branding, con código propio.{' '}
           <a href={`${HOME}servicios/`} className="text-klein font-medium underline underline-offset-4">
             Ver todos los servicios
           </a>

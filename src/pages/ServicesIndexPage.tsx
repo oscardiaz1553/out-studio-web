@@ -55,8 +55,9 @@ export default function ServicesIndexPage() {
             Servicios para que tu marca <span className="text-carne">se salga</span> de lo usual.
           </h1>
           <p className="mt-6 sm:mt-8 max-w-[58ch] text-lg sm:text-xl leading-relaxed text-paper-pure/85">
-            Diseño y desarrollo web a medida para negocios de toda Colombia: tiendas Shopify,
-            sitios WordPress, landing pages y branding, con código propio.
+            Especialistas en diseño UX/UI. Diseño y desarrollo web a medida para negocios de
+            toda Colombia: tiendas Shopify, sitios WordPress, landing pages y branding, con
+            código propio.
           </p>
           {/* Atajos a cada servicio */}
           <ul className="mt-8 sm:mt-10 flex flex-wrap gap-2.5">
@@ -73,6 +74,37 @@ export default function ServicesIndexPage() {
           </ul>
         </div>
       </header>
+
+      {/* El plus de Out: el diseño UX/UI detrás de cada servicio. */}
+      <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-20 bg-paper-pure">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-20 items-start">
+          <div>
+            <p className="text-sm text-carne-tinta mb-4">Nuestro plus</p>
+            <h2
+              className="font-display font-extrabold text-klein tracking-[-0.045em] leading-[0.98]"
+              style={{ fontSize: 'clamp(2.2rem, 5vw, 4.2rem)' }}
+            >
+              Especialistas en diseño UX/UI.
+            </h2>
+            <p className="mt-5 max-w-[46ch] text-lg leading-relaxed text-ink-2">
+              Antes de escribir código diseñamos la experiencia: cómo llega la gente,
+              qué busca y qué la lleva a comprar o a escribirte. Cada servicio parte de ahí.
+            </p>
+          </div>
+          <ul className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
+            {[
+              ['Entendemos a tus usuarios', 'Qué necesitan, qué les estorba y qué los convence, antes de diseñar una sola pantalla.'],
+              ['Ves antes de construir', 'Prototipos y diseños que revisas y apruebas antes de pasar a desarrollo.'],
+              ['Pensado para el celular', 'Interfaces claras, rápidas y fáciles de usar, primero en la pantalla más pequeña.'],
+            ].map(([t, d]) => (
+              <li key={t} className="rounded-2xl bg-paper p-6">
+                <h3 className="font-display font-extrabold text-klein tracking-[-0.03em] text-xl sm:text-2xl mb-2">{t}</h3>
+                <p className="text-sm sm:text-base leading-relaxed text-ink-2">{d}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
       {/* Un servicio por franja */}
       {PAGES.map((p, i) => {

@@ -23,7 +23,7 @@ const organization = {
   logo: `${site.url}/logo-out.png`,
   image: OG,
   description:
-    'Estudio de desarrollo web en Colombia: tiendas Shopify, e-commerce, sitios WordPress, landing pages y branding a medida, con código propio.',
+    'Estudio de diseño UX/UI y desarrollo web en Colombia: tiendas Shopify, e-commerce, sitios WordPress, landing pages y branding a medida, con código propio.',
   email: site.email,
   telephone: site.phone,
   slogan: 'Never the usual.',
@@ -34,7 +34,7 @@ const organization = {
     name: 'Oscar Díaz',
     jobTitle: 'UX/UI Specialist y desarrollador WordPress y Shopify',
   },
-  knowsAbout: ['Desarrollo web', 'Tiendas Shopify', 'E-commerce', 'WordPress', 'Diseño UX/UI', 'Branding'],
+  knowsAbout: ['Diseño UX/UI', 'Experiencia de usuario', 'Desarrollo web', 'Tiendas Shopify', 'E-commerce', 'WordPress', 'Branding'],
   // sameAs: agregar aquí el perfil de Google Business y las redes de Out
   // cuando existan (URLs completas), para reforzar la identidad de la marca.
   hasOfferCatalog: {
@@ -109,7 +109,7 @@ writeFileSync(
   head({
     title: 'Desarrollo web y tiendas Shopify en Colombia | Out Studio',
     description:
-      'Estudio de desarrollo web en Colombia: tiendas Shopify, e-commerce, sitios WordPress, landing pages y branding a medida con código propio. Cotiza en 6 a 24 h.',
+      'Especialistas en diseño UX/UI y desarrollo web en Colombia: tiendas Shopify, sitios WordPress, landing pages y branding a medida con código propio.',
     path: '/',
     extra: [ld(organization), ld(website)],
   }) + body('main'),
@@ -159,7 +159,7 @@ writeFileSync(
   head({
     title: 'Servicios de desarrollo web, Shopify y branding en Colombia | Out Studio',
     description:
-      'Tiendas Shopify, sitios WordPress, landing pages, branding y desarrollo web a medida para negocios de toda Colombia. Cotiza en 6 a 24 horas.',
+      'Especialistas en diseño UX/UI: tiendas Shopify, sitios WordPress, landing pages, branding y desarrollo web a medida para negocios de toda Colombia.',
     path: '/servicios/',
     extra: [
       ld({

@@ -177,7 +177,8 @@ export default function HeroSection() {
               transition={{ delay: 0.75, duration: 0.7 }}
               className="text-paper-pure/90 leading-relaxed text-base sm:text-lg"
             >
-              Diseño y desarrollo a medida, con código propio: tiendas
+              <span className="text-carne font-medium">Especialistas en diseño UX/UI.</span>{' '}
+              Diseñamos y desarrollamos a medida, con código propio: tiendas
               Shopify, sitios WordPress, landing pages y branding pensados para
               convertir visitas en clientes.
             </motion.p>
