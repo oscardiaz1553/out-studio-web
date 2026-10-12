@@ -14,15 +14,18 @@
 
       /* Fondo: color base + barrido circular para cada cambio de escena */
       #bg { position: absolute; inset: 0; background: #1b2fcc; }
-      #wipe { position: absolute; inset: 0; background: #f3ede7; clip-path: circle(0px at 540px 960px); }
+      #wipe { position: absolute; inset: 0; background: #f3ede7; clip-path: polygon(0% 100%, 100% 120%, 100% 120%, 0% 100%); }
 
       /* Cámara: todo lo que se mueve con ella */
       #cam { position: absolute; inset: 0; transform-origin: 540px 960px; --dot: #4a55c4; }
       #lattice { position: absolute; left: -540px; top: -960px; width: 2160px; height: 3840px; }
       .dot { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--dot); opacity: 0.55; }
-      #ring { position: absolute; left: 0; top: 0; width: 240px; height: 240px; border-radius: 50%; border: 18px solid #f5e3b3; opacity: 0; }
 
       .scene { position: absolute; inset: 0; }
+      .sl { position: absolute; left: 0; height: 10px; width: 1100px; border-radius: 5px; background: #f5e3b3; opacity: 0; }
+      .bu { position: absolute; left: 0; top: 0; width: 120px; height: 120px; opacity: 0; }
+      .bu svg { display: block; width: 100%; height: 100%; overflow: visible; }
+      .bu path { fill: none; stroke: currentColor; stroke-width: 9.4; stroke-linejoin: miter; stroke-miterlimit: 10; }
       .d { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
       .w { display: inline-block; }
       .ch { display: inline-block; }
@@ -33,7 +36,6 @@
       .half { height: 100%; }
 
       /* Líneas de velocidad (fuera de la cámara) */
-      .sl { position: absolute; left: 0; height: 10px; width: 1100px; border-radius: 5px; background: #f5e3b3; opacity: 0; }
 
       /* Escena 1 · gancho */
       #s1-title { position: absolute; left: 80px; right: 80px; top: 330px; color: #1b2fcc; }
@@ -99,7 +101,7 @@
 
       <div id="cam">
         <div id="lattice"></div>
-        <div id="ring"></div>
+        <div id="burst"></div>
 
         <!-- Escena 1 · gancho -->
         <div id="s1" class="scene clip" data-start="0" data-duration="3.4" data-track-index="1">
@@ -191,7 +193,6 @@
           <img id="s5-mono" src="assets/mono-laptop.webp" alt="" />
         </div>
       </div>
-
       <div id="sl1" class="sl" style="top: 420px"></div>
       <div id="sl2" class="sl" style="top: 860px"></div>
       <div id="sl3" class="sl" style="top: 1240px"></div>
@@ -239,21 +240,50 @@
       tl.to(cam, { d: Math.PI * 2 * 3, duration: TOTAL, ease: "none", onUpdate: apply }, 0);
       apply();
 
-      /* ── Cambio de fondo con barrido circular desde un punto ── */
+      /* Piezas de la explosión: medio símbolo de la marca cada una ( [ { < ) */
+      const BURST_PATHS = [
+        ["18.58 21.7 19.61 48.4", "M38.19,26.4 H23.28 V65.4 H38.19"],
+        ["18.58 21.7 19.61 48.4", "M38.19,26.4 H34 Q29,26.4 29,31.4 V40.9 Q29,45.9 23.3,45.9 Q29,45.9 29,50.9 V60.4 Q29,65.4 34,65.4 H38.19"],
+        ["19 18 30 56", "M46,21 L23.3,45.9 L46,70.8"],
+      ];
+      const burstHost = document.getElementById("burst");
+      const bursts = [];
+      for (let i = 0; i < 10; i++) {
+        const [vb, d] = BURST_PATHS[i % 3];
+        const el = document.createElement("div");
+        el.className = "bu";
+        el.innerHTML = `<svg viewBox="${vb}"><path d="${d}" /></svg>`;
+        burstHost.appendChild(el);
+        bursts.push(el);
+      }
+
+      /* Cambio de fondo: barrido en diagonal (alterna desde abajo y desde un lado) */
+      let flips = 0;
+      const WIPES = [
+        ["polygon(0% 100%, 100% 118%, 100% 118%, 0% 100%)", "polygon(0% -18%, 100% 0%, 100% 118%, 0% 100%)"],
+        ["polygon(118% 0%, 118% 0%, 100% 100%, 100% 100%)", "polygon(0% 0%, 118% 0%, 100% 100%, -18% 100%)"],
+        ["polygon(0% 0%, 0% 0%, -18% 100%, -18% 100%)", "polygon(0% 0%, 118% 0%, 100% 100%, -18% 100%)"],
+      ];
       function flip(t, color, cx, cy, dot) {
-        tl.set("#wipe", { backgroundColor: color, clipPath: `circle(0px at ${cx}px ${cy}px)` }, t);
-        tl.to("#wipe", { clipPath: `circle(2300px at ${cx}px ${cy}px)`, duration: 0.5, ease: "power3.out" }, t);
-        tl.set("#bg", { backgroundColor: color }, t + 0.52);
-        tl.set("#wipe", { clipPath: `circle(0px at ${cx}px ${cy}px)` }, t + 0.52);
+        const [from, to] = WIPES[flips++ % WIPES.length];
+        tl.set("#wipe", { backgroundColor: color, clipPath: from }, t);
+        tl.to("#wipe", { clipPath: to, duration: 0.45, ease: "power3.inOut" }, t);
+        tl.set("#bg", { backgroundColor: color }, t + 0.47);
+        tl.set("#wipe", { clipPath: WIPES[0][0] }, t + 0.47);
         tl.set("#cam", { "--dot": dot }, t);
       }
-      /* ── Anillo que se expande en cada impacto ── */
-      function boom(t, cx, cy, color, size) {
-        tl.set("#ring", { x: cx - 120, y: cy - 120, borderColor: color }, t);
-        tl.fromTo("#ring", { scale: 0.2, opacity: 1 }, { scale: size || 9, opacity: 0, duration: 0.65, ease: "power3.out", immediateRender: false }, t);
+      /* Golpe: los símbolos salen disparados girando desde el punto del impacto */
+      function boom(t, cx, cy, color, size, dur) {
+        const D = ((size || 9) / 9) * 330;
+        bursts.forEach((el, i) => {
+          const a = (i / bursts.length) * Math.PI * 2 + 0.35;
+          const k = i % 2 ? 1 : 0.72;
+          tl.set(el, { x: cx - 60, y: cy - 60, color, opacity: 1, scale: 0.3, rotation: 0 }, t);
+          tl.to(el, { x: cx - 60 + Math.cos(a) * D * k, y: cy - 60 + Math.sin(a) * D * k, rotation: (i % 2 ? 1 : -1) * 140, scale: 1.1, opacity: 0, duration: dur || 0.58, ease: "power3.out" }, t);
+        });
         shake(t, 18);
       }
-      /* ── Líneas de velocidad ── */
+      /* Líneas de velocidad en la salida de cada escena */
       function speed(t) {
         ["#sl1", "#sl2", "#sl3", "#sl4"].forEach((id, i) => {
           tl.fromTo(id, { x: -1200, opacity: 0.95 }, { x: 1300, opacity: 0.95, duration: 0.38, ease: "power2.in", immediateRender: false }, t + i * 0.045);

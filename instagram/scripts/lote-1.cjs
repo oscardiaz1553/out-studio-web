@@ -1,5 +1,6 @@
-// Lote 1 de Instagram: carrusel "3 errores que frenan tu tienda online",
-// carrusel de Out Emprende y portada del reel de Diario Deportes.
+// Lote 1 de Instagram: carrusel "3 errores que frenan tu tienda online" y
+// carrusel de Out Emprende. El reel de Diario Deportes se hace con
+// HyperFrames: instagram/hyperframes/reel-diario-deportes/.
 // Uso: node instagram/scripts/lote-1.cjs   (escribe en instagram/lote-1/)
 const path = require('path');
 const { IMG, C, logo, pair, check, dots, footer, page, band, render } = require('./kit.cjs');
@@ -112,22 +113,10 @@ const empSlides = [
     ${footer(2, EMP_N, C.pure, 'rgba(251,248,245,.3)')}`),
 ];
 
-// ── Portada del reel de Diario Deportes (9:16, lo central se lee en la grilla 4:5)
-const reelCover = page(1080, 1920, C.klein, `
-  <div class="abs" style="left:-80px;top:380px;opacity:.08">${pair('square', C.carne, 760, 0.6)}</div>
-  <div class="abs" style="left:90px;right:90px;top:430px">
-    <div style="display:flex;align-items:center;gap:30px">${logo(C.pure, 170)}<span class="d" style="font-size:90px;color:${C.carne}">×</span></div>
-    <div style="margin-top:40px;background:${C.deep};border-radius:32px;padding:40px 48px;display:inline-block"><img src="${IMG.dd}" style="height:110px;display:block"></div>
-    <div class="d" style="margin-top:70px;font-size:130px;color:${C.pure}">Así rediseñamos Diario Deportes</div>
-    <p style="margin-top:36px;color:${C.carne};font-size:44px">Antes y después de un medio deportivo.</p>
-  </div>
-  ${band(150, 'bottom:0')}`);
-
 const ERR_NAMES = ['portada', 'carga', 'celular', 'pago', 'resumen', 'cotiza'];
 const EMP_NAMES = ['portada', 'para-ti', 'cotiza'];
 const n2 = (i) => String(i + 1).padStart(2, '0');
 render(path.join(__dirname, '..', 'lote-1'), [
   ...errSlides.map((html, i) => [html, 1080, 1350, `errores-${n2(i)}-${ERR_NAMES[i]}.png`]),
   ...empSlides.map((html, i) => [html, 1080, 1350, `emprende-${n2(i)}-${EMP_NAMES[i]}.png`]),
-  [reelCover, 1080, 1920, 'reel-diario-deportes-portada.png'],
 ]);

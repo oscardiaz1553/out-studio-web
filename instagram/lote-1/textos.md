@@ -38,9 +38,10 @@ mira en las estadísticas de Instagram a qué hora está conectada tu gente.
 
 ## 2. Reel: así rediseñamos Diario Deportes
 
-Sube el video `reel-diario-deportes.mp4` (32 segundos) y elige la
-portada `reel-diario-deportes-portada.png`. El video no tiene audio: ponle un
-sonido que esté sonando en Reels, a volumen bajo.
+Sube el video `reel-diario-deportes.mp4` (21 segundos) y elige la
+portada `reel-diario-deportes-portada.png`. Está hecho con HyperFrames, con el
+lenguaje de la intro del sitio (su proyecto: `instagram/hyperframes/reel-diario-deportes/`).
+No tiene audio: ponle un sonido que esté sonando en Reels, a volumen bajo.
 
 **Texto:**
 
