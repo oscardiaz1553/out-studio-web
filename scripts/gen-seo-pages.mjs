@@ -201,16 +201,6 @@ for (const p of pages) {
           description: p.metaDescription,
           url,
           serviceType: p.nav,
-          ...(p.offer
-            ? {
-                offers: {
-                  '@type': 'Offer',
-                  price: p.offer.price,
-                  priceCurrency: 'COP',
-                  description: `${p.offer.installments} cuotas sin intereses`,
-                },
-              }
-            : {}),
           provider: { '@id': ORG_ID },
           areaServed: { '@type': 'Country', name: 'Colombia' },
         }),

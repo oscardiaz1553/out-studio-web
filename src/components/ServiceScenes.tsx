@@ -188,12 +188,13 @@ const EMPRENDE = (
     <Pair kind="curly" size="30cqw" color="#1B2FCC" className="absolute left-[8%] top-[7%]" />
     <span
       aria-hidden
-      className="absolute left-[8%] top-[34%] font-display font-extrabold tracking-[-0.05em] leading-[0.9]"
+      className="absolute left-[8%] top-[30%] font-display font-extrabold tracking-[-0.05em] leading-[0.9]"
       style={{ fontSize: '17cqw', color: '#1B2FCC' }}
     >
-      3 cuotas
+      Hasta
+      <br />3 cuotas
     </span>
-    <span aria-hidden className="absolute left-[8%] top-[54%] flex gap-[2.5cqw]">
+    <span aria-hidden className="absolute left-[8%] top-[62%] flex gap-[2.5cqw]">
       {[0, 1, 2].map((i) => (
         <span key={i} className="block rounded-full" style={{ width: '7cqw', height: '7cqw', background: '#BC6039' }} />
       ))}

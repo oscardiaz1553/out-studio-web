@@ -29,7 +29,7 @@ const SERVICES = [
     scene: 'emprende',
     slug: 'out-emprende',
     description:
-      'Tu tienda Shopify en 3 cuotas sin intereses, con todos tus productos.',
+      'Tu tienda Shopify hasta en 3 cuotas sin intereses, con todos tus productos.',
     tilt: 3,
   },
   {

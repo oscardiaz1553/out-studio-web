@@ -115,10 +115,10 @@
     {
       "slug": "out-emprende",
       "nav": "Out Emprende",
-      "metaTitle": "Out Emprende: tienda Shopify en 3 cuotas para emprendedores | Out Studio",
-      "metaDescription": "Tu tienda Shopify lista para vender por $2.200.000 en 3 cuotas sin intereses, con todos tus productos. El plan de Out Studio para emprendedores en Colombia.",
-      "h1": "Out Emprende: tu tienda lista para vender, en 3 cuotas",
-      "lead": "Una tienda Shopify completa, con diseño para tu marca, pagos y envíos configurados y todos tus productos cargados. Por $2.200.000, en 3 cuotas mensuales sin intereses.",
+      "metaTitle": "Out Emprende: tienda Shopify hasta en 3 cuotas para emprendedores | Out Studio",
+      "metaDescription": "Tu tienda Shopify lista para vender, con todos tus productos, hasta en 3 cuotas sin intereses. El plan de Out Studio para emprendedores en Colombia.",
+      "h1": "Out Emprende: tu tienda lista para vender, hasta en 3 cuotas",
+      "lead": "Una tienda Shopify completa, con diseño para tu marca, pagos y envíos configurados y todos tus productos cargados. Y la pagas hasta en 3 cuotas mensuales sin intereses.",
       "includesTitle": "Qué incluye Out Emprende",
       "includes": [
         "Tienda Shopify con diseño adaptado a tu marca y pensada para el celular",
@@ -130,14 +130,12 @@
       ],
       "whyTitle": "Pensado para empezar bien",
       "why": [
-        "Cuando estás arrancando, cada peso cuenta. Out Emprende te da una tienda bien hecha, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos, y un pago dividido en 3 cuotas para que no tengas que sacarlo todo de una vez.",
-        "Trabajamos sobre una base propia de Out que adaptamos a tu marca: así salimos rápido y el precio se mantiene fijo. Cuando tu negocio crezca, tu tienda puede crecer con un proyecto a medida."
+        "Cuando estás arrancando, cada peso cuenta. Out Emprende te da una tienda bien hecha, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos, y la posibilidad de pagarla hasta en 3 cuotas para que no tengas que sacarlo todo de una vez.",
+        "Trabajamos sobre una base propia de Out que adaptamos a tu marca: así salimos rápido y con un valor pensado para emprendedores. Cuando tu negocio crezca, tu tienda puede crecer con un proyecto a medida."
       ],
       "forWho": "Emprendedores y negocios pequeños que van a abrir su primera tienda online o que hoy venden solo por redes y WhatsApp.",
       "offer": {
-        "price": 2200000,
         "installments": 3,
-        "installment": 733334,
         "criteria": [
           "Tu negocio está empezando o lleva menos de 2 años vendiendo.",
           "Es tu primera tienda online, o hoy vendes solo por redes sociales y WhatsApp.",
@@ -148,8 +146,12 @@
       },
       "faq": [
         {
-          "q": "¿Cómo funcionan las 3 cuotas?",
-          "a": "El valor total es $2.200.000. Pagas la primera cuota de $733.334 para arrancar, la segunda a los 30 días y la tercera a los 60 días, sin intereses."
+          "q": "¿Cómo funcionan las cuotas?",
+          "a": "Te enviamos una cotización a la medida de tu tienda y puedes pagarla hasta en 3 cuotas mensuales sin intereses: la primera para arrancar y las demás cada 30 días."
+        },
+        {
+          "q": "¿Cuánto cuesta?",
+          "a": "Depende de tu tienda, así que no damos una cifra al azar. Cuéntanos tu proyecto y te enviamos la cotización en 6 a 24 horas, con un valor pensado para emprendedores."
         },
         {
           "q": "¿Cuántos productos puedo tener?",

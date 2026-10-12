@@ -198,30 +198,24 @@ function HeroArt({ theme }: { theme: Theme }) {
 }
 
 type Offer = {
-  price: number;
   installments: number;
-  installment: number;
   criteria: string[];
   note: string;
 };
 
-const cop = (n: number) => `$${new Intl.NumberFormat('es-CO').format(n)}`;
-
-/** Precio publicado y a quién va dirigido (sólo en los planes con oferta fija). */
+/** Forma de pago y a quién va dirigido el plan (sin cifras: el valor se cotiza). */
 function OfferBlock({ offer }: { offer: Offer }) {
   return (
     <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20 bg-paper-pure">
       <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.15fr] gap-6 md:gap-10 items-stretch">
         <div className="rounded-[28px] bg-klein text-paper-pure p-8 sm:p-10 flex flex-col">
-          <p className="text-carne text-sm">Precio fijo</p>
-          <p className="mt-3 font-display font-extrabold tracking-[-0.05em] leading-none" style={{ fontSize: 'clamp(2.8rem, 6vw, 4.4rem)' }}>
-            {offer.installments} cuotas
+          <p className="text-carne text-sm">Forma de pago</p>
+          <p className="mt-3 font-display font-extrabold tracking-[-0.05em] leading-[0.95]" style={{ fontSize: 'clamp(2.6rem, 5.6vw, 4.2rem)' }}>
+            Hasta {offer.installments} cuotas
           </p>
-          <p className="mt-2 font-display font-bold text-2xl sm:text-3xl tracking-[-0.03em]">
-            de {cop(offer.installment)}
-          </p>
+          <p className="mt-2 font-display font-bold text-2xl sm:text-3xl tracking-[-0.03em]">sin intereses</p>
           <p className="mt-4 text-paper-pure/80 leading-relaxed">
-            Total {cop(offer.price)} COP, sin intereses. Productos ilimitados.
+            Con todos tus productos cargados, sin límite. Te enviamos la cotización en 6 a 24 horas.
           </p>
           <div className="mt-auto pt-8">
             <AccentButton href={`${HOME}#cotizar`} onBlue>

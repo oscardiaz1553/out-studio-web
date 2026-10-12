@@ -45,7 +45,7 @@ export const PROJECT_TYPES: ProjectType[] = [
         kind: 'single',
         required: true,
         options: [
-          'Out Emprende: $2.200.000 en 3 cuotas sin intereses',
+          'Out Emprende: hasta en 3 cuotas sin intereses',
           'Tienda a medida',
           'No sé, recomiéndenme',
         ],
