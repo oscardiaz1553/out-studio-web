@@ -22,6 +22,10 @@ Lista viva de lo que quedó por hacer. Se revisa al empezar cada sesión de trab
       footer y los datos de SEO (`sameAs`).
 - [ ] Usuario real de Instagram para el manual de marca.
 
+## Plan de marketing
+
+- [ ] Seguir el plan de 90 días en `docs/plan-marketing.md` (decisiones abiertas en la sección 13).
+
 ## Web y negocio
 
 - [ ] Enviar el sitemap a Google Search Console y Bing Webmaster Tools.
