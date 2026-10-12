@@ -6,6 +6,7 @@ import QuoteDossier, {
   QuoteItem,
   REFERRAL_DISCOUNT,
   formatCOP,
+  isGlobal,
   totals,
 } from '../components/QuoteDossier';
 import {
@@ -415,7 +416,9 @@ export default function QuoteBuilderPage() {
                   placeholder="Un entregable por línea"
                   aria-label="Entregables, uno por línea"
                 />
-                <PriceInput value={item.price} onChange={(n) => setItem(item.id, { price: n })} />
+                {!isGlobal(draft) && (
+                  <PriceInput value={item.price} onChange={(n) => setItem(item.id, { price: n })} />
+                )}
                 {draft.partnerName?.trim() && (
                   <label className="flex items-center gap-2 text-sm text-klein-deep">
                     <input
@@ -481,6 +484,24 @@ export default function QuoteBuilderPage() {
               </label>
               {discount > 0 && (
                 <p className="text-xs text-carne-tinta">Descuento: − {formatCOP(discount)}</p>
+              )}
+            </div>
+            <div className="rounded-xl border border-klein-deep/15 p-3 flex flex-col gap-3">
+              <label className="flex items-center gap-2 text-sm text-klein-deep">
+                <input
+                  type="checkbox"
+                  checked={isGlobal(draft)}
+                  onChange={(e) =>
+                    set(
+                      'globalPrice',
+                      e.target.checked ? draft.items.reduce((sum, i) => sum + (i.price || 0), 0) : undefined,
+                    )
+                  }
+                />
+                Un solo valor para todo el proyecto (sin precio por concepto)
+              </label>
+              {isGlobal(draft) && (
+                <PriceInput value={draft.globalPrice ?? 0} onChange={(n) => set('globalPrice', n)} />
               )}
             </div>
             <p className="text-sm font-medium text-klein-deep">Total: {formatCOP(total)}</p>

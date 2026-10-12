@@ -37,6 +37,8 @@ export interface QuoteDraft {
   note: string;
   /** Cuerpo del correo con el que se envía el PDF. */
   emailMessage: string;
+  /** Un solo valor para todo el proyecto (sin desglose por concepto). */
+  globalPrice?: number;
   /** Estudio aliado cuando el proyecto se hace en conjunto (vacío si no). */
   partnerName?: string;
   /** Logo del aliado como data URL, en blanco o claro: va sobre fondos azules. */
@@ -63,8 +65,13 @@ export function validUntil(iso: string, days: number): string {
   return new Intl.DateTimeFormat('es-CO', { dateStyle: 'long' }).format(d);
 }
 
+/** ¿La inversión va como un solo valor, sin precio por concepto? */
+export const isGlobal = (draft: QuoteDraft) => draft.globalPrice !== undefined;
+
 export function totals(draft: QuoteDraft) {
-  const subtotal = draft.items.reduce((sum, i) => sum + (i.price || 0), 0);
+  const subtotal = isGlobal(draft)
+    ? draft.globalPrice || 0
+    : draft.items.reduce((sum, i) => sum + (i.price || 0), 0);
   const pct = Math.min(100, Math.max(0, draft.referralDiscount || 0));
   const discount = Math.round((subtotal * pct) / 100);
   const base = subtotal - discount;
@@ -442,8 +449,6 @@ export default function QuoteDossier({
               <dd>{formatDate(draft.date)}</dd>
               <dt className="text-carne">Válida hasta</dt>
               <dd>{validUntil(draft.date, draft.validDays)}</dd>
-              <dt className="text-carne">Preparada por</dt>
-              <dd>Oscar Díaz · Out Studio</dd>
             </dl>
           </div>
         </div>
@@ -478,10 +483,7 @@ export default function QuoteDossier({
               </p>
             )}
             <p className="mt-6 font-display font-bold text-klein-deep text-[15px]">
-              Oscar Díaz
-              <span className="block font-sans font-normal text-[12px] text-muted">
-                Out Studio
-              </span>
+              El equipo de Out
             </p>
           </div>
           <Lamina scene="wordpress" className="w-[46mm]" />
@@ -551,7 +553,7 @@ export default function QuoteDossier({
                     )}
                   </td>
                   <td className="py-3 text-right font-medium whitespace-nowrap">
-                    {item.price > 0 ? formatCOP(item.price) : 'Por definir'}
+                    {isGlobal(draft) ? 'Incluido' : item.price > 0 ? formatCOP(item.price) : 'Por definir'}
                   </td>
                 </tr>
               ))}
@@ -693,7 +695,7 @@ export default function QuoteDossier({
             </h2>
             <p className="text-[16px] leading-relaxed text-paper-pure/90 max-w-[118mm]">
               Si la propuesta te hace sentido, respóndenos al correo o escríbenos
-              por WhatsApp y coordinamos el anticipo para empezar. Si tienes dudas,
+              por WhatsApp y coordinamos el primer pago para empezar. Si tienes dudas,
               las resolvemos antes.
             </p>
           </div>
