@@ -93,12 +93,38 @@ const OPTIONS = {
     <div class="abs" style="left:0;right:0;top:290px;display:flex;justify-content:center">${out('#FBF8F5', 'width:340px')}</div>
     <div class="abs" style="left:0;right:0;top:590px;display:flex;justify-content:center"><div style="width:120px;height:10px;border-radius:5px;background:#F5E3B3"></div></div>
     <img class="abs" src="${DD}" style="left:355px;top:640px;width:370px">`,
+
+  // D1: la D con fondo azul plano y corchetes crema enmarcando el título.
+  d1: `
+    <div class="abs" style="inset:0;background:#1B2FCC"></div>
+    <div class="abs" style="left:192px;top:160px;height:320px;display:flex;gap:436px">${sym('square', '#F5E3B3', 'height:330px')}${sym('square', '#F5E3B3', 'height:330px', true)}</div>
+    <div class="abs" style="left:0;right:0;top:195px;display:flex;justify-content:center;align-items:center;gap:26px">${out('#FBF8F5', 'width:200px')}<span style="font-weight:800;font-size:58px;color:#F5E3B3">×</span></div>
+    <img class="abs" src="${DD}" style="left:335px;top:355px;width:410px">
+    <img class="abs" src="${LAPTOP}" style="left:250px;top:520px;width:640px">`,
+
+  // D2: fondo azul plano, llaves enormes y tenues detrás de Mango.
+  d2: `
+    <div class="abs" style="inset:0;background:#1B2FCC"></div>
+    <div class="abs" style="left:120px;top:430px;height:560px;display:flex;gap:500px;opacity:.22">${sym('curly', '#F5E3B3', 'height:560px')}${sym('curly', '#F5E3B3', 'height:560px', true)}</div>
+    <div class="abs" style="left:0;right:0;top:170px;display:flex;justify-content:center;align-items:center;gap:30px">${out('#FBF8F5', 'width:220px')}<span style="font-weight:800;font-size:64px;color:#F5E3B3">×</span></div>
+    <img class="abs" src="${DD}" style="left:240px;top:350px;width:600px">
+    <img class="abs" src="${LAPTOP}" style="left:250px;top:520px;width:640px">`,
+
+  // D3: fondo azul plano; un corchete arriba a la izquierda y otro abajo a la
+  // derecha, como si la imagen fuera un bloque de código abierto y cerrado.
+  d3: `
+    <div class="abs" style="inset:0;background:#1B2FCC"></div>
+    <div class="abs" style="left:235px;top:105px;height:210px">${sym('square', '#F5E3B3', 'height:210px')}</div>
+    <div class="abs" style="right:200px;top:610px;height:250px">${sym('square', '#F5E3B3', 'height:250px', true)}</div>
+    <div class="abs" style="left:0;right:0;top:175px;display:flex;justify-content:center;align-items:center;gap:30px">${out('#FBF8F5', 'width:220px')}<span style="font-weight:800;font-size:64px;color:#F5E3B3">×</span></div>
+    <img class="abs" src="${DD}" style="left:265px;top:350px;width:550px">
+    <img class="abs" src="${LAPTOP}" style="left:210px;top:520px;width:640px">`,
 };
 
 (async () => {
   const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
   const p = await br.newPage({ viewport: { width: 1080, height: 1080 } });
-  for (const [k, body] of Object.entries(OPTIONS)) {
+  for (const [k, body] of Object.entries(OPTIONS).filter(([k]) => !process.argv[2] || process.argv.slice(2).includes(k))) {
     await p.setContent(`<!doctype html><html><head><style>${BASE}</style></head><body>${body}</body></html>`);
     await p.evaluate(() => document.fonts.ready);
     await p.waitForTimeout(300);
