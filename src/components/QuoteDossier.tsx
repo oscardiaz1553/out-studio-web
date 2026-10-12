@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { Fragment, ReactNode } from 'react';
 import LogoOut from './LogoOut';
 import TitleFrame, { FrameKind, Sym } from './TitleFrame';
 import { SCENES } from './ServiceScenes';
@@ -43,6 +43,10 @@ export interface QuoteDraft {
   partnerName?: string;
   /** Logo del aliado como data URL, en blanco o claro: va sobre fondos azules. */
   partnerLogo?: string;
+  /** Contacto del aliado, para la contraportada. */
+  partnerContact?: string;
+  partnerEmail?: string;
+  partnerPhone?: string;
 }
 
 export const IVA_RATE = 0.19;
@@ -483,9 +487,6 @@ export default function QuoteDossier({
                 proyecto, donde estamos tú y los dos estudios.
               </p>
             )}
-            <p className="mt-6 font-display font-bold text-klein-deep text-[15px]">
-              El equipo de Out
-            </p>
           </div>
           <Lamina scene="wordpress" className="w-[46mm]" />
         </div>
@@ -700,14 +701,43 @@ export default function QuoteDossier({
               las resolvemos antes.
             </p>
           </div>
-          <dl className="mt-[14mm] grid grid-cols-[24mm_1fr] gap-x-4 gap-y-3 text-[15px] max-w-[110mm]">
-            <dt className="text-carne text-[13px] pt-[2px]">Correo</dt>
-            <dd className="font-medium">{EMAIL}</dd>
-            <dt className="text-carne text-[13px] pt-[2px]">WhatsApp</dt>
-            <dd className="font-medium">{PHONE_DISPLAY}</dd>
-            <dt className="text-carne text-[13px] pt-[2px]">Web</dt>
-            <dd className="font-medium">outstudio.online</dd>
-          </dl>
+          {partner && (draft.partnerEmail?.trim() || draft.partnerPhone?.trim()) ? (
+            <div className="mt-[14mm] grid grid-cols-2 gap-[10mm] max-w-[170mm]">
+              {[
+                { who: 'Out', rows: [['Correo', EMAIL], ['WhatsApp', PHONE_DISPLAY], ['Web', 'outstudio.online']] },
+                {
+                  who: [partner, draft.partnerContact?.trim()].filter(Boolean).join(' · '),
+                  rows: [
+                    ['Correo', draft.partnerEmail?.trim() ?? ''],
+                    ['WhatsApp', draft.partnerPhone?.trim() ?? ''],
+                  ].filter(([, v]) => v),
+                },
+              ].map((c) => (
+                <div key={c.who}>
+                  <p className="font-display font-extrabold text-paper-pure text-[18px] tracking-[-0.02em] mb-3 pb-3 border-b border-paper-pure/20">
+                    {c.who}
+                  </p>
+                  <dl className="grid grid-cols-[20mm_1fr] gap-x-3 gap-y-2.5 text-[14px]">
+                    {c.rows.map(([k, v]) => (
+                      <Fragment key={k}>
+                        <dt className="text-carne text-[12px] pt-[2px]">{k}</dt>
+                        <dd className="font-medium break-all">{v}</dd>
+                      </Fragment>
+                    ))}
+                  </dl>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <dl className="mt-[14mm] grid grid-cols-[24mm_1fr] gap-x-4 gap-y-3 text-[15px] max-w-[110mm]">
+              <dt className="text-carne text-[13px] pt-[2px]">Correo</dt>
+              <dd className="font-medium">{EMAIL}</dd>
+              <dt className="text-carne text-[13px] pt-[2px]">WhatsApp</dt>
+              <dd className="font-medium">{PHONE_DISPLAY}</dd>
+              <dt className="text-carne text-[13px] pt-[2px]">Web</dt>
+              <dd className="font-medium">outstudio.online</dd>
+            </dl>
+          )}
           <div className="mt-auto">
             {partner && (
               <div className="mb-5 [&_svg]:h-9">

@@ -358,6 +358,22 @@ export default function QuoteBuilderPage() {
                     e.target.value = '';
                   }}
                 />
+                <Field label="Contacto del aliado">
+                  <input
+                    className={INPUT}
+                    value={draft.partnerContact ?? ''}
+                    onChange={(e) => set('partnerContact', e.target.value)}
+                    placeholder="Nombre"
+                  />
+                </Field>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="Email del aliado">
+                    <input type="email" className={INPUT} value={draft.partnerEmail ?? ''} onChange={(e) => set('partnerEmail', e.target.value)} />
+                  </Field>
+                  <Field label="WhatsApp del aliado">
+                    <input className={INPUT} value={draft.partnerPhone ?? ''} onChange={(e) => set('partnerPhone', e.target.value)} />
+                  </Field>
+                </div>
                 <p className="text-xs text-muted">
                   Marca en cada concepto si lo hace el aliado. El dossier lo muestra en la
                   portada, en el alcance y en la contraportada.
