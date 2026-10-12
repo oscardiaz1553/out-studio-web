@@ -1,12 +1,12 @@
 # Instagram, lote 1
 
 Tres publicaciones para la primera semana. Las imágenes están en esta carpeta
-y se regeneran con `node design-src/instagram/lote-1.cjs`.
+y se regeneran con `node instagram/scripts/lote-1.cjs`.
 
 | Día sugerido | Publicación | Archivos |
 |---|---|---|
 | Martes | Carrusel: 3 errores que frenan tu tienda online | `errores-01` a `errores-06` |
-| Jueves | Reel: así rediseñamos Diario Deportes | `public/diario-deportes-vertical.mp4` + portada `reel-diario-deportes-portada.png` |
+| Jueves | Reel: así rediseñamos Diario Deportes | `reel-diario-deportes.mp4` + portada `reel-diario-deportes-portada.png` |
 | Sábado | Carrusel: Out Emprende | `emprende-01` a `emprende-03` |
 
 La hora: empieza al mediodía o a las 7 p. m. y, después de 3 o 4 semanas,
@@ -38,7 +38,7 @@ mira en las estadísticas de Instagram a qué hora está conectada tu gente.
 
 ## 2. Reel: así rediseñamos Diario Deportes
 
-Sube el video `public/diario-deportes-vertical.mp4` (32 segundos) y elige la
+Sube el video `reel-diario-deportes.mp4` (32 segundos) y elige la
 portada `reel-diario-deportes-portada.png`. El video no tiene audio: ponle un
 sonido que esté sonando en Reels, a volumen bajo.
 
