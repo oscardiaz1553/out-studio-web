@@ -24,6 +24,7 @@ const LABEL = 'text-[11px] tracking-[0.04em] text-muted';
 const DEFAULT_PAYMENT =
   '50% de anticipo para dar inicio al proyecto y 50% restante contra entrega, antes de la publicación.';
 const DEFAULT_TERMS = [
+  'Los valores parten de la información que nos compartiste y pueden ajustarse cuando definamos el detalle del proyecto en una reunión uno a uno.',
   'Esta propuesta es válida durante el tiempo indicado en la portada.',
   'El alcance cubre únicamente lo descrito en este documento; cualquier cambio o adición se cotiza aparte.',
   'Se incluyen rondas de ajustes razonables sobre cada entregable, definidas de común acuerdo al iniciar.',
@@ -51,7 +52,7 @@ function hashString(s: string) {
 
 function defaultEmailMessage(name: string) {
   const first = name.trim().split(' ')[0];
-  return `Hola${first ? ` ${first}` : ''},\n\nGracias por contarnos sobre tu proyecto. Te compartimos nuestra propuesta de cotización, con el alcance, la inversión y los tiempos.\n\nCualquier duda la resolvemos con gusto.\n\nOscar Díaz\nOut Studio`;
+  return `Hola${first ? ` ${first}` : ''},\n\nGracias por contarnos sobre tu proyecto. Te compartimos nuestra propuesta de cotización, con el alcance, la inversión y los tiempos. Es un valor inicial: lo ajustamos cuando hablemos del detalle en una reunión uno a uno.\n\nCualquier duda la resolvemos con gusto.\n\nOscar Díaz\nOut Studio`;
 }
 
 function initialDraft(payload: QuotePayload | null): QuoteDraft {

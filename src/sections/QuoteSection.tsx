@@ -426,6 +426,10 @@ function QuoteScreen({
               enviamos la cotización a {contact.email} en las próximas 6 a 24
               horas.
             </p>
+            <p className="text-sm text-muted leading-relaxed max-w-md">
+              Es un valor inicial, armado con lo que nos contaste. Puede ajustarse
+              cuando hablemos del detalle de tu proyecto en una reunión uno a uno.
+            </p>
             <AccentButton onClick={finish} className="mt-4">
               Cerrar
             </AccentButton>
@@ -497,7 +501,9 @@ function QuoteScreen({
                         ¿A dónde te enviamos la cotización?
                       </h2>
                       <p className="text-ink-2 leading-relaxed mb-10">
-                        Usamos tus datos solo para responderte.
+                        Usamos tus datos solo para responderte. La cotización es un
+                        valor inicial con lo que nos cuentas aquí y se puede ajustar
+                        cuando hablemos del detalle en una reunión uno a uno.
                       </p>
                       <div className="flex flex-col gap-4">
                         <label className="flex flex-col gap-2">

@@ -431,7 +431,7 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
 
         {success && (
           <Bubble from="bot">
-            {`¡Recibimos tu solicitud${firstName ? `, ${firstName}` : ''}! 🥭\nRevisamos tu caso y te escribimos a ${form.contact.email} en las próximas 6 a 24 horas.`}
+            {`¡Recibimos tu solicitud${firstName ? `, ${firstName}` : ''}! 🥭\nRevisamos tu caso y te escribimos a ${form.contact.email} en las próximas 6 a 24 horas.\nEs un valor inicial: lo afinamos cuando hablemos de tu proyecto en una reunión uno a uno.`}
           </Bubble>
         )}
       </div>

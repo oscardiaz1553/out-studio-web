@@ -486,6 +486,10 @@ export default function QuoteDossier({
               {formatCOP(total)}
             </span>
           </div>
+          <p className="relative mt-4 pt-4 border-t border-paper-pure/15 text-[11.5px] leading-relaxed text-paper-pure/75">
+            Valor inicial, calculado con la información que nos compartiste. Puede
+            ajustarse cuando definamos el detalle del proyecto en una reunión uno a uno.
+          </p>
         </div>
         {draft.tax === 'none' && (
           <p className="text-[11px] text-muted mt-2">Valores en pesos colombianos (COP).</p>
