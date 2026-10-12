@@ -68,7 +68,7 @@ export default function OutEmprendeSection() {
               Quiero empezar
             </AccentButton>
             <a
-              href={`${HOME}servicios/out-emprende/`}
+              href={`${HOME}out-emprende/`}
               className="font-medium underline underline-offset-[6px] decoration-paper-pure/40 hover:decoration-carne hover:text-carne transition-colors"
             >
               ¿Es para mí?
@@ -79,7 +79,7 @@ export default function OutEmprendeSection() {
         {/* La lámina del plan, inclinada, con un sello que gira encima. */}
         <div className="relative w-full max-w-[340px] sm:max-w-[420px] mx-auto">
           <motion.a
-            href={`${HOME}servicios/out-emprende/`}
+            href={`${HOME}out-emprende/`}
             aria-label="Ver Out Emprende"
             initial={reduceMotion ? false : { y: 40, rotate: 0 }}
             whileInView={{ y: 0, rotate: 4 }}

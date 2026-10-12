@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import AccentButton from '../components/AccentButton';
+import { SCENES } from '../components/ServiceScenes';
 import { FrameKind, Sym } from '../components/TitleFrame';
 import { AZULEJO } from '../data/botanica';
 import ScrollToTop from '../components/ScrollToTop';
@@ -11,6 +12,23 @@ export type ServiceData = (typeof data.pages)[number];
 
 const HOME = import.meta.env.BASE_URL;
 export const servicePath = (slug: string) => `${HOME}servicios/${slug}/`;
+
+// Las páginas "independientes" (como Out Emprende) viven en la raíz del sitio
+// y no aparecen en las listas de servicios.
+export const isStandalone = (p: ServiceData) => Boolean((p as { standalone?: boolean }).standalone);
+export const pagePath = (p: ServiceData) => (isStandalone(p) ? `${HOME}${p.slug}/` : servicePath(p.slug));
+export const SERVICE_PAGES = data.pages.filter((p) => !isStandalone(p));
+
+// Una línea por servicio para las tarjetas de "Otros servicios".
+const SHORT: Record<string, string> = {
+  'tiendas-shopify': 'Tu tienda vendiendo desde el primer día.',
+  'sitios-wordpress': 'Una web profesional que actualizas tú mismo.',
+  'landing-pages': 'Páginas de campaña hechas para que la gente actúe.',
+  branding: 'Logo e identidad visual con carácter.',
+  'desarrollo-web': 'Sitios y tiendas a medida, con código propio.',
+  'out-emprende': 'Tu proyecto web, hasta en 3 cuotas sin intereses.',
+};
+const TILTS = [-3, 2.5, -2, 3];
 
 export const STEPS = [
   { verb: 'Escuchamos', text: 'Entendemos tu negocio y lo que tiene que lograr tu proyecto. Recibes una propuesta clara, con alcance y tiempos.' },
@@ -65,7 +83,7 @@ function ServiceSwitcher({ current, dark }: { current: ServiceData; dark: boolea
       </button>
       {open && (
         <ul className="absolute left-0 top-full mt-2 z-30 min-w-[230px] rounded-2xl bg-paper-pure text-klein-deep shadow-[0_18px_50px_rgba(10,14,50,0.35)] ring-1 ring-klein-deep/10 p-2">
-          {data.pages.map((p) => (
+          {SERVICE_PAGES.map((p) => (
             <li key={p.slug}>
               <a
                 href={servicePath(p.slug)}
@@ -275,9 +293,15 @@ export default function ServicePage({ page }: { page: ServiceData }) {
             >
               <a href={HOME} className="underline-offset-4 hover:underline">Inicio</a>
               <span aria-hidden className="mx-2">/</span>
-              <a href={`${HOME}servicios/`} className="underline-offset-4 hover:underline">Servicios</a>
-              <span aria-hidden className="mx-2">/</span>
-              <ServiceSwitcher current={page} dark={theme.dark} />
+              {isStandalone(page) ? (
+                <span aria-current="page">{page.nav}</span>
+              ) : (
+                <>
+                  <a href={`${HOME}servicios/`} className="underline-offset-4 hover:underline">Servicios</a>
+                  <span aria-hidden className="mx-2">/</span>
+                  <ServiceSwitcher current={page} dark={theme.dark} />
+                </>
+              )}
             </nav>
             <h1
               className="font-display font-extrabold tracking-[-0.04em] leading-[1]"
@@ -386,24 +410,43 @@ export default function ServicePage({ page }: { page: ServiceData }) {
         </div>
       </section>
 
-      {/* Otros servicios */}
-      <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-16 bg-paper-pure border-t border-klein-deep/15">
-        <div className="max-w-[1100px] mx-auto">
-          <h2 className="font-display font-semibold text-klein tracking-[-0.03em] leading-tight mb-6" style={{ fontSize: 'clamp(1.3rem, 2.6vw, 2rem)' }}>
-            Otros servicios de Out Studio
+      {/* Otros servicios: las láminas, igual que en la portada */}
+      <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20 bg-paper-pure border-t border-klein-deep/15">
+        <div className="max-w-[1200px] mx-auto">
+          <h2 className="font-display font-extrabold text-klein tracking-[-0.04em] leading-[1] mb-8 sm:mb-10" style={{ fontSize: 'clamp(1.8rem, 3.6vw, 3rem)' }}>
+            {isStandalone(page) ? 'Lo que puedes hacer con Out Emprende' : 'Otros servicios'}
           </h2>
-          <ul className="flex flex-wrap gap-3">
-            {related.map((r) => (
-              <li key={r.slug}>
-                <a
-                  href={servicePath(r.slug)}
-                  className="inline-block rounded-full border border-klein text-klein font-medium px-6 py-2.5 text-sm hover:bg-klein hover:text-paper-pure transition-colors"
-                >
-                  {r.nav}
-                </a>
-              </li>
+          <div
+            className={`flex lg:grid ${related.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-5 lg:gap-8 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scroll-px-6 md:scroll-px-10 py-4 [&::-webkit-scrollbar]:hidden lg:!mx-0 lg:!px-0`}
+            // En el celular la pista va a todo el ancho para que las láminas
+            // inclinadas no se corten en el borde.
+            style={{ scrollbarWidth: 'none', marginInline: 'calc(50% - 50vw)', paddingInline: 'calc(50vw - 50%)' }}
+          >
+            {related.map((r, i) => (
+              <motion.a
+                key={r.slug}
+                href={pagePath(r)}
+                initial={false}
+                whileHover={{ rotate: 0, y: -4 }}
+                style={{ rotate: TILTS[i % TILTS.length] }}
+                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                className="group shrink-0 snap-start w-[68%] sm:w-[40%] lg:w-auto flex flex-col rounded-[24px] overflow-hidden bg-paper shadow-[0_14px_40px_rgba(20,30,92,0.12)]"
+              >
+                <span aria-hidden className="relative block w-full aspect-[4/5]" style={{ containerType: 'inline-size' }}>
+                  {SCENES[r.scene]}
+                </span>
+                <span className="flex flex-1 flex-col gap-2 p-5">
+                  <span className="font-display font-extrabold text-klein tracking-[-0.03em] leading-tight text-xl sm:text-2xl">
+                    {r.nav}
+                  </span>
+                  <span className="text-sm leading-relaxed text-klein-deep/80">{SHORT[r.slug]}</span>
+                  <span className="mt-auto pt-2 text-sm font-medium text-klein underline underline-offset-4 decoration-klein/30 group-hover:decoration-klein">
+                    Ver servicio
+                  </span>
+                </span>
+              </motion.a>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 
@@ -431,7 +474,7 @@ export default function ServicePage({ page }: { page: ServiceData }) {
       <footer className="px-6 md:px-10 lg:px-16 py-10 border-t border-klein-deep/15 text-sm text-muted">
         <div className="max-w-[1100px] mx-auto flex flex-col gap-4">
           <nav aria-label="Servicios" className="flex flex-wrap gap-x-5 gap-y-2">
-            {data.pages.map((p) => (
+            {SERVICE_PAGES.map((p) => (
               <a key={p.slug} href={servicePath(p.slug)} className="hover:text-klein">
                 {p.nav}
               </a>

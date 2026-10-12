@@ -21,7 +21,7 @@ function BlogFooter() {
     <footer className="px-6 md:px-10 lg:px-16 py-10 border-t border-klein-deep/15 text-sm text-muted">
       <div className="max-w-[1100px] mx-auto flex flex-col gap-4">
         <nav aria-label="Servicios" className="flex flex-wrap gap-x-5 gap-y-2">
-          {services.pages.map((p) => (
+          {services.pages.filter((p) => !(p as { standalone?: boolean }).standalone).map((p) => (
             <a key={p.slug} href={`${HOME}servicios/${p.slug}/`} className="hover:text-klein">
               {p.nav}
             </a>

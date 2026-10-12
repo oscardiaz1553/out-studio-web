@@ -6,11 +6,13 @@ import { readFileSync, readdirSync } from 'node:fs';
 // Una página de entrada por servicio (ver src/data/services.json).
 const services = JSON.parse(
   readFileSync(new URL('./src/data/services.json', import.meta.url), 'utf8'),
-).pages as { slug: string }[];
+).pages as { slug: string; standalone?: boolean }[];
 const servicePages = Object.fromEntries(
   services.map((s) => [
     `servicio-${s.slug}`,
-    fileURLToPath(new URL(`./servicios/${s.slug}/index.html`, import.meta.url)),
+    fileURLToPath(
+      new URL(`./${s.standalone ? '' : 'servicios/'}${s.slug}/index.html`, import.meta.url),
+    ),
   ]),
 );
 

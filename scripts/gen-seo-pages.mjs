@@ -8,6 +8,9 @@ import { marked } from 'marked';
 const data = JSON.parse(readFileSync('src/data/services.json', 'utf8'));
 const { site, pages } = data;
 const ORG_ID = `${site.url}/#organization`;
+// Las páginas "independientes" (Out Emprende) viven en la raíz y no se listan
+// como servicios.
+const pathOf = (p) => (p.standalone ? `/${p.slug}/` : `/servicios/${p.slug}/`);
 const OG = `${site.url}/og.png`;
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -42,7 +45,7 @@ const organization = {
     name: 'Servicios de Out Studio',
     itemListElement: pages.map((p) => ({
       '@type': 'Offer',
-      itemOffered: { '@type': 'Service', name: p.h1, url: `${site.url}/servicios/${p.slug}/` },
+      itemOffered: { '@type': 'Service', name: p.h1, url: `${site.url}${pathOf(p)}` },
     })),
   },
 };
@@ -166,7 +169,7 @@ writeFileSync(
         '@context': 'https://schema.org',
         '@type': 'ItemList',
         name: 'Servicios de Out Studio',
-        itemListElement: pages.map((p, i) => ({
+        itemListElement: pages.filter((p) => !p.standalone).map((p, i) => ({
           '@type': 'ListItem',
           position: i + 1,
           name: p.nav,
@@ -187,12 +190,12 @@ writeFileSync(
 
 // --- Una página por servicio
 for (const p of pages) {
-  const url = `${site.url}/servicios/${p.slug}/`;
+  const url = `${site.url}${pathOf(p)}`;
   const html =
     head({
       title: p.metaTitle,
       description: p.metaDescription,
-      path: `/servicios/${p.slug}/`,
+      path: pathOf(p),
       extra: [
         ld({
           '@context': 'https://schema.org',
@@ -209,8 +212,12 @@ for (const p of pages) {
           '@type': 'BreadcrumbList',
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` },
-            { '@type': 'ListItem', position: 2, name: 'Servicios', item: `${site.url}/servicios/` },
-            { '@type': 'ListItem', position: 3, name: p.nav, item: url },
+            ...(p.standalone
+              ? [{ '@type': 'ListItem', position: 2, name: p.nav, item: url }]
+              : [
+                  { '@type': 'ListItem', position: 2, name: 'Servicios', item: `${site.url}/servicios/` },
+                  { '@type': 'ListItem', position: 3, name: p.nav, item: url },
+                ]),
           ],
         }),
         ld({
@@ -224,8 +231,9 @@ for (const p of pages) {
         }),
       ],
     }) + body('servicio', p.slug);
-  mkdirSync(`servicios/${p.slug}`, { recursive: true });
-  writeFileSync(`servicios/${p.slug}/index.html`, html);
+  const dir = pathOf(p).slice(1, -1);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(`${dir}/index.html`, html);
 }
 // --- Blog: un archivo Markdown por artículo en content/blog/ (con un bloque
 // de datos al inicio: title, description, date, category, related).

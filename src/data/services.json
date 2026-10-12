@@ -181,7 +181,8 @@
         "branding"
       ],
       "scene": "emprende",
-      "tilt": 3
+      "tilt": 3,
+      "standalone": true
     },
     {
       "slug": "sitios-wordpress",
