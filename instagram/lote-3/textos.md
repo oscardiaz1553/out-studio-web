@@ -37,8 +37,8 @@ su proyecto vive en `instagram/hyperframes/reel-senales/`.
 ## 2. Reel: 3 señales de que tu página necesita un rediseño
 
 Video de 16,6 segundos, sin audio, animado con el mismo lenguaje de la intro
-del sitio: cámara que entra y sale, sacudidas y una explosión de símbolos
-en cada golpe, barridos de color en diagonal y líneas de velocidad. Súbelo con un sonido que esté
+del sitio: cámara que entra y sale, anillos que se expanden en los golpes,
+barridos circulares de color y líneas de velocidad. Súbelo con un sonido que esté
 sonando en Reels, a volumen bajo. Portada: `reel-senales-portada.png`.
 
 **Texto:**
