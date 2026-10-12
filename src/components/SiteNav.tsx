@@ -107,7 +107,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
           <span className="font-display font-extrabold tracking-[-0.03em] text-klein-deep text-[clamp(1.1rem,5.6vw,1.4rem)] leading-none whitespace-nowrap">
             Cotiza tu proyecto
           </span>
-          <span className="w-12 h-12 shrink-0 rounded-full bg-klein text-paper-pure flex items-center justify-center">
+          <span className="w-12 h-12 shrink-0 rounded-full bg-klein-deep text-paper-pure flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
               <path
                 d="M5 12h14M13 6l6 6-6 6"
