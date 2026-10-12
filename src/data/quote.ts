@@ -457,6 +457,22 @@ export const COMMON_QUESTIONS: Question[] = [
     ],
   },
   {
+    id: 'fuente',
+    label: '¿Cómo nos conociste?',
+    kind: 'single',
+    required: true,
+    options: [
+      'Me lo recomendó alguien',
+      'Instagram',
+      'TikTok',
+      'Google',
+      'LinkedIn',
+      'Vi un anuncio',
+      'Ustedes me escribieron',
+      'Otro',
+    ],
+  },
+  {
     id: 'extra',
     label: '¿Algo más que debamos saber?',
     kind: 'long',
