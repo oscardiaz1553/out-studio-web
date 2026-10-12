@@ -111,7 +111,7 @@
 
 ## Proof Points
 **Metrics:** Todavía no hay datos medidos. Prioridad: medir antes y después en los próximos proyectos (velocidad, visitas, ventas o contactos) y pedir testimonios al entregar.
-**Customers:** BARCI (tienda Shopify), Diario Deportes (rediseño de medio deportivo), Volta (app), Habla Deportes.
+**Customers:** BARCI (tienda Shopify), Diario Deportes (rediseño de medio deportivo), Volta (app), Habla Deportes (fuera de la web por ahora).
 **Testimonials:**
 > "[por confirmar]" — [cliente]
 **Value themes:**

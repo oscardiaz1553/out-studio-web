@@ -55,15 +55,6 @@ export const PROJECTS: Project[] = [
   },
   {
     number: '03',
-    name: 'Habla Deportes',
-    type: 'Web',
-    status: 'in-progress',
-    summary:
-      'Rediseño completo de un medio de fútbol colombiano: video, radio y marca propia.',
-    url: 'https://habladeportes.co',
-  },
-  {
-    number: '04',
     name: 'Volta',
     type: 'Web',
     status: 'launched',
