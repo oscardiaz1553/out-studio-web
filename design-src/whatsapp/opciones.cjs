@@ -119,6 +119,16 @@ const OPTIONS = {
     <div class="abs" style="left:0;right:0;top:175px;display:flex;justify-content:center;align-items:center;gap:30px">${out('#FBF8F5', 'width:220px')}<span style="font-weight:800;font-size:64px;color:#F5E3B3">×</span></div>
     <img class="abs" src="${DD}" style="left:265px;top:350px;width:550px">
     <img class="abs" src="${LAPTOP}" style="left:210px;top:520px;width:640px">`,
+
+  // Final: la D2 con la trama de símbolos de la E en vez de las llaves.
+  final: `
+    <div class="abs" style="inset:0;background:#1B2FCC"></div>
+    <div class="abs" style="inset:-40px;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);opacity:.09;transform:rotate(-12deg)">
+      ${Array.from({ length: 64 }, (_, i) => `<div style="display:flex;justify-content:center;align-items:center;gap:4px">${sym(i % 2 ? 'curly' : 'square', '#F5E3B3', 'height:46px')}${sym(i % 2 ? 'curly' : 'square', '#F5E3B3', 'height:46px', true)}</div>`).join('')}
+    </div>
+    <div class="abs" style="left:0;right:0;top:170px;display:flex;justify-content:center;align-items:center;gap:30px">${out('#FBF8F5', 'width:220px')}<span style="font-weight:800;font-size:64px;color:#F5E3B3">×</span></div>
+    <img class="abs" src="${DD}" style="left:240px;top:350px;width:600px">
+    <img class="abs" src="${LAPTOP}" style="left:250px;top:520px;width:640px">`,
 };
 
 (async () => {
