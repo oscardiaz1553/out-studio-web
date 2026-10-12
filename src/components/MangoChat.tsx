@@ -108,8 +108,8 @@ const DETAILS_PROMPT: Prompt = {
 
 const TYPE_PROMPT: Prompt = {
   id: 'type',
-  ask: '¿Qué necesitas? Elige la opción que más se acerque.',
-  kind: 'single',
+  ask: '¿Qué necesitas? Puedes elegir uno o varios servicios.',
+  kind: 'multi',
   options: PROJECT_TYPES.map((t) => t.label),
   required: true,
   target: { type: 'type' },
@@ -128,9 +128,9 @@ export function useChatState() {
   const [details, setDetails] = useState<boolean | null>(null);
 
   const prompts = useMemo(() => {
-    const type = PROJECT_TYPES.find((t) => t.id === form.selected[0]);
+    const types = PROJECT_TYPES.filter((t) => form.selected.includes(t.id));
     const all = [
-      ...(type ? type.questions.map((q) => fromQuestion(q, type.id)) : []),
+      ...types.flatMap((t) => t.questions.map((q) => fromQuestion(q, t.id))),
       ...COMMON_QUESTIONS.map((q) => fromQuestion(q, 'comun')),
     ];
     const quick = all.filter((p) => !p.question || !isDetail(p.question));
@@ -171,7 +171,7 @@ export type ChatState = ReturnType<typeof useChatState>;
 function valueOf(p: Prompt, chat: ChatState): string | string[] | undefined {
   const { form } = chat;
   if (p.target.type === 'type') {
-    return PROJECT_TYPES.find((t) => t.id === form.selected[0])?.label;
+    return PROJECT_TYPES.filter((t) => form.selected.includes(t.id)).map((t) => t.label);
   }
   if (p.target.type === 'contact') return form.contact[p.target.field];
   if (p.target.type === 'details') {
@@ -299,9 +299,8 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
 
   const commit = (p: Prompt, value: string | string[]) => {
     if (p.target.type === 'type') {
-      form.selectType(
-        PROJECT_TYPES.find((t) => t.label === value)?.id ?? PROJECT_TYPES[0].id,
-      );
+      const labels = Array.isArray(value) ? value : [value];
+      form.setTypes(PROJECT_TYPES.filter((t) => labels.includes(t.label)).map((t) => t.id));
     } else if (p.target.type === 'details') {
       chat.setDetails(value === DETAILS_YES);
     } else if (p.target.type === 'contact') {
@@ -325,7 +324,10 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
   };
 
   const canGoMulti =
-    !current || !current.question || isAnswered(current.question, multiDraft);
+    !current ||
+    (current.question
+      ? isAnswered(current.question, multiDraft)
+      : !current.required || multiDraft.length > 0);
 
   const send = () => {
     const bot = rootRef.current?.querySelector<HTMLInputElement>('input[name="botcheck"]');

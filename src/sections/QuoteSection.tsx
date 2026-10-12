@@ -233,22 +233,28 @@ function TypeCards({
       {PROJECT_TYPES.map((t) => (
         <label key={t.id} className="relative block">
           <input
-            type="radio"
+            type="checkbox"
             name="tipo-proyecto"
             checked={selected.includes(t.id)}
             onChange={() => onSelect(t.id)}
-            // click además de change: tocar el que ya estaba elegido no
-            // dispara change, pero sí debe volver a abrir la pantalla.
-            onClick={() => onSelect(t.id)}
             className="peer sr-only"
           />
           <span
-            className={`${OPTION_BASE} flex-col !items-start gap-1 h-full text-left`}
+            className={`${OPTION_BASE} flex-col !items-start gap-1 h-full text-left pr-12`}
           >
             <span className="font-display font-semibold text-base">
               {t.label}
             </span>
             <span className="text-xs opacity-75">{t.blurb}</span>
+          </span>
+          {/* Casilla: se marca cuando el servicio queda elegido. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-4 top-4 w-6 h-6 rounded-full border-2 border-klein-deep/25 flex items-center justify-center text-transparent peer-checked:border-paper-pure peer-checked:bg-paper-pure peer-checked:text-klein transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </span>
         </label>
       ))}
@@ -449,12 +455,12 @@ function QuoteScreen({
                       <p className="text-ink-2 leading-relaxed mb-8 max-w-lg">
                         Cada proyecto es distinto, así que no te damos una
                         cifra al azar: cuéntanos y te enviamos una cotización a
-                        la medida en 6 a 24 horas. Elige la opción que más
-                        se acerque.
+                        la medida en 6 a 24 horas. Puedes elegir uno o
+                        varios servicios.
                       </p>
                       <TypeCards
                         selected={form.selected}
-                        onSelect={form.selectType}
+                        onSelect={form.toggleType}
                       />
                     </>
                   )}
@@ -727,14 +733,17 @@ export default function QuoteSection() {
               ¿Qué necesitas?
             </h3>
             <p className="text-sm text-muted mb-6">
-              Elige una opción para empezar; se abre en pantalla completa
+              Elige uno o varios servicios; se abre en pantalla completa
               para que te concentres.
             </p>
             <TypeCards
               selected={form.selected}
               onSelect={(id) => {
-                form.selectType(id);
-                setOpen(true);
+                // Desde la página, el primer toque abre la pantalla completa
+                // (allí puede sumar más servicios); los siguientes solo marcan.
+                const opening = form.selected.length === 0;
+                form.toggleType(id);
+                if (opening) setOpen(true);
               }}
             />
             <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 min-h-[2.75rem]">

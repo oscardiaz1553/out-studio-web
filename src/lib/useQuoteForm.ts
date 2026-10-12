@@ -42,8 +42,16 @@ export function useQuoteForm() {
   const setAnswer = (key: string, value: Answer) =>
     setAnswers((prev) => ({ ...prev, [key]: value }));
 
-  // Un solo tipo de proyecto por solicitud.
-  const selectType = (id: string) => setSelected([id]);
+  // Se pueden pedir varios servicios en una misma solicitud: cada uno suma
+  // su bloque de preguntas. Se guardan en el orden de PROJECT_TYPES.
+  const toggleType = (id: string) =>
+    setSelected((prev) =>
+      prev.includes(id)
+        ? prev.filter((t) => t !== id)
+        : PROJECT_TYPES.map((t) => t.id).filter((t) => t === id || prev.includes(t)),
+    );
+  const setTypes = (ids: string[]) =>
+    setSelected(PROJECT_TYPES.map((t) => t.id).filter((t) => ids.includes(t)));
 
   const canContinue = (() => {
     if (step === 'tipos') return selected.length > 0;
@@ -134,7 +142,8 @@ export function useQuoteForm() {
     isLast,
     currentType,
     setAnswer,
-    selectType,
+    toggleType,
+    setTypes,
     canContinue,
     go,
     reset,
