@@ -89,7 +89,7 @@ const box = (color) =>
   `<span style="flex:none;width:44px;height:44px;border-radius:10px;border:4px solid ${color};margin-top:2px"></span>`;
 const LIST = [
   { kind: 'square', title: 'Tu marca', items: ['Tu logo en buena calidad.', 'Tus colores y tipografías, si ya los tienes.'], extra: 'Si todavía no tienes marca, también la hacemos.' },
-  { kind: 'curly', title: 'Fotos', items: ['Fotos de tus productos o de tu trabajo, con buena luz.', 'Fotos tuyas o de tu equipo, si quieres mostrarte.'], extra: 'Si no tienes, te ayudamos con un estudio de fotografía aliado.' },
+  { kind: 'curly', title: 'Fotos', items: ['Fotos de tus productos o de tu trabajo, con buena luz.', 'Fotos tuyas o de tu equipo, si quieres mostrarte.'], extra: 'Un dato: con el celular y la luz de una ventana ya se logran buenas fotos.' },
   { kind: 'angle', title: 'Textos', items: ['Quiénes son y qué venden.', 'Preguntas frecuentes.', 'Políticas de envío, cambios y devoluciones.'], extra: 'Si te cuesta escribirlos, te ayudamos a ordenarlos.' },
   { kind: 'square', title: 'Lo que vendes y cómo cobras', items: ['Lista de productos o servicios con precios.', 'Medios de pago que quieres recibir.', 'El nombre de tu dominio, o la idea.'], extra: 'Con esto te recomendamos la plataforma y la pasarela de pagos que más te convienen.' },
 ];
