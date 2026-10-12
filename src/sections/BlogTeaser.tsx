@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import RevealText from '../components/RevealText';
 import TitleFrame from '../components/TitleFrame';
 import blog from '../data/blog.json';
+import BlogCard from '../components/BlogCard';
 
 const HOME = import.meta.env.BASE_URL;
 
@@ -96,7 +97,7 @@ export default function BlogTeaser() {
           tabIndex={0}
           role="region"
           aria-label="Carrusel de artículos del blog"
-          className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-px-6 md:scroll-px-10 lg:scroll-px-[max(4rem,calc((100vw-1400px)/2))] overscroll-x-contain pb-2 [&::-webkit-scrollbar]:hidden"
+          className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-px-6 md:scroll-px-10 lg:scroll-px-[max(4rem,calc((100vw-1400px)/2))] overscroll-x-contain pt-2 pb-4 [&::-webkit-scrollbar]:hidden"
           // A todo el ancho de la pantalla: la pista sale del contenedor hasta los
           // bordes y el relleno deja la primera tarjeta alineada con el título.
           style={{
@@ -105,24 +106,13 @@ export default function BlogTeaser() {
             paddingInline: 'calc(50vw - 50%)',
           }}
         >
-          {posts.map((p) => (
-            <article
+          {posts.map((p, i) => (
+            <BlogCard
               key={p.slug}
-              className="group relative shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)] flex flex-col rounded-2xl bg-paper p-6 sm:p-7 transition-colors hover:bg-[#ECE4DC]"
-            >
-              <p className="text-xs text-carne-tinta mb-3">
-                {p.category} · {p.readingMin} min de lectura
-              </p>
-              <h3 className="font-display font-semibold text-klein tracking-[-0.02em] leading-snug text-xl">
-                <a href={`${HOME}blog/${p.slug}/`} className="after:absolute after:inset-0">
-                  {p.title}
-                </a>
-              </h3>
-              <p className="mt-3 text-ink-2 leading-relaxed text-sm">{p.description}</p>
-              <p className="mt-auto pt-5 text-sm font-medium text-klein group-hover:underline underline-offset-4">
-                Leer artículo
-              </p>
-            </article>
+              post={p}
+              index={i}
+              className="shrink-0 snap-start w-[82%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)]"
+            />
           ))}
         </div>
       </div>

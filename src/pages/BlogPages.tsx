@@ -1,4 +1,5 @@
 import AccentButton from '../components/AccentButton';
+import BlogCard from '../components/BlogCard';
 import ScrollToTop from '../components/ScrollToTop';
 import SiteNav from '../components/SiteNav';
 import blog from '../data/blog.json';
@@ -7,7 +8,6 @@ import services from '../data/services.json';
 export type Post = (typeof blog.posts)[number];
 
 const HOME = import.meta.env.BASE_URL;
-const postPath = (slug: string) => `${HOME}blog/${slug}/`;
 
 function formatDate(iso: string) {
   const d = new Date(`${iso}T12:00:00`);
@@ -35,25 +35,6 @@ function BlogFooter() {
   );
 }
 
-function PostCard({ post }: { post: Post }) {
-  return (
-    <article className="group flex flex-col rounded-2xl bg-paper-pure p-6 sm:p-7 transition-colors hover:bg-white/70">
-      <p className="text-xs text-carne-tinta mb-3">
-        {post.category} · {post.readingMin} min de lectura
-      </p>
-      <h2 className="font-display font-semibold text-klein tracking-[-0.02em] leading-snug text-xl sm:text-2xl">
-        <a href={postPath(post.slug)} className="after:absolute after:inset-0 relative">
-          {post.title}
-        </a>
-      </h2>
-      <p className="mt-3 text-ink-2 leading-relaxed text-sm sm:text-base">{post.description}</p>
-      <p className="mt-auto pt-5 text-sm font-medium text-klein group-hover:underline underline-offset-4">
-        Leer artículo
-      </p>
-    </article>
-  );
-}
-
 /** Índice del blog: todos los artículos, del más reciente al más antiguo. */
 export function BlogIndex() {
   return (
@@ -78,8 +59,8 @@ export function BlogIndex() {
       </header>
       <section className="px-6 md:px-10 lg:px-16 py-12 sm:py-16">
         <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {blog.posts.map((p) => (
-            <PostCard key={p.slug} post={p} />
+          {blog.posts.map((p, i) => (
+            <BlogCard key={p.slug} post={p} index={i} />
           ))}
         </div>
       </section>
@@ -166,7 +147,7 @@ export function BlogPost({ post }: { post: Post }) {
                 <h2 className="font-display font-semibold text-klein text-xl sm:text-2xl mb-4">Sigue leyendo</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                   {others.map((p) => (
-                    <PostCard key={p.slug} post={p} />
+                    <BlogCard key={p.slug} post={p} index={blog.posts.findIndex((x) => x.slug === p.slug)} />
                   ))}
                 </div>
               </div>
