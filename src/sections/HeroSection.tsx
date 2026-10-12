@@ -167,6 +167,15 @@ export default function HeroSection() {
               sea imposible de ignorar.
             </motion.span>
           </h1>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.75, duration: 0.7 }}
+              className="mt-6 sm:mt-7 max-w-[44ch] text-paper-pure/80 leading-relaxed text-base sm:text-lg"
+            >
+              Diseño UX/UI y desarrollo web a medida para negocios de toda Colombia.
+              Tiendas Shopify, sitios WordPress, landing pages y branding.
+            </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
