@@ -1,6 +1,7 @@
 // Imagen de perfil para el grupo de WhatsApp de un proyecto: Out × cliente.
 // Uso: node render.cjs <logo-del-cliente.png|svg> <salida.png>
-// Sin logo, deja un espacio marcado para ver la composición.
+// Sin logo, deja un espacio marcado para ver la composición. Con CARD=dark la
+// tarjeta va en azul profundo (para logos claros o con blanco).
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
@@ -22,7 +23,7 @@ const html = `<!doctype html><html><head><style>
 .top{position:absolute;left:0;right:0;top:150px;height:250px;display:flex;align-items:center;justify-content:center;gap:30px}
 .top .logo{width:300px}
 .x{position:absolute;left:0;right:0;top:420px;text-align:center;font-weight:800;font-size:72px;color:#F5E3B3;line-height:1}
-.card{position:absolute;left:50%;top:530px;transform:translateX(-50%);width:600px;height:330px;background:#FBF8F5;border-radius:44px;padding:44px 56px;display:flex;align-items:center;justify-content:center;box-shadow:0 30px 70px rgba(10,14,50,.45)}
+.card{position:absolute;left:50%;top:540px;transform:translateX(-50%);width:720px;height:260px;background:${process.env.CARD === 'dark' ? '#141E5C' : '#FBF8F5'};border:${process.env.CARD === 'dark' ? '3px solid rgba(245,227,179,.35)' : '0'};border-radius:44px;padding:44px 56px;display:flex;align-items:center;justify-content:center;box-shadow:0 30px 70px rgba(10,14,50,.45)}
 .dot{position:absolute;width:56px;height:56px;border-radius:50%;background:#F5E3B3;right:262px;top:500px}
 </style></head><body><div class="bg"></div>
 <div class="top">${bracket(false)}<div class="logo">${outSvg}</div>${bracket(true)}</div>
