@@ -695,7 +695,7 @@ export default function QuoteDossier({
             </h2>
             <p className="text-[16px] leading-relaxed text-paper-pure/90 max-w-[118mm]">
               Si la propuesta te hace sentido, respóndenos al correo o escríbenos
-              por WhatsApp y coordinamos el primer pago para empezar. Si tienes dudas,
+              por WhatsApp y coordinamos el anticipo para empezar. Si tienes dudas,
               las resolvemos antes.
             </p>
           </div>
