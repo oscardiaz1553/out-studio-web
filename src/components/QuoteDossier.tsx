@@ -479,7 +479,8 @@ export default function QuoteDossier({
             {partner && (
               <p className="text-[14px] leading-relaxed text-ink-2 mt-3">
                 Este proyecto lo hacemos en conjunto con {partner}. En cada concepto
-                te indicamos quién lo hace; Out coordina todo y es tu punto de contacto.
+                te indicamos quién lo hace, y lo coordinamos todo en el grupo del
+                proyecto, donde estamos tú y los dos estudios.
               </p>
             )}
             <p className="mt-6 font-display font-bold text-klein-deep text-[15px]">
