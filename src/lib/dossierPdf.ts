@@ -185,7 +185,19 @@ function paintImage(
   const own: Box = { x: -w / 2, y: -h / 2, w, h };
   roundRect(ctx, own, radii(cs, w, h));
   ctx.clip();
-  ctx.drawImage(img, own.x, own.y, w, h);
+  // object-fit: contain (logos de aliados): se encaja sin deformar, según
+  // object-position.
+  let dx = own.x, dy = own.y, dw = w, dh = h;
+  if (cs.objectFit === 'contain') {
+    const s = Math.min(w / img.naturalWidth, h / img.naturalHeight);
+    dw = img.naturalWidth * s;
+    dh = img.naturalHeight * s;
+    const [px = '50%', py = '50%'] = cs.objectPosition.split(/\s+/);
+    const at = (v: string, free: number) => (v.endsWith('%') ? (parseFloat(v) / 100) * free : parseFloat(v) || 0);
+    dx = own.x + at(px, w - dw);
+    dy = own.y + at(py, h - dh);
+  }
+  ctx.drawImage(img, dx, dy, dw, dh);
   ctx.restore();
 }
 

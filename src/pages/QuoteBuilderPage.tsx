@@ -34,6 +34,30 @@ const DEFAULT_TERMS = [
 
 const uid = () => Math.random().toString(36).slice(2, 9);
 
+/** Lee el logo del aliado y lo reduce (máximo 900 px de ancho) para que el
+ *  borrador guardado no pese de más. */
+function logoDataUrl(file: File): Promise<string> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const src = String(reader.result);
+      if (file.type === 'image/svg+xml') return resolve(src);
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, 900 / img.naturalWidth);
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.naturalWidth * scale);
+        canvas.height = Math.round(img.naturalHeight * scale);
+        canvas.getContext('2d')!.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = () => resolve(src);
+      img.src = src;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function todayISO() {
   const d = new Date();
   const p = (n: number) => String(n).padStart(2, '0');
@@ -299,6 +323,48 @@ export default function QuoteBuilderPage() {
             </div>
           </Group>
 
+          <Group title="Proyecto en conjunto (opcional)">
+            <Field label="Estudio aliado">
+              <input
+                className={INPUT}
+                value={draft.partnerName ?? ''}
+                onChange={(e) => set('partnerName', e.target.value)}
+                placeholder="Ej.: Ese Studio"
+              />
+            </Field>
+            {draft.partnerName?.trim() && (
+              <div className="flex flex-col gap-2">
+                <span className={LABEL}>Logo del aliado (en blanco o claro: va sobre azul)</span>
+                {draft.partnerLogo && (
+                  <div className="flex items-center gap-3 rounded-lg bg-klein-deep px-4 py-3">
+                    <img src={draft.partnerLogo} alt="" className="h-7 w-auto max-w-[200px] object-contain" />
+                    <button
+                      type="button"
+                      onClick={() => set('partnerLogo', '')}
+                      className="ml-auto text-xs text-carne hover:underline"
+                    >
+                      Quitar
+                    </button>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/png,image/svg+xml,image/webp,image/jpeg"
+                  className="text-sm text-klein-deep"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) set('partnerLogo', await logoDataUrl(file));
+                    e.target.value = '';
+                  }}
+                />
+                <p className="text-xs text-muted">
+                  Marca en cada concepto si lo hace el aliado. El dossier lo muestra en la
+                  portada, en el alcance y en la contraportada.
+                </p>
+              </div>
+            )}
+          </Group>
+
           <Group title="Documento">
             <div className="grid grid-cols-3 gap-3">
               <Field label="Folio">
@@ -350,6 +416,16 @@ export default function QuoteBuilderPage() {
                   aria-label="Entregables, uno por línea"
                 />
                 <PriceInput value={item.price} onChange={(n) => setItem(item.id, { price: n })} />
+                {draft.partnerName?.trim() && (
+                  <label className="flex items-center gap-2 text-sm text-klein-deep">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(item.partner)}
+                      onChange={(e) => setItem(item.id, { partner: e.target.checked })}
+                    />
+                    Lo hace {draft.partnerName.trim()}
+                  </label>
+                )}
               </div>
             ))}
             <button

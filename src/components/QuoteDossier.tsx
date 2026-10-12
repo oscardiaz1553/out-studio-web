@@ -12,6 +12,8 @@ export interface QuoteItem {
   /** Un entregable por línea. */
   scope: string;
   price: number;
+  /** Lo hace el estudio aliado (ver `partnerName`). */
+  partner?: boolean;
 }
 
 export interface QuoteDraft {
@@ -35,6 +37,10 @@ export interface QuoteDraft {
   note: string;
   /** Cuerpo del correo con el que se envía el PDF. */
   emailMessage: string;
+  /** Estudio aliado cuando el proyecto se hace en conjunto (vacío si no). */
+  partnerName?: string;
+  /** Logo del aliado como data URL, en blanco o claro: va sobre fondos azules. */
+  partnerLogo?: string;
 }
 
 export const IVA_RATE = 0.19;
@@ -97,6 +103,7 @@ function sceneFor(title: string, index: number): string {
   const t = title.toLowerCase();
   if (/emprende/.test(t)) return 'emprende';
   if (/landing/.test(t)) return 'landing';
+  if (/foto|fotograf/.test(t)) return 'branding';
   if (/shopify|tienda|e-?commerce/.test(t)) return 'shopify';
   if (/marca|branding|identidad|logo/.test(t)) return 'branding';
   if (/soporte|mantenimiento|optimiza/.test(t)) return 'soporte';
@@ -165,6 +172,74 @@ function GhostPair({
       <Sym kind={kind} />
       <Sym kind={kind} flip />
     </span>
+  );
+}
+
+/** El logo del aliado (o su nombre si no hay logo), sobre fondo oscuro. Lleva
+ *  caja de tamaño fijo para que el PDF lo pinte en su sitio. */
+function PartnerMark({
+  name,
+  logo,
+  height,
+  maxWidth,
+  align = 'left',
+}: {
+  name: string;
+  logo?: string;
+  height: number;
+  maxWidth: number;
+  align?: 'left' | 'center';
+}) {
+  if (!logo) {
+    return (
+      <span className="font-display font-extrabold tracking-[-0.03em] leading-none" style={{ fontSize: height * 0.8 }}>
+        {name}
+      </span>
+    );
+  }
+  return (
+    <span className="relative inline-block shrink-0" style={{ height, width: maxWidth }}>
+      <img
+        src={logo}
+        alt={name}
+        className="absolute inset-0 w-full h-full object-contain"
+        style={{ objectPosition: align === 'left' ? '0% 50%' : '50% 50%' }}
+      />
+    </span>
+  );
+}
+
+/** "Out + aliado", para la portada y la contraportada. */
+function CoBrand({ name, logo, size }: { name: string; logo?: string; size: number }) {
+  return (
+    <div className="flex items-center" style={{ gap: size * 0.35 }}>
+      <LogoOut decorative className="w-auto text-paper-pure" />
+      <span className="font-display font-extrabold text-carne leading-none" style={{ fontSize: size * 0.7 }}>
+        +
+      </span>
+      <PartnerMark name={name} logo={logo} height={size * 0.62} maxWidth={size * 4.2} />
+    </div>
+  );
+}
+
+/** Lámina de un concepto que hace el aliado: su logo entre corchetes. */
+function PartnerLamina({ name, logo, className = '' }: { name: string; logo?: string; className?: string }) {
+  return (
+    <div
+      aria-hidden
+      className={`relative overflow-hidden rounded-[4mm] aspect-[4/5] shrink-0 bg-klein-deep text-paper-pure ${className}`}
+    >
+      <span className="absolute inset-x-[12%] top-[20%] flex justify-center">
+        <PartnerMark name={name} logo={logo} height={20} maxWidth={104} align="center" />
+      </span>
+      <span className="absolute inset-x-0 top-[44%] flex justify-center gap-[7mm] text-carne" style={{ fontSize: '58px' }}>
+        <Sym kind="square" />
+        <Sym kind="square" flip />
+      </span>
+      <span className="absolute left-0 right-0 bottom-[9%] text-center text-[10px] text-carne">
+        con Out
+      </span>
+    </div>
   );
 }
 
@@ -313,6 +388,7 @@ export default function QuoteDossier({
   const { subtotal, discount, pct, iva, total } = totals(draft);
   const client = draft.clientCompany || draft.clientName || 'tu proyecto';
   const firstName = draft.clientName.trim().split(' ')[0];
+  const partner = draft.partnerName?.trim() ?? '';
   const projectTitles = draft.items.map((i) => i.title).filter(Boolean);
   const terms = lines(draft.terms);
   const answerPages = paginateAnswers(groups);
@@ -326,12 +402,20 @@ export default function QuoteDossier({
         <GhostPair kind="curly" size="360px" color="#F5E3B3" opacity={0.07} className="right-[-18mm] top-[34mm]" />
         <div className="relative flex-1 flex flex-col pt-[2mm]">
           <div className="flex items-center justify-between">
-            <LogoOut decorative className="h-14 w-auto text-paper-pure" />
+            {partner ? (
+              <div className="h-14 [&_svg]:h-14">
+                <CoBrand name={partner} logo={draft.partnerLogo} size={56} />
+              </div>
+            ) : (
+              <LogoOut decorative className="h-14 w-auto text-paper-pure" />
+            )}
             <span className="text-[12px] text-paper-pure/75">Propuesta {draft.folio}</span>
           </div>
 
           <div className="mt-[46mm] max-w-[150mm]">
-            <p className="text-[15px] text-carne mb-4">Propuesta de cotización para</p>
+            <p className="text-[15px] text-carne mb-4">
+              {partner ? `Propuesta conjunta de Out y ${partner} para` : 'Propuesta de cotización para'}
+            </p>
             <h1 className="font-display font-extrabold tracking-[-0.045em] leading-[0.92] text-[64px]">
               {client}
             </h1>
@@ -387,6 +471,12 @@ export default function QuoteDossier({
             <p className="text-[14px] leading-relaxed text-ink-2">
               Si algo no te cuadra, lo hablamos y lo ajustamos. Para eso estamos.
             </p>
+            {partner && (
+              <p className="text-[14px] leading-relaxed text-ink-2 mt-3">
+                Este proyecto lo hacemos en conjunto con {partner}. En cada concepto
+                te indicamos quién lo hace; Out coordina todo y es tu punto de contacto.
+              </p>
+            )}
             <p className="mt-6 font-display font-bold text-klein-deep text-[15px]">
               Oscar Díaz
               <span className="block font-sans font-normal text-[12px] text-muted">
@@ -416,11 +506,20 @@ export default function QuoteDossier({
         <div className="flex flex-col gap-5">
           {draft.items.map((item, i) => (
             <div key={item.id} className="rounded-[4mm] bg-paper p-[5mm] flex gap-[6mm] items-start">
-              <Lamina scene={sceneFor(item.title, i)} className="w-[36mm]" />
+              {partner && item.partner ? (
+                <PartnerLamina name={partner} logo={draft.partnerLogo} className="w-[36mm]" />
+              ) : (
+                <Lamina scene={sceneFor(item.title, i)} className="w-[36mm]" />
+              )}
               <div className="flex-1 pt-1">
                 <h3 className="font-display font-extrabold text-klein tracking-[-0.03em] text-[22px] leading-tight mb-3">
                   {item.title || 'Concepto'}
                 </h3>
+                {partner && (
+                  <p className="-mt-1.5 mb-3 text-[11.5px] text-carne-deep font-medium">
+                    A cargo de {item.partner ? partner : 'Out'}
+                  </p>
+                )}
                 <ul className="flex flex-col gap-2">
                   {lines(item.scope).map((l) => (
                     <li key={l} className="flex gap-2.5 text-[13px] leading-snug text-klein-deep">
@@ -443,7 +542,14 @@ export default function QuoteDossier({
             <tbody>
               {draft.items.map((item) => (
                 <tr key={item.id} className="border-b border-paper-pure/15">
-                  <td className="py-3 pr-4">{item.title || 'Concepto'}</td>
+                  <td className="py-3 pr-4">
+                    {item.title || 'Concepto'}
+                    {partner && (
+                      <span className="block text-[11px] text-paper-pure/60">
+                        {item.partner ? partner : 'Out'}
+                      </span>
+                    )}
+                  </td>
                   <td className="py-3 text-right font-medium whitespace-nowrap">
                     {item.price > 0 ? formatCOP(item.price) : 'Por definir'}
                   </td>
@@ -483,7 +589,7 @@ export default function QuoteDossier({
               Total{draft.tax === 'none' ? '' : ' con IVA'}
             </span>
             <span className="font-display font-extrabold text-carne text-[40px] tracking-[-0.03em] leading-none">
-              {formatCOP(total)}
+              {subtotal > 0 ? formatCOP(total) : 'Por definir'}
             </span>
           </div>
           <p className="relative mt-4 pt-4 border-t border-paper-pure/15 text-[11.5px] leading-relaxed text-paper-pure/75">
@@ -599,9 +705,16 @@ export default function QuoteDossier({
             <dt className="text-carne text-[13px] pt-[2px]">Web</dt>
             <dd className="font-medium">outstudio.online</dd>
           </dl>
-          <p className="mt-auto font-display font-extrabold text-paper-pure text-[26px] tracking-[-0.03em]">
-            Never the usual.
-          </p>
+          <div className="mt-auto">
+            {partner && (
+              <div className="mb-5 [&_svg]:h-9">
+                <CoBrand name={partner} logo={draft.partnerLogo} size={36} />
+              </div>
+            )}
+            <p className="font-display font-extrabold text-paper-pure text-[26px] tracking-[-0.03em]">
+              Never the usual.
+            </p>
+          </div>
         </div>
         <img
           src={MONO_LAPTOP}
