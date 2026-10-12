@@ -1,8 +1,8 @@
 # Instagram, lote 3
 
-Dos carruseles y un reel para la tercera semana. Todo se regenera con
-`node instagram/scripts/lote-3.cjs` (el reel se arma con ffmpeg a partir de
-sus láminas `reel-senales-01` a `05`).
+Dos carruseles y un reel para la tercera semana. Los carruseles se regeneran
+con `node instagram/scripts/lote-3.cjs`. El reel está hecho con HyperFrames:
+su proyecto vive en `instagram/hyperframes/reel-senales/`.
 
 | Día sugerido | Publicación | Archivos |
 |---|---|---|
@@ -36,8 +36,10 @@ sus láminas `reel-senales-01` a `05`).
 
 ## 2. Reel: 3 señales de que tu página necesita un rediseño
 
-Video de 14 segundos, sin audio: súbelo con un sonido que esté sonando en
-Reels, a volumen bajo. Portada: `reel-senales-portada.png`.
+Video de 16,6 segundos, sin audio, animado con el mismo lenguaje de la intro
+del sitio: cámara que entra y sale, sacudidas en cada golpe, barridos de
+color, anillos y los símbolos de la marca. Súbelo con un sonido que esté
+sonando en Reels, a volumen bajo. Portada: `reel-senales-portada.png`.
 
 **Texto:**
 

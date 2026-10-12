@@ -21,7 +21,8 @@ símbolos, azulejo y Mango) y se renderizan con Playwright: 1080 × 1350 para
 carruseles y publicaciones, 1080 × 1920 para reels e historias.
 
 - `scripts/kit.cjs`: lo compartido (fuentes, colores, logo, símbolos, imágenes y el render).
-- `scripts/lote-1.cjs` a `scripts/lote-3.cjs`: un script por lote. Los reels animados se arman con ffmpeg desde sus láminas.
+- `scripts/lote-1.cjs` a `scripts/lote-3.cjs`: un script por lote.
+- `hyperframes/`: los reels animados, hechos con [HyperFrames](https://github.com/heygen-com/hyperframes) (HTML + GSAP). Cada carpeta es un proyecto: `index.html` es el video. Para volver a renderizarlo, desde su carpeta: `npx hyperframes@0.8.150 render -q high -o reel.mp4` (pide Node 22 y FFmpeg). Toman como referencia la intro del sitio (`public/intro/index.html`): cámara con zoom y giro, sacudida en cada impacto, barrido circular de color, anillos, líneas de velocidad y los símbolos [ ] { } < >.
 
 Para regenerar un lote: `node instagram/scripts/lote-2.cjs`.
 

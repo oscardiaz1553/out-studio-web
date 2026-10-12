@@ -1,10 +1,8 @@
 // Lote 3 de Instagram: carrusel "¿De qué depende el precio de una página
-// web?", reel "3 señales de que tu página necesita un rediseño" (video
-// armado con ffmpeg a partir de láminas) y carrusel "Así trabajamos".
+// web?" y carrusel "Así trabajamos". El reel "3 señales de que tu página
+// necesita un rediseño" se hace con HyperFrames: instagram/hyperframes/reel-senales/.
 // Uso: node instagram/scripts/lote-3.cjs   (escribe en instagram/lote-3/)
 const path = require('path');
-const fs = require('fs');
-const { execFileSync } = require('child_process');
 const { IMG, C, logo, pair, check, footer, page, band, render } = require('./kit.cjs');
 
 const OUT = path.join(__dirname, '..', 'lote-3');
@@ -60,37 +58,6 @@ const priceSlides = [
     ${footer(6, PRICE_N, C.pure, 'rgba(251,248,245,.3)')}`),
 ];
 
-// ── Reel: 3 señales de que tu página necesita un rediseño (9:16) ───────────
-const reelFrame = (bg, body) => page(1080, 1920, bg, body);
-const SIGNS = [
-  { kind: 'square', bg: C.carne, fg: C.klein, text: 'La abres en el celular y tienes que hacer zoom.' },
-  { kind: 'curly', bg: C.pure, fg: C.klein, text: 'Tarda tanto en cargar que hasta tú te aburres.' },
-  { kind: 'angle', bg: C.deep, fg: C.carne, text: 'Te da pena mandarle el link a un cliente.' },
-];
-const reelFrames = [
-  reelFrame(C.klein, `
-    <div class="abs" style="left:80px;top:220px">${logo(C.pure, 130)}</div>
-    <div class="abs" style="left:80px;right:80px;top:470px">
-      <div class="d" style="font-size:136px;color:${C.pure}">3 señales de que tu página necesita un rediseño</div>
-    </div>
-    <img class="abs" src="${IMG.asoma}" style="width:720px;right:-6px;bottom:260px">`),
-  ...SIGNS.map((s) =>
-    reelFrame(s.bg, `
-      ${bigPair(s.kind, s.bg === C.deep ? C.carne : C.klein, 420, 'right:80px;bottom:300px')}
-      <div class="abs" style="left:80px;right:80px;top:640px">
-        <div class="d" style="font-size:118px;color:${s.fg}">${s.text}</div>
-      </div>
-      <div class="abs" style="left:80px;bottom:260px">${logo(s.bg === C.deep ? C.pure : C.klein, 110)}</div>`),
-  ),
-  reelFrame(C.klein, `
-    <div class="abs" style="left:80px;right:80px;top:360px">
-      <div class="d" style="font-size:130px;color:${C.pure}">¿Te pasó alguna? Hablemos.</div>
-      <p style="margin-top:44px;color:${C.carne};font-size:44px">Te decimos cómo mejorarla. Cotización en 6 a 24 horas.</p>
-      <div style="margin-top:56px">${button('outstudio.online', C.carne, C.klein)}</div>
-    </div>
-    <img class="abs" src="${IMG.laptop}" style="width:680px;right:30px;bottom:300px">`),
-];
-
 // ── Carrusel: así trabajamos ───────────────────────────────────────────────
 const WORK_N = 6;
 const STEPS = [
@@ -136,39 +103,9 @@ const workSlides = [
     ${footer(5, WORK_N, C.klein, 'rgba(27,47,204,.22)')}`),
 ];
 
-// Arma el reel: cada lámina con un zoom lento y fundidos entre ellas.
-function buildReel(frames, out) {
-  const FPS = 30;
-  const durs = frames.map((_, i) => (i === frames.length - 1 ? 4 : 3));
-  const T = 0.4;
-  const args = ['-y', '-v', 'error'];
-  frames.forEach((f) => args.push('-i', f));
-  const parts = frames.map(
-    (_, i) =>
-      `[${i}:v]scale=1188:2112,zoompan=z='min(zoom+0.0005,1.05)':d=${durs[i] * FPS}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS},format=yuv420p,setsar=1[v${i}]`,
-  );
-  let last = 'v0';
-  let offset = 0;
-  for (let i = 1; i < frames.length; i++) {
-    offset += durs[i - 1] - T;
-    const outLabel = i === frames.length - 1 ? 'vout' : `x${i}`;
-    parts.push(`[${last}][v${i}]xfade=transition=fade:duration=${T}:offset=${offset.toFixed(2)}[${outLabel}]`);
-    last = outLabel;
-  }
-  args.push('-filter_complex', parts.join(';'), '-map', '[vout]', '-c:v', 'libx264', '-preset', 'medium', '-crf', '20', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out);
-  execFileSync('ffmpeg', args, { stdio: 'inherit' });
-}
-
 (async () => {
-  const REEL_NAMES = ['gancho', 'celular', 'carga', 'pena', 'cotiza'];
   await render(OUT, [
     ...priceSlides.map((html, i) => [html, 1080, 1350, `precio-${n2(i)}-${['portada', 'paginas', 'diseno', 'funciones', 'contenido', 'despues', 'cotiza'][i]}.png`]),
     ...workSlides.map((html, i) => [html, 1080, 1350, `trabajamos-${n2(i)}-${['portada', 'escuchamos', 'construimos', 'lanzamos', 'seguimos', 'cotiza'][i]}.png`]),
-    ...reelFrames.map((html, i) => [html, 1080, 1920, `reel-senales-${n2(i)}-${REEL_NAMES[i]}.png`]),
   ]);
-  const frames = REEL_NAMES.map((n, i) => path.join(OUT, `reel-senales-${n2(i)}-${n}.png`));
-  buildReel(frames, path.join(OUT, 'reel-senales.mp4'));
-  // La portada del reel es su primera lámina.
-  fs.copyFileSync(frames[0], path.join(OUT, 'reel-senales-portada.png'));
-  console.log('reel ok');
 })();

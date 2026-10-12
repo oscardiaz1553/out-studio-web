@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+      @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-500.woff2") format("woff2"); font-weight: 500; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #1b2fcc; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Instrument Sans", sans-serif; }
+
+      /* Fondo: color base + barrido circular para cada cambio de escena */
+      #bg { position: absolute; inset: 0; background: #1b2fcc; }
+      #wipe { position: absolute; inset: 0; background: #f3ede7; clip-path: circle(0px at 540px 960px); }
+
+      /* Cámara: todo lo que se mueve con ella */
+      #cam { position: absolute; inset: 0; transform-origin: 540px 960px; --dot: #4a55c4; }
+      #lattice { position: absolute; left: -540px; top: -960px; width: 2160px; height: 3840px; }
+      .dot { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--dot); opacity: 0.55; }
+      #ring { position: absolute; left: 0; top: 0; width: 240px; height: 240px; border-radius: 50%; border: 18px solid #f5e3b3; opacity: 0; }
+
+      .scene { position: absolute; inset: 0; }
+      .d { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
+      .w { display: inline-block; }
+      .ch { display: inline-block; }
+      .sym { display: block; height: 100%; width: auto; overflow: visible; }
+      .sym path { fill: none; stroke-width: 9.4; stroke-linejoin: miter; stroke-miterlimit: 10; stroke-linecap: butt; }
+      .flip { transform: scaleX(-1); }
+      .pair { position: absolute; display: flex; justify-content: center; }
+      .half { height: 100%; }
+
+      /* Líneas de velocidad (fuera de la cámara) */
+      .sl { position: absolute; left: 0; height: 10px; width: 1100px; border-radius: 5px; background: #f5e3b3; opacity: 0; }
+
+      /* Escena 1 · gancho */
+      #s1-title { position: absolute; left: 80px; right: 80px; top: 330px; color: #1b2fcc; }
+      #s1-title .big { font-size: 220px; display: block; }
+      #s1-title .mid { font-size: 108px; display: block; color: #141e5c; margin-top: 18px; }
+      #s1-title .acc { font-size: 150px; display: block; color: #bc6039; margin-top: 10px; }
+      #s1-mono { position: absolute; right: -6px; bottom: 250px; width: 760px; }
+
+      /* Escena 2 · celular */
+      #s2-l1 { position: absolute; left: 80px; right: 80px; top: 250px; font-size: 112px; color: #1b2fcc; }
+      #s2-l2 { position: absolute; left: 80px; right: 80px; top: 1480px; font-size: 100px; color: #141e5c; }
+      #phone { position: absolute; left: 350px; top: 640px; width: 380px; height: 760px; border-radius: 58px; background: #141e5c; padding: 18px; }
+      #screen { position: relative; width: 100%; height: 100%; border-radius: 42px; background: #fbf8f5; overflow: hidden; }
+      #page { position: absolute; left: 0; top: 0; width: 344px; height: 724px; padding: 26px 18px; transform-origin: 22% 30%; }
+      .pg-bar { height: 10px; border-radius: 3px; background: #c9c3bd; margin-bottom: 9px; }
+      .pg-hero { height: 120px; border-radius: 8px; background: #1b2fcc; margin: 14px 0 16px; }
+      .pg-row { display: flex; gap: 8px; margin-top: 14px; }
+      .pg-tile { flex: 1; height: 70px; border-radius: 6px; background: #f5e3b3; }
+      .finger { position: absolute; width: 70px; height: 70px; border-radius: 50%; background: rgba(20, 30, 92, 0.35); border: 5px solid #141e5c; opacity: 0; }
+
+      /* Escena 3 · carga */
+      #s3-l1 { position: absolute; left: 80px; right: 80px; top: 260px; font-size: 116px; color: #f5e3b3; }
+      #s3-l2 { position: absolute; left: 80px; right: 80px; top: 1440px; font-size: 98px; color: #fbf8f5; }
+      #s3-l2 .ab { color: #f5e3b3; white-space: nowrap; display: inline-block; }
+      #browser { position: absolute; left: 110px; top: 690px; width: 860px; height: 600px; border-radius: 30px; background: #fbf8f5; overflow: hidden; }
+      #browser .top { height: 64px; background: #f3ede7; display: flex; align-items: center; gap: 12px; padding: 0 26px; }
+      #browser .top i { width: 18px; height: 18px; border-radius: 50%; background: #c9c3bd; display: block; }
+      #browser .url { margin-left: 18px; height: 30px; flex: 1; border-radius: 15px; background: #e6dfd8; }
+      #loader { position: absolute; left: 0; right: 0; top: 150px; display: flex; justify-content: center; align-items: center; gap: 34px; height: 170px; color: #1b2fcc; }
+      #loader .sym { height: 170px; }
+      #spin { width: 120px; height: 120px; border-radius: 50%; border: 16px solid #e6dfd8; border-top-color: #1b2fcc; }
+      #track { position: absolute; left: 90px; right: 90px; top: 400px; height: 26px; border-radius: 13px; background: #e6dfd8; overflow: hidden; }
+      #fill { width: 100%; height: 100%; background: #bc6039; transform-origin: 0 50%; }
+      #pct { position: absolute; left: 0; right: 0; top: 452px; text-align: center; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 64px; color: #141e5c; letter-spacing: -0.03em; }
+      #s3-mono { position: absolute; left: 700px; top: 1090px; width: 300px; }
+      .z { position: absolute; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; color: #bc6039; opacity: 0; }
+
+      /* Escena 4 · link */
+      #s4-sym { position: absolute; left: 80px; top: 170px; height: 110px; color: #bc6039; display: flex; gap: 26px; }
+      #s4-l1 { position: absolute; left: 80px; right: 80px; top: 320px; font-size: 100px; color: #1b2fcc; }
+      #s4-l2 { position: absolute; left: 80px; right: 80px; top: 1390px; font-size: 128px; color: #bc6039; }
+      #s4-under { position: absolute; left: 80px; top: 1530px; width: 700px; height: 16px; border-radius: 8px; background: #1b2fcc; transform-origin: 0 50%; }
+      #bubble { position: absolute; left: 80px; top: 690px; max-width: 760px; padding: 30px 40px; border-radius: 40px 40px 40px 10px; background: #fbf8f5; font-size: 50px; color: #141e5c; font-weight: 500; }
+      #composer { position: absolute; left: 80px; top: 960px; width: 920px; height: 180px; border-radius: 90px; background: #fbf8f5; display: flex; align-items: center; padding: 0 30px 0 60px; gap: 24px; }
+      #field { flex: 1; font-size: 62px; font-weight: 500; color: #141e5c; white-space: nowrap; overflow: hidden; display: flex; align-items: center; }
+      #caret { width: 6px; height: 70px; background: #1b2fcc; margin-left: 6px; }
+      #send { width: 124px; height: 124px; border-radius: 50%; background: #1b2fcc; display: flex; align-items: center; justify-content: center; }
+      #pointer { position: absolute; left: 0; top: 0; width: 84px; height: 84px; border-radius: 50%; background: rgba(188, 96, 57, 0.35); border: 6px solid #bc6039; opacity: 0; }
+
+      /* Escena 5 · cierre */
+      #s5-l1 { position: absolute; left: 80px; right: 80px; top: 360px; font-size: 132px; color: #fbf8f5; }
+      #s5-l2 { position: absolute; left: 80px; right: 80px; top: 620px; font-size: 190px; color: #f5e3b3; }
+      #btn { position: absolute; left: 80px; top: 920px; padding: 34px 58px; border-radius: 999px; background: #f5e3b3; color: #1b2fcc; font-weight: 500; font-size: 56px; }
+      #never { position: absolute; left: 80px; top: 1100px; font-size: 54px; color: #fbf8f5; }
+      #s5-mono { position: absolute; right: 30px; bottom: 250px; width: 700px; }
+      #s5-logo { position: absolute; left: 80px; top: 170px; width: 150px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16.6" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="wipe"></div>
+
+      <div id="cam">
+        <div id="lattice"></div>
+        <div id="ring"></div>
+
+        <!-- Escena 1 · gancho -->
+        <div id="s1" class="scene clip" data-start="0" data-duration="3.4" data-track-index="1">
+          <div id="s1-br" class="pair" style="left: 0; right: 0; top: 700px; height: 520px; gap: 0px">
+            <div id="s1-bl" class="half"><svg class="sym" viewBox="18.58 21.7 19.61 48.4"><path stroke="#f5e3b3" d="M38.19,26.4 H23.28 V65.4 H38.19" /></svg></div>
+            <div id="s1-brr" class="half"><svg class="sym flip" viewBox="18.58 21.7 19.61 48.4"><path stroke="#f5e3b3" d="M38.19,26.4 H23.28 V65.4 H38.19" /></svg></div>
+          </div>
+          <div id="s1-title" class="d">
+            <span class="big"><span class="w">3</span> <span class="w">señales</span></span>
+            <span class="mid"><span class="w">de</span> <span class="w">que</span> <span class="w">tu</span> <span class="w">página</span></span>
+            <span class="mid"><span class="w">necesita</span> <span class="w">un</span></span>
+            <span class="acc split">rediseño</span>
+          </div>
+          <img id="s1-mono" src="assets/mono-asoma.webp" alt="" />
+        </div>
+
+        <!-- Escena 2 · zoom en el celular -->
+        <div id="s2" class="scene clip" data-start="3.25" data-duration="3.45" data-track-index="2">
+          <div id="s2-l1" class="d"><span class="w">La</span> <span class="w">abres</span> <span class="w">en</span> <span class="w">el</span> <span class="w">celular</span></div>
+          <div id="s2-br" class="pair" style="left: 0; right: 0; top: 760px; height: 520px; gap: 470px">
+            <div id="s2-bl" class="half"><svg class="sym" viewBox="18.58 21.7 19.61 48.4"><path stroke="#1b2fcc" d="M38.19,26.4 H23.28 V65.4 H38.19" /></svg></div>
+            <div id="s2-brr" class="half"><svg class="sym flip" viewBox="18.58 21.7 19.61 48.4"><path stroke="#1b2fcc" d="M38.19,26.4 H23.28 V65.4 H38.19" /></svg></div>
+          </div>
+          <div id="phone">
+            <div id="screen">
+              <div id="page">
+                <div class="pg-bar" style="width: 40%"></div>
+                <div class="pg-hero"></div>
+                <div class="pg-bar"></div><div class="pg-bar" style="width: 86%"></div><div class="pg-bar" style="width: 92%"></div><div class="pg-bar" style="width: 64%"></div>
+                <div class="pg-row"><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div></div>
+                <div class="pg-row"><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div></div>
+                <div class="pg-bar" style="margin-top: 16px"></div><div class="pg-bar" style="width: 78%"></div><div class="pg-bar" style="width: 88%"></div>
+              </div>
+              <div id="f1" class="finger"></div>
+              <div id="f2" class="finger"></div>
+            </div>
+          </div>
+          <div id="s2-l2" class="d"><span class="w">y</span> <span class="w">tienes</span> <span class="w">que</span> <span class="w">hacer</span> <span class="w">zoom.</span></div>
+        </div>
+
+        <!-- Escena 3 · carga eterna -->
+        <div id="s3" class="scene clip" data-start="6.55" data-duration="3.45" data-track-index="3">
+          <div id="s3-l1" class="d"><span class="w">Tarda</span> <span class="w">tanto</span> <span class="w">en</span> <span class="w">cargar</span></div>
+          <div id="browser">
+            <div class="top"><i></i><i></i><i></i><div class="url"></div></div>
+            <div id="loader">
+              <div id="s3-cl"><svg class="sym" viewBox="18.58 21.7 19.61 48.4"><path stroke="#1b2fcc" d="M38.19,26.4 H34 Q29,26.4 29,31.4 V40.9 Q29,45.9 23.3,45.9 Q29,45.9 29,50.9 V60.4 Q29,65.4 34,65.4 H38.19" /></svg></div>
+              <div id="spin"></div>
+              <div id="s3-cr"><svg class="sym flip" viewBox="18.58 21.7 19.61 48.4"><path stroke="#1b2fcc" d="M38.19,26.4 H34 Q29,26.4 29,31.4 V40.9 Q29,45.9 23.3,45.9 Q29,45.9 29,50.9 V60.4 Q29,65.4 34,65.4 H38.19" /></svg></div>
+            </div>
+            <div id="track"><div id="fill"></div></div>
+            <div id="pct">0%</div>
+          </div>
+          <img id="s3-mono" src="assets/mono-avatar.webp" alt="" />
+          <div id="z1" class="z" style="left: 870px; top: 1070px; font-size: 50px">z</div>
+          <div id="z2" class="z" style="left: 912px; top: 1015px; font-size: 62px">z</div>
+          <div id="z3" class="z" style="left: 958px; top: 950px; font-size: 76px">z</div>
+          <div id="s3-l2" class="d"><span class="w">que</span> <span class="w">hasta</span> <span class="w">tú</span> <span class="w">te</span> <span class="ab split">aburres.</span></div>
+        </div>
+
+        <!-- Escena 4 · el link que da pena -->
+        <div id="s4" class="scene clip" data-start="9.9" data-duration="3.4" data-track-index="4">
+          <div id="s4-sym">
+            <div id="s4-al" class="half"><svg class="sym" viewBox="19 18 30 56"><path stroke="#bc6039" d="M46,21 L23.3,45.9 L46,70.8" /></svg></div>
+            <div id="s4-ar" class="half"><svg class="sym flip" viewBox="19 18 30 56"><path stroke="#bc6039" d="M46,21 L23.3,45.9 L46,70.8" /></svg></div>
+          </div>
+          <div id="s4-l1" class="d"><span class="w">Te</span> <span class="w">da</span> <span class="w">pena</span> <span class="w">mandarle</span> <span class="w">el</span> <span class="w">link</span></div>
+          <div id="bubble">¿Me mandas el link de tu página?</div>
+          <div id="composer">
+            <div id="field"><span id="typed"></span><span id="caret"></span></div>
+            <div id="send"><svg width="54" height="54" viewBox="0 0 24 24" fill="none"><path d="M4 12h14M13 6l6 6-6 6" stroke="#fbf8f5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+          </div>
+          <div id="pointer"></div>
+          <div id="s4-l2" class="d"><span class="w">a</span> <span class="w">un</span> <span class="w">cliente.</span></div>
+          <div id="s4-under"></div>
+        </div>
+
+        <!-- Escena 5 · cierre -->
+        <div id="s5" class="scene clip" data-start="13.0" data-duration="3.6" data-track-index="5">
+          <svg id="s5-logo" viewBox="0 0 126.12 91.76">
+            <path fill="#fbf8f5" d="M29.19,72.04c-3.3,0-6.27-.52-8.93-1.55-2.66-1.04-4.93-2.57-6.82-4.59-1.88-2.02-3.32-4.54-4.31-7.56-.99-3.01-1.48-6.47-1.48-10.38,0-5.55,.93-10.13,2.79-13.74,1.86-3.6,4.45-6.3,7.77-8.09,3.32-1.79,7.12-2.68,11.41-2.68,3.34,0,6.33,.51,8.97,1.52,2.64,1.01,4.9,2.53,6.78,4.56,1.88,2.02,3.32,4.55,4.31,7.59,.99,3.04,1.48,6.56,1.48,10.56s-.52,7.6-1.55,10.66c-1.04,3.06-2.53,5.6-4.48,7.63-1.95,2.02-4.27,3.54-6.96,4.56-2.68,1.01-5.67,1.52-8.97,1.52Zm.42-9.25c2.17,0,3.98-.54,5.44-1.62,1.46-1.08,2.54-2.71,3.25-4.87,.71-2.16,1.06-4.85,1.06-8.05,0-3.44-.38-6.29-1.13-8.55-.75-2.26-1.87-3.98-3.35-5.16-1.48-1.18-3.35-1.77-5.61-1.77-2.12,0-3.91,.57-5.37,1.7-1.46,1.13-2.57,2.8-3.32,5.01-.75,2.21-1.13,4.97-1.13,8.26,0,2.45,.21,4.63,.64,6.53,.42,1.91,1.07,3.48,1.94,4.73,.87,1.25,1.94,2.19,3.21,2.82,1.27,.64,2.73,.95,4.38,.95Z" />
+            <path fill="#fbf8f5" d="M65.42,72.04c-4.19,0-7.3-1.44-9.32-4.31-2.02-2.87-3.04-7.27-3.04-13.21v-20.76h11.44v20.27c0,2.92,.42,5.01,1.27,6.29s2.09,1.91,3.74,1.91c1.08,0,2.07-.28,2.97-.85,.89-.56,1.67-1.41,2.33-2.54,.66-1.13,1.15-2.53,1.48-4.2,.33-1.67,.49-3.61,.49-5.83v-15.04h11.44v37.29h-9.53l-.07-13.63h-.78c-.38,3.39-1.07,6.17-2.08,8.33-1.01,2.17-2.38,3.76-4.1,4.77-1.72,1.01-3.8,1.52-6.25,1.52Z" />
+            <path fill="#fbf8f5" d="M113.05,65.87c0-1.83,.51-3.55,1.4-5.01-.59,.31-1.24,.55-1.94,.73-.73,.19-1.45,.28-2.15,.28-1.41,0-2.54-.37-3.39-1.13s-1.27-2-1.27-3.74v-14.05h8.69v-9.18h-8.69v-8.47h-6.57l-.05,1.36c-.02,.5-.06,1.01-.16,1.5-.36,1.89-1,2.57-2.01,3.47-1.21,1.09-2.99,1.85-5.49,2.13h-1.27l-.07,8.9h4.45v15.25c0,4.8,1.06,8.33,3.18,10.59,2.12,2.26,5.37,3.39,9.75,3.39,.9,0,1.92-.06,3.07-.18,1.14-.12,2.45-.38,3.93-.8-.9-1.48-1.42-3.21-1.42-5.06Z" />
+          </svg>
+          <div id="s5-l1" class="d"><span class="w">¿Te</span> <span class="w">pasó</span> <span class="w">alguna?</span></div>
+          <div id="s5-l2" class="d split">Hablemos.</div>
+          <div id="btn">outstudio.online</div>
+          <div id="never" class="d split">Never the usual.</div>
+          <img id="s5-mono" src="assets/mono-laptop.webp" alt="" />
+        </div>
+      </div>
+
+      <div id="sl1" class="sl" style="top: 420px"></div>
+      <div id="sl2" class="sl" style="top: 860px"></div>
+      <div id="sl3" class="sl" style="top: 1240px"></div>
+      <div id="sl4" class="sl" style="top: 1560px"></div>
+    </div>
+
+    <script>
+      /* Partir en letras los textos marcados con .split (para rebotes por letra). */
+      document.querySelectorAll(".split").forEach((el) => {
+        const text = el.textContent;
+        el.textContent = "";
+        for (const c of text) {
+          const s = document.createElement("span");
+          s.className = "ch";
+          s.textContent = c === " " ? "\u00a0" : c;
+          el.appendChild(s);
+        }
+      });
+
+      /* Retícula de puntos (determinística) */
+      const lat = document.getElementById("lattice");
+      for (let r = 0; r < 70; r++)
+        for (let c = 0; c < 40; c++) {
+          const d = document.createElement("div");
+          d.className = "dot";
+          d.style.left = 28 + c * 56 + "px";
+          d.style.top = 28 + r * 56 + "px";
+          lat.appendChild(d);
+        }
+
+      const tl = gsap.timeline({ paused: true });
+      const P4 = "power4.out", E = "expo.out", EI = "expo.inOut";
+      const TOTAL = 16.6;
+
+      /* ── Cámara: un solo escritor del transform, con fase + deriva + sacudida ── */
+      const camEl = document.getElementById("cam");
+      const cam = { s: 2.4, r: -6, x: 0, y: 0, sx: 0, sy: 0, d: 0 };
+      const apply = () => {
+        const dx = Math.sin(cam.d) * 7, dy = Math.sin(cam.d * 1.3) * 9;
+        camEl.style.transform = `translate(${cam.x + cam.sx + dx}px, ${cam.y + cam.sy + dy}px) rotate(${cam.r}deg) scale(${cam.s})`;
+      };
+      const move = (vars, t) => tl.to(cam, { ...vars, onUpdate: apply }, t);
+      const shake = (t, a) =>
+        tl.to(cam, { keyframes: { sx: [0, -a, a * 0.8, -a * 0.5, a * 0.25, 0], sy: [0, a * 0.5, -a * 0.6, a * 0.3, -a * 0.1, 0] }, duration: 0.32, ease: "none", onUpdate: apply }, t);
+      tl.to(cam, { d: Math.PI * 2 * 3, duration: TOTAL, ease: "none", onUpdate: apply }, 0);
+      apply();
+
+      /* ── Cambio de fondo con barrido circular desde un punto ── */
+      function flip(t, color, cx, cy, dot) {
+        tl.set("#wipe", { backgroundColor: color, clipPath: `circle(0px at ${cx}px ${cy}px)` }, t);
+        tl.to("#wipe", { clipPath: `circle(2300px at ${cx}px ${cy}px)`, duration: 0.5, ease: "power3.out" }, t);
+        tl.set("#bg", { backgroundColor: color }, t + 0.52);
+        tl.set("#wipe", { clipPath: `circle(0px at ${cx}px ${cy}px)` }, t + 0.52);
+        tl.set("#cam", { "--dot": dot }, t);
+      }
+      /* ── Anillo que se expande en cada impacto ── */
+      function boom(t, cx, cy, color, size) {
+        tl.set("#ring", { x: cx - 120, y: cy - 120, borderColor: color }, t);
+        tl.fromTo("#ring", { scale: 0.2, opacity: 1 }, { scale: size || 9, opacity: 0, duration: 0.65, ease: "power3.out", immediateRender: false }, t);
+        shake(t, 18);
+      }
+      /* ── Líneas de velocidad ── */
+      function speed(t) {
+        ["#sl1", "#sl2", "#sl3", "#sl4"].forEach((id, i) => {
+          tl.fromTo(id, { x: -1200, opacity: 0.95 }, { x: 1300, opacity: 0.95, duration: 0.38, ease: "power2.in", immediateRender: false }, t + i * 0.045);
+          tl.set(id, { opacity: 0 }, t + 0.6);
+        });
+      }
+      /* ── Palabras que caen con rebote ── */
+      const dropWords = (sel, t, st) =>
+        tl.fromTo(`${sel} .w`, { y: -140, rotation: -12, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.55, ease: "back.out(2.2)", stagger: st || 0.07 }, t);
+      const popWords = (sel, t, st) =>
+        tl.fromTo(`${sel} .w`, { scale: 0.2, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "back.out(2.6)", stagger: st || 0.06, transformOrigin: "50% 80%" }, t);
+      const slamWords = (sel, t) =>
+        tl.fromTo(`${sel} .w`, { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.42, ease: P4, stagger: 0.07 }, t);
+      const waveLetters = (sel, t) =>
+        tl.fromTo(`${sel} .ch`, { y: 90, rotation: 18, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.5, ease: "back.out(2.4)", stagger: 0.035 }, t);
+
+      /* ════ ESCENA 1 · 0–3.3 · el gancho ════ */
+      tl.set("#cam", { "--dot": "#4a55c4" }, 0);
+      tl.fromTo("#s1-bl", { x: -150 }, { x: -12, duration: 0.45, ease: "power3.in" }, 0.05);
+      tl.fromTo("#s1-brr", { x: 150 }, { x: 12, duration: 0.45, ease: "power3.in" }, 0.05);
+      flip(0.5, "#f3ede7", 540, 960, "#d9d1c8");
+      boom(0.5, 540, 960, "#f5e3b3", 11);
+      move({ s: 1, r: 0, duration: 0.95, ease: P4 }, 0.5);
+      tl.to("#s1-bl", { x: -700, opacity: 0, scaleX: 0.3, duration: 0.3, ease: "power3.in" }, 0.62);
+      tl.to("#s1-brr", { x: 700, opacity: 0, scaleX: 0.3, duration: 0.3, ease: "power3.in" }, 0.62);
+      dropWords("#s1-title .big", 0.7, 0.09);
+      dropWords("#s1-title .mid", 1.0, 0.06);
+      waveLetters("#s1-title .acc", 1.45);
+      tl.fromTo("#s1-mono", { x: 520, rotation: 10 }, { x: 0, rotation: 0, duration: 0.7, ease: "back.out(1.8)" }, 1.75);
+      move({ s: 1.07, r: -2.5, duration: 1.1, ease: "sine.inOut" }, 1.9);
+      tl.to("#s1-mono", { rotation: -4, duration: 0.25, ease: "sine.inOut", yoyo: true, repeat: 3 }, 2.45);
+      /* salida: látigo de cámara */
+      speed(2.95);
+      move({ s: 1.5, r: 9, x: -260, duration: 0.35, ease: "power3.in" }, 2.95);
+
+      /* ════ ESCENA 2 · 3.25–6.6 · tienes que hacer zoom ════ */
+      flip(3.25, "#f5e3b3", 900, 1000, "#e6cf98");
+      move({ s: 1.35, r: -5, x: 0, duration: 0.01, ease: "none" }, 3.3);
+      move({ s: 1, r: 0, duration: 0.8, ease: E }, 3.32);
+      tl.fromTo("#phone", { y: 1100, rotation: -14 }, { y: 0, rotation: -3, duration: 0.75, ease: "back.out(1.5)" }, 3.3);
+      tl.fromTo("#s2-bl", { x: -300, opacity: 0, scaleX: 1.4 }, { x: 0, opacity: 1, scaleX: 1, duration: 0.35, ease: P4 }, 3.55);
+      tl.fromTo("#s2-brr", { x: 300, opacity: 0, scaleX: 1.4 }, { x: 0, opacity: 1, scaleX: 1, duration: 0.35, ease: P4 }, 3.55);
+      boom(3.6, 540, 1020, "#1b2fcc", 7);
+      popWords("#s2-l1", 3.6);
+      /* el gesto de pellizcar: dos dedos se separan y la página se agranda */
+      tl.fromTo("#f1", { x: 120, y: 280, opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, ease: P4 }, 4.35);
+      tl.fromTo("#f2", { x: 160, y: 320, opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, ease: P4 }, 4.35);
+      tl.to("#f1", { x: 40, y: 190, duration: 0.55, ease: "power2.inOut" }, 4.55);
+      tl.to("#f2", { x: 240, y: 420, duration: 0.55, ease: "power2.inOut" }, 4.55);
+      tl.fromTo("#page", { scale: 1 }, { scale: 2.8, duration: 0.6, ease: "power2.inOut" }, 4.55);
+      move({ s: 2.05, r: 4, x: 0, y: -110, duration: 0.6, ease: EI }, 4.5);
+      tl.to(["#f1", "#f2"], { opacity: 0, duration: 0.15 }, 5.15);
+      move({ s: 1, r: 0, y: 0, duration: 0.55, ease: "back.out(1.6)" }, 5.35);
+      tl.to("#phone", { rotation: 3, duration: 0.5, ease: "back.out(2)" }, 5.35);
+      slamWords("#s2-l2", 5.5);
+      shake(5.62, 22);
+      /* salida */
+      tl.to("#s2-bl", { x: -300, opacity: 0, scaleX: 0.3, duration: 0.22, ease: "power3.in" }, 6.3);
+      tl.to("#s2-brr", { x: 300, opacity: 0, scaleX: 0.3, duration: 0.22, ease: "power3.in" }, 6.3);
+      speed(6.25);
+      move({ s: 0.75, r: -10, duration: 0.3, ease: "power3.in" }, 6.3);
+
+      /* ════ ESCENA 3 · 6.55–9.95 · la carga eterna ════ */
+      flip(6.55, "#141e5c", 540, 990, "#2a3678");
+      move({ s: 1.3, r: 6, duration: 0.01, ease: "none" }, 6.58);
+      move({ s: 1, r: 0, duration: 0.8, ease: E }, 6.6);
+      tl.fromTo("#browser", { scale: 0.4, rotation: 8, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.6, ease: "back.out(1.8)" }, 6.6);
+      dropWords("#s3-l1", 6.85, 0.08);
+      tl.fromTo("#s3-cl", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: P4 }, 7.0);
+      tl.fromTo("#s3-cr", { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: P4 }, 7.0);
+      tl.fromTo("#spin", { rotation: 0 }, { rotation: 360 * 5, duration: 2.9, ease: "none" }, 6.95);
+      /* barra que avanza a trompicones y se queda pegada */
+      const load = { p: 0 };
+      tl.fromTo("#fill", { scaleX: 0 }, { scaleX: 0.13, duration: 2.2, ease: "none", keyframes: { scaleX: [0, 0.06, 0.07, 0.11, 0.12, 0.13, 0.13] } }, 7.1);
+      tl.fromTo(load, { p: 0 }, { p: 13, duration: 2.2, ease: "none", keyframes: { p: [0, 6, 7, 11, 12, 13, 13] }, onUpdate: () => { document.getElementById("pct").textContent = Math.round(load.p) + "%"; } }, 7.1);
+      move({ s: 1.12, duration: 2.2, ease: "sine.inOut" }, 7.2);
+      tl.fromTo("#s3-mono", { y: 420, rotation: 12 }, { y: 0, rotation: -6, duration: 0.6, ease: "back.out(1.7)" }, 7.6);
+      tl.to("#s3-mono", { rotation: 4, y: 14, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 3 }, 8.2);
+      ["#z1", "#z2", "#z3"].forEach((id, i) => {
+        tl.fromTo(id, { y: 40, opacity: 0 }, { y: -160, opacity: 1, duration: 1.2, ease: "sine.out" }, 8.0 + i * 0.25);
+        tl.to(id, { opacity: 0, duration: 0.25 }, 9.22 + i * 0.25);
+      });
+      tl.fromTo("#s3-l2 .w", { scale: 0.2, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "back.out(2.6)", stagger: 0.06 }, 8.3);
+      /* «aburres.» se desinfla: letras que caen con sueño */
+      tl.fromTo("#s3-l2 .ab .ch", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", stagger: 0.04 }, 8.6);
+      tl.to("#s3-l2 .ab .ch", { y: 26, rotation: (i) => (i % 2 ? 9 : -7), duration: 0.6, ease: "bounce.out", stagger: 0.05 }, 9.15);
+      /* salida */
+      speed(9.6);
+      move({ s: 1.6, r: -8, x: 240, duration: 0.32, ease: "power3.in" }, 9.62);
+
+      /* ════ ESCENA 4 · 9.9–13.3 · el link que da pena ════ */
+      flip(9.9, "#f3ede7", 900, 1050, "#d9d1c8");
+      move({ s: 1.3, r: -4, x: 0, duration: 0.01, ease: "none" }, 9.92);
+      move({ s: 1, r: 0, duration: 0.8, ease: E }, 9.94);
+      tl.fromTo("#s4-al", { x: -160, opacity: 0, scaleX: 1.4 }, { x: 0, opacity: 1, scaleX: 1, duration: 0.3, ease: P4 }, 10.0);
+      tl.fromTo("#s4-ar", { x: 160, opacity: 0, scaleX: 1.4 }, { x: 0, opacity: 1, scaleX: 1, duration: 0.3, ease: P4 }, 10.0);
+      popWords("#s4-l1", 10.05, 0.05);
+      tl.fromTo("#bubble", { scale: 0, opacity: 0, transformOrigin: "0% 100%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.4)" }, 10.45);
+      tl.fromTo("#composer", { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }, 10.6);
+      /* escribe el link, duda sobre «enviar» y lo borra */
+      const LINK = "mipagina.com";
+      const typing = { n: 0 };
+      const writeTyped = () => { document.getElementById("typed").textContent = LINK.slice(0, Math.round(typing.n)); };
+      tl.fromTo(typing, { n: 0 }, { n: LINK.length, duration: 0.75, ease: "none", onUpdate: writeTyped }, 10.95);
+      move({ s: 1.07, y: -30, duration: 0.8, ease: "power2.inOut" }, 10.95);
+      tl.fromTo("#pointer", { x: 1100, y: 1300, opacity: 0 }, { x: 870, y: 1010, opacity: 1, duration: 0.45, ease: "power3.out" }, 11.55);
+      tl.to("#pointer", { keyframes: { x: [870, 850, 885, 860, 880, 870] }, duration: 0.5, ease: "none" }, 12.0);
+      tl.to("#pointer", { x: 1150, y: 1350, opacity: 0, duration: 0.35, ease: "power3.in" }, 12.5);
+      tl.to(typing, { n: 0, duration: 0.4, ease: "none", onUpdate: writeTyped }, 12.4);
+      shake(12.45, 14);
+      move({ s: 1, y: 0, duration: 0.5, ease: "back.out(1.6)" }, 12.4);
+      tl.to("#caret", { keyframes: { opacity: [1, 0, 1, 0, 1, 0, 1, 0, 1] }, duration: 2.2, ease: "none" }, 10.6);
+      slamWords("#s4-l2", 12.25);
+      tl.fromTo("#s4-under", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: P4 }, 12.6);
+      /* salida: los ángulos se abren y empuja la cámara */
+      speed(12.85);
+      move({ s: 2.2, r: 6, duration: 0.3, ease: "power3.in" }, 12.88);
+
+      /* ════ ESCENA 5 · 13.0–16.6 · cierre ════ */
+      flip(13.0, "#1b2fcc", 540, 700, "#4a55c4");
+      move({ s: 1.4, r: 5, x: 0, y: 0, duration: 0.01, ease: "none" }, 13.02);
+      move({ s: 1, r: 0, duration: 0.9, ease: E }, 13.04);
+      dropWords("#s5-l1", 13.1, 0.08);
+      waveLetters("#s5-l2", 13.55);
+      boom(13.85, 540, 720, "#f5e3b3", 10);
+      tl.fromTo("#s5-mono", { y: 800, rotation: -10 }, { y: 0, rotation: 0, duration: 0.75, ease: "back.out(1.6)" }, 14.0);
+      tl.fromTo("#btn", { scale: 0, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.6)" }, 14.35);
+      boom(14.5, 330, 980, "#f5e3b3", 5);
+      tl.fromTo("#s5-logo", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: P4 }, 14.8);
+      waveLetters("#never", 15.0);
+      move({ s: 1.05, duration: 1.4, ease: "sine.inOut" }, 15.2);
+      tl.to("#s5-mono", { y: -16, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 1 }, 15.4);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
