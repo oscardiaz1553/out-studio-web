@@ -1,6 +1,6 @@
 # Contexto de producto y marketing: Out Studio
 
-**Document version:** v2
+**Document version:** v3
 **Last updated:** 2026-10-12
 
 > Armado a partir de la web (outstudio.online), el manual de marca y las
@@ -16,7 +16,7 @@
 - Landing page: desde 1.200.000.
 - Tienda Shopify: desde 2.200.000.
 - Sitio WordPress: desde 4.500.000.
-- Plan para emprendedores pequeños: en diseño (ver "Ofertas en diseño").
+- Out Emprende (emprendedores): $2.200.000 en 3 cuotas de $733.334, productos ilimitados (ver "Ofertas").
 
 ## Target Audience
 **Target companies:** Tres segmentos, en este orden de prioridad:
@@ -126,10 +126,11 @@
 **Conversion action:** Pedir cotización (encuesta, chat de Mango o WhatsApp).
 **Current metrics:** Sin medir todavía. **[por confirmar: proyectos al mes hoy]**
 
-## Ofertas en diseño
-**Plan para emprendedores (nombre por definir):** tienda Shopify de entrada para negocios con pocos productos. Propuesta: alcance cerrado (hasta ~20 productos, diseño adaptado a la marca sobre una base propia de Out, pasarela de pagos y envíos, entrega rápida), precio fijo y publicado por debajo de la tienda a medida, y opción de crecer después a un proyecto completo. **[por confirmar: alcance, precio y nombre]**
+## Ofertas
+**Out Emprende** (plan para emprendedores): tienda Shopify completa por $2.200.000 COP, pagadera en 3 cuotas mensuales de $733.334, sin intereses. Productos ilimitados (Out carga todos los que el cliente quiera). Incluye diseño adaptado a la marca, pasarela de pagos y envíos. Precio fijo y publicado. Mensaje clave: "Tu tienda lista para vender, en 3 cuotas y con todos tus productos". Cuando el negocio crezca, puede pasar a un proyecto a medida.
 
 ## Changelog
 *Newest first. One line per revision: what changed and why.*
+- v3 (2026-10-12) — Definido Out Emprende: tienda Shopify a $2.200.000 en 3 cuotas sin intereses, productos ilimitados.
 - v2 (2026-10-12) — Precios de referencia, tres segmentos (tiendas, medios/marcas grandes, emprendedores), lenguaje real de clientes, meta de 5-6 proyectos/mes y plan para emprendedores en diseño.
 - v1 (2026-10-12) — Borrador inicial a partir de la web, el manual de marca y la conversación.
