@@ -16,6 +16,7 @@ import {
   Question,
   answerKey,
   isDetail,
+  visibleQuestions,
 } from '../data/quote';
 import { EMAIL } from '../data/site';
 import { useQuoteForm } from '../lib/useQuoteForm';
@@ -143,8 +144,9 @@ function QuestionList({
   answers: Answers;
   setAnswer: (key: string, value: Answer) => void;
 }) {
-  const quick = questions.filter((q) => !isDetail(q));
-  const details = questions.filter(isDetail);
+  const shown = visibleQuestions(questions, scope, answers);
+  const quick = shown.filter((q) => !isDetail(q));
+  const details = shown.filter(isDetail);
   const hasDetailAnswers = details.some((q) => {
     const v = answers[answerKey(scope, q.id)];
     return typeof v === 'string' && v.trim() !== '';

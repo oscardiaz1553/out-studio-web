@@ -16,6 +16,7 @@ import {
   answerGroups,
   answerKey,
   decodePayload,
+  emprendeCheck,
 } from '../data/quote';
 
 const INPUT =
@@ -221,6 +222,11 @@ export default function QuoteBuilderPage() {
     }`;
   }, [draft, storageKey]);
 
+  const emprende = useMemo(
+    () => (payload ? emprendeCheck(payload.types, payload.answers) : null),
+    [payload],
+  );
+
   const groups = useMemo(
     () => (payload ? answerGroups(payload.types, payload.answers) : []),
     [payload],
@@ -305,6 +311,26 @@ export default function QuoteBuilderPage() {
                 ? `Brief cargado de ${payload.contact.name}. Pon los valores y ajusta lo que quieras: el dossier se actualiza al lado.`
                 : 'Sin brief: abre el link que llega en el correo de la solicitud para cargarlo, o llena todo a mano.'}
             </p>
+            {emprende && (
+              <div
+                className={`mt-3 rounded-xl px-4 py-3 text-sm ${
+                  emprende.status === 'si'
+                    ? 'bg-klein text-paper-pure'
+                    : emprende.status === 'revisar'
+                      ? 'bg-carne text-klein-deep'
+                      : 'bg-paper text-klein-deep border border-klein-deep/15'
+                }`}
+              >
+                <p className="font-display font-bold">{emprende.label}</p>
+                {emprende.reasons.length > 0 && (
+                  <ul className="mt-1.5 text-xs leading-relaxed opacity-90 list-disc pl-4">
+                    {emprende.reasons.map((r) => (
+                      <li key={r}>{r}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
           </div>
 
           <Group title="Cliente">

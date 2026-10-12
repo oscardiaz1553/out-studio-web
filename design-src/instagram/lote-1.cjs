@@ -167,7 +167,7 @@ const empSlides = [
         ${[
           'Tu negocio está empezando o tiene menos de 2 años.',
           'Es tu primera tienda, sitio web o marca profesional, u hoy vendes solo por redes y WhatsApp.',
-          'Tu equipo es pequeño: hasta 5 personas.',
+          'Si es una tienda online, tiene hasta 40 productos.',
         ].map((t) => `<div style="display:flex;gap:26px;align-items:flex-start">${check(C.carne, C.deep)}<p style="color:${C.pure};font-size:42px">${t}</p></div>`).join('')}
       </div>
     </div>

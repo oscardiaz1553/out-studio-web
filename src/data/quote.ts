@@ -16,12 +16,26 @@ export interface Question {
   /** Para text/long: se muestra con las preguntas rápidas en vez de ir en
    *  "Más detalles" (cuando no hay opciones que lo reemplacen). */
   open?: boolean;
+  /** Solo se muestra según la respuesta a otra pregunta del mismo bloque. */
+  showIf?: { id: string; not: string[] };
 }
 
 /** Las preguntas abiertas son opcionales y van en un bloque aparte: quien
  *  quiera dar más contexto lo hace, pero nunca frenan la encuesta. */
 export const isDetail = (q: Question) =>
   (q.kind === 'text' || q.kind === 'long') && !q.open;
+
+/** ¿Se muestra la pregunta, según lo que ya respondió en su bloque? Las
+ *  ocultas no se piden ni van en el brief. */
+export function isVisible(q: Question, scope: string, answers: Answers): boolean {
+  if (!q.showIf) return true;
+  const v = answers[`${scope}.${q.showIf.id}`];
+  if (v == null || v === '') return false;
+  return !(Array.isArray(v) ? v : [v]).some((x) => q.showIf!.not.includes(x));
+}
+
+export const visibleQuestions = (qs: Question[], scope: string, answers: Answers) =>
+  qs.filter((q) => isVisible(q, scope, answers));
 
 export interface ProjectType {
   id: string;
@@ -52,7 +66,7 @@ export const PROJECT_TYPES: ProjectType[] = [
         label: '¿Cuántos productos tendrá aproximadamente?',
         kind: 'single',
         required: true,
-        options: ['1 a 20', '21 a 100', '101 a 500', 'Más de 500'],
+        options: ['1 a 20', '21 a 40', '41 a 100', '101 a 500', 'Más de 500'],
       },
       {
         id: 'funciones',
@@ -413,13 +427,34 @@ export const COMMON_QUESTIONS: Question[] = [
   {
     id: 'emprende',
     label: '¿Tu negocio está empezando? (Out Emprende)',
-    help: 'Out Emprende es para negocios con menos de 2 años y equipo de hasta 5 personas: tu proyecto hasta en 3 cuotas sin intereses.',
+    help: 'Out Emprende es para negocios que están empezando: tu proyecto hasta en 3 cuotas sin intereses. Confirmamos si aplicas en la primera conversación.',
     kind: 'single',
     required: true,
     options: [
       'Sí, me interesa Out Emprende',
       'No, busco un proyecto a medida',
       'No sé, recomiéndenme',
+    ],
+  },
+  // Para saber si califica a Out Emprende: solo si le interesa o tiene dudas.
+  {
+    id: 'antiguedad',
+    label: '¿Hace cuánto vende tu negocio?',
+    kind: 'single',
+    required: true,
+    showIf: { id: 'emprende', not: ['No, busco un proyecto a medida'] },
+    options: ['Todavía no vendo', 'Menos de 1 año', '1 a 2 años', 'Más de 2 años'],
+  },
+  {
+    id: 'web',
+    label: '¿Ya tienes página web o tienda online?',
+    kind: 'single',
+    required: true,
+    showIf: { id: 'emprende', not: ['No, busco un proyecto a medida'] },
+    options: [
+      'No, vendo por redes sociales o WhatsApp',
+      'No, es lo primero que hago',
+      'Sí, pero quiero cambiarla o mejorarla',
     ],
   },
   {
@@ -502,7 +537,7 @@ function formatAnswer(value: Answer | undefined): string {
 }
 
 function section(title: string, questions: Question[], scope: string, answers: Answers) {
-  const lines = questions.map(
+  const lines = visibleQuestions(questions, scope, answers).map(
     (q) => `• ${q.label}\n  → ${formatAnswer(answers[answerKey(scope, q.id)])}`,
   );
   return `=== ${title.toUpperCase()} ===\n${lines.join('\n')}`;
@@ -531,10 +566,92 @@ export function buildBrief(
     `Empresa o marca: ${contact.company || '—'}`,
     `Referido por: ${contact.referral?.trim() || '—'}`,
     `Proyectos solicitados: ${types.map((t) => t.label).join(', ')}`,
+    ...emprendeLines(typeIds, answers),
     ...types.map((t) => section(t.label, t.questions, t.id, answers)),
     section('Sobre el proyecto', COMMON_QUESTIONS, 'comun', answers),
   ];
   return parts.join('\n\n');
+}
+
+// ---------------------------------------------------------------------------
+// Out Emprende: ¿califica?
+// ---------------------------------------------------------------------------
+
+/** Tope de productos que carga Out dentro del plan. */
+export const EMPRENDE_MAX_PRODUCTS = 40;
+const OVER_PRODUCTS = ['41 a 100', '101 a 500', 'Más de 500'];
+const SPECIAL_FEATURES = [
+  'Venta por suscripción o recurrente',
+  'Varios idiomas o monedas',
+  'Facturación electrónica o inventario (ERP)',
+];
+
+export interface EmprendeCheck {
+  status: 'si' | 'revisar' | 'no';
+  label: string;
+  reasons: string[];
+}
+
+/**
+ * Califica la solicitud a Out Emprende (null si no le interesa). Lo que
+ * decide es que el proyecto quepa en el plan (hasta 40 productos, sin
+ * integraciones especiales) y que el negocio esté empezando: menos de 2 años
+ * vendiendo o su primera web. Si cabe pero no está empezando, queda para
+ * revisar en la reunión uno a uno.
+ */
+export function emprendeCheck(typeIds: string[], answers: Answers): EmprendeCheck | null {
+  const interest = answers[answerKey('comun', 'emprende')];
+  if (!interest || interest === 'No, busco un proyecto a medida') return null;
+
+  const one = (key: string) => {
+    const v = answers[key];
+    return Array.isArray(v) ? v[0] : v;
+  };
+  const antiguedad = one(answerKey('comun', 'antiguedad'));
+  const web = one(answerKey('comun', 'web'));
+  const productos = typeIds.includes('shopify') ? one(answerKey('shopify', 'productos')) : undefined;
+  const funcionesRaw = typeIds.includes('shopify') ? answers[answerKey('shopify', 'funciones')] : undefined;
+  const funciones = Array.isArray(funcionesRaw) ? funcionesRaw : funcionesRaw ? [funcionesRaw] : [];
+
+  const reasons: string[] = [];
+  const young = !!antiguedad && antiguedad !== 'Más de 2 años';
+  const firstWeb = !!web && !web.startsWith('Sí');
+  if (antiguedad) {
+    reasons.push(
+      antiguedad === 'Todavía no vendo'
+        ? 'Todavía no vende'
+        : young
+          ? `Vende hace poco (${antiguedad.toLowerCase()})`
+          : 'Lleva más de 2 años vendiendo',
+    );
+  }
+  if (web) reasons.push(firstWeb ? 'Es su primera página o tienda' : 'Ya tiene página o tienda');
+
+  const overProducts = !!productos && OVER_PRODUCTS.includes(productos);
+  const special = funciones.filter((f) => SPECIAL_FEATURES.includes(f));
+  const automation = typeIds.includes('automatizacion');
+  if (overProducts) reasons.push(`Más de ${EMPRENDE_MAX_PRODUCTS} productos (${productos})`);
+  if (special.length) reasons.push(`Necesita integraciones especiales: ${special.join(', ').toLowerCase()}`);
+  if (automation) reasons.push('Pide integraciones y automatizaciones');
+
+  const fits = !overProducts && !special.length && !automation;
+  const status: EmprendeCheck['status'] = !fits
+    ? 'no'
+    : young || firstWeb
+      ? 'si'
+      : 'revisar';
+  const label = {
+    si: 'Califica a Out Emprende',
+    revisar: 'Out Emprende: a revisar en la reunión',
+    no: 'No califica a Out Emprende (necesita una propuesta a la medida)',
+  }[status];
+  return { status, label, reasons };
+}
+
+function emprendeLines(typeIds: string[], answers: Answers): string[] {
+  const check = emprendeCheck(typeIds, answers);
+  if (!check) return [];
+  return [`Out Emprende: ${check.label}${check.reasons.length ? `\n  ${check.reasons.join('\n  ')}` : ''}`];
 }
 
 // ---------------------------------------------------------------------------
@@ -617,7 +734,7 @@ export function answerGroups(
 ): AnswerGroup[] {
   const make = (title: string, qs: Question[], scope: string): AnswerGroup => ({
     title,
-    rows: qs
+    rows: visibleQuestions(qs, scope, answers)
       .map((q) => ({
         question: q.label,
         answer: formatAnswer(answers[answerKey(scope, q.id)]),

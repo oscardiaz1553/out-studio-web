@@ -9,6 +9,7 @@ import {
   buildBrief,
   encodePayload,
   isAnswered,
+  visibleQuestions,
 } from '../data/quote';
 import { EMAIL, WEB3FORMS_ACCESS_KEY } from '../data/site';
 
@@ -56,14 +57,14 @@ export function useQuoteForm() {
   const canContinue = (() => {
     if (step === 'tipos') return selected.length > 0;
     if (step === 'comun') {
-      return COMMON_QUESTIONS.every((q) =>
+      return visibleQuestions(COMMON_QUESTIONS, 'comun', answers).every((q) =>
         isAnswered(q, answers[answerKey('comun', q.id)]),
       );
     }
     if (step === 'contacto') {
       return contact.name.trim() !== '' && contact.email.trim() !== '';
     }
-    return (currentType?.questions ?? []).every((q) =>
+    return visibleQuestions(currentType?.questions ?? [], currentType?.id ?? '', answers).every((q) =>
       isAnswered(q, answers[answerKey(currentType!.id, q.id)]),
     );
   })();

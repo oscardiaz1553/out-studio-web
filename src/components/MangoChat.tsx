@@ -8,6 +8,7 @@ import {
   answerKey,
   isAnswered,
   isDetail,
+  visibleQuestions,
 } from '../data/quote';
 import { EMAIL } from '../data/site';
 import { useQuoteForm } from '../lib/useQuoteForm';
@@ -130,8 +131,8 @@ export function useChatState() {
   const prompts = useMemo(() => {
     const types = PROJECT_TYPES.filter((t) => form.selected.includes(t.id));
     const all = [
-      ...types.flatMap((t) => t.questions.map((q) => fromQuestion(q, t.id))),
-      ...COMMON_QUESTIONS.map((q) => fromQuestion(q, 'comun')),
+      ...types.flatMap((t) => visibleQuestions(t.questions, t.id, form.answers).map((q) => fromQuestion(q, t.id))),
+      ...visibleQuestions(COMMON_QUESTIONS, 'comun', form.answers).map((q) => fromQuestion(q, 'comun')),
     ];
     const quick = all.filter((p) => !p.question || !isDetail(p.question));
     const detailPrompts = all.filter((p) => p.question && isDetail(p.question));
@@ -142,7 +143,7 @@ export function useChatState() {
       ...(details ? detailPrompts : []),
       ...CONTACT_PROMPTS,
     ];
-  }, [form.selected, details]);
+  }, [form.selected, form.answers, details]);
 
   // Cada vez que avanza o retrocede, Mango "escribe" un instante.
   const first = useRef(true);

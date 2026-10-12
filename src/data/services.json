@@ -137,12 +137,12 @@
       "offer": {
         "installments": 3,
         "criteria": [
-          "Tu negocio está empezando o lleva menos de 2 años en el mercado.",
+          "Tu negocio está empezando o lleva menos de 2 años vendiendo.",
           "Es tu primera tienda, sitio web o marca profesional, u hoy vendes solo por redes sociales y WhatsApp.",
-          "Tu equipo es pequeño: hasta 5 personas.",
+          "Si es una tienda online, tiene hasta 40 productos.",
           "Tu proyecto no necesita integraciones especiales (facturación electrónica, inventario o ERP, suscripciones, varios idiomas o monedas)."
         ],
-        "note": "Si tu proyecto necesita más de lo que incluye el plan, te armamos una cotización a la medida."
+        "note": "Confirmamos si tu proyecto aplica en la primera conversación. Si necesita más de lo que incluye el plan, te armamos una propuesta a la medida."
       },
       "faq": [
         {
@@ -159,11 +159,11 @@
         },
         {
           "q": "¿Cuántos productos puedo tener?",
-          "a": "Si es una tienda online, los que quieras: cargamos todos tus productos, sin límite."
+          "a": "Si es una tienda online, el plan incluye hasta 40 productos y nosotros los cargamos. Si tienes más, te armamos una propuesta a la medida."
         },
         {
           "q": "¿Cómo sé si califico para Out Emprende?",
-          "a": "Es para negocios de cualquier sector que están empezando o llevan menos de 2 años en el mercado, con un equipo de hasta 5 personas, que hacen su primera tienda, sitio o marca y no necesitan integraciones especiales. Si tienes dudas, cuéntanos tu caso y te decimos."
+          "a": "Es para negocios de cualquier sector que están empezando o llevan menos de 2 años vendiendo, o que hacen su primera tienda, sitio o marca, con hasta 40 productos si es una tienda y sin integraciones especiales. Al pedir tu cotización te hacemos dos preguntas rápidas y confirmamos si aplicas en la primera conversación."
         },
         {
           "q": "¿Qué no incluye?",
