@@ -6,14 +6,14 @@ import SymbolField from '../components/SymbolField';
 const HOME = import.meta.env.BASE_URL;
 
 const POINTS = [
-  'Tu tienda Shopify con diseño para tu marca',
-  'Todos tus productos cargados, sin límite',
-  'Pagos y envíos listos para vender',
+  'Tienda online, sitio web, landing page o tu marca',
+  'Para cualquier negocio que está arrancando',
+  'Diseño UX/UI a la medida, sin plantillas',
 ];
 
 /**
  * Out Emprende en su propia sección de la portada: el plan para emprendedores
- * no es un servicio más de la lista, así que tiene su franja con la lámina
+ * (tienda, sitio, landing o marca) no es un servicio más de la lista, así que tiene su franja con la lámina
  * "Hasta 3 cuotas" y un sello que gira.
  */
 export default function OutEmprendeSection() {
@@ -47,7 +47,7 @@ export default function OutEmprendeSection() {
             className="mt-5 max-w-[22ch] font-display font-bold tracking-[-0.03em] leading-[1.08] text-carne"
             style={{ fontSize: 'clamp(1.5rem, 3vw, 2.4rem)' }}
           >
-            Tu tienda lista para vender, hasta en 3 cuotas sin intereses.
+            Tu proyecto web, hasta en 3 cuotas sin intereses.
           </p>
 
           <ul className="mt-8 flex flex-col gap-3.5">
@@ -65,7 +65,7 @@ export default function OutEmprendeSection() {
 
           <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
             <AccentButton href={`${HOME}#cotizar`} onBlue className="sm:px-12 sm:py-4">
-              Quiero mi tienda
+              Quiero empezar
             </AccentButton>
             <a
               href={`${HOME}servicios/out-emprende/`}

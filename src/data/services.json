@@ -115,32 +115,32 @@
     {
       "slug": "out-emprende",
       "nav": "Out Emprende",
-      "metaTitle": "Out Emprende: tienda Shopify hasta en 3 cuotas para emprendedores | Out Studio",
-      "metaDescription": "Tu tienda Shopify lista para vender, con todos tus productos, hasta en 3 cuotas sin intereses. El plan de Out Studio para emprendedores en Colombia.",
-      "h1": "Out Emprende: tu tienda lista para vender, hasta en 3 cuotas",
-      "lead": "Una tienda Shopify completa, con diseño para tu marca, pagos y envíos configurados y todos tus productos cargados. Y la pagas hasta en 3 cuotas mensuales sin intereses.",
-      "includesTitle": "Qué incluye Out Emprende",
+      "metaTitle": "Out Emprende: tu sitio, tienda o marca hasta en 3 cuotas | Out Studio",
+      "metaDescription": "Tienda online, sitio web, landing page o marca para emprendedores en Colombia, con diseño UX/UI a la medida y hasta en 3 cuotas sin intereses.",
+      "h1": "Out Emprende: tu proyecto web, hasta en 3 cuotas",
+      "lead": "Para emprendedores y negocios que están arrancando: tu tienda online, tu sitio web, una landing page o tu marca, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos. Y lo pagas hasta en 3 cuotas mensuales sin intereses.",
+      "includesTitle": "Qué puedes hacer con Out Emprende",
       "includes": [
-        "Tienda Shopify con diseño adaptado a tu marca y pensada para el celular",
-        "Todos tus productos cargados, sin límite",
-        "Pasarela de pagos (como Wompi, Mercado Pago o PayU) y envíos configurados",
-        "Páginas básicas: inicio, catálogo, nosotros, contacto y políticas",
-        "SEO básico y analítica instalada",
-        "Capacitación para que administres tu tienda"
+        "Tienda online en Shopify, con todos tus productos cargados, sin límite",
+        "Sitio web informativo en WordPress para tu empresa o tus servicios",
+        "Landing page para lanzar un producto o una campaña",
+        "Branding: logo e identidad visual para tu marca",
+        "Diseño UX/UI a la medida de tu negocio y pensado para el celular",
+        "Capacitación para que administres tu sitio"
       ],
       "whyTitle": "Pensado para empezar bien",
       "why": [
-        "Cuando estás arrancando, cada peso cuenta. Out Emprende te da una tienda bien hecha, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos, y la posibilidad de pagarla hasta en 3 cuotas para que no tengas que sacarlo todo de una vez.",
-        "Trabajamos sobre una base propia de Out que adaptamos a tu marca: así salimos rápido y con un valor pensado para emprendedores. Cuando tu negocio crezca, tu tienda puede crecer con un proyecto a medida."
+        "Cuando estás arrancando, cada peso cuenta. Out Emprende te da un proyecto bien hecho, sea una tienda, un sitio, una landing o tu marca, y la posibilidad de pagarlo hasta en 3 cuotas para que no tengas que sacarlo todo de una vez.",
+        "Sirve para cualquier tipo de negocio: una tienda de productos, una empresa de servicios, un medio digital o un proyecto personal. Cuando tu negocio crezca, tu sitio puede crecer con un proyecto a medida."
       ],
-      "forWho": "Emprendedores y negocios pequeños que van a abrir su primera tienda online o que hoy venden solo por redes y WhatsApp.",
+      "forWho": "Emprendedores y negocios pequeños de cualquier sector que necesitan su primera tienda, sitio web, landing page o marca profesional.",
       "offer": {
         "installments": 3,
         "criteria": [
-          "Tu negocio está empezando o lleva menos de 2 años vendiendo.",
-          "Es tu primera tienda online, u hoy vendes solo por redes sociales y WhatsApp.",
+          "Tu negocio está empezando o lleva menos de 2 años en el mercado.",
+          "Es tu primera tienda, sitio web o marca profesional, u hoy vendes solo por redes sociales y WhatsApp.",
           "Tu equipo es pequeño: hasta 5 personas.",
-          "Tu tienda no necesita integraciones especiales (facturación electrónica, inventario o ERP, suscripciones, varios idiomas o monedas)."
+          "Tu proyecto no necesita integraciones especiales (facturación electrónica, inventario o ERP, suscripciones, varios idiomas o monedas)."
         ],
         "note": "Si tu proyecto necesita más de lo que incluye el plan, te armamos una cotización a la medida."
       },
@@ -150,20 +150,24 @@
           "a": "Te enviamos una cotización a la medida de tu tienda y puedes pagarla hasta en 3 cuotas mensuales sin intereses: la primera para arrancar y las demás cada 30 días."
         },
         {
+          "q": "¿Qué tipo de proyectos incluye?",
+          "a": "Tiendas online en Shopify, sitios web informativos en WordPress, landing pages y branding (logo e identidad visual). Puedes hacer uno solo o combinarlos."
+        },
+        {
           "q": "¿Cuánto cuesta?",
           "a": "Depende de tu tienda, así que no damos una cifra al azar. Cuéntanos tu proyecto y te enviamos la cotización en 6 a 24 horas, con un valor pensado para emprendedores."
         },
         {
           "q": "¿Cuántos productos puedo tener?",
-          "a": "Los que quieras. En Out Emprende cargamos todos tus productos, sin límite."
+          "a": "Si es una tienda online, los que quieras: cargamos todos tus productos, sin límite."
         },
         {
           "q": "¿Cómo sé si califico para Out Emprende?",
-          "a": "Es para negocios que están empezando o llevan menos de 2 años vendiendo, con un equipo de hasta 5 personas, que abren su primera tienda online y no necesitan integraciones especiales. Si tienes dudas, cuéntanos tu caso y te decimos."
+          "a": "Es para negocios de cualquier sector que están empezando o llevan menos de 2 años en el mercado, con un equipo de hasta 5 personas, que hacen su primera tienda, sitio o marca y no necesitan integraciones especiales. Si tienes dudas, cuéntanos tu caso y te decimos."
         },
         {
           "q": "¿Qué no incluye?",
-          "a": "No incluye integraciones a medida (facturación electrónica, inventario o ERP), suscripciones, varios idiomas o monedas, ni la mensualidad de Shopify, las aplicaciones de pago o las comisiones de la pasarela."
+          "a": "No incluye integraciones a medida (facturación electrónica, inventario o ERP), suscripciones, varios idiomas o monedas, ni costos de terceros como la mensualidad de Shopify, el hosting y dominio, las aplicaciones de pago o las comisiones de la pasarela."
         },
         {
           "q": "¿Puedo crecer después?",
@@ -172,8 +176,9 @@
       ],
       "related": [
         "tiendas-shopify",
-        "branding",
-        "landing-pages"
+        "sitios-wordpress",
+        "landing-pages",
+        "branding"
       ],
       "scene": "emprende",
       "tilt": 3

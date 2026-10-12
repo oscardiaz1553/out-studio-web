@@ -215,11 +215,11 @@ function OfferBlock({ offer }: { offer: Offer }) {
           </p>
           <p className="mt-2 font-display font-bold text-2xl sm:text-3xl tracking-[-0.03em]">sin intereses</p>
           <p className="mt-4 text-paper-pure/80 leading-relaxed">
-            Con todos tus productos cargados, sin límite. Te enviamos la cotización en 6 a 24 horas.
+            Tienda, sitio web, landing page o marca. Te enviamos la cotización en 6 a 24 horas.
           </p>
           <div className="mt-auto pt-8">
             <AccentButton href={`${HOME}#cotizar`} onBlue>
-              Quiero mi tienda
+              Quiero empezar
             </AccentButton>
           </div>
         </div>

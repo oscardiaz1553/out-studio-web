@@ -1,6 +1,6 @@
 # Contexto de producto y marketing: Out Studio
 
-**Document version:** v4
+**Document version:** v5
 **Last updated:** 2026-10-12
 
 > Armado a partir de la web (outstudio.online), el manual de marca y las
@@ -127,10 +127,11 @@
 **Current metrics:** Sin medir todavía. **[por confirmar: proyectos al mes hoy]**
 
 ## Ofertas
-**Out Emprende** (plan para emprendedores): tienda Shopify completa, pagadera hasta en 3 cuotas mensuales sin intereses. Productos ilimitados (Out carga todos los que el cliente quiera). Incluye diseño adaptado a la marca, pasarela de pagos y envíos. El valor NO se publica: se cotiza según la tienda (referencia interna: alrededor de $2.200.000 COP, puede ser más o menos). Mensaje clave: "Tu tienda lista para vender, hasta en 3 cuotas y con todos tus productos". Criterios: negocio que empieza o con menos de 2 años vendiendo, primera tienda online o venta solo por redes y WhatsApp, equipo de hasta 5 personas, sin integraciones especiales. Cuando el negocio crezca, puede pasar a un proyecto a medida.
+**Out Emprende** (plan para emprendedores de cualquier sector): tienda Shopify, sitio web WordPress, landing page o branding, pagadero hasta en 3 cuotas mensuales sin intereses. Productos ilimitados (Out carga todos los que el cliente quiera). Incluye diseño adaptado a la marca, pasarela de pagos y envíos. El valor NO se publica: se cotiza según la tienda (referencia interna: alrededor de $2.200.000 COP, puede ser más o menos). Mensaje clave: "Tu tienda lista para vender, hasta en 3 cuotas y con todos tus productos". Criterios: negocio que empieza o con menos de 2 años vendiendo, primera tienda online o venta solo por redes y WhatsApp, equipo de hasta 5 personas, sin integraciones especiales. Cuando el negocio crezca, puede pasar a un proyecto a medida.
 
 ## Changelog
 *Newest first. One line per revision: what changed and why.*
+- v5 (2026-10-12) — Out Emprende ampliado a todos los servicios (tienda, sitio, landing, marca) y a cualquier tipo de negocio; sección propia en el home y en el menú.
 - v4 (2026-10-12) — Out Emprende sin precio publicado: "hasta en 3 cuotas sin intereses", valor cotizado; criterios de elegibilidad añadidos.
 - v3 (2026-10-12) — Definido Out Emprende: tienda Shopify a $2.200.000 en 3 cuotas sin intereses, productos ilimitados.
 - v2 (2026-10-12) — Precios de referencia, tres segmentos (tiendas, medios/marcas grandes, emprendedores), lenguaje real de clientes, meta de 5-6 proyectos/mes y plan para emprendedores en diseño.

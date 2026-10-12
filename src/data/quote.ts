@@ -40,17 +40,6 @@ export const PROJECT_TYPES: ProjectType[] = [
         ],
       },
       {
-        id: 'plan',
-        label: '¿Qué plan te interesa?',
-        kind: 'single',
-        required: true,
-        options: [
-          'Out Emprende: hasta en 3 cuotas sin intereses',
-          'Tienda a medida',
-          'No sé, recomiéndenme',
-        ],
-      },
-      {
         id: 'productos',
         label: '¿Cuántos productos tendrá aproximadamente?',
         kind: 'single',
@@ -416,6 +405,18 @@ export const PROJECT_TYPES: ProjectType[] = [
 ];
 
 export const COMMON_QUESTIONS: Question[] = [
+  {
+    id: 'emprende',
+    label: '¿Tu negocio está empezando? (Out Emprende)',
+    help: 'Out Emprende es para negocios con menos de 2 años y equipo de hasta 5 personas: tu proyecto hasta en 3 cuotas sin intereses.',
+    kind: 'single',
+    required: true,
+    options: [
+      'Sí, me interesa Out Emprende',
+      'No, busco un proyecto a medida',
+      'No sé, recomiéndenme',
+    ],
+  },
   {
     id: 'negocio',
     label: '¿A qué se dedica tu negocio y a quién le vendes?',

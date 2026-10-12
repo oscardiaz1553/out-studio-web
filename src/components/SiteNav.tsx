@@ -26,7 +26,8 @@ type NavLink = { label: string; href: string; scene: string; tilt: number };
 // entre corchetes para Contacto.
 const NAV_LINKS: NavLink[] = [
   { label: 'Servicios', href: `${HOME}servicios/`, scene: 'shopify', tilt: -2.5 },
-  { label: 'Proyectos', href: `${HOME}proyectos.html`, scene: 'apps', tilt: 2 },
+  { label: 'Out Emprende', href: `${HOME}#out-emprende`, scene: 'emprende', tilt: 2 },
+  { label: 'Proyectos', href: `${HOME}proyectos.html`, scene: 'apps', tilt: -1.5 },
   { label: 'Blog', href: `${HOME}blog/`, scene: 'branding', tilt: 1.5 },
   { label: 'Contacto', href: `${HOME}contacto.html`, scene: 'wordpress', tilt: -2 },
 ];
@@ -62,9 +63,10 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
 
       <nav
         aria-label="Navegación móvil"
-        className="flex-1 grid grid-cols-2 content-center gap-x-4 gap-y-6 py-6"
+        className="flex-1 grid grid-cols-2 content-center gap-x-4 gap-y-5 py-5"
       >
-        {NAV_LINKS.map((link, i) => (
+        {/* Out Emprende va aparte, como franja ancha bajo las láminas. */}
+        {NAV_LINKS.filter((l) => l.scene !== 'emprende').map((link, i) => (
           <motion.a
             key={link.label}
             href={link.href}
@@ -79,7 +81,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
           >
             <span
               aria-hidden
-              className="relative block w-full aspect-[4/5] [@media(max-height:700px)]:aspect-[1/1] rounded-[20px] overflow-hidden shadow-[0_14px_34px_rgba(10,15,50,0.45)]"
+              className="relative block w-full aspect-[4/5] [@media(max-height:900px)]:aspect-[1/1] [@media(max-height:700px)]:aspect-[5/4] rounded-[20px] overflow-hidden shadow-[0_14px_34px_rgba(10,15,50,0.45)]"
               style={{ containerType: 'inline-size' }}
             >
               {SCENES[link.scene]}
@@ -89,6 +91,20 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
             </span>
           </motion.a>
         ))}
+        <motion.a
+          href={`${HOME}#out-emprende`}
+          onClick={onClose}
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, type: 'spring', stiffness: 260, damping: 22 }}
+          className="col-span-2 relative overflow-hidden flex items-center justify-between gap-3 rounded-[20px] bg-klein text-paper-pure ring-1 ring-carne/40 pl-5 pr-2 py-3.5 shadow-[0_14px_34px_rgba(10,15,50,0.45)]"
+        >
+          <span className="flex flex-col gap-1">
+            <span className="font-display font-extrabold tracking-[-0.03em] text-[clamp(1.2rem,6vw,1.5rem)] leading-none whitespace-nowrap">Out Emprende</span>
+            <span className="text-[13px] text-carne whitespace-nowrap">Hasta 3 cuotas sin intereses</span>
+          </span>
+          <img src={`${HOME}mango-hero.webp`} alt="" className="w-[5.5rem] h-auto -my-6 -mr-4 rotate-[-12deg]" />
+        </motion.a>
       </nav>
 
       {/* La acción principal del menú: a todo el ancho, en crema. */}
