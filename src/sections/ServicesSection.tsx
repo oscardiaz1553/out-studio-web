@@ -25,14 +25,6 @@ const SERVICES = [
     tilt: -4,
   },
   {
-    name: 'Out Emprende',
-    scene: 'emprende',
-    slug: 'out-emprende',
-    description:
-      'Tu tienda Shopify hasta en 3 cuotas sin intereses, con todos tus productos.',
-    tilt: 3,
-  },
-  {
     name: 'Sitios WordPress',
     scene: 'wordpress',
     slug: 'sitios-wordpress',

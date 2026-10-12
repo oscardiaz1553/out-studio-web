@@ -7,6 +7,7 @@ import HeroSection from './sections/HeroSection';
 import ClientsStrip from './sections/ClientsStrip';
 import ServicesSection from './sections/ServicesSection';
 import ProjectsSection from './sections/ProjectsSection';
+import OutEmprendeSection from './sections/OutEmprendeSection';
 import MethodSection from './sections/MethodSection';
 import ReviewsSection from './sections/ReviewsSection';
 import QuoteSection from './sections/QuoteSection';
@@ -30,6 +31,7 @@ export default function App() {
       <HeroSection key={heroKey} />
       <ClientsStrip />
       <ServicesSection />
+      <OutEmprendeSection />
       <ProjectsSection />
       <ResultsSection />
       <QuoteSection />
