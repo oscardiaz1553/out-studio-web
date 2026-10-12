@@ -7,6 +7,7 @@ import {
   Question,
   answerKey,
   isAnswered,
+  isDetail,
 } from '../data/quote';
 import { EMAIL } from '../data/site';
 import { useQuoteForm } from '../lib/useQuoteForm';
@@ -28,6 +29,7 @@ interface Prompt {
   target:
     | { type: 'type' }
     | { type: 'answer'; key: string }
+    | { type: 'details' }
     | { type: 'contact'; field: keyof Contact };
   inputType?: 'text' | 'email' | 'tel';
   question?: Question;
@@ -91,6 +93,19 @@ const CONTACT_PROMPTS: Prompt[] = [
   },
 ];
 
+// Las preguntas abiertas son opcionales: Mango pregunta primero si quieres
+// dar más detalles y solo entonces las hace.
+const DETAILS_YES = 'Sí, quiero dar más detalles';
+const DETAILS_NO = 'No, así está bien';
+const DETAILS_PROMPT: Prompt = {
+  id: 'details',
+  ask: '¿Quieres contarnos algo más de tu proyecto? Es opcional: con lo que ya respondiste podemos cotizar.',
+  kind: 'single',
+  options: [DETAILS_YES, DETAILS_NO],
+  required: true,
+  target: { type: 'details' },
+};
+
 const TYPE_PROMPT: Prompt = {
   id: 'type',
   ask: '¿Qué necesitas? Elige la opción que más se acerque.',
@@ -110,16 +125,24 @@ export function useChatState() {
   const [open, setOpen] = useState(false);
   const [cursor, setCursor] = useState(0);
   const [typing, setTyping] = useState(false);
+  const [details, setDetails] = useState<boolean | null>(null);
 
   const prompts = useMemo(() => {
     const type = PROJECT_TYPES.find((t) => t.id === form.selected[0]);
-    return [
-      TYPE_PROMPT,
+    const all = [
       ...(type ? type.questions.map((q) => fromQuestion(q, type.id)) : []),
       ...COMMON_QUESTIONS.map((q) => fromQuestion(q, 'comun')),
+    ];
+    const quick = all.filter((p) => !p.question || !isDetail(p.question));
+    const detailPrompts = all.filter((p) => p.question && isDetail(p.question));
+    return [
+      TYPE_PROMPT,
+      ...quick,
+      ...(detailPrompts.length ? [DETAILS_PROMPT] : []),
+      ...(details ? detailPrompts : []),
       ...CONTACT_PROMPTS,
     ];
-  }, [form.selected]);
+  }, [form.selected, details]);
 
   // Cada vez que avanza o retrocede, Mango "escribe" un instante.
   const first = useRef(true);
@@ -135,11 +158,12 @@ export function useChatState() {
 
   const reset = () => {
     form.reset();
+    setDetails(null);
     setCursor(0);
     setTyping(false);
   };
 
-  return { form, open, setOpen, cursor, setCursor, typing, prompts, reset };
+  return { form, open, setOpen, cursor, setCursor, typing, prompts, reset, details, setDetails };
 }
 
 export type ChatState = ReturnType<typeof useChatState>;
@@ -150,6 +174,9 @@ function valueOf(p: Prompt, chat: ChatState): string | string[] | undefined {
     return PROJECT_TYPES.find((t) => t.id === form.selected[0])?.label;
   }
   if (p.target.type === 'contact') return form.contact[p.target.field];
+  if (p.target.type === 'details') {
+    return chat.details == null ? undefined : chat.details ? DETAILS_YES : DETAILS_NO;
+  }
   return form.answers[p.target.key];
 }
 
@@ -275,6 +302,8 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
       form.selectType(
         PROJECT_TYPES.find((t) => t.label === value)?.id ?? PROJECT_TYPES[0].id,
       );
+    } else if (p.target.type === 'details') {
+      chat.setDetails(value === DETAILS_YES);
     } else if (p.target.type === 'contact') {
       form.setContact({ ...form.contact, [p.target.field]: String(value).trim() });
     } else {

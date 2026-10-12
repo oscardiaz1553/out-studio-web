@@ -13,7 +13,15 @@ export interface Question {
   options?: string[];
   placeholder?: string;
   required?: boolean;
+  /** Para text/long: se muestra con las preguntas rápidas en vez de ir en
+   *  "Más detalles" (cuando no hay opciones que lo reemplacen). */
+  open?: boolean;
 }
+
+/** Las preguntas abiertas son opcionales y van en un bloque aparte: quien
+ *  quiera dar más contexto lo hace, pero nunca frenan la encuesta. */
+export const isDetail = (q: Question) =>
+  (q.kind === 'text' || q.kind === 'long') && !q.open;
 
 export interface ProjectType {
   id: string;
@@ -237,7 +245,6 @@ export const PROJECT_TYPES: ProjectType[] = [
         label: '¿Qué proceso quieres automatizar?',
         help: 'Descríbelo paso a paso, como se hace hoy.',
         kind: 'long',
-        required: true,
         placeholder: 'Ej: cuando llega un pedido, copiamos los datos a Excel y facturamos a mano…',
       },
       {
@@ -314,7 +321,6 @@ export const PROJECT_TYPES: ProjectType[] = [
         label: 'Cuéntanos sobre tu marca',
         help: 'A qué se dedica, a quién le habla y cómo quieres que se sienta.',
         kind: 'long',
-        required: true,
         placeholder: 'Ej: una marca de café de origen, para gente joven, cálida pero con carácter…',
       },
       {
@@ -334,7 +340,7 @@ export const PROJECT_TYPES: ProjectType[] = [
       {
         id: 'inspiracion',
         label: 'Marcas que te inspiran',
-        help: 'Opcional. Nombres o links.',
+        help: 'Nombres o links.',
         kind: 'long',
       },
     ],
@@ -348,7 +354,6 @@ export const PROJECT_TYPES: ProjectType[] = [
         id: 'url',
         label: '¿Cuál es la dirección de tu sitio?',
         kind: 'text',
-        required: true,
         placeholder: 'https://',
       },
       {
@@ -388,16 +393,16 @@ export const PROJECT_TYPES: ProjectType[] = [
     questions: [
       {
         id: 'idea',
+        open: true,
         label: '¿Qué tienes en mente?',
         help: 'Descríbelo con tus palabras: qué necesitas, para qué y para quién.',
         kind: 'long',
-        required: true,
         placeholder: 'Ej: necesito una plataforma para que mis clientes reserven y paguen en línea…',
       },
       {
         id: 'referencias',
         label: '¿Tienes algún ejemplo o referencia?',
-        help: 'Opcional. Links o nombres de algo parecido a lo que buscas.',
+        help: 'Links o nombres de algo parecido a lo que buscas.',
         kind: 'long',
       },
     ],
@@ -421,13 +426,12 @@ export const COMMON_QUESTIONS: Question[] = [
     id: 'negocio',
     label: '¿A qué se dedica tu negocio y a quién le vendes?',
     kind: 'long',
-    required: true,
     placeholder: 'Cuéntanos con tus palabras…',
   },
   {
     id: 'referencias',
     label: 'Sitios o marcas que te gustan',
-    help: 'Opcional. Pega links o nombres: nos ayuda mucho a entender tu gusto.',
+    help: 'Pega links o nombres: nos ayuda mucho a entender tu gusto.',
     kind: 'long',
   },
   {
@@ -476,7 +480,6 @@ export const COMMON_QUESTIONS: Question[] = [
     id: 'extra',
     label: '¿Algo más que debamos saber?',
     kind: 'long',
-    help: 'Opcional.',
   },
 ];
 

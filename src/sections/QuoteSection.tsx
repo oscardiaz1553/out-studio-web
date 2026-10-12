@@ -15,6 +15,7 @@ import {
   PROJECT_TYPES,
   Question,
   answerKey,
+  isDetail,
 } from '../data/quote';
 import { EMAIL } from '../data/site';
 import { useQuoteForm } from '../lib/useQuoteForm';
@@ -126,6 +127,93 @@ function QuestionField({
         />
       )}
     </fieldset>
+  );
+}
+
+/** Las preguntas de un paso: primero las rápidas (con opciones) y, plegadas
+ *  en "Más detalles", las abiertas. Son opcionales: nunca frenan el paso. */
+function QuestionList({
+  questions,
+  scope,
+  answers,
+  setAnswer,
+}: {
+  questions: Question[];
+  scope: string;
+  answers: Answers;
+  setAnswer: (key: string, value: Answer) => void;
+}) {
+  const quick = questions.filter((q) => !isDetail(q));
+  const details = questions.filter(isDetail);
+  const hasDetailAnswers = details.some((q) => {
+    const v = answers[answerKey(scope, q.id)];
+    return typeof v === 'string' && v.trim() !== '';
+  });
+  const [open, setOpen] = useState(hasDetailAnswers);
+  const reduceMotion = useReducedMotion();
+  const panelId = `detalles-${scope}`;
+
+  return (
+    <div className="flex flex-col gap-10">
+      {quick.map((q) => (
+        <QuestionField key={q.id} q={q} scope={scope} answers={answers} setAnswer={setAnswer} />
+      ))}
+
+      {details.length > 0 && (
+        <div className="rounded-2xl border border-klein-deep/15 bg-paper/60">
+          <button
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls={panelId}
+            className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5"
+          >
+            <span>
+              <span className="block font-display font-semibold text-klein-deep text-lg sm:text-xl tracking-[-0.01em]">
+                Quiero dar más detalles
+              </span>
+              <span className="block text-xs text-muted mt-0.5">
+                Opcional. Si nos cuentas más, afinamos mejor la cotización.
+              </span>
+            </span>
+            <span
+              aria-hidden
+              className={`shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                open ? 'bg-klein text-paper-pure' : 'bg-paper-pure text-klein border border-klein-deep/20'
+              }`}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                className={`transition-transform duration-300 ${open ? 'rotate-45' : ''}`}
+              >
+                <path d="M12 4v16M4 12h16" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+              </svg>
+            </span>
+          </button>
+          <AnimatePresence initial={false}>
+            {open && (
+              <motion.div
+                id={panelId}
+                initial={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                animate={reduceMotion ? { opacity: 1 } : { height: 'auto', opacity: 1 }}
+                exit={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: EASE_OUT }}
+                className="overflow-hidden"
+              >
+                <div className="flex flex-col gap-8 px-5 pb-6 pt-2 sm:px-6">
+                  {details.map((q) => (
+                    <QuestionField key={q.id} q={q} scope={scope} answers={answers} setAnswer={setAnswer} />
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -375,17 +463,13 @@ function QuoteScreen({
                       <p className="text-ink-2 leading-relaxed mb-10">
                         {currentType.blurb}
                       </p>
-                      <div className="flex flex-col gap-10">
-                        {currentType.questions.map((q) => (
-                          <QuestionField
-                            key={q.id}
-                            q={q}
-                            scope={currentType.id}
-                            answers={answers}
-                            setAnswer={form.setAnswer}
-                          />
-                        ))}
-                      </div>
+                      <QuestionList
+                        key={currentType.id}
+                        questions={currentType.questions}
+                        scope={currentType.id}
+                        answers={answers}
+                        setAnswer={form.setAnswer}
+                      />
                     </>
                   )}
 
@@ -397,17 +481,13 @@ function QuoteScreen({
                       <p className="text-ink-2 leading-relaxed mb-10">
                         Lo último antes de tus datos de contacto.
                       </p>
-                      <div className="flex flex-col gap-10">
-                        {COMMON_QUESTIONS.map((q) => (
-                          <QuestionField
-                            key={q.id}
-                            q={q}
-                            scope="comun"
-                            answers={answers}
-                            setAnswer={form.setAnswer}
-                          />
-                        ))}
-                      </div>
+                      <QuestionList
+                        key="comun"
+                        questions={COMMON_QUESTIONS}
+                        scope="comun"
+                        answers={answers}
+                        setAnswer={form.setAnswer}
+                      />
                     </>
                   )}
 
