@@ -182,7 +182,33 @@ const SCENE_LIST: ReactNode[] = [
 
 // Cada lámina por clave, para usarla en el hover de Servicios y en la cabecera
 // de la página de cada servicio.
+// Out Emprende: el mango que arranca, sobre azul, con las tres cuotas.
+const EMPRENDE = (
+  <Scene key="emprende" bg={CREMA}>
+    <Pair kind="curly" size="30cqw" color="#1B2FCC" className="absolute left-[8%] top-[7%]" />
+    <span
+      aria-hidden
+      className="absolute left-[8%] top-[34%] font-display font-extrabold tracking-[-0.05em] leading-[0.9]"
+      style={{ fontSize: '17cqw', color: '#1B2FCC' }}
+    >
+      3 cuotas
+    </span>
+    <span aria-hidden className="absolute left-[8%] top-[54%] flex gap-[2.5cqw]">
+      {[0, 1, 2].map((i) => (
+        <span key={i} className="block rounded-full" style={{ width: '7cqw', height: '7cqw', background: '#BC6039' }} />
+      ))}
+    </span>
+    <img
+      src={MANGO}
+      alt=""
+      className="absolute w-[78%] h-auto right-[-12%] bottom-[-10%]"
+      style={{ transform: 'rotate(-14deg)', filter: 'drop-shadow(0 6cqw 8cqw rgba(20,30,92,.3))' }}
+    />
+  </Scene>
+);
+
 export const SCENES: Record<string, ReactNode> = {
+  emprende: EMPRENDE,
   shopify: SCENE_LIST[0],
   wordpress: SCENE_LIST[1],
   landing: SCENE_LIST[2],

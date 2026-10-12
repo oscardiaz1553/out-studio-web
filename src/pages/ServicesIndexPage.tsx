@@ -14,9 +14,10 @@ const HOME = import.meta.env.BASE_URL;
 
 // El orden de la página: primero los servicios puntuales y al final el
 // desarrollo web a medida, que los reúne a todos.
-const ORDER = ['tiendas-shopify', 'sitios-wordpress', 'landing-pages', 'branding', 'desarrollo-web'];
+const ORDER = ['tiendas-shopify', 'out-emprende', 'sitios-wordpress', 'landing-pages', 'branding', 'desarrollo-web'];
 const TILT: Record<string, number> = {
   'tiendas-shopify': -4,
+  'out-emprende': 3,
   'sitios-wordpress': 3,
   'landing-pages': -3,
   branding: 4,

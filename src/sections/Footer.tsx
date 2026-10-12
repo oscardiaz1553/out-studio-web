@@ -12,6 +12,7 @@ const HOME = import.meta.env.BASE_URL;
 const SERVICES = [
   { label: 'Todos los servicios', href: `${HOME}servicios/` },
   { label: 'Tiendas Shopify', href: `${HOME}servicios/tiendas-shopify/` },
+  { label: 'Out Emprende', href: `${HOME}servicios/out-emprende/` },
   { label: 'Sitios WordPress', href: `${HOME}servicios/sitios-wordpress/` },
   { label: 'Landing pages', href: `${HOME}servicios/landing-pages/` },
   { label: 'Branding', href: `${HOME}servicios/branding/` },

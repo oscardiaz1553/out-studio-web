@@ -40,6 +40,17 @@ export const PROJECT_TYPES: ProjectType[] = [
         ],
       },
       {
+        id: 'plan',
+        label: '¿Qué plan te interesa?',
+        kind: 'single',
+        required: true,
+        options: [
+          'Out Emprende: $2.200.000 en 3 cuotas sin intereses',
+          'Tienda a medida',
+          'No sé, recomiéndenme',
+        ],
+      },
+      {
         id: 'productos',
         label: '¿Cuántos productos tendrá aproximadamente?',
         kind: 'single',

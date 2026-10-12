@@ -114,6 +114,11 @@ const IMG = {
 };
 
 export const THEMES: Record<string, Theme> = {
+  emprende: {
+    bg: '#141E5C', dark: true, text: '#FBF8F5', muted: 'rgba(251,248,245,0.88)', accent: '#F5E3B3',
+    kind: 'curly', art: IMG.mango, artRotate: -14,
+    artClass: 'right-[-16%] bottom-[-10%] w-[80vw] max-w-[360px] sm:right-[-6%] sm:bottom-[-14%] sm:max-w-none sm:w-[44vw] lg:w-[min(40vw,600px)]',
+  },
   shopify: {
     bg: '#F5E3B3', dark: false, text: '#1B2FCC', muted: 'rgba(20,30,92,0.78)', accent: '#1B2FCC',
     kind: 'curly', art: IMG.mango, artRotate: -10,
@@ -192,6 +197,61 @@ function HeroArt({ theme }: { theme: Theme }) {
   );
 }
 
+type Offer = {
+  price: number;
+  installments: number;
+  installment: number;
+  criteria: string[];
+  note: string;
+};
+
+const cop = (n: number) => `$${new Intl.NumberFormat('es-CO').format(n)}`;
+
+/** Precio publicado y a quién va dirigido (sólo en los planes con oferta fija). */
+function OfferBlock({ offer }: { offer: Offer }) {
+  return (
+    <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20 bg-paper-pure">
+      <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.15fr] gap-6 md:gap-10 items-stretch">
+        <div className="rounded-[28px] bg-klein text-paper-pure p-8 sm:p-10 flex flex-col">
+          <p className="text-carne text-sm">Precio fijo</p>
+          <p className="mt-3 font-display font-extrabold tracking-[-0.05em] leading-none" style={{ fontSize: 'clamp(2.8rem, 6vw, 4.4rem)' }}>
+            {offer.installments} cuotas
+          </p>
+          <p className="mt-2 font-display font-bold text-2xl sm:text-3xl tracking-[-0.03em]">
+            de {cop(offer.installment)}
+          </p>
+          <p className="mt-4 text-paper-pure/80 leading-relaxed">
+            Total {cop(offer.price)} COP, sin intereses. Productos ilimitados.
+          </p>
+          <div className="mt-auto pt-8">
+            <AccentButton href={`${HOME}#cotizar`} onBlue>
+              Quiero mi tienda
+            </AccentButton>
+          </div>
+        </div>
+        <div className="rounded-[28px] bg-paper p-8 sm:p-10">
+          <h2 className="font-display font-extrabold text-klein tracking-[-0.03em] leading-tight" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}>
+            Es para ti si…
+          </h2>
+          <ul className="mt-6 flex flex-col gap-4">
+            {offer.criteria.map((c) => (
+              <li key={c} className="flex gap-3 text-klein-deep leading-relaxed">
+                <span aria-hidden className="mt-[0.15em] shrink-0 w-6 h-6 rounded-full bg-carne text-klein-deep flex items-center justify-center">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                {c}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-sm text-ink-2 leading-relaxed">{offer.note}</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /**
  * Página de servicio (una por servicio): contenido real y específico para
  * quien busca justo eso (p. ej. "tienda Shopify en Colombia"), con preguntas
@@ -248,6 +308,8 @@ export default function ServicePage({ page }: { page: ServiceData }) {
           </div>
         </div>
       </header>
+
+      {'offer' in page && page.offer ? <OfferBlock offer={page.offer as Offer} /> : null}
 
       {/* Qué incluye */}
       <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20 bg-paper-pure">
