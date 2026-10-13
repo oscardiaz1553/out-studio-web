@@ -235,11 +235,26 @@ function usePhoneViewport() {
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 639px)');
     const vv = window.visualViewport;
+    // Solo cambia el estado si la medida cambió de verdad (más de medio píxel).
     const update = () => {
-      if (!mq.matches) return setBox(null);
-      setBox({ top: vv ? vv.offsetTop : 0, height: vv ? vv.height : window.innerHeight });
+      if (!mq.matches) return setBox((b) => (b === null ? b : null));
+      const top = vv ? vv.offsetTop : 0;
+      const height = vv ? vv.height : window.innerHeight;
+      setBox((b) =>
+        b && Math.abs(b.top - top) < 0.5 && Math.abs(b.height - height) < 0.5 ? b : { top, height },
+      );
     };
     update();
+    // iOS no siempre avisa cuando el teclado cambia de forma (por ejemplo, al
+    // pasar del campo de nombre al de correo, que trae otra barra encima): el
+    // chat se quedaba más corto y dejaba ver la página debajo. Se revisa la
+    // medida en cada cuadro mientras el chat está abierto.
+    let raf = 0;
+    const poll = () => {
+      update();
+      raf = requestAnimationFrame(poll);
+    };
+    raf = requestAnimationFrame(poll);
     const html = document.documentElement;
     const prev = html.style.overflow;
     if (mq.matches) html.style.overflow = 'hidden';
@@ -247,6 +262,7 @@ function usePhoneViewport() {
     vv?.addEventListener('scroll', update);
     mq.addEventListener('change', update);
     return () => {
+      cancelAnimationFrame(raf);
       html.style.overflow = prev;
       vv?.removeEventListener('resize', update);
       vv?.removeEventListener('scroll', update);
