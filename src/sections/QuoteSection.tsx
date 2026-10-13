@@ -15,6 +15,7 @@ import {
   PROJECT_TYPES,
   Question,
   answerKey,
+  cleanPhone,
   isDetail,
   visibleQuestions,
 } from '../data/quote';
@@ -280,6 +281,11 @@ function QuoteScreen({
   const dialogRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
+  // `onClose` se crea de nuevo en cada render del padre (o sea, en cada letra
+  // que se escribe). Si el efecto del foco dependiera de él, se repetiría y
+  // le quitaría el cursor al campo en cada tecla.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
   const {
     stepIndex,
     steps,
@@ -303,7 +309,7 @@ function QuoteScreen({
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (e.key !== 'Tab' || !dialogRef.current) return;
@@ -327,7 +333,7 @@ function QuoteScreen({
       html.style.overflow = prevOverflow;
       opener?.focus?.();
     };
-  }, [onClose]);
+  }, []);
 
   // Cada paso arranca desde arriba (los bloques largos, sobre todo en móvil).
   useEffect(() => {
@@ -553,10 +559,11 @@ function QuoteScreen({
                             </span>
                             <input
                               type="tel"
+                              inputMode="numeric"
                               autoComplete="tel"
                               value={contact.phone}
                               onChange={(e) =>
-                                form.setContact({ ...contact, phone: e.target.value })
+                                form.setContact({ ...contact, phone: cleanPhone(e.target.value) })
                               }
                               placeholder="+57 …"
                               className={INPUT_CLASSES}

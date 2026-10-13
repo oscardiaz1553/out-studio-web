@@ -6,6 +6,7 @@ import {
   PROJECT_TYPES,
   Question,
   answerKey,
+  cleanPhone,
   isAnswered,
   isDetail,
   visibleQuestions,
@@ -550,7 +551,7 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
                 <input
                   ref={inputRef}
                   type={current!.inputType ?? 'text'}
-                  inputMode={current!.inputType === 'tel' ? 'tel' : undefined}
+                  inputMode={current!.inputType === 'tel' ? 'numeric' : undefined}
                   autoComplete={
                     current!.inputType === 'email'
                       ? 'email'
@@ -562,7 +563,7 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
                   }
                   value={draft}
                   onChange={(e) => {
-                    setDraft(e.target.value);
+                    setDraft(current!.inputType === 'tel' ? cleanPhone(e.target.value) : e.target.value);
                     setFieldError('');
                   }}
                   placeholder={current!.placeholder ?? 'Escribe aquí…'}

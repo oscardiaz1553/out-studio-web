@@ -522,6 +522,10 @@ export type Answer = string | string[];
 export type Answers = Record<string, Answer>;
 
 /** Clave única de cada respuesta: `tipo.pregunta` (o `comun.pregunta`). */
+/** Teléfono: solo números, con un "+" opcional al inicio (hasta 15 dígitos). */
+export const cleanPhone = (value: string) =>
+  (value.trimStart().startsWith('+') ? '+' : '') + value.replace(/\D/g, '').slice(0, 15);
+
 export const answerKey = (scope: string, questionId: string) =>
   `${scope}.${questionId}`;
 
