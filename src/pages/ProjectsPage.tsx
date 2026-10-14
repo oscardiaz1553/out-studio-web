@@ -24,7 +24,9 @@ function ProjectGridCard({ project }: { project: Project }) {
         <ProjectMedia
           src={project.rightImage}
           alt={`${project.name}, vista principal`}
-          label={project.name.charAt(0)}
+          label={project.name}
+          url={project.url}
+          index={Number(project.number)}
           className="w-full aspect-[4/3] object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         />
         {/* Lomo de azulejo: el mismo motivo que en las cards del home. */}
