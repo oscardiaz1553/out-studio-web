@@ -62,6 +62,24 @@ export const PROJECTS: Project[] = [
     url: 'https://usevolta.app',
     featured: true,
   },
+  // Sitios en línea. Descripción provisional: ajustarla con lo que se hizo en cada uno.
+  ...[
+    ['Rugs N Home', 'https://rugsnhome.mx'],
+    ['Eticolor', 'https://eticolor.com.co'],
+    ['Maison Caviar', 'https://maisoncaviar.com.co'],
+    ['The Black Box Snack', 'https://theblackboxsnack.com'],
+    ['Osere', 'https://osere.co'],
+    ['Daza Organic', 'https://dazaorganic.com'],
+  ].map(
+    ([name, url], i): Project => ({
+      number: String(i + 4).padStart(2, '0'),
+      name,
+      type: 'Web',
+      status: 'launched',
+      summary: 'Sitio web desarrollado por Out, ya en línea.',
+      url,
+    }),
+  ),
 ];
 
 export const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured);
