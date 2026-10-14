@@ -12,6 +12,10 @@ export const WEB3FORMS_ACCESS_KEY = 'd7b8bdbb-5202-4264-b1d3-d80b7b60f854';
 // "Descargar PDF" y "Preparar correo".
 export const QUOTE_WORKER_URL = 'https://out-cotizaciones.oscar-diaz-dc0.workers.dev/';
 
+// Franja "Marcas que confían en Out" de la portada (se alimenta de los
+// proyectos). Apagada por ahora: se enciende con true.
+export const SHOW_CLIENTS = false;
+
 // Sección "Reseñas" de la portada. Apagada mientras no haya reseñas reales que
 // mostrar: se enciende (true) cuando se carguen en src/data/reviews.ts.
 export const SHOW_REVIEWS = false;
