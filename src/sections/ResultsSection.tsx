@@ -178,9 +178,6 @@ export default function ResultsSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.4fr] gap-8 lg:gap-14 items-center">
           <FadeIn>
-            <p className="inline-flex items-center gap-2 text-xs text-carne-tinta mb-4">
-              Caso · Diario Deportes
-            </p>
             <h3
               className="font-display font-extrabold text-klein tracking-[-0.04em] leading-[1.02]"
               style={{ fontSize: 'clamp(1.9rem, 3.6vw, 3.2rem)' }}

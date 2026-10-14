@@ -6,7 +6,6 @@ import ProjectMedia from '../components/ProjectMedia';
 import RevealText from '../components/RevealText';
 import { AZULEJO } from '../data/botanica';
 import {
-  categoryLabel,
   PROJECTS,
   PROJECT_TYPES,
   type Project,
@@ -47,12 +46,6 @@ function ProjectGridCard({ project }: { project: Project }) {
       </div>
 
       <div className="flex flex-col gap-2 flex-1 p-5 sm:p-6">
-        <div className="flex items-center gap-3">
-          <span className="text-muted tracking-[0.04em] text-[11px]">
-            {categoryLabel(project.type)}
-          </span>
-        </div>
-
         <h3 className="font-display font-semibold text-klein tracking-[-0.02em] text-lg sm:text-xl">
           {project.name}
         </h3>

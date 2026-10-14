@@ -36,9 +36,8 @@ export default function OutEmprendeSection() {
 
       <div className="relative max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] items-center gap-12 lg:gap-20">
         <div>
-          <p className="text-carne text-sm sm:text-base">Para emprendedores</p>
           <h2
-            className="mt-3 font-display font-extrabold tracking-[-0.05em] leading-[0.92]"
+            className="font-display font-extrabold tracking-[-0.05em] leading-[0.92]"
             style={{ fontSize: 'clamp(3rem, 8vw, 7rem)' }}
           >
             Out Emprende

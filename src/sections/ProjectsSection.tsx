@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { BrandDot } from '../components/Brand';
 import RevealText from '../components/RevealText';
 import TitleFrame, { FrameKind, Sym } from '../components/TitleFrame';
-import { categoryLabel, FEATURED_PROJECTS, type Project } from '../data/projects';
+import { FEATURED_PROJECTS, type Project } from '../data/projects';
 
 const PROJECTS_URL = `${import.meta.env.BASE_URL}proyectos.html`;
 const KINDS: FrameKind[] = ['square', 'curly', 'paren', 'angle'];
@@ -45,12 +45,10 @@ function ProjectRow({
         {...(live ? { href: project.url, target: '_blank', rel: 'noreferrer' } : {})}
         onPointerEnter={(e: React.PointerEvent) => e.pointerType === 'mouse' && onHover(index)}
         onPointerLeave={(e: React.PointerEvent) => e.pointerType === 'mouse' && onHover(null)}
-        className={`group grid grid-cols-1 lg:grid-cols-[5rem_1fr_19rem] items-center gap-x-6 gap-y-3 py-6 sm:py-8 ${
+        className={`group grid grid-cols-1 lg:grid-cols-[1fr_19rem] items-center gap-x-6 gap-y-3 py-6 sm:py-8 ${
           live ? 'lg:cursor-none' : ''
         }`}
       >
-        <span className="text-xs text-carne-tinta">{categoryLabel(project.type)}</span>
-
         <div className="relative min-w-0 px-[0.62em]" style={{ fontSize: NAME_SIZE }}>
           <span className="relative inline-flex items-center">
             <motion.span
