@@ -34,6 +34,32 @@ export function categoryLabel(type: ProjectType): string {
   return `Out.${type}`;
 }
 
+/**
+ * Interruptor de las seis tiendas nuevas (Rugs N Home, Eticolor, Maison Caviar,
+ * The Black Box Snack, Osere y Daza Organic). En `false` desaparecen de
+ * Proyectos sin borrar nada: `node scripts/tiendas-nuevas.mjs off|on`.
+ */
+const SHOW_NEW_STORES = true;
+
+// Tiendas online. La plataforma de cada una no está confirmada: no se nombra en la descripción.
+const NEW_STORES: Project[] = [
+  ['Rugs N Home', 'https://rugsnhome.mx'],
+  ['Eticolor', 'https://eticolor.com.co'],
+  ['Maison Caviar', 'https://maisoncaviar.com.co'],
+  ['The Black Box Snack', 'https://theblackboxsnack.com'],
+  ['Osere', 'https://osere.co'],
+  ['Daza Organic', 'https://dazaorganic.com'],
+].map(
+  ([name, url], i): Project => ({
+    number: String(i + 4).padStart(2, '0'),
+    name,
+    type: 'Web',
+    status: 'launched',
+    summary: 'Tienda online desarrollada por Out, lista para vender.',
+    url,
+  }),
+);
+
 export const PROJECTS: Project[] = [
   {
     number: '01',
@@ -62,24 +88,7 @@ export const PROJECTS: Project[] = [
     url: 'https://usevolta.app',
     featured: true,
   },
-  // Tiendas online. La plataforma de cada una no está confirmada: no se nombra en la descripción.
-  ...[
-    ['Rugs N Home', 'https://rugsnhome.mx'],
-    ['Eticolor', 'https://eticolor.com.co'],
-    ['Maison Caviar', 'https://maisoncaviar.com.co'],
-    ['The Black Box Snack', 'https://theblackboxsnack.com'],
-    ['Osere', 'https://osere.co'],
-    ['Daza Organic', 'https://dazaorganic.com'],
-  ].map(
-    ([name, url], i): Project => ({
-      number: String(i + 4).padStart(2, '0'),
-      name,
-      type: 'Web',
-      status: 'launched',
-      summary: 'Tienda online desarrollada por Out, lista para vender.',
-      url,
-    }),
-  ),
+  ...(SHOW_NEW_STORES ? NEW_STORES : []),
 ];
 
 export const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured);
