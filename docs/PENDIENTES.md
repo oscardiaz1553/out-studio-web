@@ -18,6 +18,9 @@ Lista viva de lo que quedó por hacer. Se revisa al empezar cada sesión de trab
 - [ ] Logos de las marcas cliente (franja de clientes).
 - [ ] Capturas reales de los proyectos (BARCI, Diario Deportes, Volta).
 - [ ] Reseñas reales en el perfil de Google.
+- [ ] Encender la sección "Reseñas" de la portada cuando haya reseñas reales:
+      cargarlas en `src/data/reviews.ts` y poner `SHOW_REVIEWS = true` en
+      `src/data/site.ts` (hoy está apagada).
 - [ ] Enlaces de redes sociales (Instagram, LinkedIn, TikTok, Behance) para el
       footer y los datos de SEO (`sameAs`).
 - [ ] Usuario real de Instagram para el manual de marca.

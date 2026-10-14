@@ -10,6 +10,7 @@ import ProjectsSection from './sections/ProjectsSection';
 import OutEmprendeSection from './sections/OutEmprendeSection';
 import MethodSection from './sections/MethodSection';
 import ReviewsSection from './sections/ReviewsSection';
+import { SHOW_REVIEWS } from './data/site';
 import QuoteSection from './sections/QuoteSection';
 import ResultsSection from './sections/ResultsSection';
 import BlogTeaser from './sections/BlogTeaser';
@@ -36,7 +37,7 @@ export default function App() {
       <ResultsSection />
       <QuoteSection />
       <MethodSection />
-      <ReviewsSection />
+      {SHOW_REVIEWS && <ReviewsSection />}
       <BlogTeaser />
       <Footer />
       <MangoBot />
