@@ -62,7 +62,7 @@ export const PROJECTS: Project[] = [
     url: 'https://usevolta.app',
     featured: true,
   },
-  // Sitios en línea. Descripción provisional: ajustarla con lo que se hizo en cada uno.
+  // Tiendas online. La plataforma de cada una no está confirmada: no se nombra en la descripción.
   ...[
     ['Rugs N Home', 'https://rugsnhome.mx'],
     ['Eticolor', 'https://eticolor.com.co'],
@@ -76,7 +76,7 @@ export const PROJECTS: Project[] = [
       name,
       type: 'Web',
       status: 'launched',
-      summary: 'Sitio web desarrollado por Out, ya en línea.',
+      summary: 'Tienda online desarrollada por Out, lista para vender.',
       url,
     }),
   ),
