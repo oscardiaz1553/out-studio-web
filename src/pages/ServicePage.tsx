@@ -31,13 +31,6 @@ const SHORT: Record<string, string> = {
 };
 const TILTS = [-3, 2.5, -2, 3];
 
-export const STEPS = [
-  { verb: 'Escuchamos', text: 'Entendemos tu negocio y lo que tiene que lograr tu proyecto. Recibes una propuesta clara, con alcance y tiempos.' },
-  { verb: 'Construimos', text: 'Diseñamos y desarrollamos con código propio, compartiendo avances reales que puedes ver y aprobar.' },
-  { verb: 'Lanzamos', text: 'Probamos todo antes de salir: velocidad, SEO técnico, pagos y formularios funcionando.' },
-  { verb: 'Seguimos', text: 'No desaparecemos después del lanzamiento: soporte, ajustes y mejoras continuas.' },
-];
-
 /** Ruta de navegación cuyo último paso es un selector: desde una página de
  *  servicio se salta directo a cualquier otro servicio. */
 function ServiceSwitcher({ current, dark }: { current: ServiceData; dark: boolean }) {
