@@ -8,7 +8,10 @@ import TitleFrame from '../components/TitleFrame';
 
 // El enlace sale de src/data/projects.ts: cuando cambie el sitio de Diario
 // Deportes, se actualiza allá.
-const CASE_URL = PROJECTS.find((p) => p.name === 'Diario Deportes')?.url;
+const CASE = PROJECTS.find((p) => p.name === 'Diario Deportes');
+const CASE_URL = CASE?.url;
+// Mientras el proyecto siga en desarrollo no hay botón al sitio: se marca así.
+const CASE_IN_PROGRESS = CASE?.status === 'in-progress';
 
 const BASE = import.meta.env.BASE_URL;
 const VIDEO = `${BASE}diario-deportes.mp4`;
@@ -192,7 +195,13 @@ export default function ResultsSection() {
               visita encuentre primero lo importante: la nota principal, el
               partido al frente y la publicidad en su lugar.
             </p>
-            {CASE_URL && (
+            {CASE_IN_PROGRESS && (
+              <span className="mt-7 inline-flex items-center gap-2 rounded-full bg-klein-deep/[0.07] px-4 py-2 text-sm font-medium text-klein-deep">
+                <span className="w-2 h-2 rounded-full bg-carne-deep" />
+                En desarrollo
+              </span>
+            )}
+            {CASE_URL && !CASE_IN_PROGRESS && (
               <AccentButton
                 href={CASE_URL}
                 target="_blank"
