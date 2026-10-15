@@ -74,7 +74,7 @@ const BLOCKS = [
  * apilan y el activo se despliega hacia abajo. Todo es accesible por teclado
  * (cada paso es un botón con aria-expanded).
  */
-function MethodSteps() {
+export function MethodSteps({ ctaHref = '#cotizacion' }: { ctaHref?: string }) {
   const [active, setActive] = useState(0);
   const hover = useRef<number | undefined>(undefined);
 
@@ -189,7 +189,7 @@ function MethodSteps() {
       </ol>
 
       <div className="mt-6 flex flex-wrap items-center gap-4">
-        <AccentButton href="#cotizacion">Empieza con tu cotización</AccentButton>
+        <AccentButton href={ctaHref}>Empieza con tu cotización</AccentButton>
       </div>
     </div>
   );

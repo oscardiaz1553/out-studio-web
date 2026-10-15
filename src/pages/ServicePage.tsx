@@ -7,6 +7,7 @@ import { AZULEJO } from '../data/botanica';
 import ScrollToTop from '../components/ScrollToTop';
 import SiteNav from '../components/SiteNav';
 import data from '../data/services.json';
+import { MethodSteps } from '../sections/MethodSection';
 
 export type ServiceData = (typeof data.pages)[number];
 
@@ -374,19 +375,13 @@ export default function ServicePage({ page }: { page: ServiceData }) {
       </section>
 
       {/* Cómo trabajamos */}
-      <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20 bg-paper-pure border-t border-klein-deep/15">
-        <div className="max-w-[1100px] mx-auto">
-          <h2 className="font-display font-semibold text-klein tracking-[-0.03em] leading-tight mb-8" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.4rem)' }}>
+      <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20 bg-paper border-t border-klein-deep/15">
+        <div className="max-w-[1400px] mx-auto">
+          <h2 className="font-display font-semibold text-klein tracking-[-0.035em] leading-tight mb-8 sm:mb-10" style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>
             Cómo trabajamos
           </h2>
-          <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {STEPS.map((s) => (
-              <li key={s.verb} className="rounded-2xl border border-klein-deep/15 bg-paper p-6">
-                <h3 className="font-display font-extrabold text-klein tracking-[-0.03em] text-2xl mb-2">{s.verb}.</h3>
-                <p className="text-sm leading-relaxed text-ink-2">{s.text}</p>
-              </li>
-            ))}
-          </ol>
+          {/* El mismo método del home: cuatro paneles que se abren. */}
+          <MethodSteps ctaHref={`${HOME}#cotizar`} />
         </div>
       </section>
 
