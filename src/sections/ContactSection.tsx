@@ -1,3 +1,4 @@
+import PrivacyNote from '../components/PrivacyNote';
 import TitleFrame from '../components/TitleFrame';
 import { FormEvent, useState } from 'react';
 import AccentButton from '../components/AccentButton';
@@ -168,10 +169,11 @@ export default function ContactSection({ titleAs = "h2" }: { titleAs?: "h1" | "h
                   className={`${INPUT_CLASSES} resize-none`}
                 />
               </label>
+              <PrivacyNote className="mt-1" />
               <AccentButton
                 type="submit"
                 disabled={status === 'sending'}
-                className="mt-2 self-start"
+                className="self-start"
               >
                 {status === 'sending' ? 'Enviando…' : 'Enviar mensaje'}
               </AccentButton>

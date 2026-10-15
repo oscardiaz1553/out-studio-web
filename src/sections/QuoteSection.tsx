@@ -1,3 +1,4 @@
+import PrivacyNote from '../components/PrivacyNote';
 import TitleFrame from '../components/TitleFrame';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -619,6 +620,11 @@ function QuoteScreen({
 
           {/* Navegación siempre a la vista */}
           <div className="shrink-0 border-t border-klein-deep/15 bg-paper-pure">
+            {isLast && (
+              <div className="max-w-[720px] mx-auto px-6 sm:px-8 pt-3 text-klein-deep">
+                <PrivacyNote />
+              </div>
+            )}
             <div className="max-w-[720px] mx-auto px-6 sm:px-8 py-4 flex items-center justify-between gap-4">
               {stepIndex > 0 ? (
                 <button

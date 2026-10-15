@@ -156,6 +156,14 @@ writeFileSync(
   }) + body('contacto'),
 );
 
+// --- Páginas legales
+for (const [file, entry, title, description] of [
+  ['privacidad.html', 'privacidad', 'Aviso de Privacidad y Política de Tratamiento de Datos | Out Studio', 'Cómo trata Out Studio tus datos personales: qué recogemos, para qué los usamos, con quién los compartimos y cómo ejercer tus derechos (Ley 1581 de 2012).'],
+  ['terminos.html', 'terminos', 'Términos de Uso | Out Studio', 'Condiciones de uso del sitio de Out Studio y cómo funcionan las cotizaciones y la contratación de proyectos.'],
+]) {
+  writeFileSync(file, head({ title, description, path: `/${file}` }) + body(entry));
+}
+
 // --- Índice de servicios
 writeFileSync(
   'servicios/index.html',

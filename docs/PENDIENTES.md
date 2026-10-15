@@ -32,8 +32,9 @@ Lista viva de lo que quedó por hacer. Se revisa al empezar cada sesión de trab
 ## Web y negocio
 
 - [ ] Enviar el sitemap a Google Search Console y Bing Webmaster Tools.
-- [ ] Páginas de Aviso de Privacidad y Términos de Uso (los enlaces del footer
-      no llevan a ninguna parte).
+- [ ] Revisar con un abogado el Aviso de Privacidad y los Términos de Uso
+      (`src/data/legal.ts`) y agregar la razón social, el NIT y la ciudad de Out.
+      Si se añade analítica o cookies, actualizar el aviso.
 - [ ] Definir el premio para quien refiere clientes y, si se quiere, la sección
       "Recomienda a Out".
 - [ ] Posible página propia del servicio de diseño UX/UI.

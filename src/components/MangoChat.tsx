@@ -1,3 +1,4 @@
+import PrivacyNote from './PrivacyNote';
 import { motion, useReducedMotion } from 'framer-motion';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -477,6 +478,8 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
             Cerrar
           </button>
         ) : done ? (
+          <>
+          <PrivacyNote className="text-klein-deep" />
           <button
             type="button"
             onClick={send}
@@ -489,6 +492,7 @@ export function MangoChat({ chat, onClose }: { chat: ChatState; onClose: () => v
                 ? 'Intentar de nuevo'
                 : 'Enviar solicitud'}
           </button>
+          </>
         ) : typing ? null : current!.kind === 'single' ? (
           <div className="flex flex-wrap gap-2 max-h-[40vh] overflow-y-auto overscroll-contain">
             {current!.options!.map((opt) => {

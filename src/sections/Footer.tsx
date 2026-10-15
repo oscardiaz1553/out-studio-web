@@ -199,8 +199,8 @@ export default function Footer() {
 
         <div className="site-footer__legal">
           <p>© 2026 Out Studio. Todos los derechos reservados.</p>
-          <a href="#privacidad">Aviso de Privacidad</a>
-          <a href="#terminos">Términos de Uso</a>
+          <a href={`${HOME}privacidad.html`}>Aviso de Privacidad</a>
+          <a href={`${HOME}terminos.html`}>Términos de Uso</a>
         </div>
       </div>
     </footer>
