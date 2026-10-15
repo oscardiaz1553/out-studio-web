@@ -79,15 +79,6 @@ export const PROJECTS: Project[] = [
     url: 'https://diariodeportes.com.co',
     featured: true,
   },
-  {
-    number: '03',
-    name: 'Volta',
-    type: 'Web',
-    status: 'launched',
-    summary: 'App desarrollada desde cero, de la idea al lanzamiento.',
-    url: 'https://usevolta.app',
-    featured: true,
-  },
   ...(SHOW_NEW_STORES ? NEW_STORES : []),
 ];
 
