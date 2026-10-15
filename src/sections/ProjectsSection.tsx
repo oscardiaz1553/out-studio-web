@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { BrandDot } from '../components/Brand';
 import RevealText from '../components/RevealText';
 import TitleFrame, { FrameKind, Sym } from '../components/TitleFrame';
-import { FEATURED_PROJECTS, type Project } from '../data/projects';
+import ProjectMedia from '../components/ProjectMedia';
+import { FEATURED_PROJECTS, PROJECTS, type Project } from '../data/projects';
 
 const PROJECTS_URL = `${import.meta.env.BASE_URL}proyectos.html`;
 const KINDS: FrameKind[] = ['square', 'curly', 'paren', 'angle'];
@@ -180,7 +181,54 @@ export default function ProjectsSection() {
           </a>
         </div>
 
-        <ul ref={listRef} onPointerMove={onMove} className="relative">
+        {/* Celular: todos los proyectos como láminas, en un carrusel a todo el ancho. */}
+        <div
+          role="region"
+          aria-label="Proyectos"
+          tabIndex={0}
+          className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory overscroll-x-contain scroll-px-6 pb-2 [&::-webkit-scrollbar]:hidden"
+          style={{
+            scrollbarWidth: 'none',
+            marginInline: 'calc(50% - 50vw)',
+            paddingInline: 'calc(50vw - 50%)',
+          }}
+        >
+          {PROJECTS.map((p) => {
+            const live = Boolean(p.url) && p.status !== 'in-progress';
+            const Card = live ? 'a' : 'div';
+            return (
+            <Card
+              key={p.number}
+              {...(live ? { href: p.url, target: '_blank', rel: 'noreferrer' } : {})}
+              className="shrink-0 snap-start w-[78%] max-w-[320px] flex flex-col rounded-[24px] overflow-hidden bg-paper-pure active:scale-[0.99] transition-transform"
+            >
+              <ProjectMedia
+                src={p.rightImage}
+                alt={`${p.name}, vista principal`}
+                label={p.name}
+                url={p.url}
+                index={Number(p.number)}
+                className="w-full aspect-[4/5]"
+              />
+              <div className="flex flex-1 flex-col gap-2 p-5">
+                <p className="text-sm leading-relaxed text-klein-deep/80">{p.summary}</p>
+                {live ? (
+                  <span className="mt-auto pt-2 text-sm font-medium text-klein underline underline-offset-4">
+                    Ver sitio
+                  </span>
+                ) : (
+                  <span className="mt-auto inline-flex items-center gap-1.5 self-start rounded-full bg-klein-deep/[0.07] px-2.5 py-1 text-[11px] font-medium text-klein-deep">
+                    <span className="w-1.5 h-1.5 rounded-full bg-carne-deep" />
+                    En desarrollo
+                  </span>
+                )}
+              </div>
+            </Card>
+            );
+          })}
+        </div>
+
+        <ul ref={listRef} onPointerMove={onMove} className="relative hidden md:block">
           {FEATURED_PROJECTS.map((p, i) => (
             <ProjectRow
               key={p.number}
