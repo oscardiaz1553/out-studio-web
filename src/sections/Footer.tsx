@@ -125,7 +125,7 @@ export default function Footer() {
               Never the usual.
             </h2>
             <p className="mt-4 max-w-[38ch] text-paper-pure/75 leading-relaxed">
-              Diseño UX/UI y desarrollo web a medida para negocios de toda Colombia.
+              Especialistas en Diseño UX/UI y desarrollo web.
             </p>
           </div>
           <div className="flex flex-col items-start lg:items-end gap-2.5">

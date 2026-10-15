@@ -173,7 +173,7 @@ export default function HeroSection() {
               transition={{ delay: 0.75, duration: 0.7 }}
               className="mt-6 sm:mt-7 max-w-[44ch] text-paper-pure/80 leading-relaxed text-base sm:text-lg"
             >
-              Diseño UX/UI y desarrollo web a medida para negocios de toda Colombia.
+              Especialistas en Diseño UX/UI y desarrollo web.
               Tiendas Shopify, sitios WordPress, landing pages y branding.
             </motion.p>
             <motion.div
