@@ -161,7 +161,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="proyectos"
-      className="relative z-10 overflow-hidden bg-carne px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
+      className="relative z-10 overflow-hidden bg-paper-pure md:bg-carne border-b border-klein-deep/10 md:border-b-0 px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <div className="relative max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between gap-4 mb-8 sm:mb-12">
@@ -200,7 +200,7 @@ export default function ProjectsSection() {
             <Card
               key={p.number}
               {...(live ? { href: p.url, target: '_blank', rel: 'noreferrer' } : {})}
-              className="shrink-0 snap-start w-[78%] max-w-[320px] flex flex-col rounded-[24px] overflow-hidden bg-paper-pure active:scale-[0.99] transition-transform"
+              className="shrink-0 snap-start w-[78%] max-w-[320px] flex flex-col active:scale-[0.99] transition-transform"
             >
               <ProjectMedia
                 src={p.rightImage}
@@ -208,9 +208,9 @@ export default function ProjectsSection() {
                 label={p.name}
                 url={p.url}
                 index={Number(p.number)}
-                className="w-full aspect-[4/5]"
+                className="w-full aspect-[4/5] rounded-[24px]"
               />
-              <div className="flex flex-1 flex-col gap-2 p-5">
+              <div className="flex flex-1 flex-col gap-2 px-1 pt-4 pb-2">
                 <p className="text-sm leading-relaxed text-klein-deep/80">{p.summary}</p>
                 {live ? (
                   <span className="mt-auto pt-2 text-sm font-medium text-klein underline underline-offset-4">
