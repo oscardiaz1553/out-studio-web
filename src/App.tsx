@@ -10,7 +10,8 @@ import ProjectsSection from './sections/ProjectsSection';
 import OutEmprendeSection from './sections/OutEmprendeSection';
 import MethodSection from './sections/MethodSection';
 import ReviewsSection from './sections/ReviewsSection';
-import { SHOW_CLIENTS, SHOW_REVIEWS } from './data/site';
+import FounderSection from './sections/FounderSection';
+import { SHOW_CLIENTS, SHOW_FOUNDER, SHOW_REVIEWS } from './data/site';
 import QuoteSection from './sections/QuoteSection';
 import ResultsSection from './sections/ResultsSection';
 import BlogTeaser from './sections/BlogTeaser';
@@ -35,6 +36,7 @@ export default function App() {
       <OutEmprendeSection />
       <ProjectsSection />
       <ResultsSection />
+      {SHOW_FOUNDER && <FounderSection />}
       <QuoteSection />
       <MethodSection />
       {SHOW_REVIEWS && <ReviewsSection />}

@@ -20,6 +20,10 @@ export const SHOW_CLIENTS = false;
 // mostrar: se enciende (true) cuando se carguen en src/data/reviews.ts.
 export const SHOW_REVIEWS = false;
 
+// Sección "Quién está detrás de Out" de la portada. Apagada hasta tener la foto
+// (public/oscar.webp) y el texto en src/data/founder.ts: se enciende con true.
+export const SHOW_FOUNDER = false;
+
 // Enlace para dejar una reseña en el perfil de Google de Out (Google Business
 // Profile → "Pedir reseñas" → copiar el enlace). Mientras esté vacío, el botón
 // de Google no aparece y queda sólo el formulario propio.

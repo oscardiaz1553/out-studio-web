@@ -10,8 +10,9 @@ cada publicación y los scripts que las generan.
 | Lote 1 | Carrusel "3 errores que frenan tu tienda online", reel de Diario Deportes (video y portada), carrusel de Out Emprende | `lote-1/` |
 | Lote 2 | Carrusel "¿Shopify, WordPress o landing page?", carrusel "Antes de pedir tu página web, ten esto listo", publicación e historia de Mango | `lote-2/` |
 | Lote 3 | Carrusel "¿De qué depende el precio de una página web?", reel "3 señales de que tu página necesita un rediseño" (video y portada), carrusel "Así trabajamos" | `lote-3/` |
+| Videos personales | Cinco guiones para grabar con tu cara y tu voz (quién eres, revisión de una página, precio, caso Diario Deportes, un día de trabajo) | `videos-personales/` |
 
-Cada carpeta tiene un `textos.md` con el calendario sugerido, el texto de
+Cada carpeta tiene un `textos.md` (en videos personales, `guiones.md`) con el calendario sugerido, el texto de
 cada publicación, los hashtags y el texto alternativo.
 
 ## Cómo se generan
