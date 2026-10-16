@@ -26,6 +26,7 @@ carruseles y publicaciones, 1080 × 1920 para reels e historias.
 - `hyperframes/`: los reels animados, hechos con [HyperFrames](https://github.com/heygen-com/hyperframes) (HTML + GSAP). Cada carpeta es un proyecto: `index.html` es el video. Para volver a renderizarlo, desde su carpeta: `npx hyperframes@0.8.150 render -q high -o reel.mp4` (pide Node 22 y FFmpeg). Toman como referencia la intro del sitio (`public/intro/index.html`): cámara con zoom y giro, anillos que se expanden en los impactos, barrido circular de color, líneas de velocidad y los símbolos [ ] { } < >. La sacudida de pantalla se usa solo en uno o dos golpes grandes por reel, no en cada entrada.
   - `reel-senales/`: reel del lote 3.
   - `reel-diario-deportes/`: reel del lote 1, con capturas reales del sitio antes y después.
+  - `video-ejemplo/`: ejemplo del formato "Reviso tu página" de los videos personales (pantalla, marcas, subtítulos palabra por palabra y un círculo "Tu cámara" donde va la cara). El render está en `videos-personales/ejemplo-reviso-tu-pagina.mp4`.
 
 Para regenerar un lote: `node instagram/scripts/lote-2.cjs`.
 
