@@ -39,7 +39,7 @@ export function categoryLabel(type: ProjectType): string {
  * The Black Box Snack, Osere y Daza Organic). En `false` desaparecen de
  * Proyectos sin borrar nada: `node scripts/tiendas-nuevas.mjs off|on`.
  */
-const SHOW_NEW_STORES = false;
+const SHOW_NEW_STORES = true;
 
 // Tiendas online. La plataforma de cada una no está confirmada: no se nombra en la descripción.
 const NEW_STORES: Project[] = [
