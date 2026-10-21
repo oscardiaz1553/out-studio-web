@@ -183,3 +183,9 @@ a {
 .prose-out ol { list-style: disc; }
 .prose-out li + li { margin-top: 0.4em; }
 .prose-out li::marker { color: #bc6039; }
+.prose-out video { display: block; width: 100%; height: auto; border-radius: 20px; background: #141e5c; }
+.prose-out figure { margin: 0; }
+.prose-out figcaption { margin-top: 0.6em; font-size: 0.9rem; line-height: 1.45; color: #3c4375; }
+.prose-out img { display: block; width: 100%; height: auto; border-radius: 16px; }
+.prose-out .figure-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+@media (max-width: 480px) { .prose-out .figure-pair { grid-template-columns: 1fr; } }
