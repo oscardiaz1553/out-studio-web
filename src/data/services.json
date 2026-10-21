@@ -116,9 +116,9 @@
       "slug": "out-emprende",
       "nav": "Out Emprende",
       "metaTitle": "Out Emprende: tu sitio, tienda o marca para emprendedores | Out Studio",
-      "metaDescription": "Tienda online, sitio web, landing page o marca para emprendedores en Colombia, con diseño UX/UI a la medida y un plan pensado para quienes están empezando.",
+      "metaDescription": "Tienda online, sitio web, landing page o marca para emprendedores en Colombia, con diseño UX/UI a la medida y facilidades de pago.",
       "h1": "Out Emprende: el plan para emprendedores",
-      "lead": "Para emprendedores y negocios que están arrancando: tu tienda online, tu sitio web, una landing page o tu marca, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos.",
+      "lead": "Para emprendedores y negocios que están arrancando: tu tienda online, tu sitio web, una landing page o tu marca, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos. Y con facilidades de pago.",
       "includesTitle": "Qué puedes hacer con Out Emprende",
       "includes": [
         "Tienda online en Shopify, con todos tus productos cargados, sin límite",
@@ -130,7 +130,7 @@
       ],
       "whyTitle": "Pensado para empezar bien",
       "why": [
-        "Cuando estás arrancando, cada peso cuenta. Out Emprende te da un proyecto bien hecho, sea una tienda, un sitio, una landing o tu marca, con un plan pensado para quienes están empezando.",
+        "Cuando estás arrancando, cada peso cuenta. Out Emprende te da un proyecto bien hecho, sea una tienda, un sitio, una landing o tu marca, con un plan pensado para quienes están empezando y con facilidades de pago.",
         "Sirve para cualquier tipo de negocio: una tienda de productos, una empresa de servicios, un medio digital o un proyecto personal. Cuando tu negocio crezca, tu sitio puede crecer con un proyecto a medida."
       ],
       "forWho": "Emprendedores y negocios pequeños de cualquier sector que necesitan su primera tienda, sitio web, landing page o marca profesional.",
@@ -147,6 +147,10 @@
         {
           "q": "¿Qué es Out Emprende?",
           "a": "Es nuestro plan para emprendedores y negocios que están arrancando. Te enviamos una cotización a la medida de tu proyecto, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos."
+        },
+        {
+          "q": "¿Hay facilidades de pago?",
+          "a": "Sí. Out Emprende tiene facilidades de pago: al pedir tu cotización te contamos cómo funcionan."
         },
         {
           "q": "¿Qué tipo de proyectos incluye?",

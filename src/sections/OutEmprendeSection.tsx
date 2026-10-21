@@ -46,7 +46,7 @@ export default function OutEmprendeSection() {
             className="mt-5 max-w-[22ch] font-display font-bold tracking-[-0.03em] leading-[1.08] text-carne"
             style={{ fontSize: 'clamp(1.5rem, 3vw, 2.4rem)' }}
           >
-            Tu proyecto web, con un plan pensado para emprendedores.
+            Tu proyecto web, con facilidades de pago.
           </p>
 
           <ul className="mt-8 flex flex-col gap-3.5">

@@ -27,7 +27,7 @@ const SHORT: Record<string, string> = {
   'landing-pages': 'Páginas de campaña hechas para que la gente actúe.',
   branding: 'Logo e identidad visual con carácter.',
   'desarrollo-web': 'Sitios y tiendas a medida, con código propio.',
-  'out-emprende': 'Tu proyecto web, con un plan pensado para emprendedores.',
+  'out-emprende': 'Tu proyecto web, con facilidades de pago.',
 };
 const TILTS = [-3, 2.5, -2, 3];
 
@@ -224,6 +224,7 @@ function OfferBlock({ offer }: { offer: Offer }) {
           <p className="mt-3 font-display font-extrabold tracking-[-0.05em] leading-[0.95]" style={{ fontSize: 'clamp(2.4rem, 5.2vw, 3.8rem)' }}>
             Un plan para emprendedores
           </p>
+          <p className="mt-2 font-display font-bold text-2xl sm:text-3xl tracking-[-0.03em]">con facilidades de pago</p>
           <p className="mt-4 text-paper-pure/80 leading-relaxed">
             Tienda, sitio web, landing page o marca. Te enviamos la cotización en 6 a 24 horas.
           </p>
