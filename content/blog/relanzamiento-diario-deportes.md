@@ -77,7 +77,6 @@ Un sitio de noticias se juega en la redacción, así que construimos herramienta
 - **Pizarra deportiva:** una pantalla simple para publicar, reemplazar o quitar la pizarra del día.
 - **Baloncito**, la caricatura diaria, con su archivo.
 - **Número de edición y efemérides automáticas:** cambian solas a medianoche («Un día como hoy»), sin que nadie toque nada.
-- Una hoja de una página para la redacción: cómo clasificar una nota para que salga en la sección correcta.
 
 ### Accesibilidad y celular primero
 
