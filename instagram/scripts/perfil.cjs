@@ -94,8 +94,8 @@ const presentacion = [
     ${band(110, 'top:0')}
     <div class="abs" style="left:80px;top:190px">${logo(C.pure, 130)}</div>
     <div class="abs" style="left:80px;right:80px;top:400px">
-      <div class="d" style="font-size:128px;color:${C.pure}">Diseño UX/UI y desarrollo web a medida.</div>
-      <p style="margin-top:44px;color:${C.carne};font-size:42px;line-height:1.35;max-width:620px">Tiendas Shopify, sitios, landing pages y marca, con código propio.</p>
+      <div class="d" style="font-size:128px;color:${C.pure}">Diseño UX/UI y desarrollo web.</div>
+      <p style="margin-top:44px;color:${C.carne};font-size:42px;line-height:1.35;max-width:620px">Tiendas Shopify, sitios, landing pages y marca.</p>
     </div>
     <img class="abs" src="${IMG.laptop}" style="width:560px;right:20px;bottom:130px">
     <div class="abs" style="left:80px;bottom:64px;font:500 28px I;color:${C.pure}">Never the usual. · outstudio.online</div>`), 1080, 1350, 'publicacion-presentacion.png'],

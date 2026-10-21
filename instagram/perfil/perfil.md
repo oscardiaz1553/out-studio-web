@@ -88,7 +88,7 @@ Imagen: `publicacion-presentacion.png` (1080 × 1350).
 
 **Hashtags:** #OutStudio #DiseñoWeb #DesarrolloWeb #UXUI #TiendaOnline #Shopify #Emprendimiento #Colombia
 
-**Texto alternativo:** Mango, el mono de gafas de Out Studio, trabajando en un portátil junto al texto "Diseño UX/UI y desarrollo web a medida".
+**Texto alternativo:** Mango, el mono de gafas de Out Studio, trabajando en un portátil junto al texto "Diseño UX/UI y desarrollo web".
 
 Después de fijarla, publica la de Mango (`lote-2/mango-publicacion.png`) y los lotes
 según su calendario.
