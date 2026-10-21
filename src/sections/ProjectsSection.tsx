@@ -6,6 +6,19 @@ import TitleFrame, { FrameKind, Sym } from '../components/TitleFrame';
 import ProjectMedia from '../components/ProjectMedia';
 import { FEATURED_PROJECTS, PROJECTS, type Project } from '../data/projects';
 
+/** Etiqueta de un proyecto recién publicado. */
+function NewBadge({ className = '', onImage = false }: { className?: string; onImage?: boolean }) {
+  return (
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
+        onImage ? 'bg-paper-pure text-klein shadow-[0_2px_10px_rgba(20,30,92,0.25)]' : 'bg-klein text-carne'
+      } ${className}`}
+    >
+      New
+    </span>
+  );
+}
+
 const PROJECTS_URL = `${import.meta.env.BASE_URL}proyectos.html`;
 const KINDS: FrameKind[] = ['square', 'curly', 'paren', 'angle'];
 const SPRING = { type: 'spring', stiffness: 320, damping: 26 } as const;
@@ -96,6 +109,7 @@ function ProjectRow({
         </div>
 
         <div className="flex flex-col gap-2 lg:items-end lg:text-right">
+          {project.isNew && <NewBadge className="self-start lg:self-end" />}
           <p className="text-ink-2 leading-relaxed text-sm sm:text-base max-w-[40ch]">
             {project.summary}
           </p>
@@ -202,14 +216,17 @@ export default function ProjectsSection() {
               {...(live ? { href: p.url, target: '_blank', rel: 'noreferrer' } : {})}
               className="shrink-0 snap-start w-[78%] max-w-[320px] flex flex-col active:scale-[0.99] transition-transform"
             >
-              <ProjectMedia
-                src={p.rightImage}
-                alt={`${p.name}, vista principal`}
-                label={p.name}
-                url={p.url}
-                index={Number(p.number)}
-                className="w-full aspect-[4/5] rounded-[24px]"
-              />
+              <div className="relative">
+                <ProjectMedia
+                  src={p.rightImage}
+                  alt={`${p.name}, vista principal`}
+                  label={p.name}
+                  url={p.url}
+                  index={Number(p.number)}
+                  className="w-full aspect-[4/5] rounded-[24px]"
+                />
+                {p.isNew && <NewBadge onImage className="absolute top-3 left-3" />}
+              </div>
               <div className="flex flex-1 flex-col gap-2 px-1 pt-4 pb-2">
                 <p className="text-sm leading-relaxed text-klein-deep/80">{p.summary}</p>
                 {live ? (

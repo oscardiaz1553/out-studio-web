@@ -27,6 +27,8 @@ export interface Project {
   url?: string;
   /** true = aparece en la muestra destacada del home. */
   featured?: boolean;
+  /** true = lleva la etiqueta "New" (proyecto recién publicado). */
+  isNew?: boolean;
 }
 
 // El lockup de marca que se muestra en cada tarjeta: Out.Web, Out.Design…
@@ -51,7 +53,7 @@ const NEW_STORES: Project[] = [
   ['Daza Organic', 'https://dazaorganic.com'],
 ].map(
   ([name, url], i): Project => ({
-    number: String(i + 4).padStart(2, '0'),
+    number: String(i + 3).padStart(2, '0'),
     name,
     type: 'Web',
     status: 'launched',
@@ -63,20 +65,21 @@ const NEW_STORES: Project[] = [
 export const PROJECTS: Project[] = [
   {
     number: '01',
+    name: 'Diario Deportes',
+    type: 'Web',
+    status: 'launched',
+    summary: 'Rediseño y desarrollo completo de un medio deportivo digital.',
+    url: 'https://diariodeportes.com.co',
+    featured: true,
+    isNew: true,
+  },
+  {
+    number: '02',
     name: 'BARCI',
     type: 'Web',
     status: 'launched',
     summary: 'Tienda Shopify lista para vender en línea desde el día uno.',
     url: 'https://barci.com.co',
-    featured: true,
-  },
-  {
-    number: '02',
-    name: 'Diario Deportes',
-    type: 'Web',
-    status: 'in-progress',
-    summary: 'Rediseño y desarrollo completo de un medio deportivo digital.',
-    url: 'https://diariodeportes.com.co',
     featured: true,
   },
   ...(SHOW_NEW_STORES ? NEW_STORES : []),

@@ -39,6 +39,11 @@ function ProjectGridCard({ project }: { project: Project }) {
             backgroundPosition: '50% 50%',
           }}
         />
+        {project.isNew && (
+          <span className="absolute top-3 left-5 inline-flex items-center rounded-full bg-paper-pure px-2.5 py-1 text-[11px] font-medium text-klein shadow-[0_2px_10px_rgba(20,30,92,0.25)]">
+            New
+          </span>
+        )}
         {project.status === 'in-progress' && (
           <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 rounded-full border border-carne-tinta/30 bg-paper-pure/95 backdrop-blur px-2.5 py-1 text-[10px] font-medium tracking-[0.03em] text-carne-tinta">
             <span className="w-1.5 h-1.5 rounded-full bg-carne-tinta" />
