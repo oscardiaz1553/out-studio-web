@@ -35,8 +35,9 @@ Elige una. Ninguna lleva emojis.
 
 **Opción C (pensada para emprendedores):**
 
-> Tu página web o tienda online, a medida y hasta en 3 cuotas sin intereses.
-> Out Emprende. Diseño UX/UI, Colombia.
+> Tu página web o tienda online, a medida.
+> Out Emprende: el plan para emprendedores.
+> Diseño UX/UI, Colombia.
 
 Cuando tengas tu cara en los videos, puedes cambiar a una bio en primera persona
 ("Soy Oscar, fundador de Out...").
@@ -80,8 +81,8 @@ Imagen: `publicacion-presentacion.png` (1080 × 1350).
 > Landing pages.
 > Logo e identidad de marca.
 >
-> Si estás empezando, pregunta por Out Emprende: tu proyecto web, hasta en 3
-> cuotas sin intereses.
+> Si estás empezando, pregunta por Out Emprende, nuestro plan para
+> emprendedores.
 >
 > Cotiza con Mango en outstudio.online (link en la bio) y en 6 a 24 horas tienes
 > tu cotización.
@@ -113,9 +114,9 @@ rápidas. Copia estos textos y cámbialos si quieres.
 
 **Respuesta rápida: Out Emprende** (atajo `emprende`)
 
-> Out Emprende es para negocios que están arrancando: tu tienda online, tu sitio,
-> una landing o tu marca, con el mismo cuidado de diseño de todos nuestros
-> proyectos, y lo pagas hasta en 3 cuotas mensuales sin intereses. Cotiza en
+> Out Emprende es nuestro plan para emprendedores y negocios que están
+> arrancando: tu tienda online, tu sitio, una landing o tu marca, con el mismo
+> cuidado de diseño de todos nuestros proyectos. Cotiza en
 > outstudio.online/#cotizar.
 
 **Respuesta rápida: servicios** (atajo `servicios`)

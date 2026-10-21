@@ -14,7 +14,7 @@ const POINTS = [
 /**
  * Out Emprende en su propia sección de la portada: el plan para emprendedores
  * (tienda, sitio, landing o marca) no es un servicio más de la lista, así que tiene su franja con la lámina
- * "Hasta 3 cuotas" y un sello que gira.
+ * "Plan para emprendedores" y un sello que gira.
  */
 export default function OutEmprendeSection() {
   const reduceMotion = useReducedMotion();
@@ -46,7 +46,7 @@ export default function OutEmprendeSection() {
             className="mt-5 max-w-[22ch] font-display font-bold tracking-[-0.03em] leading-[1.08] text-carne"
             style={{ fontSize: 'clamp(1.5rem, 3vw, 2.4rem)' }}
           >
-            Tu proyecto web, hasta en 3 cuotas sin intereses.
+            Tu proyecto web, con un plan pensado para emprendedores.
           </p>
 
           <ul className="mt-8 flex flex-col gap-3.5">
@@ -102,7 +102,7 @@ export default function OutEmprendeSection() {
                 <path id="sello" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" />
               </defs>
               <text fontSize="11" fontWeight="700" letterSpacing="1.4" fill="currentColor" style={{ fontFamily: 'var(--display)' }}>
-                <textPath href="#sello" textLength="222" lengthAdjust="spacing">SIN INTERESES · HASTA 3 CUOTAS · </textPath>
+                <textPath href="#sello" textLength="222" lengthAdjust="spacing">PLAN PARA EMPRENDEDORES · </textPath>
               </text>
             </svg>
             <span className="absolute inset-0 flex items-center justify-center">

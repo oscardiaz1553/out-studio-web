@@ -32,7 +32,7 @@ Enlaces:
 
 > ¡Hola [nombre]! ¿Cómo va [nombre del negocio]? [detalle: "Vi lo de…", "Me encantó…"].
 >
-> Te escribo porque arranqué con Out, mi estudio de diseño y desarrollo web. Estamos ayudando a negocios a tener su tienda online o su página bien hecha, y lancé Out Emprende, pensado para negocios que están arrancando: se puede pagar hasta en 3 cuotas sin intereses.
+> Te escribo porque arranqué con Out, mi estudio de diseño y desarrollo web. Estamos ayudando a negocios a tener su tienda online o su página bien hecha, y lancé Out Emprende, pensado para negocios que están arrancando.
 >
 > No te quiero vender nada a la fuerza: si en algún momento quieres que le eche un ojo a tu página o a cómo vendes en línea, te doy ideas sin compromiso. Y si conoces a alguien a quien le sirva, me ayudas mucho pasándole mi contacto.
 >
@@ -85,7 +85,7 @@ Enlaces:
 **A la persona recomendada:**
 > ¡Hola [nombre]! Soy Oscar, de Out. [Nombre de quien recomendó] me contó que estás [montando tu tienda / pensando en tu página]. Te escribo para ver si te puedo ayudar.
 >
-> Hacemos tiendas online, páginas y marcas con diseño a la medida, y para negocios que están arrancando tenemos Out Emprende, que se paga hasta en 3 cuotas sin intereses.
+> Hacemos tiendas online, páginas y marcas con diseño a la medida, y para negocios que están arrancando tenemos Out Emprende, nuestro plan para emprendedores.
 >
 > ¿Te parece si hablamos 15 minutos esta semana y me cuentas qué tienes en mente? Si prefieres, puedes pedir tu cotización aquí y te respondo en 6 a 24 horas: outstudio.online/#cotizar
 >

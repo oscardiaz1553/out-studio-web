@@ -87,8 +87,8 @@ burles de la página.
 >
 > Por eso no doy un número sin saber eso. Pero sí puedo decirte que la
 > cotización te llega en 6 a 24 horas, que el valor inicial puede ajustarse
-> después de que hablamos, y que si estás arrancando tenemos Out Emprende: tu
-> proyecto web hasta en 3 cuotas sin intereses.
+> después de que hablamos, y que si estás arrancando tenemos Out Emprende, nuestro
+> plan para emprendedores.
 >
 > Cotiza en outstudio.online y respóndele a Mango unas preguntas rápidas.
 

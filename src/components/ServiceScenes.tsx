@@ -182,22 +182,17 @@ const SCENE_LIST: ReactNode[] = [
 
 // Cada lámina por clave, para usarla en el hover de Servicios y en la cabecera
 // de la página de cada servicio.
-// Out Emprende: el mango que arranca, sobre azul, con las tres cuotas.
+// Out Emprende: el mango que arranca, sobre crema, con el plan para emprendedores.
 const EMPRENDE = (
   <Scene key="emprende" bg={CREMA}>
     <Pair kind="curly" size="30cqw" color="#1B2FCC" className="absolute left-[8%] top-[7%]" />
     <span
       aria-hidden
       className="absolute left-[8%] top-[30%] font-display font-extrabold tracking-[-0.05em] leading-[0.9]"
-      style={{ fontSize: '17cqw', color: '#1B2FCC' }}
+      style={{ fontSize: '11.5cqw', color: '#1B2FCC' }}
     >
-      Hasta
-      <br />3 cuotas
-    </span>
-    <span aria-hidden className="absolute left-[8%] top-[62%] flex gap-[2.5cqw]">
-      {[0, 1, 2].map((i) => (
-        <span key={i} className="block rounded-full" style={{ width: '7cqw', height: '7cqw', background: '#BC6039' }} />
-      ))}
+      Plan para
+      <br />emprendedores
     </span>
     <img
       src={MANGO}

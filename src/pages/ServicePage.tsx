@@ -27,7 +27,7 @@ const SHORT: Record<string, string> = {
   'landing-pages': 'Páginas de campaña hechas para que la gente actúe.',
   branding: 'Logo e identidad visual con carácter.',
   'desarrollo-web': 'Sitios y tiendas a medida, con código propio.',
-  'out-emprende': 'Tu proyecto web, hasta en 3 cuotas sin intereses.',
+  'out-emprende': 'Tu proyecto web, con un plan pensado para emprendedores.',
 };
 const TILTS = [-3, 2.5, -2, 3];
 
@@ -210,22 +210,20 @@ function HeroArt({ theme }: { theme: Theme }) {
 }
 
 type Offer = {
-  installments: number;
   criteria: string[];
   note: string;
 };
 
-/** Forma de pago y a quién va dirigido el plan (sin cifras: el valor se cotiza). */
+/** A quién va dirigido el plan (sin cifras: el valor se cotiza). */
 function OfferBlock({ offer }: { offer: Offer }) {
   return (
     <section className="px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20 bg-paper-pure">
       <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.15fr] gap-6 md:gap-10 items-stretch">
         <div className="rounded-[28px] bg-klein text-paper-pure p-8 sm:p-10 flex flex-col">
-          <p className="text-carne text-sm">Forma de pago</p>
-          <p className="mt-3 font-display font-extrabold tracking-[-0.05em] leading-[0.95]" style={{ fontSize: 'clamp(2.6rem, 5.6vw, 4.2rem)' }}>
-            Hasta {offer.installments} cuotas
+          <p className="text-carne text-sm">Out Emprende</p>
+          <p className="mt-3 font-display font-extrabold tracking-[-0.05em] leading-[0.95]" style={{ fontSize: 'clamp(2.4rem, 5.2vw, 3.8rem)' }}>
+            Un plan para emprendedores
           </p>
-          <p className="mt-2 font-display font-bold text-2xl sm:text-3xl tracking-[-0.03em]">sin intereses</p>
           <p className="mt-4 text-paper-pure/80 leading-relaxed">
             Tienda, sitio web, landing page o marca. Te enviamos la cotización en 6 a 24 horas.
           </p>

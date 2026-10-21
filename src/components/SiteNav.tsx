@@ -101,7 +101,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
         >
           <span className="flex flex-col gap-1">
             <span className="font-display font-extrabold tracking-[-0.03em] text-[clamp(1.2rem,6vw,1.5rem)] leading-none whitespace-nowrap">Out Emprende</span>
-            <span className="text-[13px] text-carne whitespace-nowrap">Hasta 3 cuotas sin intereses</span>
+            <span className="text-[13px] text-carne whitespace-nowrap">Plan para emprendedores</span>
           </span>
           <img src={`${HOME}mango-hero.webp`} alt="" className="w-[5.5rem] h-auto -my-6 -mr-4 rotate-[-12deg]" />
         </motion.a>

@@ -12,7 +12,7 @@ Out está empezando: hoy cierra 0 a 1 proyecto al mes, los clientes llegan por r
 Esa meta es alcanzable, pero no desde el primer mes. El plan sube por escalones: **1 a 2 proyectos al mes en diciembre, 3 en febrero y 5 o 6 en abril.** Para cerrar 5 o 6 proyectos hacen falta unas **20 a 25 cotizaciones al mes** (si se cierra 1 de cada 4), y para eso unas **40 a 50 conversaciones con posibles clientes**.
 
 **Tres apuestas:**
-1. **Out Emprende como puerta de entrada.** Es la oferta más fácil de vender (hasta 3 cuotas sin intereses) y apunta al mercado más grande: los negocios que hoy venden solo por Instagram y WhatsApp. Se le vende con contacto directo, uno a uno.
+1. **Out Emprende como puerta de entrada.** Es la oferta más fácil de vender (un plan pensado para quienes están empezando) y apunta al mercado más grande: los negocios que hoy venden solo por Instagram y WhatsApp. Se le vende con contacto directo, uno a uno.
 2. **Diario Deportes como caso para crecer hacia medios y marcas grandes.** Un caso bien contado (antes y después, video, datos) abre puertas a otros medios digitales, que pagan proyectos más grandes.
 3. **Activos que se acumulan.** Perfil de Google con reseñas, blog, contenido en redes y programa de referidos. Ninguno da clientes la primera semana, pero cada mes rinden más que el anterior.
 
@@ -27,7 +27,7 @@ Esa meta es alcanzable, pero no desde el primer mes. El plan sube por escalones:
 **A quién le vende, en orden:**
 | Segmento | Por qué | Oferta principal |
 |---|---|---|
-| Emprendedores y negocios que arrancan (cualquier sector) | Mercado grande, decisión rápida, el precio en cuotas quita la barrera | Out Emprende |
+| Emprendedores y negocios que arrancan (cualquier sector) | Mercado grande, decisión rápida, un plan pensado para ellos quita la barrera | Out Emprende |
 | Tiendas en línea que ya venden | Es el cliente actual; necesitan "vender más, rápido y fácil" | Tienda Shopify a medida, desde $2.200.000 |
 | Medios digitales y marcas más grandes | Proyectos de mayor valor; Diario Deportes abre la puerta | Rediseño y sitio a medida, desde $4.500.000 |
 
@@ -45,7 +45,7 @@ Esa meta es alcanzable, pero no desde el primer mes. El plan sube por escalones:
 |---|---|---|
 | Sitio web | Fuerte | Diseño propio, cotizador, chat con Mango, páginas de servicios, blog y SEO técnico listos |
 | Marca | Fuerte | Manual de marca, mascota, plantillas (grupo de WhatsApp) |
-| Oferta | Buena | Servicios claros, Out Emprende, descuento por referido, cuotas |
+| Oferta | Buena | Servicios claros, Out Emprende, descuento por referido |
 | Pruebas | Débil | 4 proyectos, sin datos de resultados ni testimonios |
 | Reseñas | Muy débil | Perfil de Google creado, sin reseñas reales |
 | Redes sociales | Por arrancar | Usuario de Instagram por confirmar, sin contenido regular |
@@ -151,7 +151,7 @@ El descuento para el cliente referido ya está en el cotizador. Falta el premio 
 
 | Servicio | Precio de referencia | Rol |
 |---|---|---|
-| Out Emprende | Se cotiza, hasta en 3 cuotas | Entrada, volumen |
+| Out Emprende | Se cotiza, plan para emprendedores | Entrada, volumen |
 | Landing page | Desde $1.200.000 | Entrada rápida, campañas |
 | Tienda Shopify a medida | Desde $2.200.000 | Producto principal |
 | Sitio WordPress | Desde $4.500.000 | Proyectos medianos |

@@ -115,10 +115,10 @@
     {
       "slug": "out-emprende",
       "nav": "Out Emprende",
-      "metaTitle": "Out Emprende: tu sitio, tienda o marca hasta en 3 cuotas | Out Studio",
-      "metaDescription": "Tienda online, sitio web, landing page o marca para emprendedores en Colombia, con diseño UX/UI a la medida y hasta en 3 cuotas sin intereses.",
-      "h1": "Out Emprende: tu proyecto web, hasta en 3 cuotas",
-      "lead": "Para emprendedores y negocios que están arrancando: tu tienda online, tu sitio web, una landing page o tu marca, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos. Y lo pagas hasta en 3 cuotas mensuales sin intereses.",
+      "metaTitle": "Out Emprende: tu sitio, tienda o marca para emprendedores | Out Studio",
+      "metaDescription": "Tienda online, sitio web, landing page o marca para emprendedores en Colombia, con diseño UX/UI a la medida y un plan pensado para quienes están empezando.",
+      "h1": "Out Emprende: el plan para emprendedores",
+      "lead": "Para emprendedores y negocios que están arrancando: tu tienda online, tu sitio web, una landing page o tu marca, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos.",
       "includesTitle": "Qué puedes hacer con Out Emprende",
       "includes": [
         "Tienda online en Shopify, con todos tus productos cargados, sin límite",
@@ -130,12 +130,11 @@
       ],
       "whyTitle": "Pensado para empezar bien",
       "why": [
-        "Cuando estás arrancando, cada peso cuenta. Out Emprende te da un proyecto bien hecho, sea una tienda, un sitio, una landing o tu marca, y la posibilidad de pagarlo hasta en 3 cuotas para que no tengas que sacarlo todo de una vez.",
+        "Cuando estás arrancando, cada peso cuenta. Out Emprende te da un proyecto bien hecho, sea una tienda, un sitio, una landing o tu marca, con un plan pensado para quienes están empezando.",
         "Sirve para cualquier tipo de negocio: una tienda de productos, una empresa de servicios, un medio digital o un proyecto personal. Cuando tu negocio crezca, tu sitio puede crecer con un proyecto a medida."
       ],
       "forWho": "Emprendedores y negocios pequeños de cualquier sector que necesitan su primera tienda, sitio web, landing page o marca profesional.",
       "offer": {
-        "installments": 3,
         "criteria": [
           "Tu negocio está empezando o lleva menos de 2 años vendiendo.",
           "Es tu primera tienda, sitio web o marca profesional, u hoy vendes solo por redes sociales y WhatsApp.",
@@ -146,8 +145,8 @@
       },
       "faq": [
         {
-          "q": "¿Cómo funcionan las cuotas?",
-          "a": "Te enviamos una cotización a la medida de tu tienda y puedes pagarla hasta en 3 cuotas mensuales sin intereses: la primera para arrancar y las demás cada 30 días."
+          "q": "¿Qué es Out Emprende?",
+          "a": "Es nuestro plan para emprendedores y negocios que están arrancando. Te enviamos una cotización a la medida de tu proyecto, con el mismo cuidado de diseño UX/UI de todos nuestros proyectos."
         },
         {
           "q": "¿Qué tipo de proyectos incluye?",

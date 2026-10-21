@@ -51,7 +51,7 @@ const priceSlides = [
   page(1080, 1350, C.klein, `
     <div class="abs" style="left:80px;right:80px;top:140px">
       <div class="d" style="font-size:116px;color:${C.pure}">Por eso cotizamos a la medida.</div>
-      <p style="margin-top:40px;color:${C.carne};font-size:40px;max-width:860px">Cuéntanos tu proyecto y en 6 a 24 horas tienes tu cotización. Si estás empezando, pregunta por Out Emprende: hasta en 3 cuotas sin intereses.</p>
+      <p style="margin-top:40px;color:${C.carne};font-size:40px;max-width:860px">Cuéntanos tu proyecto y en 6 a 24 horas tienes tu cotización. Si estás empezando, pregunta por Out Emprende, nuestro plan para emprendedores.</p>
       <div style="margin-top:52px">${button('Cotiza en outstudio.online', C.carne, C.klein)}</div>
     </div>
     <img class="abs" src="${IMG.laptop}" style="width:560px;right:40px;bottom:150px">

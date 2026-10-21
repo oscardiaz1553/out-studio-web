@@ -427,7 +427,7 @@ export const COMMON_QUESTIONS: Question[] = [
   {
     id: 'emprende',
     label: '¿Tu negocio está empezando? (Out Emprende)',
-    help: 'Out Emprende es para negocios que están empezando: tu proyecto hasta en 3 cuotas sin intereses. Confirmamos si aplicas en la primera conversación.',
+    help: 'Out Emprende es nuestro plan para negocios que están empezando. Confirmamos si aplicas en la primera conversación.',
     kind: 'single',
     required: true,
     options: [

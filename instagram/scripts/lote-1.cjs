@@ -84,7 +84,7 @@ const empSlides = [
     <div class="abs" style="left:80px;top:230px">${pair('curly', C.klein, 120)}</div>
     <div class="abs" style="left:80px;right:80px;top:410px">
       <div class="d" style="font-size:128px;color:${C.klein}">¿Estás arrancando tu negocio?</div>
-      <p style="margin-top:40px;color:${C.deep};font-size:40px;max-width:600px">Out Emprende: tu proyecto web, hasta en 3 cuotas sin intereses.</p>
+      <p style="margin-top:40px;color:${C.deep};font-size:40px;max-width:600px">Out Emprende: el plan para emprendedores.</p>
       <div style="margin-top:44px;display:flex;gap:22px">${[0, 1, 2].map(() => `<span style="width:56px;height:56px;border-radius:50%;background:${C.carneDeep}"></span>`).join('')}</div>
     </div>
     <img class="abs" src="${IMG.mango}" style="width:620px;right:-150px;bottom:40px;transform:rotate(-14deg)">
@@ -106,7 +106,7 @@ const empSlides = [
     <div class="abs" style="right:-40px;top:60px;opacity:.08">${pair('curly', C.carne, 440)}</div>
     <div class="abs" style="left:80px;right:80px;top:130px">
       <div class="d" style="font-size:96px;color:${C.pure}">Tienda online, sitio web, landing page o tu marca.</div>
-      <p style="margin-top:40px;color:${C.carne};font-size:38px;max-width:820px">Diseño UX/UI a la medida, sin plantillas. Y lo pagas hasta en 3 cuotas sin intereses.</p>
+      <p style="margin-top:40px;color:${C.carne};font-size:38px;max-width:820px">Diseño UX/UI a la medida, sin plantillas. Un plan pensado para quienes están empezando.</p>
       <div style="margin-top:52px;display:inline-flex;background:${C.carne};color:${C.klein};font:600 34px I;padding:26px 44px;border-radius:999px">outstudio.online/out-emprende</div>
     </div>
     <img class="abs" src="${IMG.asoma}" style="width:560px;right:-6px;bottom:150px">

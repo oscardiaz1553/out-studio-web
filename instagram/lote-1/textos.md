@@ -67,7 +67,7 @@ No tiene audio: ponle un sonido que esté sonando en Reels, a volumen bajo.
 
 > ¿Estás arrancando tu negocio y necesitas tu tienda online, tu página web, una landing page o tu marca?
 >
-> Para eso creamos Out Emprende: diseño UX/UI a la medida, sin plantillas, y lo pagas hasta en 3 cuotas sin intereses.
+> Para eso creamos Out Emprende: diseño UX/UI a la medida, sin plantillas, en un plan pensado para quienes están empezando.
 >
 > Es para ti si tu negocio está empezando, si es tu primera tienda o página profesional, u hoy vendes solo por redes y WhatsApp.
 >
@@ -75,7 +75,7 @@ No tiene audio: ponle un sonido que esté sonando en Reels, a volumen bajo.
 
 **Hashtags:** #Emprendimiento #EmprendedoresColombia #TiendaOnline #PáginaWeb #Branding #DiseñoWeb #PequeñosNegocios
 
-**Texto alternativo:** Carrusel de Out Emprende: proyecto web para negocios que están empezando, hasta en 3 cuotas sin intereses, con los requisitos para aplicar.
+**Texto alternativo:** Carrusel de Out Emprende: plan para emprendedores y negocios que están empezando, con los requisitos para aplicar.
 
 ---
 

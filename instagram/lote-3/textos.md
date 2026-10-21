@@ -24,7 +24,7 @@ su proyecto vive en `instagram/hyperframes/reel-senales/`.
 > El contenido: si ya tienes fotos y textos, o hay que crearlos.
 > Lo que pasa después: soporte y mejoras.
 >
-> Por eso cotizamos a la medida, y en 6 a 24 horas tienes tu cotización. Si estás empezando, pregunta por Out Emprende: hasta en 3 cuotas sin intereses.
+> Por eso cotizamos a la medida, y en 6 a 24 horas tienes tu cotización. Si estás empezando, pregunta por Out Emprende, nuestro plan para emprendedores.
 >
 > outstudio.online (link en la bio).
 

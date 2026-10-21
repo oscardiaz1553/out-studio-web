@@ -16,7 +16,7 @@
 - Landing page: desde 1.200.000.
 - Tienda Shopify: desde 2.200.000.
 - Sitio WordPress: desde 4.500.000.
-- Out Emprende (emprendedores): hasta en 3 cuotas sin intereses, hasta 40 productos; valor no publicado (ver "Ofertas").
+- Out Emprende (emprendedores): plan para quienes están empezando, hasta 40 productos; valor no publicado y sin cuotas anunciadas (ver "Ofertas").
 
 ## Target Audience
 **Target companies:** Tres segmentos, en este orden de prioridad:
@@ -127,10 +127,11 @@
 **Current metrics:** Sin medir todavía. **[por confirmar: proyectos al mes hoy]**
 
 ## Ofertas
-**Out Emprende** (plan para emprendedores de cualquier sector): tienda Shopify, sitio web WordPress, landing page o branding, pagadero hasta en 3 cuotas mensuales sin intereses. Hasta 40 productos cargados por Out (más de eso, proyecto a medida). Incluye diseño adaptado a la marca, pasarela de pagos y envíos. El valor NO se publica: se cotiza según la tienda (referencia interna: alrededor de $2.200.000 COP, puede ser más o menos). Mensaje clave: "Tu proyecto web, hasta en 3 cuotas sin intereses". Calificación: el proyecto debe caber en el plan (hasta 40 productos, sin integraciones especiales) y el negocio estar empezando (menos de 2 años vendiendo o primera web). Si cabe pero no está empezando, se revisa en la reunión uno a uno; si no cabe, propuesta a la medida (el pago dividido se puede negociar, no se anuncia). El tamaño del equipo no cuenta. El formulario pregunta antigüedad y si ya tiene web solo a quien le interesa el plan, y el brief llega con la etiqueta de calificación. Cuando el negocio crezca, puede pasar a un proyecto a medida.
+**Out Emprende** (plan para emprendedores de cualquier sector): tienda Shopify, sitio web WordPress, landing page o branding. No se anuncian cuotas ni financiación: solo que existe un plan para emprendedores. Hasta 40 productos cargados por Out (más de eso, proyecto a medida). Incluye diseño adaptado a la marca, pasarela de pagos y envíos. El valor NO se publica: se cotiza según la tienda (referencia interna: alrededor de $2.200.000 COP, puede ser más o menos). Mensaje clave: "Out Emprende, el plan para emprendedores". Calificación: el proyecto debe caber en el plan (hasta 40 productos, sin integraciones especiales) y el negocio estar empezando (menos de 2 años vendiendo o primera web). Si cabe pero no está empezando, se revisa en la reunión uno a uno; si no cabe, propuesta a la medida (la forma de pago se conversa en la cotización, no se anuncia). El tamaño del equipo no cuenta. El formulario pregunta antigüedad y si ya tiene web solo a quien le interesa el plan, y el brief llega con la etiqueta de calificación. Cuando el negocio crezca, puede pasar a un proyecto a medida.
 
 ## Changelog
 *Newest first. One line per revision: what changed and why.*
+- v7 (2026-10-21) — Se quitan "3 cuotas sin intereses" de todo el sitio y los materiales: Out Emprende se comunica solo como el plan para emprendedores.
 - v6 (2026-10-12) — Out Emprende: tope de 40 productos, sin criterio de tamaño de equipo y calificación por alcance + etapa del negocio (sí / a revisar / no).
 - v5 (2026-10-12) — Out Emprende ampliado a todos los servicios (tienda, sitio, landing, marca) y a cualquier tipo de negocio; sección propia en el home y en el menú.
 - v4 (2026-10-12) — Out Emprende sin precio publicado: "hasta en 3 cuotas sin intereses", valor cotizado; criterios de elegibilidad añadidos.

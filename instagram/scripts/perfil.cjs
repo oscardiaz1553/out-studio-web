@@ -61,7 +61,7 @@ add('servicios', [
 ]);
 
 add('out-emprende', [
-  intro(C.deep, C.pure, C.carne, 'square', 'Out Emprende', 'Tu proyecto web, hasta en 3 cuotas sin intereses.'),
+  intro(C.deep, C.pure, C.carne, 'square', 'Out Emprende', 'El plan para emprendedores.'),
   story(C.carne, C.klein, C.carneDeep, 'square', 'Para negocios que están arrancando', 'Tu tienda online, tu sitio web, una landing page o tu marca, con el mismo cuidado de diseño de todos nuestros proyectos.'),
   story(C.klein, C.pure, C.carne, 'curly', 'Cómo empezar', 'Cuéntale tu idea a Mango en outstudio.online. En 6 a 24 horas te llega tu cotización.'),
 ]);
