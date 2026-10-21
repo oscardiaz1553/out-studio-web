@@ -106,10 +106,6 @@ Reconstruimos el sitio en WordPress. El reto no era el diseño, era pasar más d
 
 Durante la noche y la madrugada hicimos además decenas de ajustes pedidos en tiempo real por la editora digital. Cada uno llevó respaldo, revisión y prueba antes de subir.
 
-## Lo que todavía estamos midiendo
-
-Preferimos no contarte una mejora que no hemos medido. Vamos a repetir con el sitio nuevo exactamente el mismo método del «antes» (PageSpeed y peso de la portada) a las 24 horas, a los 7 días y a los 28 días, y vamos a actualizar este artículo con los resultados.
-
 ## Lo que aprendimos
 
 - **El orden va antes que el adorno.** Casi todos los problemas del sitio viejo eran de jerarquía, no de estilo: sin una nota que mande, el lector no sabe qué mirar.
