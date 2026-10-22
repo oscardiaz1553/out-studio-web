@@ -17,6 +17,13 @@ export const REVIEWS: Review[] = [
     role: 'Editora digital, Diario Deportes',
     rating: 5,
   },
+  {
+    quote:
+      'Gran experiencia, propone ideas y siempre está atento a lo que el cliente necesita. Además de la calidez humana del equipo que hace sentir cómodo al cliente. La página quedó espectacular y lo recomendamos a ojo cerrado',
+    name: 'Diar10 Deportes',
+    role: 'Diario deportivo de Barranquilla',
+    rating: 5,
+  },
 ];
 
 // Reseñas de EJEMPLO, sólo para ver el diseño. Son ficticias y no se muestran
