@@ -90,4 +90,4 @@ async function render(outDir, items) {
   console.log('ok', outDir);
 }
 
-module.exports = { ROOT, uri, IMG, C, logo, sym, pair, check, dots, footer, page, band, render };
+module.exports = { ROOT, uri, IMG, C, BASE, logo, sym, pair, check, dots, footer, page, band, render };
