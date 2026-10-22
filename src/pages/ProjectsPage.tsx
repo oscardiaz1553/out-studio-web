@@ -39,6 +39,11 @@ function ProjectGridCard({ project }: { project: Project }) {
             backgroundPosition: '50% 50%',
           }}
         />
+        {project.collab && (
+          <span className="absolute top-3 left-5 inline-flex items-center rounded-full bg-paper-pure px-2.5 py-1 text-[11px] font-medium text-klein-deep shadow-[0_2px_10px_rgba(20,30,92,0.25)]">
+            En colaboración
+          </span>
+        )}
         {project.isNew && (
           <span className="absolute top-3 left-5 inline-flex items-center rounded-full bg-paper-pure px-2.5 py-1 text-[11px] font-medium text-klein shadow-[0_2px_10px_rgba(20,30,92,0.25)]">
             New

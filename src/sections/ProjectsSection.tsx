@@ -226,6 +226,11 @@ export default function ProjectsSection() {
                   className="w-full aspect-[4/5] rounded-[24px]"
                 />
                 {p.isNew && <NewBadge onImage className="absolute top-3 left-3" />}
+                {p.collab && (
+                  <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-paper-pure px-2.5 py-1 text-[11px] font-medium text-klein-deep shadow-[0_2px_10px_rgba(20,30,92,0.25)]">
+                    En colaboración
+                  </span>
+                )}
               </div>
               <div className="flex flex-1 flex-col gap-2 px-1 pt-4 pb-2">
                 <p className="text-sm leading-relaxed text-klein-deep/80">{p.summary}</p>

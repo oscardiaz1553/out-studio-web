@@ -20,7 +20,7 @@ Las seis tiendas viven en `src/data/projects.ts` detrás del interruptor
    - Espera a que `gh api repos/oscardiaz1553/out-studio-web/actions/runs?per_page=1` diga `completed success` para ese commit.
 4. Confirma a Oscar en pocas líneas: ya no aparecen, siguen en el código y se vuelven a poner con "Pon las tiendas nuevas en proyectos".
 
-Ojo: en Proyectos quedan solo BARCI, Diario Deportes y Volta. Si Oscar pide quitar solo
+Ojo: en Proyectos quedan solo BARCI y Diario Deportes, los proyectos propios de Out. Si Oscar pide quitar solo
 algunas de las seis, no uses el interruptor: edita la lista `NEW_STORES` en `projects.ts`.
 
 ## Volver a poner ("Pon las tiendas nuevas en proyectos")

@@ -29,6 +29,8 @@ export interface Project {
   featured?: boolean;
   /** true = lleva la etiqueta "New" (proyecto recién publicado). */
   isNew?: boolean;
+  /** true = proyecto hecho en colaboración (no es un proyecto propio de Out). */
+  collab?: boolean;
 }
 
 // El lockup de marca que se muestra en cada tarjeta: Out.Web, Out.Design…
@@ -43,7 +45,8 @@ export function categoryLabel(type: ProjectType): string {
  */
 const SHOW_NEW_STORES = true;
 
-// Tiendas online. La plataforma de cada una no está confirmada: no se nombra en la descripción.
+// Tiendas online hechas en colaboración (los proyectos propios de Out son BARCI y Diario Deportes).
+// La plataforma de cada una no está confirmada: no se nombra en la descripción.
 const NEW_STORES: Project[] = [
   ['Rugs N Home', 'https://rugsnhome.mx'],
   ['Eticolor', 'https://eticolor.com.co'],
@@ -57,8 +60,9 @@ const NEW_STORES: Project[] = [
     name,
     type: 'Web',
     status: 'launched',
-    summary: 'Tienda online desarrollada por Out, lista para vender.',
+    summary: 'Tienda online desarrollada en colaboración, lista para vender.',
     url,
+    collab: true,
   }),
 );
 
