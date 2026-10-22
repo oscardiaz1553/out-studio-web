@@ -5,6 +5,32 @@ import TitleFrame from '../components/TitleFrame';
 import { DEMO_REVIEWS, REVIEWS } from '../data/reviews';
 import { GOOGLE_REVIEW_URL } from '../data/site';
 
+const BASE = import.meta.env.BASE_URL;
+
+/** Foto de perfil de quien reseña; sin foto, su inicial sobre el azul de la marca. */
+function Avatar({ name, src }: { name: string; src?: string }) {
+  if (src) {
+    return (
+      <img
+        src={`${BASE}${src}`}
+        alt=""
+        width={96}
+        height={96}
+        loading="lazy"
+        className="w-12 h-12 rounded-full object-cover shrink-0 bg-paper-pure"
+      />
+    );
+  }
+  return (
+    <span
+      aria-hidden
+      className="w-12 h-12 rounded-full bg-klein text-carne font-display font-bold text-xl flex items-center justify-center shrink-0"
+    >
+      {name.trim().charAt(0).toUpperCase()}
+    </span>
+  );
+}
+
 function Stars({ value }: { value: number }) {
   return (
     <span
@@ -65,13 +91,19 @@ export default function ReviewsSection() {
                 key={`${r.name}-${i}`}
                 className="rounded-2xl bg-paper p-7 flex flex-col gap-5"
               >
-                {r.rating ? <Stars value={r.rating} /> : null}
+                <div className="flex items-center gap-3">
+                  {r.rating ? <Stars value={r.rating} /> : null}
+                  <span className="text-xs text-muted">Reseña en Google</span>
+                </div>
                 <p className="font-display font-semibold text-klein tracking-[-0.02em] leading-snug text-xl">
                   “{r.quote}”
                 </p>
-                <div className="mt-auto">
-                  <p className="text-sm font-medium text-klein-deep">{r.name}</p>
-                  {r.role && <p className="text-xs text-muted">{r.role}</p>}
+                <div className="mt-auto flex items-center gap-3">
+                  <Avatar name={r.name} src={r.avatar} />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-klein-deep">{r.name}</p>
+                    {r.role && <p className="text-xs text-muted">{r.role}</p>}
+                  </div>
                 </div>
               </FadeIn>
             ))}

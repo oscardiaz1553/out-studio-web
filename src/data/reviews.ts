@@ -7,6 +7,8 @@ export interface Review {
   role?: string;
   /** 1 a 5 */
   rating?: number;
+  /** Foto de perfil (ruta en public/). Si falta, se muestra la inicial. */
+  avatar?: string;
 }
 
 export const REVIEWS: Review[] = [
@@ -23,6 +25,7 @@ export const REVIEWS: Review[] = [
     name: 'Diar10 Deportes',
     role: 'Diario deportivo de Barranquilla',
     rating: 5,
+    avatar: 'resenas/diario-deportes.webp',
   },
 ];
 
