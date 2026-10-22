@@ -16,9 +16,9 @@ export const QUOTE_WORKER_URL = 'https://out-cotizaciones.oscar-diaz-dc0.workers
 // proyectos). Apagada por ahora: se enciende con true.
 export const SHOW_CLIENTS = false;
 
-// Sección "Reseñas" de la portada. Apagada mientras no haya reseñas reales que
-// mostrar: se enciende (true) cuando se carguen en src/data/reviews.ts.
-export const SHOW_REVIEWS = false;
+// Sección "Reseñas" de la portada. Se muestra mientras haya reseñas reales en
+// src/data/reviews.ts; se apaga (false) si dejan de estar.
+export const SHOW_REVIEWS = true;
 
 // Sección "Quién está detrás de Out" de la portada. Apagada hasta tener la foto
 // (public/oscar.webp) y el texto en src/data/founder.ts: se enciende con true.

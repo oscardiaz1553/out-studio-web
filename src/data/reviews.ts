@@ -9,7 +9,15 @@ export interface Review {
   rating?: number;
 }
 
-export const REVIEWS: Review[] = [];
+export const REVIEWS: Review[] = [
+  {
+    quote:
+      'Excelente experiencia. Se mostraron atentos y respondieron a la altura a las peticiones, sugerencias. Receptivos en pos del objetivo final. Demasiado satisfechos con el resultado obtenido',
+    name: 'Lizeth Torres',
+    role: 'Editora digital, Diario Deportes',
+    rating: 5,
+  },
+];
 
 // Reseñas de EJEMPLO, sólo para ver el diseño. Son ficticias y no se muestran
 // al público: únicamente aparecen al abrir la web con ?resenas=demo. Cuando
