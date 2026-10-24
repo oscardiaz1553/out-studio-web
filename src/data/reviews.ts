@@ -11,6 +11,15 @@ export interface Review {
   avatar?: string;
 }
 
+/** Testimonio en video (va de primero en el carrusel de reseñas). */
+export const VIDEO_TESTIMONIAL = {
+  src: 'resenas/hugo-illera-diario-deportes.mp4',
+  poster: 'resenas/hugo-illera-diario-deportes.webp',
+  name: 'Hugo Illera',
+  role: 'Director de Diario Deportes',
+  label: 'Testimonio en video',
+};
+
 export const REVIEWS: Review[] = [
   {
     quote:

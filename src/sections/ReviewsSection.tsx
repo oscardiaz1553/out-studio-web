@@ -3,7 +3,7 @@ import AccentButton from '../components/AccentButton';
 import FadeIn from '../components/FadeIn';
 import RevealText from '../components/RevealText';
 import TitleFrame from '../components/TitleFrame';
-import { DEMO_REVIEWS, REVIEWS } from '../data/reviews';
+import { DEMO_REVIEWS, REVIEWS, VIDEO_TESTIMONIAL } from '../data/reviews';
 import { GOOGLE_REVIEW_URL } from '../data/site';
 
 const BASE = import.meta.env.BASE_URL;
@@ -72,7 +72,10 @@ export default function ReviewsSection() {
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('resenas') === 'demo';
   const reviews = REVIEWS.length > 0 ? REVIEWS : demo ? DEMO_REVIEWS : [];
+  const hasVideo = REVIEWS.length > 0;
   const hasReviews = reviews.length > 0;
+  // El video de Hugo va de primero; después, las reseñas de Google.
+  const total = reviews.length + (hasVideo ? 1 : 0);
 
   const track = useRef<HTMLDivElement>(null);
   const [overflow, setOverflow] = useState(false);
@@ -84,11 +87,16 @@ export default function ReviewsSection() {
     if (!el) return;
     const measure = () => {
       setOverflow(el.scrollWidth > el.clientWidth + 4);
-      const first = el.firstElementChild as HTMLElement | null;
-      if (first) {
-        const step = first.offsetWidth + 20;
-        setIndex(Math.min(reviews.length - 1, Math.max(0, Math.round(el.scrollLeft / step))));
-      }
+      let best = 0;
+      let bestDist = Infinity;
+      Array.from(el.children).forEach((c, i) => {
+        const d = Math.abs((c as HTMLElement).offsetLeft - el.offsetLeft - el.scrollLeft);
+        if (d < bestDist) {
+          bestDist = d;
+          best = i;
+        }
+      });
+      setIndex(best);
     };
     measure();
     el.addEventListener('scroll', measure, { passive: true });
@@ -98,7 +106,7 @@ export default function ReviewsSection() {
       el.removeEventListener('scroll', measure);
       ro.disconnect();
     };
-  }, [reviews.length]);
+  }, [total]);
 
   const goTo = (i: number) => {
     const el = track.current;
@@ -134,8 +142,8 @@ export default function ReviewsSection() {
               </button>
               <button
                 type="button"
-                onClick={() => goTo(Math.min(reviews.length - 1, index + 1))}
-                disabled={index >= reviews.length - 1}
+                onClick={() => goTo(Math.min(total - 1, index + 1))}
+                disabled={index >= total - 1}
                 aria-label="Reseña siguiente"
                 className="w-11 h-11 rounded-full bg-klein text-paper-pure flex items-center justify-center disabled:opacity-30"
               >
@@ -155,6 +163,25 @@ export default function ReviewsSection() {
               className="mt-10 sm:mt-12 flex gap-5 overflow-x-auto snap-x snap-mandatory overscroll-x-contain pb-2 [&::-webkit-scrollbar]:hidden"
               style={{ scrollbarWidth: 'none' }}
             >
+              {hasVideo && (
+                <article className="snap-start shrink-0 self-start w-[92%] sm:w-[640px] rounded-[28px] bg-klein-deep text-paper-pure p-3 sm:p-4 flex flex-col gap-4">
+                  <video
+                    controls
+                    playsInline
+                    preload="none"
+                    poster={`${BASE}${VIDEO_TESTIMONIAL.poster}`}
+                    aria-label={`${VIDEO_TESTIMONIAL.name}, ${VIDEO_TESTIMONIAL.role}: su opinión sobre el sitio nuevo`}
+                    className="w-full aspect-video rounded-[20px] bg-klein-deep object-cover"
+                  >
+                    <source src={`${BASE}${VIDEO_TESTIMONIAL.src}`} type="video/mp4" />
+                  </video>
+                  <div className="px-3 pb-3 sm:px-4 sm:pb-3">
+                    <p className="text-xs text-paper-pure/70">{VIDEO_TESTIMONIAL.label}</p>
+                    <p className="mt-1 text-sm font-semibold text-carne">{VIDEO_TESTIMONIAL.name}</p>
+                    <p className="text-xs text-paper-pure/70">{VIDEO_TESTIMONIAL.role}</p>
+                  </div>
+                </article>
+              )}
               {reviews.map((r, i) => (
                 <article
                   key={`${r.name}-${i}`}
@@ -179,12 +206,12 @@ export default function ReviewsSection() {
             </div>
             {overflow && (
               <div className="mt-5 flex gap-2" role="tablist" aria-label="Elegir reseña">
-                {reviews.map((r, i) => (
+                {Array.from({ length: total }, (_, i) => (
                   <button
-                    key={`${r.name}-dot-${i}`}
+                    key={`dot-${i}`}
                     type="button"
                     onClick={() => goTo(i)}
-                    aria-label={`Ver la reseña de ${r.name}`}
+                    aria-label={`Ver la reseña ${i + 1} de ${total}`}
                     aria-selected={i === index}
                     role="tab"
                     className={`h-2.5 rounded-full transition-all ${
