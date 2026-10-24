@@ -14,11 +14,11 @@ const CASE_URL = CASE?.url;
 const CASE_IN_PROGRESS = CASE?.status === 'in-progress';
 
 const BASE = import.meta.env.BASE_URL;
-const VIDEO = `${BASE}diario-deportes.mp4`;
-const POSTER = `${BASE}diario-deportes-poster.webp`;
+const VIDEO = `${BASE}casos/hugo-illera-horizontal.mp4`;
+const POSTER = `${BASE}casos/hugo-illera-horizontal.webp`;
 // En el celular se usa la versión vertical (9:16), pensada para esa pantalla.
-const VIDEO_V = `${BASE}diario-deportes-vertical.mp4`;
-const POSTER_V = `${BASE}diario-deportes-vertical-poster.webp`;
+const VIDEO_V = `${BASE}casos/hugo-illera-vertical.mp4`;
+const POSTER_V = `${BASE}casos/hugo-illera-vertical.webp`;
 
 function useIsPhone() {
   const query = '(max-width: 639px)';
@@ -122,7 +122,7 @@ function CaseVideo() {
         loop
         playsInline
         preload="metadata"
-        aria-label="Video del caso Diario Deportes: del sitio de antes al rediseño"
+        aria-label="Hugo Illera, director de Diario Deportes, cuenta cómo les fue con el sitio nuevo"
         onPlay={() => {
           setPlaying(true);
           setBlocked(false);
