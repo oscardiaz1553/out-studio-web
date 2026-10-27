@@ -76,7 +76,7 @@ function ProjectRow({
             </motion.span>
             <h3
               className="font-display font-extrabold tracking-[-0.045em] leading-[1.02] whitespace-nowrap transition-colors duration-300"
-              style={{ color: active ? '#1B2FCC' : 'rgba(188,96,57,0.3)' }}
+              style={{ color: active ? '#1B2FCC' : '#141E5C' }}
             >
               {project.name}
             </h3>
@@ -175,7 +175,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="proyectos"
-      className="relative z-10 overflow-hidden bg-paper-pure md:bg-carne border-b border-klein-deep/10 md:border-b-0 px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
+      className="relative z-10 overflow-hidden bg-paper-pure px-6 md:px-10 lg:px-16 py-14 sm:py-16 md:py-20"
     >
       <div className="relative max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between gap-4 mb-8 sm:mb-12">
