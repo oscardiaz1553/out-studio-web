@@ -10,7 +10,7 @@ cada publicación y los scripts que las generan.
 | Lote 1 | Carrusel "3 errores que frenan tu tienda online", reel de Diario Deportes (video y portada), carrusel de Out Emprende | `lote-1/` |
 | Lote 2 | Carrusel "¿Shopify, WordPress o landing page?", carrusel "Antes de pedir tu página web, ten esto listo", publicación e historia de Mango | `lote-2/` |
 | Lote 3 | Carrusel "¿De qué depende el precio de una página web?", reel "3 señales de que tu página necesita un rediseño" (video y portada), carrusel "Así trabajamos" | `lote-3/` |
-| Lote 4 | Reel "La venta perdida" (video y portada), pensado como la publicación 3 | `lote-4/` |
+| Lote 4 | «La venta perdida», publicación 3: imagen, o reel con música (video y portada) | `lote-4/` |
 | Perfil | Foto de perfil, portadas de destacados, historias de cada destacado, biografía y datos del perfil | `perfil/` |
 | Videos personales | Cinco guiones para grabar con tu cara y tu voz (quién eres, revisión de una página, precio, caso Diario Deportes, un día de trabajo) | `videos-personales/` |
 

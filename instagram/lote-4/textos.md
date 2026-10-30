@@ -5,7 +5,8 @@ HyperFrames (su proyecto vive en `instagram/hyperframes/reel-venta-perdida/`).
 
 | Archivo | Qué es |
 |---|---|
-| `reel-venta-perdida-con-musica.mp4` | El reel con música original, 1080 × 1920, 28,6 segundos, sin voz. Es el que se sube |
+| `venta-perdida-imagen.png` | La misma idea en una sola imagen, 1080 × 1350. Es la que se sube como publicación 3 |
+| `reel-venta-perdida-con-musica.mp4` | El reel con música original, 1080 × 1920, 28,6 segundos, sin voz. Alternativa si prefieres video |
 | `reel-venta-perdida.mp4` | El mismo reel sin audio, por si prefieres ponerle un sonido en trending de Instagram |
 | `voz-plan.json` | Los cortes de una grabación de voz que se probó y se descartó (ver «Voz en off») |
 | `reel-venta-perdida-portada.png` | La portada |
@@ -84,6 +85,32 @@ segundo del video donde entra). Para volver a mezclar:
 
 Si grabas otra toma con una pausa de un segundo entre frases, el script las
 separa solo, sin plan: `python3 instagram/scripts/poner-voz.py toma.m4a`.
+
+## Publicación de imagen
+
+Imagen: `venta-perdida-imagen.png` (1080 × 1350). Se regenera con
+`node instagram/scripts/lote-4.cjs`. Muestra el contador de ventas perdidas, a la
+clienta que quiere comprar, las tres cosas que fallaron y «Se fue.» en cada una.
+
+**Texto:**
+
+> Esta clienta quiere comprar en tu tienda. Y se va.
+>
+> Tarda en cargar: se fue.
+> No se ve bien en el celular: se fue.
+> Pagar es un enredo: se fue.
+>
+> Tres ventas perdidas por tres errores que tienen arreglo. Lo difícil es que casi nunca te enteras: el cliente no avisa, solo se va.
+>
+> Los montos de la imagen son un ejemplo para que se entienda la idea.
+>
+> ¿Cuál de las tres le pasa a tu tienda? Cuéntanos en los comentarios o escríbenos por DM y la revisamos contigo. También puedes cotizar en outstudio.online (link en la bio).
+>
+> Guárdalo para revisar tu tienda con calma.
+
+**Hashtags:** #TiendaOnline #Shopify #Ecommerce #EmprendimientoColombia #DiseñoWeb #DiseñoUXUI #VentasOnline
+
+**Texto alternativo:** Imagen de Out Studio con un contador de ventas perdidas de 540.000 pesos. Una clienta quería comprar y se fue por tres fallos de la tienda: tarda en cargar 7,4 segundos, no se ve bien en el celular y pagar tiene 9 campos. Las tres tienen arreglo.
 
 ## Antes de publicar
 
