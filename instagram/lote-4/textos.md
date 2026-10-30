@@ -5,9 +5,9 @@ HyperFrames (su proyecto vive en `instagram/hyperframes/reel-venta-perdida/`).
 
 | Archivo | Qué es |
 |---|---|
-| `reel-venta-perdida-con-voz.mp4` | El reel con la voz de Oscar, 1080 × 1920, 28,6 segundos. Es el que se sube |
-| `reel-venta-perdida.mp4` | El mismo reel sin audio, por si prefieres ponerle un sonido de Reels |
-| `voz-plan.json` | Los cortes de la grabación y el segundo en que entra cada frase |
+| `reel-venta-perdida-con-musica.mp4` | El reel con música original, 1080 × 1920, 28,6 segundos, sin voz. Es el que se sube |
+| `reel-venta-perdida.mp4` | El mismo reel sin audio, por si prefieres ponerle un sonido en trending de Instagram |
+| `voz-plan.json` | Los cortes de una grabación de voz que se probó y se descartó (ver «Voz en off») |
 | `reel-venta-perdida-portada.png` | La portada |
 
 ## Qué muestra
@@ -24,8 +24,10 @@ Cierre: tres ventas, tres errores, todos con arreglo, y la invitación a hablar.
 
 ## Cómo publicarlo
 
-- **Audio:** sube `reel-venta-perdida-con-voz.mp4`, que ya trae la voz. Si quieres
-  música, ponla en Instagram a un volumen muy bajo (un 5 a 10 %) para que no tape la voz.
+- **Audio:** sube `reel-venta-perdida-con-musica.mp4`. La música es original (no
+  tiene derechos de autor) y los golpes caen sobre los de la pantalla. Si prefieres
+  un sonido que esté de moda en Reels, sube `reel-venta-perdida.mp4` (sin audio) y
+  elígelo en Instagram: los sonidos en tendencia suelen dar más alcance.
 - **Portada:** sube `reel-venta-perdida-portada.png`. En el perfil, la cuadrícula
   recorta arriba y abajo, y el título queda a la vista.
 - **Cuándo:** martes o jueves, al mediodía o a las 7 p. m.
@@ -52,10 +54,12 @@ Cierre: tres ventas, tres errores, todos con arreglo, y la invitación a hablar.
 
 **Texto alternativo:** Video de Out Studio que sigue a una clienta en una tienda online que falla de tres formas: carga lento, no se ve bien en el celular y pagar es un enredo. Un contador de ventas perdidas sube en cada fallo.
 
-## Voz en off
+## Voz en off (probada y descartada)
 
-La voz es la de Oscar, grabada en una toma. El video se ajustó a su ritmo (el
-cierre es más pausado que el del guion original), por eso dura 28,6 segundos.
+Se probó con la voz de Oscar, grabada en una toma, en tres tratamientos (natural,
+cálida y grave), y no convenció, así que el reel se publica sin voz y con música.
+El video quedó ajustado al ritmo de esa lectura (por eso el cierre es más pausado
+y dura 28,6 s). La herramienta y el guion se dejan por si se quiere retomar.
 
 | Desde | Frase | Qué pasa en pantalla |
 |---|---|---|
@@ -94,3 +98,17 @@ Desde `instagram/hyperframes/reel-venta-perdida/`:
 `npx hyperframes@0.8.150 render -q high -o reel.mp4` (pide Node 22 y FFmpeg).
 La portada es el cuadro del segundo 2,85 del video:
 `ffmpeg -ss 2.85 -i reel.mp4 -frames:v 1 portada.png`.
+
+## Música
+
+Está hecha con `instagram/scripts/musica-reel.py` (numpy y scipy, todo sintetizado, sin
+muestras ni derechos de autor). Va a 114 BPM, con la rejilla desplazada para que los
+cambios de escena y las tres «Se fue.» caigan sobre el pulso. Va creciendo con las
+escenas (intro, reloj, zoom, formulario), se corta justo antes de cada «Se fue.» para
+que el golpe pegue más, hace un respiro antes de «nunca te enteras» y pasa de acordes
+menores y tensos a mayores y esperanzados cuando llega la suma. Cierra con silencio y
+un golpe final con campanitas.
+
+Para regenerarla y mezclarla con el video:
+`python3 instagram/scripts/musica-reel.py --video instagram/lote-4/reel-venta-perdida.mp4`
+Se puede ajustar el volumen con `--volumen 0.8` (requiere numpy, scipy y ffmpeg).
