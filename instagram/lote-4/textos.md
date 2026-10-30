@@ -50,6 +50,28 @@ Cierre: tres ventas, tres errores, todos con arreglo, y la invitación a hablar.
 
 **Texto alternativo:** Video de Out Studio que sigue a una clienta en una tienda online que falla de tres formas: carga lento, no se ve bien en el celular y pagar es un enredo. Un contador de ventas perdidas sube en cada fallo.
 
+## Voz en off
+
+El video tiene el momento de cada golpe marcado, así que la voz se acomoda a
+estos tiempos. Pensada para una voz cercana y con energía, que cuenta una
+anécdota rápida (no para leer un anuncio). Se puede grabar en una sola toma, con
+una pausa corta entre frases: la voz se corta y se coloca en cada escena.
+
+| Desde | Frase | Qué pasa en pantalla |
+|---|---|---|
+| 0,4 s | Esta clienta quería comprar en tu tienda. Mira qué pasó. | Gancho, el carrito de $180.000 |
+| 3,9 s | Tarda en cargar. Siete segundos. | El reloj sube hasta 7,4 s |
+| 6,95 s | Se fue. | Cae «Se fue.» y sube el contador |
+| 8,5 s | No se ve bien en el celular. No lee nada. | Zoom con los dedos |
+| 11,95 s | Se fue. | Cae «Se fue.» |
+| 13,4 s | Pagar es un enredo. Nueve campos. | Los campos se apilan |
+| 16,7 s | Se fue. | Cae «Se fue.» |
+| 18,0 s | Tres ventas perdidas. Tres errores con arreglo. Y casi nunca te enteras. | La suma de $540.000 |
+| 21,4 s | ¿Tu tienda tiene alguno? Escríbenos. | Cierre con Mango |
+
+Las tres veces que dice «Se fue.» van secas y cortas, casi en voz baja: son el
+remate del chiste, y la voz baja le da más peso al golpe visual.
+
 ## Antes de publicar
 
 - El texto promete una revisión por DM de la tienda de quien comente. Confirma
