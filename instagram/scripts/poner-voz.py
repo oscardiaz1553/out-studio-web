@@ -30,6 +30,25 @@ LINES = [
 ]
 MAX_ATEMPO = 1.18
 
+# Cadenas de filtros para darle más atractivo a la voz. «calido» no cambia la voz:
+# limpia el ruido, le da cuerpo en los graves, quita lo «encajonado», aclara la
+# dicción, suaviza las eses y la deja pareja. «grave» hace lo mismo y además baja
+# el tono casi dos semitonos conservando el timbre (rubberband, formante conservado).
+BASE_TONO = (
+    "highpass=f=85,afftdn=nr=10:nf=-42,"
+    "equalizer=f=190:t=q:w=1.0:g=2.8,"
+    "equalizer=f=420:t=q:w=1.2:g=-2.2,"
+    "equalizer=f=3200:t=q:w=1.0:g=2.6,"
+    "deesser=i=0.35:m=0.5:f=0.5,"
+    "treble=g=1.6:f=9500,"
+    "acompressor=threshold=0.09:ratio=3:attack=8:release=90:makeup=3"
+)
+TONOS = {
+    "limpio": "",
+    "calido": BASE_TONO,
+    "grave": BASE_TONO + ",rubberband=pitch=0.915:formant=preserved:pitchq=quality,equalizer=f=140:t=q:w=1.0:g=1.5",
+}
+
 
 def run(cmd):
     return subprocess.run(cmd, capture_output=True, text=True)
@@ -75,6 +94,7 @@ def main():
     ap.add_argument("--pausa", type=float, default=0.30, help="segundos de silencio que separan frases")
     ap.add_argument("--minimo", type=float, default=0.18, help="duración mínima de una frase")
     ap.add_argument("--margen", type=float, default=0.06, help="aire que se deja antes y después de cada frase")
+    ap.add_argument("--tono", choices=sorted(TONOS), default="limpio", help="limpio (como se grabó), calido o grave")
     ap.add_argument("--plan", help="JSON con los cortes a mano: [{\"t0\": 1.94, \"t1\": 3.92, \"entra\": 0.4}, ...]. Si la toma salió de corrido y las pausas no alcanzan para separar las frases")
     a = ap.parse_args()
 
@@ -104,6 +124,8 @@ def main():
         t0, t1 = max(0, t0 - a.margen), t1 + a.margen
         dur = t1 - t0
         cadena = f"[1:a]atrim={t0:.3f}:{t1:.3f},asetpts=PTS-STARTPTS"
+        if TONOS[a.tono]:
+            cadena += "," + TONOS[a.tono]
         if dur > hueco:
             f = min(MAX_ATEMPO, dur / hueco)
             cadena += f",atempo={f:.4f}"
