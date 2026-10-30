@@ -72,6 +72,22 @@ una pausa corta entre frases: la voz se corta y se coloca en cada escena.
 Las tres veces que dice «Se fue.» van secas y cortas, casi en voz baja: son el
 remate del chiste, y la voz baja le da más peso al golpe visual.
 
+### Cómo grabarla
+
+1. Un lugar sin eco: un clóset con ropa, o con la cabeza bajo una cobija. Importa más que el micrófono.
+2. El celular a un palmo de la boca, con la nota de voz o el grabador de la cámara. Sin audífonos con cable que roce.
+3. Una sola toma con las nueve frases en orden. Una pausa corta, de un segundo, entre una y otra.
+4. Tono de quien cuenta una anécdota a un amigo, con una sonrisa. Las tres veces que dices «Se fue.», secas y bajitas.
+5. Si te equivocas, no pares: haz la pausa, repite la frase y sigue. Dime cuál repetiste y la cuento.
+
+### Cómo se pone
+
+Pásame el audio y lo acomodo. Para hacerlo a mano:
+`python3 instagram/scripts/poner-voz.py toma.m4a`
+Corta cada frase en las pausas, la coloca en el segundo de su escena y devuelve
+`reel-venta-perdida-con-voz.mp4`. Si una frase es más larga que su hueco, la acelera
+hasta un 18 %.
+
 ## Antes de publicar
 
 - El texto promete una revisión por DM de la tienda de quien comente. Confirma
