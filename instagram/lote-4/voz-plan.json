@@ -1,0 +1,86 @@
+[
+ {
+  "t0": 1.94,
+  "t1": 3.92,
+  "entra": 0.4,
+  "frase": "Esta clienta quiere comprar en tu tienda."
+ },
+ {
+  "t0": 4.22,
+  "t1": 5.18,
+  "entra": 2.7,
+  "frase": "Mira qué pasó."
+ },
+ {
+  "t0": 5.98,
+  "t1": 8.1,
+  "entra": 3.95,
+  "frase": "Tarda en cargar siete segundos."
+ },
+ {
+  "t0": 8.42,
+  "t1": 8.8,
+  "entra": 6.95,
+  "frase": "Se fue."
+ },
+ {
+  "t0": 9.3,
+  "t1": 11.7,
+  "entra": 8.5,
+  "frase": "No se ve bien en el celular. No lee nada."
+ },
+ {
+  "t0": 11.9,
+  "t1": 12.36,
+  "entra": 11.95,
+  "frase": "Se fue."
+ },
+ {
+  "t0": 13.0,
+  "t1": 15.62,
+  "entra": 13.4,
+  "frase": "Pagar es un enredo. Tiene nueve campos."
+ },
+ {
+  "t0": 15.7,
+  "t1": 16.2,
+  "entra": 16.7,
+  "frase": "Se fue."
+ },
+ {
+  "t0": 17.1,
+  "t1": 18.46,
+  "entra": 18.0,
+  "frase": "Tres ventas perdidas."
+ },
+ {
+  "t0": 18.52,
+  "t1": 20.14,
+  "entra": 19.45,
+  "frase": "Tres errores con arreglo."
+ },
+ {
+  "t0": 20.68,
+  "t1": 21.1,
+  "entra": 21.35,
+  "frase": "Y casi"
+ },
+ {
+  "t0": 21.88,
+  "t1": 23.12,
+  "entra": 22.25,
+  "frase": "nunca te enteras."
+ },
+ {
+  "t0": 23.62,
+  "t1": 26.4,
+  "entra": 24.0,
+  "frase": "¿Tu tienda tiene alguno?"
+ },
+ {
+  "t0": 27.12,
+  "t1": 28.06,
+  "entra": 27.2,
+  "frase": "Escríbenos."
+ }
+]

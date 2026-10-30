@@ -5,7 +5,9 @@ HyperFrames (su proyecto vive en `instagram/hyperframes/reel-venta-perdida/`).
 
 | Archivo | Qué es |
 |---|---|
-| `reel-venta-perdida.mp4` | El reel, 1080 × 1920, 25 segundos, sin audio |
+| `reel-venta-perdida-con-voz.mp4` | El reel con la voz de Oscar, 1080 × 1920, 28,6 segundos. Es el que se sube |
+| `reel-venta-perdida.mp4` | El mismo reel sin audio, por si prefieres ponerle un sonido de Reels |
+| `voz-plan.json` | Los cortes de la grabación y el segundo en que entra cada frase |
 | `reel-venta-perdida-portada.png` | La portada |
 
 ## Qué muestra
@@ -22,8 +24,8 @@ Cierre: tres ventas, tres errores, todos con arreglo, y la invitación a hablar.
 
 ## Cómo publicarlo
 
-- **Audio:** el video no trae sonido. Elige uno que esté sonando en Reels (con
-  ritmo marcado, que acompañe los golpes de «Se fue.») y ponlo a volumen bajo.
+- **Audio:** sube `reel-venta-perdida-con-voz.mp4`, que ya trae la voz. Si quieres
+  música, ponla en Instagram a un volumen muy bajo (un 5 a 10 %) para que no tape la voz.
 - **Portada:** sube `reel-venta-perdida-portada.png`. En el perfil, la cuadrícula
   recorta arriba y abajo, y el título queda a la vista.
 - **Cuándo:** martes o jueves, al mediodía o a las 7 p. m.
@@ -52,41 +54,32 @@ Cierre: tres ventas, tres errores, todos con arreglo, y la invitación a hablar.
 
 ## Voz en off
 
-El video tiene el momento de cada golpe marcado, así que la voz se acomoda a
-estos tiempos. Pensada para una voz cercana y con energía, que cuenta una
-anécdota rápida (no para leer un anuncio). Se puede grabar en una sola toma, con
-una pausa corta entre frases: la voz se corta y se coloca en cada escena.
+La voz es la de Oscar, grabada en una toma. El video se ajustó a su ritmo (el
+cierre es más pausado que el del guion original), por eso dura 28,6 segundos.
 
 | Desde | Frase | Qué pasa en pantalla |
 |---|---|---|
-| 0,4 s | Esta clienta quería comprar en tu tienda. Mira qué pasó. | Gancho, el carrito de $180.000 |
-| 3,9 s | Tarda en cargar. Siete segundos. | El reloj sube hasta 7,4 s |
+| 0,4 s | Esta clienta quiere comprar en tu tienda. Mira qué pasó. | Gancho, el carrito de $180.000 |
+| 3,95 s | Tarda en cargar siete segundos. | El reloj sube hasta 7,4 s |
 | 6,95 s | Se fue. | Cae «Se fue.» y sube el contador |
 | 8,5 s | No se ve bien en el celular. No lee nada. | Zoom con los dedos |
 | 11,95 s | Se fue. | Cae «Se fue.» |
-| 13,4 s | Pagar es un enredo. Nueve campos. | Los campos se apilan |
+| 13,4 s | Pagar es un enredo. Tiene nueve campos. | Los campos se apilan |
 | 16,7 s | Se fue. | Cae «Se fue.» |
-| 18,0 s | Tres ventas perdidas. Tres errores con arreglo. Y casi nunca te enteras. | La suma de $540.000 |
-| 21,4 s | ¿Tu tienda tiene alguno? Escríbenos. | Cierre con Mango |
-
-Las tres veces que dice «Se fue.» van secas y cortas, casi en voz baja: son el
-remate del chiste, y la voz baja le da más peso al golpe visual.
-
-### Cómo grabarla
-
-1. Un lugar sin eco: un clóset con ropa, o con la cabeza bajo una cobija. Importa más que el micrófono.
-2. El celular a un palmo de la boca, con la nota de voz o el grabador de la cámara. Sin audífonos con cable que roce.
-3. Una sola toma con las nueve frases en orden. Una pausa corta, de un segundo, entre una y otra.
-4. Tono de quien cuenta una anécdota a un amigo, con una sonrisa. Las tres veces que dices «Se fue.», secas y bajitas.
-5. Si te equivocas, no pares: haz la pausa, repite la frase y sigue. Dime cuál repetiste y la cuento.
+| 18,0 s | Tres ventas perdidas. Tres errores con arreglo. | La suma de $540.000 |
+| 21,35 s | Y casi… nunca te enteras. | El texto grande sobre la suma |
+| 24,0 s | ¿Tu tienda tiene alguno? | Entra el cierre |
+| 27,2 s | Escríbenos. | Mango y el botón |
 
 ### Cómo se pone
 
-Pásame el audio y lo acomodo. Para hacerlo a mano:
-`python3 instagram/scripts/poner-voz.py toma.m4a`
-Corta cada frase en las pausas, la coloca en el segundo de su escena y devuelve
-`reel-venta-perdida-con-voz.mp4`. Si una frase es más larga que su hueco, la acelera
-hasta un 18 %.
+La toma salió de corrido, sin pausas claras entre frases, así que los cortes están
+a mano en `voz-plan.json` (segundo de inicio y fin dentro de la grabación, y el
+segundo del video donde entra). Para volver a mezclar:
+`python3 instagram/scripts/poner-voz.py toma.m4a --plan instagram/lote-4/voz-plan.json`
+
+Si grabas otra toma con una pausa de un segundo entre frases, el script las
+separa solo, sin plan: `python3 instagram/scripts/poner-voz.py toma.m4a`.
 
 ## Antes de publicar
 

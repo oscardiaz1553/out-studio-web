@@ -75,15 +75,28 @@ def main():
     ap.add_argument("--pausa", type=float, default=0.30, help="segundos de silencio que separan frases")
     ap.add_argument("--minimo", type=float, default=0.18, help="duración mínima de una frase")
     ap.add_argument("--margen", type=float, default=0.06, help="aire que se deja antes y después de cada frase")
+    ap.add_argument("--plan", help="JSON con los cortes a mano: [{\"t0\": 1.94, \"t1\": 3.92, \"entra\": 0.4}, ...]. Si la toma salió de corrido y las pausas no alcanzan para separar las frases")
     a = ap.parse_args()
 
-    tramos = frases(a.toma, a.umbral, a.pausa, a.minimo)
-    print(f"Frases detectadas: {len(tramos)} (se esperan {len(LINES)})")
-    for i, (t0, t1) in enumerate(tramos, 1):
-        print(f"  {i}: {t0:6.2f} s a {t1:6.2f} s  ({t1 - t0:.2f} s)")
-    if len(tramos) != len(LINES):
-        print("\nNo coinciden. Ajusta --umbral o --pausa, o graba de nuevo con pausas más claras.")
-        sys.exit(1)
+    global LINES
+    if a.plan:
+        import json
+        plan = json.load(open(a.plan))
+        tramos = [(x["t0"], x["t1"]) for x in plan]
+        # el hueco de cada frase llega hasta el inicio de la siguiente (o 0,9 s la última)
+        LINES = []
+        for i, x in enumerate(plan):
+            sig = plan[i + 1]["entra"] if i + 1 < len(plan) else x["entra"] + (x["t1"] - x["t0"]) + 0.9
+            LINES.append((x["entra"], max(0.3, sig - x["entra"] - 0.05)))
+        print(f"Plan manual: {len(tramos)} cortes")
+    else:
+        tramos = frases(a.toma, a.umbral, a.pausa, a.minimo)
+        print(f"Frases detectadas: {len(tramos)} (se esperan {len(LINES)})")
+        for i, (t0, t1) in enumerate(tramos, 1):
+            print(f"  {i}: {t0:6.2f} s a {t1:6.2f} s  ({t1 - t0:.2f} s)")
+        if len(tramos) != len(LINES):
+            print("\nNo coinciden. Ajusta --umbral o --pausa, usa --plan con los cortes a mano, o graba de nuevo con pausas más claras.")
+            sys.exit(1)
 
     entradas = ["-i", a.video, "-i", a.toma]
     filtros, etiquetas = [], []
