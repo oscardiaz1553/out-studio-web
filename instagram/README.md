@@ -10,6 +10,7 @@ cada publicación y los scripts que las generan.
 | Lote 1 | Carrusel "3 errores que frenan tu tienda online", reel de Diario Deportes (video y portada), carrusel de Out Emprende | `lote-1/` |
 | Lote 2 | Carrusel "¿Shopify, WordPress o landing page?", carrusel "Antes de pedir tu página web, ten esto listo", publicación e historia de Mango | `lote-2/` |
 | Lote 3 | Carrusel "¿De qué depende el precio de una página web?", reel "3 señales de que tu página necesita un rediseño" (video y portada), carrusel "Así trabajamos" | `lote-3/` |
+| Lote 4 | Reel "La venta perdida" (video y portada), pensado como la publicación 3 | `lote-4/` |
 | Perfil | Foto de perfil, portadas de destacados, historias de cada destacado, biografía y datos del perfil | `perfil/` |
 | Videos personales | Cinco guiones para grabar con tu cara y tu voz (quién eres, revisión de una página, precio, caso Diario Deportes, un día de trabajo) | `videos-personales/` |
 
@@ -26,6 +27,7 @@ carruseles y publicaciones, 1080 × 1920 para reels e historias.
 - `scripts/lote-1.cjs` a `scripts/lote-3.cjs`: un script por lote.
 - `hyperframes/`: los reels animados, hechos con [HyperFrames](https://github.com/heygen-com/hyperframes) (HTML + GSAP). Cada carpeta es un proyecto: `index.html` es el video. Para volver a renderizarlo, desde su carpeta: `npx hyperframes@0.8.150 render -q high -o reel.mp4` (pide Node 22 y FFmpeg). Toman como referencia la intro del sitio (`public/intro/index.html`): cámara con zoom y giro, anillos que se expanden en los impactos, barrido circular de color, líneas de velocidad y los símbolos [ ] { } < >. La sacudida de pantalla se usa solo en uno o dos golpes grandes por reel, no en cada entrada.
   - `reel-senales/`: reel del lote 3.
+  - `reel-venta-perdida/`: reel del lote 4. Una clienta, tres fallos de la tienda y un contador de ventas perdidas que sube.
   - `reel-diario-deportes/`: reel del lote 1, con capturas reales del sitio antes y después.
   - `video-ejemplo/`: ejemplo del formato "Reviso tu página" de los videos personales (pantalla, marcas, subtítulos palabra por palabra y un círculo "Tu cámara" donde va la cara). El render está en `videos-personales/ejemplo-reviso-tu-pagina.mp4`.
 
