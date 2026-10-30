@@ -43,8 +43,21 @@ BASE_TONO = (
     "treble=g=1.6:f=9500,"
     "acompressor=threshold=0.09:ratio=3:attack=8:release=90:makeup=3"
 )
+# «mango»: voz de personaje. Sube el tono unos tres semitonos moviendo también el
+# timbre (formante desplazado), con más brillo y compresión, para que suene a mono
+# simpático y no a la persona que grabó.
+MANGO = (
+    "highpass=f=130,afftdn=nr=10:nf=-42,"
+    "rubberband=pitch=1.21:formant=shifted:pitchq=quality,"
+    "equalizer=f=300:t=q:w=1.0:g=-2,"
+    "equalizer=f=2800:t=q:w=1.0:g=3.2,"
+    "deesser=i=0.3:m=0.5:f=0.5,"
+    "treble=g=2.2:f=8000,"
+    "acompressor=threshold=0.08:ratio=3.5:attack=6:release=80:makeup=3"
+)
 TONOS = {
     "limpio": "",
+    "mango": MANGO,
     "calido": BASE_TONO,
     "grave": BASE_TONO + ",rubberband=pitch=0.915:formant=preserved:pitchq=quality,equalizer=f=140:t=q:w=1.0:g=1.5",
 }

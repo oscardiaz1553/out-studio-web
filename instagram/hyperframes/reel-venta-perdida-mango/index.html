@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+      @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-500.woff2") format("woff2"); font-weight: 500; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #1b2fcc; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Instrument Sans", sans-serif; }
+
+      #bg { position: absolute; inset: 0; background: #1b2fcc; }
+      #wipe { position: absolute; inset: 0; background: #f3ede7; clip-path: circle(0px at 540px 960px); }
+
+      #cam { position: absolute; inset: 0; transform-origin: 540px 960px; --dot: #4a55c4; }
+      #lattice { position: absolute; left: -540px; top: -960px; width: 2160px; height: 3840px; }
+      .dot { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--dot); opacity: 0.55; }
+      #ring { position: absolute; left: 0; top: 0; width: 240px; height: 240px; border-radius: 50%; border: 18px solid #f5e3b3; opacity: 0; }
+
+      .scene { position: absolute; inset: 0; }
+      .d { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
+      .w { display: inline-block; }
+      .ch { display: inline-block; }
+      .sym { display: block; height: 100%; width: auto; overflow: visible; }
+      .sym path { fill: none; stroke-width: 9.4; stroke-linejoin: miter; stroke-miterlimit: 10; stroke-linecap: butt; }
+      .flip { transform: scaleX(-1); }
+      .pair { position: absolute; display: flex; justify-content: center; }
+      .half { height: 100%; }
+
+      .sl { position: absolute; left: 0; height: 10px; width: 1100px; border-radius: 5px; background: #f5e3b3; opacity: 0; }
+
+      /* Contador de ventas perdidas: fuera de la cámara, siempre al frente */
+      #hud { position: absolute; left: 80px; top: 96px; width: 920px; height: 168px; border-radius: 84px; background: #141e5c; display: flex; align-items: center; justify-content: space-between; padding: 0 56px 0 64px; opacity: 0; }
+      #hud .lb { font-size: 40px; font-weight: 500; color: #fbf8f5; opacity: 0.82; line-height: 1.1; }
+      #hud .am { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.04em; font-size: 104px; color: #f5e3b3; line-height: 1; }
+      #hudflash { position: absolute; left: 80px; top: 96px; width: 920px; height: 168px; border-radius: 84px; border: 10px solid #bc6039; opacity: 0; }
+
+      /* Clienta (avatar) y globo */
+      .who { position: absolute; left: 80px; top: 1470px; width: 170px; height: 170px; border-radius: 50%; background: #141e5c; overflow: hidden; }
+      .who svg { width: 100%; height: 100%; display: block; }
+      .say { position: absolute; left: 280px; top: 1476px; max-width: 700px; padding: 30px 44px; border-radius: 40px 40px 40px 10px; font-size: 56px; font-weight: 500; line-height: 1.1; }
+      .gone { position: absolute; left: 80px; right: 80px; top: 1520px; font-size: 168px; color: #bc6039; }
+
+      /* Escena 1 · gancho */
+      #s1-title { position: absolute; left: 80px; right: 80px; top: 400px; white-space: nowrap; color: #fbf8f5; }
+      #s1-title .a { font-size: 116px; display: block; }
+      #s1-title .b { font-size: 116px; display: block; color: #f5e3b3; margin-top: 6px; }
+      #s1-title .c { font-size: 116px; display: block; margin-top: 6px; }
+      #s1-big { position: absolute; left: 80px; right: 80px; top: 1290px; font-size: 118px; white-space: nowrap; color: #f5e3b3; }
+      #s1-who { position: absolute; left: 80px; top: 1000px; width: 200px; height: 200px; border-radius: 50%; background: #141e5c; overflow: hidden; }
+      #s1-who svg { width: 100%; height: 100%; display: block; }
+      #s1-tag { position: absolute; left: 330px; top: 1040px; padding: 22px 38px; border-radius: 28px; background: #f5e3b3; color: #1b2fcc; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 64px; letter-spacing: -0.03em; }
+      #s1-cart { position: absolute; left: 330px; top: 960px; font-size: 38px; font-weight: 500; color: #fbf8f5; opacity: 0.85; }
+
+      /* Título de error (escenas 2 a 4) */
+      .t { position: absolute; left: 80px; right: 80px; top: 350px; font-size: 118px; }
+
+      /* Teléfono */
+      .phone { position: absolute; left: 350px; top: 680px; width: 380px; height: 740px; border-radius: 58px; background: #141e5c; padding: 18px; }
+      .screen { position: relative; width: 100%; height: 100%; border-radius: 42px; background: #fbf8f5; overflow: hidden; }
+
+      /* Escena 2 · carga */
+      #timer { position: absolute; left: 0; right: 0; top: 270px; text-align: center; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 118px; letter-spacing: -0.045em; color: #1b2fcc; }
+      #spin { position: absolute; left: 130px; top: 120px; width: 120px; height: 120px; border-radius: 50%; border: 16px solid #e6dfd8; border-top-color: #1b2fcc; }
+      #track { position: absolute; left: 50px; right: 50px; top: 480px; height: 22px; border-radius: 11px; background: #e6dfd8; overflow: hidden; }
+      #fill { width: 100%; height: 100%; background: #bc6039; transform-origin: 0 50%; }
+      #wait { position: absolute; left: 0; right: 0; top: 540px; text-align: center; font-size: 30px; font-weight: 500; color: #585d88; }
+
+      /* Escena 3 · celular */
+      #page { position: absolute; left: 0; top: 0; width: 344px; height: 704px; padding: 22px 14px; transform-origin: 0% 0%; }
+      .pg-bar { height: 7px; border-radius: 3px; background: #b9b2ab; margin-bottom: 7px; }
+      .pg-nav { display: flex; gap: 6px; margin-bottom: 10px; }
+      .pg-nav i { flex: 1; height: 8px; border-radius: 3px; background: #1b2fcc; display: block; }
+      .pg-hero { height: 90px; border-radius: 6px; background: #1b2fcc; margin: 8px 0 10px; }
+      .pg-row { display: flex; gap: 6px; margin-top: 8px; }
+      .pg-tile { flex: 1; height: 52px; border-radius: 5px; background: #f5e3b3; }
+      .pg-btn { width: 70px; height: 14px; border-radius: 7px; background: #bc6039; margin-top: 12px; }
+      .finger { position: absolute; width: 70px; height: 70px; border-radius: 50%; background: rgba(20, 30, 92, 0.35); border: 5px solid #141e5c; opacity: 0; }
+
+      /* Escena 4 · pago */
+      #form { position: absolute; left: 90px; top: 600px; width: 900px; height: 760px; border-radius: 40px; background: #fbf8f5; overflow: hidden; }
+      #rows { position: absolute; left: 0; right: 0; top: 0; padding: 34px 40px 0; }
+      .row { height: 92px; border-radius: 22px; background: #f3ede7; border: 3px solid #d9d1c8; margin-bottom: 18px; display: flex; align-items: center; padding: 0 30px; font-size: 38px; font-weight: 500; color: #585d88; opacity: 0; }
+      .row.btn { background: #c9c3bd; border-color: #c9c3bd; color: #fbf8f5; justify-content: center; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 46px; letter-spacing: -0.03em; }
+      #fields { position: absolute; left: 80px; right: 80px; top: 1400px; font-size: 54px; font-weight: 500; color: #fbf8f5; text-align: center; opacity: 0; }
+      #fields b { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; color: #f5e3b3; font-size: 78px; letter-spacing: -0.03em; }
+
+      /* Escena 5 · suma */
+      #s5-l1 { position: absolute; left: 80px; right: 80px; top: 330px; font-size: 150px; color: #fbf8f5; }
+      #s5-l2 { position: absolute; left: 80px; right: 80px; top: 650px; font-size: 150px; color: #f5e3b3; }
+      #s5-sum { position: absolute; left: 80px; right: 80px; top: 1060px; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.05em; font-size: 196px; color: #fbf8f5; line-height: 1; }
+      #s5-sub { position: absolute; left: 80px; right: 80px; top: 1380px; font-size: 56px; font-weight: 500; line-height: 1.15; color: #fbf8f5; opacity: 0.9; }
+      #s5-sub2 { position: absolute; left: 80px; right: 80px; top: 1370px; font-size: 104px; color: #f5e3b3; }
+
+      /* Escena 6 · cierre */
+      #s6-l1 { position: absolute; left: 80px; right: 80px; top: 360px; font-size: 128px; color: #fbf8f5; }
+      #s6-l2 { position: absolute; left: 80px; right: 80px; top: 640px; font-size: 190px; color: #f5e3b3; }
+      #btn { position: absolute; left: 80px; top: 920px; padding: 34px 58px; border-radius: 999px; background: #f5e3b3; color: #1b2fcc; font-weight: 500; font-size: 56px; }
+      #never { position: absolute; left: 80px; top: 1100px; font-size: 54px; color: #fbf8f5; }
+      #s6-mono { position: absolute; right: 30px; bottom: 250px; width: 700px; }
+      #s6-logo { position: absolute; left: 80px; top: 170px; width: 150px; }
+
+      /* Mango, narrador: la cabeza asoma abajo a la derecha y la boca sigue la voz */
+      #mango { position: absolute; left: 668px; top: 1430px; width: 440px; height: 587px; transform-origin: 50% 100%; will-change: transform; }
+      .bub { position: absolute; left: 80px; bottom: 70px; max-width: 560px; padding: 28px 40px; border-radius: 40px 40px 12px 40px; background: #fbf8f5; color: #141e5c; font: 500 49px/1.12 "Instrument Sans", sans-serif; box-shadow: 0 14px 40px rgba(20, 30, 92, 0.28); transform-origin: 100% 100%; opacity: 0; }
+      .bub::after { content: ""; position: absolute; right: -22px; bottom: 26px; border-left: 28px solid #fbf8f5; border-top: 16px solid transparent; border-bottom: 16px solid transparent; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="28.6" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="wipe"></div>
+
+      <div id="cam">
+        <div id="lattice"></div>
+        <div id="ring"></div>
+
+        <!-- Escena 1 · gancho -->
+        <div id="s1" class="scene clip" data-start="0" data-duration="3.4" data-track-index="1">
+          <div id="s1-title" class="d">
+            <span class="a"><span class="w">Esta</span> <span class="w">clienta</span></span>
+            <span class="b"><span class="w">quiere</span> <span class="w">comprar</span></span>
+            <span class="c"><span class="w">en</span> <span class="w">tu</span> <span class="w">tienda.</span></span>
+          </div>
+          <div id="s1-who">
+            <svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="17" fill="#f5e3b3" /><path d="M14 100 C14 70 30 60 50 60 C70 60 86 70 86 100 Z" fill="#f5e3b3" /></svg>
+          </div>
+          <div id="s1-cart">En su carrito</div>
+          <div id="s1-tag">$180.000</div>
+          <div id="s1-big" class="d split">Mira qué pasó.</div>
+        </div>
+
+        <!-- Escena 2 · tarda en cargar -->
+        <div id="s2" class="scene clip" data-start="3.3" data-duration="4.95" data-track-index="2">
+          <div id="s2-t" class="t d" style="color: #1b2fcc"><span class="w">Tarda</span> <span class="w">en</span> <span class="w">cargar.</span></div>
+          <div id="s2-phone" class="phone">
+            <div class="screen">
+              <div id="timer">0,0 s</div>
+              <div id="spin"></div>
+              <div id="track"><div id="fill"></div></div>
+              <div id="wait">Cargando…</div>
+            </div>
+          </div>
+          <div id="s2-gone" class="gone d split">Se fue.</div>
+        </div>
+
+        <!-- Escena 3 · no se ve bien en el celular -->
+        <div id="s3" class="scene clip" data-start="8.15" data-duration="4.95" data-track-index="3">
+          <div id="s3-t" class="t d" style="color: #1b2fcc"><span class="w">No</span> <span class="w">se</span> <span class="w">ve</span> <span class="w">bien</span> <span class="w">en</span> <span class="w">el</span> <span class="w">celular.</span></div>
+          <div id="s3-phone" class="phone">
+            <div class="screen">
+              <div id="page">
+                <div class="pg-nav"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="pg-hero"></div>
+                <div class="pg-bar" style="width: 52%"></div>
+                <div class="pg-bar"></div><div class="pg-bar" style="width: 94%"></div><div class="pg-bar" style="width: 88%"></div><div class="pg-bar" style="width: 96%"></div><div class="pg-bar" style="width: 70%"></div>
+                <div class="pg-row"><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div></div>
+                <div class="pg-row"><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div></div>
+                <div class="pg-btn"></div>
+                <div class="pg-bar" style="margin-top: 14px"></div><div class="pg-bar" style="width: 90%"></div><div class="pg-bar" style="width: 82%"></div>
+              </div>
+              <div id="f1" class="finger"></div>
+              <div id="f2" class="finger"></div>
+            </div>
+          </div>
+          <div id="s3-gone" class="gone d split">Se fue.</div>
+        </div>
+
+        <!-- Escena 4 · pagar es un enredo -->
+        <div id="s4" class="scene clip" data-start="13.0" data-duration="4.8" data-track-index="4">
+          <div id="s4-t" class="t d" style="color: #f5e3b3"><span class="w">Pagar</span> <span class="w">es</span> <span class="w">un</span> <span class="w">enredo.</span></div>
+          <div id="form">
+            <div id="rows">
+              <div class="row">Nombre</div>
+              <div class="row">Apellido</div>
+              <div class="row">Correo</div>
+              <div class="row">Teléfono</div>
+              <div class="row">Dirección</div>
+              <div class="row">Ciudad</div>
+              <div class="row">Código postal</div>
+              <div class="row">Crea una contraseña</div>
+              <div class="row">Confirma tu contraseña</div>
+              <div class="row btn">Pagar</div>
+            </div>
+          </div>
+          <div id="fields">Campos antes de pagar: <b id="fcount">0</b></div>
+          <div id="s4-gone" class="gone d split" style="top: 1540px">Se fue.</div>
+        </div>
+
+        <!-- Escena 5 · suma -->
+        <div id="s5" class="scene clip" data-start="17.7" data-duration="6.1" data-track-index="5">
+          <div id="s5-l1" class="d"><span class="w">Tres</span> <span class="w">ventas.</span></div>
+          <div id="s5-l2" class="d"><span class="w">Tres</span> <span class="w">errores.</span></div>
+          <div id="s5-sum">$540.000</div>
+          <div id="s5-sub">Todos tienen arreglo.</div>
+          <div id="s5-sub2" class="d"><span class="w">Y</span> <span class="w">casi</span> <br /><span class="w g2">nunca</span> <span class="w g2">te</span> <span class="w g2">enteras.</span></div>
+        </div>
+
+        <!-- Escena 6 · cierre -->
+        <div id="s6" class="scene clip" data-start="23.8" data-duration="4.8" data-track-index="6">
+          <svg id="s6-logo" viewBox="0 0 126.12 91.76">
+            <path fill="#fbf8f5" d="M29.19,72.04c-3.3,0-6.27-.52-8.93-1.55-2.66-1.04-4.93-2.57-6.82-4.59-1.88-2.02-3.32-4.54-4.31-7.56-.99-3.01-1.48-6.47-1.48-10.38,0-5.55,.93-10.13,2.79-13.74,1.86-3.6,4.450-6.3,7.77-8.09,3.32-1.79,7.12-2.68,11.41-2.68,3.34,0,6.33,.51,8.97,1.52,2.64,1.01,4.9,2.53,6.78,4.56,1.88,2.02,3.32,4.55,4.31,7.59,.99,3.04,1.48,6.56,1.48,10.56s-.52,7.6-1.55,10.66c-1.04,3.06-2.53,5.6-4.48,7.63-1.95,2.02-4.27,3.54-6.96,4.56-2.68,1.01-5.67,1.52-8.97,1.52Zm.42-9.25c2.17,0,3.98-.54,5.44-1.62,1.46-1.08,2.54-2.71,3.25-4.87,.71-2.16,1.06-4.85,1.06-8.05,0-3.44-.38-6.29-1.13-8.55-.75-2.26-1.87-3.98-3.35-5.16-1.48-1.18-3.35-1.77-5.61-1.77-2.12,0-3.91,.57-5.37,1.7-1.46,1.13-2.57,2.8-3.32,5.01-.75,2.21-1.13,4.97-1.13,8.26,0,2.45,.21,4.63,.64,6.53,.42,1.91,1.07,3.48,1.94,4.73,.87,1.25,1.94,2.19,3.21,2.82,1.27,.64,2.73,.95,4.38,.95Z" />
+            <path fill="#fbf8f5" d="M65.42,72.04c-4.19,0-7.3-1.44-9.32-4.31-2.02-2.87-3.04-7.27-3.04-13.21v-20.76h11.44v20.27c0,2.92,.42,5.01,1.27,6.29s2.09,1.91,3.74,1.91c1.08,0,2.07-.28,2.97-.85,.89-.56,1.67-1.41,2.33-2.54,.66-1.13,1.150-2.53,1.48-4.2,.33-1.67,.49-3.61,.49-5.83v-15.04h11.44v37.29h-9.53l-.07-13.63h-.78c-.38,3.39-1.07,6.17-2.08,8.33-1.01,2.17-2.38,3.76-4.1,4.77-1.72,1.01-3.8,1.52-6.25,1.52Z" />
+            <path fill="#fbf8f5" d="M113.05,65.87c0-1.83,.51-3.55,1.4-5.01-.59,.31-1.24,.55-1.94,.73-.73,.19-1.45,.28-2.15,.28-1.41,0-2.54-.37-3.39-1.13s-1.27-2-1.27-3.74v-14.05h8.69v-9.18h-8.69v-8.47h-6.57l-.05,1.36c-.02,.5-.06,1.01-.16,1.5-.36,1.89-1,2.57-2.01,3.47-1.21,1.09-2.99,1.85-5.49,2.13h-1.27l-.07,8.9h4.45v15.25c0,4.8,1.06,8.33,3.18,10.59,2.12,2.26,5.37,3.39,9.75,3.39,.9,0,1.92-.06,3.07-.18,1.14-.12,2.45-.38,3.93-.8-.9-1.48-1.42-3.21-1.42-5.06Z" />
+          </svg>
+          <div id="s6-l1" class="d"><span class="w">¿Tu</span> <span class="w">tienda</span> <span class="w">tiene</span> <span class="w">alguno?</span></div>
+          <div id="s6-l2" class="d split">Hablemos.</div>
+          <div id="btn">outstudio.online</div>
+          <div id="never" class="d split">Never the usual.</div>
+        </div>
+      </div>
+
+      <div id="sl1" class="sl" style="top: 420px"></div>
+      <div id="sl2" class="sl" style="top: 860px"></div>
+      <div id="sl3" class="sl" style="top: 1240px"></div>
+      <div id="sl4" class="sl" style="top: 1560px"></div>
+
+      <canvas id="mango" width="576" height="768"></canvas>
+      <div id="bubs"></div>
+
+      <div id="hudflash"></div>
+      <div id="hud"><div class="lb">Ventas<br />perdidas</div><div class="am" id="amount">$0</div></div>
+    </div>
+
+    <script>
+      /* Partir en letras los textos marcados con .split (para rebotes por letra). */
+      document.querySelectorAll(".split").forEach((el) => {
+        const text = el.textContent;
+        el.textContent = "";
+        for (const c of text) {
+          const s = document.createElement("span");
+          s.className = "ch";
+          s.textContent = c === " " ? " " : c;
+          el.appendChild(s);
+        }
+      });
+
+      /* Retícula de puntos (determinística) */
+      const lat = document.getElementById("lattice");
+      for (let r = 0; r < 70; r++)
+        for (let c = 0; c < 40; c++) {
+          const d = document.createElement("div");
+          d.className = "dot";
+          d.style.left = 28 + c * 56 + "px";
+          d.style.top = 28 + r * 56 + "px";
+          lat.appendChild(d);
+        }
+
+      const tl = gsap.timeline({ paused: true });
+      const P4 = "power4.out", E = "expo.out", EI = "expo.inOut";
+      const TOTAL = 28.6;
+      const fmt = (n) => "$" + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+      /* ── Cámara: un solo escritor del transform, con fase + deriva + sacudida ── */
+      const camEl = document.getElementById("cam");
+      const cam = { s: 2.4, r: -6, x: 0, y: 0, sx: 0, sy: 0, d: 0 };
+      const apply = () => {
+        const dx = Math.sin(cam.d) * 7, dy = Math.sin(cam.d * 1.3) * 9;
+        camEl.style.transform = `translate(${cam.x + cam.sx + dx}px, ${cam.y + cam.sy + dy}px) rotate(${cam.r}deg) scale(${cam.s})`;
+      };
+      const move = (vars, t) => tl.to(cam, { ...vars, onUpdate: apply }, t);
+      const shake = (t, a) =>
+        tl.to(cam, { keyframes: { sx: [0, -a, a * 0.8, -a * 0.5, a * 0.25, 0], sy: [0, a * 0.5, -a * 0.6, a * 0.3, -a * 0.1, 0] }, duration: 0.32, ease: "none", onUpdate: apply }, t);
+      tl.to(cam, { d: Math.PI * 2 * 4, duration: TOTAL, ease: "none", onUpdate: apply }, 0);
+      apply();
+
+      function flip(t, color, cx, cy, dot) {
+        tl.set("#wipe", { backgroundColor: color, clipPath: `circle(0px at ${cx}px ${cy}px)` }, t);
+        tl.to("#wipe", { clipPath: `circle(2300px at ${cx}px ${cy}px)`, duration: 0.5, ease: "power3.out" }, t);
+        tl.set("#bg", { backgroundColor: color }, t + 0.52);
+        tl.set("#wipe", { clipPath: `circle(0px at ${cx}px ${cy}px)` }, t + 0.52);
+        tl.set("#cam", { "--dot": dot }, t);
+      }
+      function boom(t, cx, cy, color, size, sh) {
+        tl.set("#ring", { x: cx - 120, y: cy - 120, borderColor: color }, t);
+        tl.fromTo("#ring", { scale: 0.2, opacity: 1 }, { scale: size || 9, opacity: 0, duration: 0.65, ease: "power3.out", immediateRender: false }, t);
+        if (sh) shake(t, sh);
+      }
+      function speed(t) {
+        ["#sl1", "#sl2", "#sl3", "#sl4"].forEach((id, i) => {
+          tl.fromTo(id, { x: -1200, opacity: 0.95 }, { x: 1300, opacity: 0.95, duration: 0.38, ease: "power2.in", immediateRender: false }, t + i * 0.045);
+          tl.set(id, { opacity: 0 }, t + 0.6);
+        });
+      }
+      const dropWords = (sel, t, st) =>
+        tl.fromTo(`${sel} .w`, { y: -140, rotation: -12, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.55, ease: "back.out(2.2)", stagger: st || 0.07 }, t);
+      const popWords = (sel, t, st) =>
+        tl.fromTo(`${sel} .w`, { scale: 0.2, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "back.out(2.6)", stagger: st || 0.06, transformOrigin: "50% 80%" }, t);
+      const slamWords = (sel, t) =>
+        tl.fromTo(`${sel} .w`, { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.42, ease: P4, stagger: 0.07 }, t);
+      const waveLetters = (sel, t) =>
+        tl.fromTo(`${sel} .ch`, { y: 90, rotation: 18, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.5, ease: "back.out(2.4)", stagger: 0.035 }, t);
+      /* «Se fue.»: cae pesado, con sacudida */
+      const goneSlam = (sel, t) => {
+        tl.fromTo(`${sel} .ch`, { y: -220, scale: 1.6, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.38, ease: "power4.out", stagger: 0.05 }, t);
+      };
+
+      /* ── Contador de ventas perdidas ── */
+      const money = { v: 0 };
+      const writeMoney = () => { document.getElementById("amount").textContent = fmt(money.v); };
+      function lose(t, from, to) {
+        tl.fromTo(money, { v: from }, { v: to, duration: 0.7, ease: "power2.out", onUpdate: writeMoney, immediateRender: false }, t);
+        tl.fromTo("#hudflash", { scale: 1, opacity: 1 }, { scale: 1.18, opacity: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+        tl.fromTo("#hud", { scale: 1.08 }, { scale: 1, duration: 0.5, ease: "back.out(2.4)", immediateRender: false }, t);
+        shake(t, 14);
+      }
+
+      /* ════ ESCENA 1 · 0–3.3 · el gancho ════ */
+      tl.set("#cam", { "--dot": "#4a55c4" }, 0);
+      move({ s: 1, r: 0, duration: 0.9, ease: P4 }, 0.1);
+      boom(0.3, 540, 760, "#f5e3b3", 10, 14);
+      dropWords("#s1-title .a", 0.35, 0.09);
+      dropWords("#s1-title .b", 0.7, 0.09);
+      dropWords("#s1-title .c", 1.05, 0.08);
+      tl.fromTo("#s1-who", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(2.2)" }, 1.55);
+      tl.fromTo("#s1-cart", { x: -40, opacity: 0 }, { x: 0, opacity: 0.85, duration: 0.35, ease: P4 }, 1.8);
+      tl.fromTo("#s1-tag", { scale: 0, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.6)" }, 1.95);
+      boom(2.0, 330, 1100, "#f5e3b3", 5);
+      waveLetters("#s1-big", 2.3);
+      move({ s: 1.06, r: -2, duration: 1.0, ease: "sine.inOut" }, 2.2);
+      speed(3.0);
+      move({ s: 1.5, r: 9, x: -240, duration: 0.3, ease: "power3.in" }, 3.0);
+
+      /* ════ ESCENA 2 · 3.3–8.2 · tarda en cargar ════ */
+      flip(3.3, "#f3ede7", 540, 1000, "#d9d1c8");
+      tl.fromTo("#hud", { y: -300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.8)" }, 3.55);
+      move({ s: 1.35, r: -5, x: 0, y: 0, duration: 0.01, ease: "none" }, 3.34);
+      move({ s: 1, r: 0, duration: 0.8, ease: E }, 3.36);
+      dropWords("#s2-t", 3.55, 0.09);
+      tl.fromTo("#s2-phone", { y: 1100, rotation: -14 }, { y: 0, rotation: -3, duration: 0.75, ease: "back.out(1.5)" }, 3.6);
+      boom(3.85, 540, 1050, "#1b2fcc", 7);
+      /* el reloj corre y la barra casi no avanza */
+      const timer = { t: 0 };
+      const writeClock = () => { document.getElementById("timer").textContent = timer.t.toFixed(1).replace(".", ",") + " s"; };
+      tl.fromTo("#spin", { rotation: 0 }, { rotation: 360 * 4, duration: 2.7, ease: "none" }, 4.1);
+      tl.fromTo(timer, { t: 0 }, { t: 7.4, duration: 2.7, ease: "none", onUpdate: writeClock }, 4.1);
+      tl.fromTo("#fill", { scaleX: 0 }, { scaleX: 0.14, duration: 2.7, ease: "none", keyframes: { scaleX: [0, 0.05, 0.06, 0.1, 0.11, 0.14] } }, 4.1);
+      tl.to("#timer", { color: "#bc6039", duration: 0.2 }, 5.5);
+      move({ s: 1.09, duration: 2.7, ease: "sine.inOut" }, 4.1);
+      /* se rinde: la pantalla se va y cae «Se fue.» */
+      tl.to("#s2-phone", { x: 1300, rotation: 24, duration: 0.45, ease: "power3.in" }, 6.85);
+      move({ s: 1, duration: 0.4, ease: "power3.out" }, 6.85);
+      goneSlam("#s2-gone", 6.95);
+      lose(6.95, 0, 180000);
+      boom(7.0, 540, 1580, "#bc6039", 8);
+      speed(7.8);
+      move({ s: 0.78, r: -9, duration: 0.3, ease: "power3.in" }, 7.85);
+
+      /* ════ ESCENA 3 · 8.15–13.1 · no se ve bien en el celular ════ */
+      flip(8.15, "#f5e3b3", 900, 1000, "#e6cf98");
+      move({ s: 1.35, r: 5, x: 0, y: 0, duration: 0.01, ease: "none" }, 8.18);
+      move({ s: 1, r: 0, duration: 0.8, ease: E }, 8.2);
+      dropWords("#s3-t", 8.4, 0.07);
+      tl.fromTo("#s3-phone", { y: 1100, rotation: 14 }, { y: 0, rotation: 3, duration: 0.75, ease: "back.out(1.5)" }, 8.45);
+      boom(8.7, 540, 1050, "#1b2fcc", 7);
+      /* pellizca para ampliar: lo que ve es solo un pedazo, y se le pasa de lado */
+      tl.fromTo("#f1", { x: 120, y: 280, opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, ease: P4 }, 9.6);
+      tl.fromTo("#f2", { x: 160, y: 320, opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, ease: P4 }, 9.6);
+      tl.to("#f1", { x: 40, y: 190, duration: 0.5, ease: "power2.inOut" }, 9.8);
+      tl.to("#f2", { x: 240, y: 430, duration: 0.5, ease: "power2.inOut" }, 9.8);
+      tl.fromTo("#page", { scale: 1, x: 0, y: 0 }, { scale: 3.1, duration: 0.55, ease: "power2.inOut" }, 9.8);
+      move({ s: 1.14, r: 2, y: 10, duration: 0.55, ease: EI }, 9.78);
+      tl.to("#page", { x: -150, y: -40, duration: 0.45, ease: "power2.inOut" }, 10.5);
+      tl.to("#page", { keyframes: { x: [-150, -210, -120, -190, -150] }, duration: 0.6, ease: "none" }, 10.95);
+      tl.to(["#f1", "#f2"], { opacity: 0, duration: 0.15 }, 10.6);
+      move({ s: 1.08, r: 1, y: 0, duration: 0.7, ease: "sine.inOut" }, 10.6);
+      /* se rinde */
+      tl.to("#s3-phone", { x: -1300, rotation: -24, duration: 0.45, ease: "power3.in" }, 11.85);
+      move({ s: 1, r: 0, y: 0, duration: 0.4, ease: "power3.out" }, 11.85);
+      goneSlam("#s3-gone", 11.95);
+      lose(11.95, 180000, 360000);
+      boom(12.0, 540, 1580, "#bc6039", 8);
+      speed(12.6);
+      move({ s: 1.6, r: -8, x: 240, duration: 0.2, ease: "power3.in" }, 12.8);
+
+      /* ════ ESCENA 4 · 13.0–17.8 · pagar es un enredo ════ */
+      flip(13.0, "#141e5c", 540, 990, "#2a3678");
+      move({ s: 1.3, r: 6, x: 0, y: 0, duration: 0.01, ease: "none" }, 13.03);
+      move({ s: 1, r: 0, duration: 0.8, ease: E }, 13.05);
+      dropWords("#s4-t", 13.25, 0.08);
+      tl.fromTo("#form", { scale: 0.4, rotation: 8, opacity: 0, transformOrigin: "50% 50%" }, { scale: 1, rotation: 0, opacity: 1, duration: 0.6, ease: "back.out(1.8)" }, 13.3);
+      boom(13.6, 540, 980, "#f5e3b3", 7);
+      /* los campos se amontonan; el formulario sube para dar espacio */
+      const rows = document.querySelectorAll("#rows .row");
+      const fc = { n: 0 };
+      const writeCount = () => { document.getElementById("fcount").textContent = String(Math.round(fc.n)); };
+      rows.forEach((row, i) => {
+        const t = 13.7 + i * 0.2;
+        tl.fromTo(row, { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: P4 }, t);
+      });
+      tl.fromTo("#fields", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: P4 }, 13.9);
+      tl.fromTo(fc, { n: 0 }, { n: 9, duration: 1.8, ease: "none", onUpdate: writeCount }, 13.7);
+      tl.to("#rows", { y: -190, duration: 1.2, ease: "power1.inOut" }, 14.9);
+      move({ s: 1.1, duration: 3, ease: "sine.inOut" }, 13.9);
+      tl.to("#fields", { opacity: 0, duration: 0.2 }, 16.6);
+      /* se rinde */
+      tl.to("#form", { x: 1300, rotation: 16, duration: 0.45, ease: "power3.in" }, 16.6);
+      move({ s: 1, duration: 0.4, ease: "power3.out" }, 16.6);
+      goneSlam("#s4-gone", 16.7);
+      lose(16.7, 360000, 540000);
+      boom(16.75, 540, 1620, "#f5e3b3", 8);
+      speed(17.4);
+      move({ s: 2.0, r: 6, duration: 0.25, ease: "power3.in" }, 17.45);
+
+      /* ════ ESCENA 5 · 17.7–21.3 · la suma ════ */
+      flip(17.7, "#1b2fcc", 540, 700, "#4a55c4");
+      tl.to("#hud", { y: -300, opacity: 0, duration: 0.3, ease: "power3.in" }, 17.6);
+      move({ s: 1.4, r: 5, x: 0, y: 0, duration: 0.01, ease: "none" }, 17.72);
+      move({ s: 1, r: 0, duration: 0.9, ease: E }, 17.74);
+      dropWords("#s5-l1", 17.85, 0.09);
+      dropWords("#s5-l2", 18.25, 0.09);
+      boom(18.6, 540, 1230, "#f5e3b3", 10, 16);
+      tl.fromTo("#s5-sum", { scale: 1.8, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: P4 }, 18.65);
+      tl.fromTo("#s5-sub", { y: 40, opacity: 0 }, { y: 0, opacity: 0.9, duration: 0.5, ease: P4 }, 19.4);
+      move({ s: 1.05, duration: 1.8, ease: "sine.inOut" }, 19.4);
+      /* la voz dice «Y casi... nunca te enteras»: el texto grande reemplaza al pequeño */
+      tl.to("#s5-sub", { opacity: 0, y: -30, duration: 0.25, ease: "power2.in" }, 21.15);
+      tl.fromTo("#s5-sub2 .w:not(.g2)", { scale: 0.2, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "back.out(2.6)", stagger: 0.12, transformOrigin: "50% 80%" }, 21.35);
+      tl.fromTo("#s5-sub2 .g2", { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.42, ease: P4, stagger: 0.14 }, 22.25);
+      boom(22.3, 540, 1450, "#f5e3b3", 7, 8);
+      move({ s: 1.12, r: -1.5, duration: 3.3, ease: "sine.inOut" }, 20.3);
+      speed(23.5);
+      move({ s: 1.5, r: -8, x: 220, duration: 0.22, ease: "power3.in" }, 23.58);
+
+      /* ════ ESCENA 6 · 21.2–25 · cierre ════ */
+      flip(23.8, "#1b2fcc", 540, 700, "#4a55c4");
+      move({ s: 1.4, r: 5, x: 0, y: 0, duration: 0.01, ease: "none" }, 23.82);
+      move({ s: 1, r: 0, duration: 0.9, ease: E }, 23.84);
+      dropWords("#s6-l1", 23.95, 0.08);
+      move({ s: 1.05, duration: 2.2, ease: "sine.inOut" }, 24.6);
+      /* «Escríbenos.» entra con la voz */
+      waveLetters("#s6-l2", 27.2);
+      boom(27.5, 540, 720, "#f5e3b3", 10, 12);
+      tl.fromTo("#btn", { scale: 0, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.6)" }, 27.6);
+      boom(27.75, 330, 980, "#f5e3b3", 5);
+      tl.fromTo("#s6-logo", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: P4 }, 27.9);
+      waveLetters("#never", 28.05);
+
+      /* ════ MANGO · narrador ════ */
+      const ENV = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.66,0.96,0.48,0.24,0.26,0.94,0.82,0.41,0.27,0.77,0.92,1.0,1.0,0.52,0.61,0.49,1.0,0.77,0.39,0.28,0.14,0.75,0.91,1.0,0.74,0.87,0.44,0.22,0.11,0.84,0.42,0.39,0.2,0.74,0.64,0.65,0.69,0.85,0.67,0.74,0.4,0.2,0.59,0.3,0.15,0.07,0.82,1.0,1.0,1.0,0.95,1.0,0.9,0.57,0.67,0.4,0.63,0.31,0.16,0.08,0.04,0.02,0.01,0.0,0.0,0.0,0.0,0.19,0.75,0.8,0.94,1.0,0.98,0.99,1.0,0.83,0.98,0.63,0.32,0.16,0.08,0.14,0.66,0.92,0.69,0.34,0.17,0.76,0.96,0.74,0.54,0.73,0.44,0.52,0.35,0.17,0.09,0.04,0.02,0.01,0.01,0.0,0.0,0.0,0.63,1.0,0.92,0.78,0.69,0.35,0.38,0.94,0.62,0.63,0.62,0.38,0.73,0.71,0.66,0.65,0.33,0.5,0.93,0.91,0.9,0.69,0.5,0.32,0.45,0.88,0.88,0.83,0.89,0.84,0.8,0.79,0.85,0.98,1.0,1.0,0.5,0.25,0.12,0.06,0.51,0.67,0.78,0.91,0.63,0.38,0.58,0.31,0.26,0.68,0.61,0.57,0.42,0.32,0.36,0.18,0.47,0.42,0.43,0.22,0.29,0.57,0.64,0.5,0.25,0.13,0.06,0.03,0.02,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.83,0.96,0.93,0.68,0.34,0.4,1.0,0.72,0.72,0.48,0.24,0.12,0.06,0.03,0.02,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.25,0.54,0.57,0.46,0.72,0.94,0.92,0.75,0.74,0.56,0.78,0.72,0.86,0.7,0.76,0.69,0.94,0.93,0.87,0.75,0.78,0.76,0.76,0.75,0.37,0.19,0.76,0.76,0.55,0.69,0.76,0.88,0.86,1.0,1.0,0.99,0.75,0.81,0.41,0.33,0.17,0.35,0.46,0.59,0.83,0.95,0.95,0.98,1.0,1.0,1.0,0.92,0.82,0.88,0.87,0.86,0.95,0.92,0.78,0.84,0.88,0.83,0.84,0.9,0.94,0.8,0.56,0.28,0.14,0.49,0.54,0.33,0.16,0.08,0.04,0.02,0.01,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.55,0.4,0.93,0.92,0.46,0.23,0.12,0.85,0.73,0.79,0.56,0.58,0.29,0.14,0.07,0.04,0.02,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.9,0.67,0.71,0.81,0.69,0.73,0.55,0.76,0.54,0.76,0.38,0.19,0.41,0.41,0.69,0.8,0.67,0.71,0.52,0.26,0.52,0.77,1.0,0.97,0.81,0.9,0.81,0.43,0.22,0.11,0.24,0.46,0.61,0.66,0.78,0.85,0.42,0.21,0.11,0.05,0.03,0.01,0.01,0.3,0.73,0.7,0.56,0.9,1.0,0.55,0.69,1.0,1.0,1.0,0.8,0.42,0.76,0.38,0.41,0.46,0.23,0.11,0.66,0.7,0.44,0.22,0.11,0.41,0.58,0.77,0.83,0.97,1.0,1.0,1.0,0.96,0.94,0.79,0.39,0.2,0.1,0.05,0.02,0.01,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.36,1.0,0.92,0.87,0.69,0.49,0.24,0.12,0.06,0.41,0.49,0.25,0.22,0.62,0.5,0.25,0.13,0.06,0.03,0.02,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.99,0.72,0.56,0.77,0.78,0.82,0.64,0.88,0.66,0.71,0.71,0.35,0.18,0.59,0.83,0.86,0.8,0.77,0.57,0.39,0.34,0.88,0.85,0.98,0.93,0.76,0.56,0.55,0.28,0.14,0.07,0.03,0.15,0.74,0.84,0.54,0.9,0.71,0.35,0.18,0.09,0.04,0.02,0.31,0.16,1.0,0.7,0.44,0.9,0.94,0.63,0.92,1.0,1.0,0.94,0.55,0.94,0.8,0.48,0.24,0.12,0.06,0.78,0.67,0.42,0.6,0.51,0.42,0.93,1.0,1.0,1.0,1.0,1.0,1.0,0.56,0.28,0.14,0.2,0.69,0.83,0.62,0.31,0.23,0.11,0.06,0.28,0.54,0.46,0.33,0.46,0.45,0.22,0.11,0.06,0.03,0.01,0.01,0.0,0.0,0.16,0.88,0.77,0.92,1.0,0.5,0.25,0.12,0.9,0.92,0.75,0.58,0.29,0.15,0.07,0.04,0.02,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.99,0.87,1.0,1.0,1.0,0.5,0.26,0.43,1.0,0.9,0.85,0.64,0.32,0.16,0.67,0.67,0.46,0.39,0.47,0.64,0.74,0.62,0.59,0.48,0.82,0.58,0.71,0.8,0.81,0.82,0.6,0.38,0.23,0.12,0.06,0.1,0.05,0.02,0.01,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.47,1.0,0.73,1.0,1.0,0.94,0.51,0.54,0.76,0.92,0.64,0.34,0.94,1.0,0.98,1.0,0.86,0.43,0.22,0.41,0.85,0.84,0.8,0.77,0.73,0.37,0.63,0.93,0.89,0.79,0.75,0.64,0.76,0.85,0.75,0.86,0.74,0.37,0.18,0.09,0.22,0.88,0.71,0.36,0.18,0.09,0.04,0.94,0.94,0.65,0.89,0.9,0.45,0.24,0.26,0.28,0.23,0.12,0.38,0.41,0.55,0.4,0.27,0.24,0.12,0.95,0.78,0.39,0.52,0.52,0.26,0.16,0.18,0.09,0.74,0.64,0.46,0.57,0.58,0.29,0.24,0.46,0.58,0.29,0.15,0.07,0.04,0.02,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.84,1.0,0.5,0.25,0.12,0.73,0.98,0.6,0.87,1.0,1.0,0.7,1.0,0.72,0.76,0.94,0.88,0.75,0.69,0.35,0.56,0.55,0.27,0.14,0.07,0.13,0.12,0.06,0.03,0.02,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0];
+      const SEFUE_T = [6.95, 11.95, 16.7];
+      const BUBS = [
+        ["Esta clienta quiere comprar en tu tienda. Mira qué pasó.", 0.45, 3.75],
+        ["Tarda en cargar. Siete segundos.", 3.95, 6.55],
+        ["No se ve bien en el celular. No lee nada.", 8.5, 11.4],
+        ["Pagar es un enredo. Tiene nueve campos.", 13.4, 16.35],
+        ["Tres ventas perdidas. Tres errores con arreglo.", 18.0, 21.2],
+      ];
+      const bubsEl = document.getElementById("bubs");
+      BUBS.forEach(([txt, a, b], i) => {
+        const d = document.createElement("div");
+        d.className = "bub"; d.id = "bub" + i; d.textContent = txt;
+        bubsEl.appendChild(d);
+        tl.fromTo(d, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.2)", immediateRender: false }, a);
+        tl.to(d, { scale: 0, opacity: 0, duration: 0.2, ease: "power3.in" }, b);
+      });
+
+      const mCanvas = document.getElementById("mango");
+      const mCtx = mCanvas.getContext("2d");
+      mCtx.imageSmoothingQuality = "high";
+      const mImg = new Image();
+      mImg.src = "assets/mango-cabeza.png";
+      /* boca: la mandíbula se comprime entre Y0 y Y1 y la barba absorbe el resto hasta Y2 */
+      const Y0 = 800, Y1 = 985, Y2 = 1230, DMAX = 112;
+      const smooth = (x) => x * x * (3 - 2 * x);
+      const clamp01 = (x) => Math.max(0, Math.min(1, x));
+      const outBack = (x) => { const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+      function drawMango(open) {
+        const W = mCanvas.width, k = W / 1086;
+        mCtx.clearRect(0, 0, W, mCanvas.height);
+        mCtx.drawImage(mImg, 0, 0, 1086, Y0, 0, 0, 1086 * k, Y0 * k);
+        const D = (1 - open) * DMAX;
+        for (let y = Y0; y < 1448; y += 2) {
+          let off = 0;
+          if (y < Y1) off = D * smooth((y - Y0) / (Y1 - Y0));
+          else if (y < Y2) off = D * (1 - smooth((y - Y1) / (Y2 - Y1)));
+          mCtx.drawImage(mImg, 0, Math.min(1447, y + off), 1086, 2, 0, y * k, 1086 * k, 2 * k + 0.6);
+        }
+      }
+      /* todo es función del tiempo: así cualquier cuadro se calcula igual al buscarlo */
+      function renderMango(t) {
+        const f = Math.min(ENV.length - 1, Math.max(0, Math.round(t * 30)));
+        const e = ENV[f];
+        drawMango(0.1 + 0.9 * e);
+        const entra = outBack(clamp01((t - 0.3) / 0.8));
+        let y = (1 - entra) * 720, x = 0, s = 1, rot = 0;
+        const u = clamp01((t - 23.85) / 0.7), ue = u * u * (3 - 2 * u);
+        x += -110 * ue; y += -250 * ue; s += 0.28 * ue;
+        SEFUE_T.forEach((ts) => {
+          const d = t - ts;
+          if (d >= 0 && d < 0.6) rot += Math.sin(d * 26) * 7 * (1 - d / 0.6);
+        });
+        const nod = t >= 22.25 && t < 22.75 ? Math.sin((t - 22.25) / 0.5 * Math.PI) * 12 : 0;
+        y += nod;
+        const bob = Math.sin(t * 2.3) * 7, tilt = Math.sin(t * 1.7) * 1.6;
+        mCanvas.style.transform = `translate(${x}px, ${y + bob}px) rotate(${rot + tilt}deg) scale(${s * (1 - 0.012 * e)}, ${s * (1 + 0.035 * e)})`;
+      }
+      const clock = { t: 0 };
+      tl.to(clock, { t: TOTAL, duration: TOTAL, ease: "none", onUpdate: () => renderMango(clock.t) }, 0);
+      mImg.onload = () => renderMango(0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

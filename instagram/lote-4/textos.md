@@ -6,6 +6,7 @@ HyperFrames (su proyecto vive en `instagram/hyperframes/reel-venta-perdida/`).
 | Archivo | Qué es |
 |---|---|
 | `venta-perdida-imagen.png` | La misma idea en una sola imagen, 1080 × 1350. Es la que se sube como publicación 3 |
+| `reel-venta-perdida-mango.mp4` | Versión con Mango como narrador: habla con su voz de personaje, con globos de texto y música. Es la alternativa más llamativa |
 | `reel-venta-perdida-con-musica.mp4` | El reel con música original, 1080 × 1920, 28,6 segundos, sin voz. Alternativa si prefieres video |
 | `reel-venta-perdida.mp4` | El mismo reel sin audio, por si prefieres ponerle un sonido en trending de Instagram |
 | `voz-plan.json` | Los cortes de una grabación de voz que se probó y se descartó (ver «Voz en off») |
@@ -54,6 +55,29 @@ Cierre: tres ventas, tres errores, todos con arreglo, y la invitación a hablar.
 **Hashtags:** #TiendaOnline #Shopify #Ecommerce #EmprendimientoColombia #DiseñoWeb #DiseñoUXUI #VentasOnline
 
 **Texto alternativo:** Video de Out Studio que sigue a una clienta en una tienda online que falla de tres formas: carga lento, no se ve bien en el celular y pagar es un enredo. Un contador de ventas perdidas sube en cada fallo.
+
+## Reel con Mango narrador
+
+Mango (la cabeza, de `design-src/mono/mono-avatar.png`) asoma abajo a la derecha y
+cuenta la historia: la boca se abre y se cierra al ritmo de la voz, cabecea, mueve la
+cabeza de lado a lado en cada «Se fue.» y en el cierre crece y pasa al centro. Sus
+frases salen en globos de texto. La clienta ya no habla: narra Mango.
+
+**Cómo funciona.** No es un 3D con esqueleto. La imagen de Mango se deforma por tiras
+en la zona de la mandíbula, entre la nariz y la barba, para cerrar o abrir la boca
+(el original es la boca abierta). Cada cuadro del video lee un valor de 0 a 1 de la
+curva de volumen de la voz (`ENV` en el HTML) y calcula cuánto abrir. Todo depende
+solo del tiempo, así que renderiza igual siempre.
+
+**La voz.** Es la grabación de Oscar con el tono subido unos tres semitonos y el timbre
+movido (`--tono mango` en `scripts/poner-voz.py`), para que suene a personaje. Se puede
+cambiar por otra voz (de IA o una locución) sin tocar el video:
+1. Saca la curva con `python3 instagram/scripts/envolvente-voz.py voz.wav > env.json`.
+2. Pega la lista en la constante `ENV` de `hyperframes/reel-venta-perdida-mango/index.html`.
+3. Renderiza: `npx hyperframes@0.8.150 render -q high -o reel.mp4` desde esa carpeta.
+4. Mezcla la voz con la música (`scripts/musica-reel.py`) y comprime con ffmpeg.
+
+El proyecto está en `instagram/hyperframes/reel-venta-perdida-mango/`.
 
 ## Voz en off (probada y descartada)
 
