@@ -267,6 +267,27 @@ def escena(res=(540, 960), muestras=24, fondo=(0.106, 0.184, 0.80, 1)):
     return cam
 
 
+def tinta(grosor=3.2, color=(0.03, 0.04, 0.2)):
+    """Contorno de tinta con Freestyle: bordes, siluetas y pliegues."""
+    sc = bpy.context.scene
+    sc.render.use_freestyle = True
+    sc.render.line_thickness_mode = "ABSOLUTE"
+    sc.render.line_thickness = grosor
+    vl = sc.view_layers[0]
+    vl.use_freestyle = True
+    fs = vl.freestyle_settings
+    for ls in list(fs.linesets):
+        fs.linesets.remove(ls)
+    ls = fs.linesets.new("tinta")
+    ls.select_silhouette = True
+    ls.select_border = True
+    ls.select_crease = True
+    estilo = bpy.data.linestyles.new("tinta")
+    estilo.color = color
+    estilo.thickness = grosor
+    ls.linestyle = estilo
+
+
 def mirar(cam, desde, hacia, lente=70):
     cam.location = desde
     cam.data.lens = lente
