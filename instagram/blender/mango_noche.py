@@ -76,30 +76,24 @@ def ciudad():
     b.inputs["Base Color"].default_value = (0.02, 0.025, 0.05, 1)
     b.inputs["Roughness"].default_value = 0.3
     s.data.materials.append(m)
-    # edificios con ventanas encendidas (textura de ruido emisiva)
+    # edificios con ventanas encendidas: textura dibujada con numpy (rejilla de ventanas al azar)
+    import numpy as np
+    rng = np.random.default_rng(7)
+    Wt, Ht, cols, filas = 320, 1024, 10, 80
+    tex = np.zeros((Ht, Wt, 4), dtype=np.float32); tex[..., :3] = (0.01, 0.015, 0.04); tex[..., 3] = 1
+    cw, ch = Wt // cols, Ht // filas
+    for r in range(filas):
+        for c in range(cols):
+            if rng.random() < 0.42:
+                col = np.array([(1.0, 0.72, 0.32), (1.0, 0.85, 0.55), (0.55, 0.75, 1.0)][rng.integers(0, 3)]) * rng.uniform(0.6, 1.0)
+                tex[r * ch + 4:(r + 1) * ch - 4, c * cw + 3:(c + 1) * cw - 3, :3] = col
+    im = bpy.data.images.new("ventanas", Wt, Ht); im.pixels = tex.ravel().tolist(); im.pack()
     ven = bpy.data.materials.new("ventanas"); ven.use_nodes = True
     n, l = ven.node_tree.nodes, ven.node_tree.links
     b = n["Principled BSDF"]
-    b.inputs["Base Color"].default_value = (0.01, 0.012, 0.03, 1)
-    tc = n.new("ShaderNodeTexCoord"); br = n.new("ShaderNodeTexBrick")
-    br.inputs["Scale"].default_value = 2.2
-    br.inputs["Mortar Size"].default_value = 0.18
-    br.inputs["Color1"].default_value = (1.0, 0.75, 0.35, 1)
-    br.inputs["Color2"].default_value = (0.02, 0.03, 0.08, 1)
-    br.inputs["Mortar"].default_value = (0.01, 0.01, 0.03, 1)
-    nz = n.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 1.6
-    mix = n.new("ShaderNodeMixRGB"); mix.blend_type = "MULTIPLY"; mix.inputs["Fac"].default_value = 1
-    cr = n.new("ShaderNodeValToRGB")
-    cr.color_ramp.elements[0].position = 0.42; cr.color_ramp.elements[1].position = 0.5
-    l.new(nz.outputs["Fac"], cr.inputs["Fac"])
-    sp = n.new("ShaderNodeSeparateXYZ"); cb = n.new("ShaderNodeCombineXYZ")
-    l.new(tc.outputs["Object"], sp.inputs["Vector"])
-    l.new(sp.outputs["X"], cb.inputs["X"]); l.new(sp.outputs["Z"], cb.inputs["Y"])
-    l.new(cb.outputs["Vector"], br.inputs["Vector"])
-    l.new(cb.outputs["Vector"], nz.inputs["Vector"])
-    l.new(br.outputs["Color"], mix.inputs["Color1"]); l.new(cr.outputs["Color"], mix.inputs["Color2"])
-    l.new(mix.outputs["Color"], b.inputs["Emission Color"])
-    b.inputs["Emission Strength"].default_value = 2.2
+    t = n.new("ShaderNodeTexImage"); t.image = im; t.interpolation = "Closest"
+    l.new(t.outputs["Color"], b.inputs["Base Color"]); l.new(t.outputs["Color"], b.inputs["Emission Color"])
+    b.inputs["Emission Strength"].default_value = 2.5
     for i in range(26):
         x = -22 + i * 1.8 + random.uniform(-.4, .4)
         h = random.uniform(5, 16)
@@ -150,6 +144,9 @@ if __name__ == "__main__":
     salida = sys.argv[1]
     W = int(sys.argv[2]) if len(sys.argv) > 2 else 540
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    ciudad(); mango(); escena(W, W * 16 // 9)
+    ciudad()
+    if "--sin-mango" not in sys.argv:
+        mango()
+    escena(W, W * 16 // 9)
     bpy.context.scene.render.filepath = salida
     bpy.ops.render.render(write_still=True)
