@@ -163,3 +163,12 @@ un golpe final con campanitas.
 Para regenerarla y mezclarla con el video:
 `python3 instagram/scripts/musica-reel.py --video instagram/lote-4/reel-venta-perdida.mp4`
 Se puede ajustar el volumen con `--volumen 0.8` (requiere numpy, scipy y ffmpeg).
+
+## Reel con dos voces (narrador y Mango)
+
+Archivo: `reel-venta-perdida-voces.mp4` (28,6 s, 1080 × 1920). Es el mismo reel de «La venta perdida», sin personajes animados, con dos voces de ElevenLabs y la música original por debajo (baja sola cuando hablan).
+
+- **Narrador:** cuenta lo que pasa. «Esta clienta quiere comprar en tu tienda. Tarda en cargar siete segundos. No se ve bien en el celular. No lee nada. Pagar es un enredo. Tiene nueve campos. Tres ventas perdidas. ¿Tu tienda tiene alguno?»
+- **Mango (voz):** comenta. «Mira qué pasó. Se fue. Se fue. Se fue. Tres errores con arreglo. Y casi nunca te enteras. Escríbenos.»
+- Las voces están en `instagram/voces/`; `instagram/dialogo/plan.json` dice en qué segundo cae cada frase y `instagram/scripts/dialogo.py` las acomoda. Si cambias una voz, vuelve a correr el script y a mezclar.
+- Antes de publicar: ElevenLabs pide plan de pago para uso comercial.
