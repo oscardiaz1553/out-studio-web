@@ -5,12 +5,13 @@ import numpy as np
 import bpy
 
 
-def _cargar(ruta):
+def _cargar(ruta, con_alfa=False):
     im = bpy.data.images.load(ruta)
     w, h = im.size
     px = np.array(im.pixels[:], dtype=np.float32).reshape(h, w, 4)
     bpy.data.images.remove(im)
-    return px[::-1, :, :3].copy()          # arriba primero
+    px = px[::-1].copy()                   # arriba primero
+    return px if con_alfa else px[:, :, :3].copy()
 
 
 def _guardar(rgb, ruta):
@@ -54,3 +55,27 @@ def comic(entrada, salida, bandas=4, punto=9, tinta=(0.04, 0.05, 0.22), grano=0.
     rng = np.random.default_rng(3)
     base += (rng.standard_normal((h, w, 1)).astype(np.float32) * grano)
     _guardar(base, salida)
+
+
+def comic_alfa(entrada, bandas=4, punto=8, tinta=(0.05, 0.04, 0.16), desfase=2):
+    """Igual que comic(), pero con fondo transparente: devuelve (alto, ancho, 4)."""
+    rgba = _cargar(entrada, con_alfa=True)
+    a = rgba[..., 3]
+    img = rgba[..., :3]
+    h, w, _ = img.shape
+    v = img.max(axis=2)
+    sat = np.where(v > 1e-4, (v - img.min(axis=2)) / np.maximum(v, 1e-4), 0)
+    vq = (np.floor(v * bandas + 0.5) / bandas).clip(0.14, 1)
+    base = img * np.where(v > 1e-4, vq / np.maximum(v, 1e-4), 1)[..., None]
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    ang = np.deg2rad(30)
+    u = (xx * np.cos(ang) + yy * np.sin(ang)) / punto
+    t = (-xx * np.sin(ang) + yy * np.cos(ang)) / punto
+    d = np.hypot((u % 1) - 0.5, (t % 1) - 0.5)
+    oscuridad = np.clip((0.5 - v) / 0.4, 0, 1) * (sat > 0.2)
+    pm = ((d < 0.16 + 0.28 * oscuridad) & (oscuridad > 0.06)).astype(np.float32)
+    base = base * (1 - 0.5 * pm[..., None]) + np.array(tinta) * 0.5 * pm[..., None]
+    r = np.roll(base[..., 0], desfase, axis=1)
+    b = np.roll(base[..., 2], -desfase, axis=1)
+    base = np.stack([r, base[..., 1], b], axis=-1)
+    return np.dstack([np.clip(base, 0, 1), a])

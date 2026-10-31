@@ -32,7 +32,7 @@ def profundidad(alfa, grosor=1.05, radio=330, suavizado=7):
 def construir(paso=5, grosor=1.05):
     im, px = cargar()
     h, w, _ = px.shape
-    alfa = px[..., 3]
+    alfa = ndimage.binary_erosion(px[..., 3] > 0.5, iterations=4).astype(np.float32)
     z = profundidad(alfa, grosor)
     # malla en rejilla, solo donde hay imagen
     ys = np.arange(0, h, paso)
@@ -69,10 +69,13 @@ def construir(paso=5, grosor=1.05):
             y = -co.z / ESCALA + h / 2
             l[uvl].uv = (x / w, 1 - y / h)
     bm.normal_update()
+    for v in bm.verts:
+        if any(len(e.link_faces) < 2 for e in v.link_edges):
+            v.co.y = 0.0                      # el borde de la silueta queda en el plano medio
     # parte de atrás: copia espejada para cerrar el volumen
     frente = bm.copy()
     geo = bmesh.ops.mirror(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], axis="Y", merge_dist=0.0005)
-    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.0008)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.004)
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     frente.free()
     me = bpy.data.meshes.new("mango_proyectado")
@@ -82,15 +85,63 @@ def construir(paso=5, grosor=1.05):
     bpy.context.collection.objects.link(o)
     for p in me.polygons:
         p.use_smooth = True
-    # material con la imagen
+    # material: textura real al frente; hacia los lados y atrás, pelaje naranja generado
     m = bpy.data.materials.new("mango_textura")
     m.use_nodes = True
-    n = m.node_tree.nodes
+    n, l = m.node_tree.nodes, m.node_tree.links
     b = n["Principled BSDF"]
     t = n.new("ShaderNodeTexImage")
     t.image = im
     t.interpolation = "Cubic"
-    m.node_tree.links.new(t.outputs["Color"], b.inputs["Base Color"])
+    t.extension = "EXTEND"
+    # pelaje generado: ruido alargado en vertical (el pelo cae), con variación de tono
+    tc = n.new("ShaderNodeTexCoord")
+    mp = n.new("ShaderNodeMapping")
+    mp.inputs["Scale"].default_value = (46, 46, 4)
+    l.new(tc.outputs["Object"], mp.inputs["Vector"])
+    ruido = n.new("ShaderNodeTexNoise")
+    ruido.inputs["Detail"].default_value = 10
+    ruido.inputs["Roughness"].default_value = 0.65
+    l.new(mp.outputs["Vector"], ruido.inputs["Vector"])
+    gran = n.new("ShaderNodeTexNoise")
+    gran.inputs["Scale"].default_value = 2.2
+    l.new(tc.outputs["Object"], gran.inputs["Vector"])
+    ramp = n.new("ShaderNodeValToRGB")
+    ramp.color_ramp.elements[0].color = (0.50, 0.08, 0.005, 1)
+    ramp.color_ramp.elements[1].color = (0.95, 0.30, 0.02, 1)
+    e = ramp.color_ramp.elements.new(0.55)
+    e.color = (0.80, 0.17, 0.01, 1)
+    mezcla_r = n.new("ShaderNodeMath")
+    mezcla_r.operation = "MULTIPLY_ADD"
+    mezcla_r.inputs[1].default_value = 0.8
+    l.new(ruido.outputs["Fac"], mezcla_r.inputs[0])
+    l.new(gran.outputs["Fac"], mezcla_r.inputs[2])
+    l.new(mezcla_r.outputs["Value"], ramp.inputs["Fac"])
+    # cuánto mira la superficie hacia la cámara (frente = -Y)
+    geo = n.new("ShaderNodeNewGeometry")
+    sep = n.new("ShaderNodeSeparateXYZ")
+    l.new(geo.outputs["Normal"], sep.inputs["Vector"])
+    neg = n.new("ShaderNodeMath")
+    neg.operation = "MULTIPLY"
+    neg.inputs[1].default_value = -1.0
+    l.new(sep.outputs["Y"], neg.inputs[0])
+    paso_f = n.new("ShaderNodeMapRange")
+    paso_f.inputs["From Min"].default_value = 0.30
+    paso_f.inputs["From Max"].default_value = 0.75
+    paso_f.clamp = True
+    l.new(neg.outputs["Value"], paso_f.inputs["Value"])
+    mix = n.new("ShaderNodeMix")
+    mix.data_type = "RGBA"
+    l.new(paso_f.outputs["Result"], mix.inputs["Factor"])
+    l.new(ramp.outputs["Color"], mix.inputs["A"])
+    l.new(t.outputs["Color"], mix.inputs["B"])
+    l.new(mix.outputs["Result"], b.inputs["Base Color"])
+    # relieve de pelo en la parte generada
+    bump = n.new("ShaderNodeBump")
+    bump.inputs["Strength"].default_value = 0.5
+    bump.inputs["Distance"].default_value = 0.03
+    l.new(ruido.outputs["Fac"], bump.inputs["Height"])
+    l.new(bump.outputs["Normal"], b.inputs["Normal"])
     b.inputs["Roughness"].default_value = 0.65
     if "Specular IOR Level" in b.inputs:
         b.inputs["Specular IOR Level"].default_value = 0.2
