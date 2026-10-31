@@ -79,3 +79,21 @@ def comic_alfa(entrada, bandas=4, punto=8, tinta=(0.05, 0.04, 0.16), desfase=2):
     b = np.roll(base[..., 2], -desfase, axis=1)
     base = np.stack([r, base[..., 1], b], axis=-1)
     return np.dstack([np.clip(base, 0, 1), a])
+
+
+def con_contorno(rgba, grosor=4, tinta=(0.03, 0.04, 0.16)):
+    """Añade un contorno de tinta alrededor de la silueta (usa el canal alfa)."""
+    from scipy import ndimage
+    a = rgba[..., 3] > 0.5
+    borde = ndimage.binary_dilation(a, iterations=grosor) & ~a
+    borde = ndimage.gaussian_filter(borde.astype(np.float32), 0.8)
+    out = rgba.copy()
+    for c in range(3):
+        out[..., c] = rgba[..., c] * rgba[..., 3] + tinta[c] * borde * (1 - rgba[..., 3])
+    out[..., 3] = np.clip(rgba[..., 3] + borde, 0, 1)
+    return out
+
+
+def sobre_fondo(rgba, fondo=(0.106, 0.184, 0.80)):
+    a = rgba[..., 3:4]
+    return rgba[..., :3] * a + np.array(fondo) * (1 - a)
