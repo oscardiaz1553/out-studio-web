@@ -15,4 +15,4 @@ del círculo que recorta WhatsApp.
    NODE_PATH=$(npm root -g) node design-src/whatsapp/grupo.cjs design-src/whatsapp/<logo>.png design-src/whatsapp/grupo-<cliente>.png
    ```
 
-Ejemplo: `grupo-diario-deportes.png`.
+Ejemplos: `grupo-diario-deportes.png` y `grupo-habla-deportes.png`. El logo de Habla Deportes llegó como JPG sobre fondo azul grisáceo; `habla-deportes.png` es ese logo en blanco con fondo transparente.
