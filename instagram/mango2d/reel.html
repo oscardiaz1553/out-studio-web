@@ -413,7 +413,8 @@ window.render = (t) => {
   // Mango: boca, ojos, giro y actuación
   const yo = habla(t, "mango"), el = habla(t, "narrador");
   const k = Math.floor(t * 12);
-  const nb = HOJA ? claveEn("bocas", Math.floor(t * 24 + 1e-6), "m") : (yo && k < BOCAS.length ? BOCAS[k] : "m");
+  // la boca se adelanta un cuadro al sonido (se lee mejor sincronizada)
+  const nb = HOJA ? claveEn("bocas", Math.floor(t * 24 + 1e-6) + 1, "m") : (yo && k < BOCAS.length ? BOCAS[k] : "m");
   m.bocaImg(nb);
   m.ojos(ojosEn(t));
   const abre = { m: 0, pb: 0.05, i: 0.2, sz: 0.2, e: 0.45, a: 0.75, h: 0.9, o: 0.6, u: 0.35 }[nb] || 0;

@@ -113,6 +113,7 @@
         <button id="btnPlay" type="button" class="prim">Reproducir</button>
         <button id="btnAdelante" type="button" aria-label="Cuadro siguiente">Cuadro ▶</button>
         <button id="btnFrase" type="button" aria-pressed="false">Repetir frase</button>
+        <button id="btn4s" type="button" class="prim" aria-pressed="true">A 4s</button>
         <span class="tiempo" id="tiempo">Cuadro 1 · 0,00 s</span>
       </div>
       <input type="range" id="scrub" min="0" value="0" step="1" aria-label="Tiempo">
@@ -132,8 +133,9 @@
       <div class="mini">
         <button id="btnQuitarB" type="button">Quitar clave de boca</button>
         <button id="btnQuitarO" type="button">Quitar clave de ojos</button>
+        <button id="btnPasar4" type="button">Pasar todas las claves a 4s</button>
       </div>
-      <p class="ayuda">Mover un slider o tocar una miniatura pone una clave en este cuadro, y se mantiene hasta la siguiente clave, como en la hoja. Teclado: <kbd>Espacio</kbd> reproducir, <kbd>←</kbd> <kbd>→</kbd> cuadro a cuadro (con <kbd>Mayús</kbd>, de 6 en 6), letras para la boca: <kbd>M</kbd> <kbd>P</kbd> <kbd>A</kbd> <kbd>E</kbd> <kbd>I</kbd> <kbd>O</kbd> <kbd>U</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>S</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>C</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>Q</kbd> <kbd>N</kbd> <kbd>T</kbd> <kbd>W</kbd> <kbd>H</kbd>.</p>
+      <p class="ayuda">Mover un slider o tocar una miniatura pone una clave, y se mantiene hasta la siguiente, como en la hoja. Con «A 4s» activo la clave cae al inicio del bloque de 4 cuadros donde estás, así la boca cambia como máximo 6 veces por segundo. Teclado: <kbd>Espacio</kbd> reproducir, <kbd>←</kbd> <kbd>→</kbd> cuadro a cuadro (con <kbd>Mayús</kbd>, de bloque en bloque), letras para la boca: <kbd>M</kbd> <kbd>P</kbd> <kbd>A</kbd> <kbd>E</kbd> <kbd>I</kbd> <kbd>O</kbd> <kbd>U</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>S</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>C</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>Q</kbd> <kbd>N</kbd> <kbd>T</kbd> <kbd>W</kbd> <kbd>H</kbd>.</p>
     </section>
   </div>
 
@@ -160,7 +162,8 @@
 
   /* ── estado ── */
   let claves = { bocas: {}, ojos: {} };
-  let cuadro = 0, tocando = false, repetir = false, sucio = false;
+  let cuadro = 0, tocando = false, repetir = false, sucio = false, rejilla = 4;
+  const bloque = (f) => (rejilla > 1 ? Math.floor(f / rejilla) * rejilla : f);
 
   /* ── capas de la vista previa (todas cargadas, se muestra una) ── */
   const cuadroEl = $("cuadro"), imgB = {}, imgO = {};
@@ -204,9 +207,10 @@
     $("scrub").value = cuadro;
     $("bocaNom").textContent = nombreB[b]; $("ojosNom").textContent = nombreO[o];
     $("bocaSl").value = BOCAS.findIndex(([k]) => k === b); $("ojosSl").value = OJOS.findIndex(([k]) => k === o);
-    const kb = claves.bocas[cuadro] !== undefined, ko = claves.ojos[cuadro] !== undefined;
-    $("bocaClave").textContent = kb ? "Clave en este cuadro" : "Se mantiene"; $("bocaClave").className = "clave" + (kb ? " si" : "");
-    $("ojosClave").textContent = ko ? "Clave en este cuadro" : "Se mantiene"; $("ojosClave").className = "clave" + (ko ? " si" : "");
+    const fb = bloque(cuadro), kb = claves.bocas[fb] !== undefined, ko = claves.ojos[fb] !== undefined;
+    const enBloque = rejilla > 1 ? "Clave en este bloque" : "Clave en este cuadro";
+    $("bocaClave").textContent = kb ? enBloque : "Se mantiene"; $("bocaClave").className = "clave" + (kb ? " si" : "");
+    $("ojosClave").textContent = ko ? enBloque : "Se mantiene"; $("ojosClave").className = "clave" + (ko ? " si" : "");
     document.querySelectorAll("#bocaPal button").forEach((x) => x.classList.toggle("on", x.dataset.k === b));
     document.querySelectorAll("#ojosPal button").forEach((x) => x.classList.toggle("on", x.dataset.k === o));
     const e = EV.find((e) => t >= e.t0 && t <= e.t1);
@@ -232,7 +236,8 @@
     for (let f = 0; f < N; f++) {
       const x = f * PX;
       if (f % FPS === 0) { cx.fillStyle = "#f5e3b3"; cx.fillRect(x, 0, 1, HH); cx.fillText((f / FPS) + " s", x + 3, 3); }
-      else if (f % 2 === 0) { cx.fillStyle = "rgba(183,188,223,.10)"; cx.fillRect(x, 16, 1, HH - 16); }
+      else if (f % 4 === 0) { cx.fillStyle = rejilla > 1 ? "rgba(245,227,179,.22)" : "rgba(183,188,223,.14)"; cx.fillRect(x, 16, 1, HH - 16); }
+      else if (rejilla === 1) { cx.fillStyle = "rgba(183,188,223,.06)"; cx.fillRect(x, 16, 1, HH - 16); }
     }
     // onda del audio
     if (picos) {
@@ -307,9 +312,9 @@
   /* ── editar claves ── */
   function poner(p, k) {
     if (tocando) play();
-    claves[p][cuadro] = k; ordenar(); pintarHoja(); pintarCuadro(); guardar();
+    claves[p][bloque(cuadro)] = k; ordenar(); pintarHoja(); pintarCuadro(); guardar();
   }
-  function quitar(p) { if (claves[p][cuadro] === undefined) return; delete claves[p][cuadro]; ordenar(); pintarHoja(); pintarCuadro(); guardar(); }
+  function quitar(p) { const f = bloque(cuadro); if (claves[p][f] === undefined) return; delete claves[p][f]; ordenar(); pintarHoja(); pintarCuadro(); guardar(); }
   $("bocaSl").addEventListener("input", (e) => poner("bocas", BOCAS[+e.target.value][0]));
   $("ojosSl").addEventListener("input", (e) => poner("ojos", OJOS[+e.target.value][0]));
   $("btnQuitarB").addEventListener("click", () => quitar("bocas"));
@@ -320,12 +325,30 @@
   $("btnAdelante").addEventListener("click", () => { if (tocando) play(); irA(cuadro + 1, true); });
   $("btnPlay").addEventListener("click", play);
   $("btnFrase").addEventListener("click", (e) => { repetir = !repetir; e.target.setAttribute("aria-pressed", repetir); e.target.classList.toggle("prim", repetir); });
+  $("btn4s").addEventListener("click", (e) => { rejilla = rejilla > 1 ? 1 : 4; const on = rejilla > 1; e.target.setAttribute("aria-pressed", on); e.target.classList.toggle("prim", on); pintarHoja(); pintarCuadro(); });
+  const PRI = { a: 9, h: 9, q: 9, o: 8, e: 7, u: 6, w: 6, i: 5, l: 5, r: 5, n: 5, dt: 4, th: 4, kg: 4, j: 4, ch: 4, sz: 4, fv: 4, pb: 3, m: 0 };
+  function aCuatros(mapa, prioridad) {
+    // en cada bloque de 4 gana la clave más importante (vocales antes que consonantes; cierres antes que silencio)
+    const bloques = {};
+    for (const f of Object.keys(mapa).map(Number).sort((a, b) => a - b)) {
+      const b = Math.floor(f / 4) * 4, k = mapa[f];
+      if (bloques[b] === undefined || (prioridad && (PRI[k] ?? 1) > (PRI[bloques[b]] ?? 1)) || (!prioridad)) bloques[b] = k;
+    }
+    const res = {}; let prev = null;
+    for (const b of Object.keys(bloques).map(Number).sort((a, b) => a - b)) if (bloques[b] !== prev) { res[b] = bloques[b]; prev = bloques[b]; }
+    return res;
+  }
+  $("btnPasar4").addEventListener("click", () => {
+    claves = { bocas: aCuatros(claves.bocas, true), ojos: aCuatros(claves.ojos, false) };
+    rejilla = 4; $("btn4s").setAttribute("aria-pressed", true); $("btn4s").classList.add("prim");
+    ordenar(); pintarHoja(); pintarCuadro(); guardar(); estado("Claves pasadas a 4s", "ok");
+  });
   $("btnZoom").addEventListener("click", (e) => { const on = $("stage").classList.toggle("cara"); e.target.setAttribute("aria-pressed", on); e.target.textContent = on ? "Ver cabeza" : "Acercar cara"; });
   document.addEventListener("keydown", (e) => {
     if (e.target.tagName === "TEXTAREA" || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === " ") { e.preventDefault(); play(); return; }
-    if (e.key === "ArrowLeft") { e.preventDefault(); if (tocando) play(); irA(cuadro - (e.shiftKey ? 6 : 1), true); return; }
-    if (e.key === "ArrowRight") { e.preventDefault(); if (tocando) play(); irA(cuadro + (e.shiftKey ? 6 : 1), true); return; }
+    if (e.key === "ArrowLeft") { e.preventDefault(); if (tocando) play(); irA(e.shiftKey ? bloque(cuadro - 1) : cuadro - 1, true); return; }
+    if (e.key === "ArrowRight") { e.preventDefault(); if (tocando) play(); irA(e.shiftKey ? bloque(cuadro) + 4 : cuadro + 1, true); return; }
     if (e.target.tagName === "INPUT" && e.key.startsWith("Arrow")) return;
     const k = TECLAS[e.key.toLowerCase()];
     if (k) { e.preventDefault(); poner("bocas", k); }
