@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Mango estrena la tienda de BARCI</title>
+<style>
+  @font-face { font-family: "B"; src: url("assets/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+  @font-face { font-family: "I"; src: url("assets/instrument-500.woff2") format("woff2"); font-weight: 500; }
+  * { margin: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1920px; overflow: hidden; position: relative; background: #f6e8c8; font-family: "I", sans-serif; }
+  .d { font-family: "B", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
+  canvas.mundo { position: absolute; left: -200px; top: -200px; }
+  #atras { transform-origin: 200px 200px; }
+  #cam { position: absolute; inset: 0; transform-origin: 0 0; }
+  #mangoW { position: absolute; left: 0; top: 0; width: 1254px; height: 1254px; transform-origin: 627px 627px; }
+  #titulo { position: absolute; left: 70px; right: 70px; top: 130px; text-align: center; color: #141e5c; font-size: 100px; -webkit-text-stroke: 16px #f6e8c8; paint-order: stroke fill; }
+  #titulo span { display: inline-block; }
+  #semanas { position: absolute; left: 60px; top: 950px; width: 400px; }
+  #semanas .fila { display: flex; gap: 12px; }
+  #semanas .s { flex: 1; height: 80px; border-radius: 26px; background: #fbf8f5; border: 5px solid #2b0d06; display: flex; align-items: center; justify-content: center; font: 800 34px "B"; letter-spacing: -0.03em; color: #141e5c; }
+  #semanas .lbl { margin-top: 18px; display: inline-block; background: #1b2fcc; color: #fbf8f5; border-radius: 40px; padding: 14px 34px; font: 800 38px "B"; letter-spacing: -0.03em; border: 5px solid #2b0d06; }
+  #cierre { position: absolute; inset: 0; background: #1b2fcc; opacity: 0; overflow: hidden; }
+  #cierre canvas { position: absolute; left: 0; top: 0; }
+  #cierre .fila { position: absolute; left: 0; right: 0; text-align: center; color: #fbf8f5; white-space: nowrap; }
+  #cierre .m { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 0.12em 0.14em; margin: 0 -0.08em; }
+  #cierre .m i { display: inline-block; font-style: normal; }
+  #cierre .btn { position: absolute; left: 50%; top: 1180px; margin-left: -290px; width: 580px; text-align: center; background: #f5e3b3; color: #1b2fcc; font-size: 56px; padding: 32px 0; border-radius: 999px; font-weight: 500; }
+</style></head>
+<body>
+<canvas id="atras" class="mundo" width="1480" height="2320"></canvas>
+<div id="cam">
+  <div id="mangoW"></div>
+  <canvas id="frente" class="mundo" width="1480" height="2320"></canvas>
+</div>
+<div id="titulo" class="d"></div>
+<div id="semanas"><div class="fila"><div class="s">S1</div><div class="s">S2</div><div class="s">S3</div><div class="s">S4</div></div><div class="lbl" id="lbl">Al aire y vendiendo</div></div>
+<div id="cierre">
+  <canvas id="cbg" width="1080" height="1920"></canvas>
+  <div class="fila d" id="a1" style="top:600px;font-size:128px"></div>
+  <div class="fila d" id="a2" style="top:740px;font-size:128px"></div>
+  <div class="fila d" id="c2" style="top:1000px;font-size:104px;color:#f5e3b3"></div>
+  <div class="btn" id="cierreBtn">outstudio.online</div>
+</div>
+<script src="elementos.js"></script>
+<script src="rig.js"></script>
+<script>
+/* ═══════════ utilidades ═══════════ */
+const TINTA = "#2b0d06";
+const lerp = (a, b, t) => a + (b - a) * t;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const suave = (a, b, x) => { const u = clamp((x - a) / (b - a)); return u * u * (3 - 2 * u); };
+const inOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+const easeOutExpo = (u) => (u >= 1 ? 1 : 1 - Math.pow(2, -10 * u));
+const easeOutBack = (u) => { const c = 1.70158; return 1 + (c + 1) * Math.pow(u - 1, 3) + c * Math.pow(u - 1, 2); };
+function interp(claves, t) {
+  if (t <= claves[0][0]) return claves[0][1];
+  for (let i = 0; i < claves.length - 1; i++) { const [t0, v0] = claves[i], [t1, v1] = claves[i + 1]; if (t <= t1) return lerp(v0, v1, inOut((t - t0) / (t1 - t0))); }
+  return claves[claves.length - 1][1];
+}
+
+/* ═══════════ tiempos (s): se ajustan a la voz del narrador (voces/barci-narrador.mp3) ═══════════ */
+const E = {
+  l: [0.3, 2.0, 4.0, 6.4, 9.4, 12.6],               // inicio de cada frase del narrador (provisional)
+  cierre: 15.6, fin: 19.4,
+};
+// desplazamiento de la pantalla del celular: [t, píxeles de la captura larga (a 2x)]
+const SCROLL = [[0, 108], [3.5, 108], [4.4, 1500], [6.0, 1500], [7.0, 4560], [9.0, 4560], [10.0, 6000], [12.2, 6000], [13.0, 7000], [14.2, 7000], [15.0, 7500]];
+const CAPS = [[E.l[0], E.l[1], "Esta es BARCI."], [E.l[1], E.l[2], "Moda femenina colombiana."], [E.l[2], E.l[3], "Básicos, cápsulas y accesorios."], [E.l[3], E.l[4], "No cabe en una sola forma."], [E.l[4], E.l[5], "Y una cápsula: Brava."], [E.l[5], E.cierre, "En 4 semanas ya vendía."]];
+
+/* ═══════════ dibujo del mundo ═══════════ */
+function contorno(ctx, relleno, ancho = 5) { ctx.fillStyle = relleno; ctx.fill(); ctx.lineWidth = ancho; ctx.strokeStyle = TINTA; ctx.lineJoin = "round"; ctx.stroke(); }
+function rect(ctx, x, y, w, h, r, color, ancho) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); contorno(ctx, color, ancho); }
+function planta(ctx, x, yBase, t) {
+  const alto = 330, sway = Math.sin(t * 1.2) * 8;
+  ctx.beginPath(); ctx.moveTo(x - 70, yBase - 120); ctx.lineTo(x + 70, yBase - 120); ctx.lineTo(x + 52, yBase + 20); ctx.lineTo(x - 52, yBase + 20); ctx.closePath(); contorno(ctx, "#bc6039");
+  rect(ctx, x - 82, yBase - 138, 164, 36, 10, "#d9784a");
+  const pt = (u) => ({ x: x + Math.sin(u * 2.4) * 22 + sway * u * u, y: yBase - 130 - alto * u });
+  ctx.beginPath(); for (let i = 0; i <= 20; i++) { const p = pt(i / 20); i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
+  ctx.lineWidth = 14; ctx.strokeStyle = TINTA; ctx.lineCap = "round"; ctx.stroke(); ctx.lineWidth = 8; ctx.strokeStyle = "#2f8a3c"; ctx.stroke();
+  for (let i = 0; i < 9; i++) {
+    const u = (i + 1) / 9.5, p = pt(u), lado = i % 2 ? 1 : -1, tam = (70 - u * 20) * (0.85 + 0.3 * ((i * 37) % 10) / 10);
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(lado * (0.9 + 0.15 * Math.sin(t * 1.2 + i)) - (lado > 0 ? 0 : 0.2));
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(tam * 0.6, -tam * 0.7, tam * 1.6, 0); ctx.quadraticCurveTo(tam * 0.6, tam * 0.7, 0, 0); contorno(ctx, i % 3 ? "#3f9a3a" : "#2c7a2f", 4);
+    ctx.beginPath(); ctx.moveTo(tam * 0.1, 0); ctx.lineTo(tam * 1.3, 0); ctx.lineWidth = 3; ctx.strokeStyle = "rgba(43,13,6,.5)"; ctx.stroke(); ctx.restore();
+  }
+}
+const PH = { x: 790, y: 1568, w: 470, h: 1017, pad: 22 };    // celular de pie sobre la mesa: centro-base, tamaño de la pantalla
+const img = new Image(); img.src = "assets/barci-home.jpg";
+function dibujarAtras(ctx, t) {
+  ctx.setTransform(1, 0, 0, 1, 200, 200); ctx.clearRect(-200, -200, 1480, 2320);
+  ctx.fillStyle = "#f6e8c8"; ctx.fillRect(-200, -200, 1480, 2320);
+  ctx.fillStyle = "#ecd7a8"; ctx.fillRect(-200, 1120, 1480, 1000); ctx.fillStyle = TINTA; ctx.fillRect(-200, 1118, 1480, 5);
+  const wx = 70, wy = 430, ww = 380, wh = 470, hora = 10.5 + t * 0.04;
+  ctx.save(); ctx.beginPath(); ctx.roundRect(wx, wy, ww, wh, 16); ctx.clip(); ctx.translate(wx, wy); Cielo.dibujar(ctx, ww, wh, hora, { lluvia: 0, nieve: 0, nubes: 0.35 }); ctx.restore();
+  ctx.lineWidth = 12; ctx.strokeStyle = "#8d4a2c"; ctx.beginPath(); ctx.roundRect(wx, wy, ww, wh, 16); ctx.stroke();
+  ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(wx + ww / 2, wy); ctx.lineTo(wx + ww / 2, wy + wh); ctx.moveTo(wx, wy + wh / 2); ctx.lineTo(wx + ww, wy + wh / 2); ctx.stroke();
+  ctx.strokeStyle = TINTA; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(wx - 6, wy - 6, ww + 12, wh + 12, 20); ctx.stroke();
+  rect(ctx, wx - 24, wy + wh + 4, ww + 48, 30, 8, "#d9784a", 5);
+}
+function dibujarFrente(ctx, t) {
+  ctx.setTransform(1, 0, 0, 1, 200, 200); ctx.clearRect(-200, -200, 1480, 2320);
+  ctx.fillStyle = "#8d4a2c"; ctx.fillRect(-210, 1620, 1500, 520); ctx.strokeStyle = TINTA; ctx.lineWidth = 5; ctx.strokeRect(-210, 1620, 1500, 520);
+  ctx.fillStyle = "rgba(43,13,6,.18)"; for (let i = -1; i < 8; i++) ctx.fillRect(40 + i * 160, 1680, 6, 440);
+  rect(ctx, -220, 1556, 1520, 74, 14, "#bc6039", 6);
+  ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(-190, 1566, 1460, 10);
+  // celular con la tienda de BARCI (captura real de barci.com.co) que se desplaza
+  const off = interp(SCROLL, t), k = PH.w / 780, vh = PH.h / k;
+  ctx.save(); ctx.translate(PH.x, PH.y); ctx.rotate(-0.025);
+  rect(ctx, -PH.w / 2 - PH.pad, -PH.h - PH.pad * 2 + 0, PH.w + PH.pad * 2, PH.h + PH.pad * 2, 56, "#141e5c", 6);
+  ctx.save(); ctx.beginPath(); ctx.roundRect(-PH.w / 2, -PH.h - PH.pad, PH.w, PH.h, 40); ctx.clip();
+  if (img.complete && img.naturalWidth) ctx.drawImage(img, 0, off, 780, vh, -PH.w / 2, -PH.h - PH.pad, PH.w, PH.h);
+  ctx.restore(); ctx.fillStyle = "#0b1038"; ctx.beginPath(); ctx.arc(0, -PH.h - PH.pad + 16, 7, 0, 6.29); ctx.fill();
+  ctx.restore();
+  planta(ctx, 60, 1590, t);
+}
+
+/* ═══════════ Mango: el único cutout ═══════════ */
+const OJOS = ["ojos-abiertos", "entreabiertos", "mirada-izq", "mirada-der", "mirada-arriba", "parpadeo"];
+const m = MangoRig.crear(document.getElementById("mangoW"), { webgl: true, bocas: { carpeta: "bocas", indice: { m: { x: 450, y: 600 } } }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: OJOS } });
+const PASO = 2;
+const LINEA_OJOS = [[0, "ojos-abiertos"], [0.8, "entreabiertos"], [1.6, "mirada-der"], [6.2, "entreabiertos"], [8.8, "mirada-der"], [12.5, "ojos-abiertos"], [14.6, "entreabiertos"]];
+const PARP = [0.8, 1.6, 6.2, 8.8, 12.5, 14.6];
+function ojosEn(f) {
+  const t = f / 24; let n = "entreabiertos"; for (const [t0, o] of LINEA_OJOS) if (t >= t0) n = o;
+  for (const b of PARP) { const fb = Math.round(b * 24 / PASO) * PASO, d = f - fb; if (d >= -2 * PASO && d < -PASO) return "entreabiertos"; if (d >= -PASO && d < PASO) return "parpadeo"; }
+  return n;
+}
+const lienzoAtras = document.getElementById("atras").getContext("2d"), lienzoFrente = document.getElementById("frente").getContext("2d");
+const mW = document.getElementById("mangoW"), cam = document.getElementById("cam");
+const camara = (t) => ({ s: 1 + 0.06 * suave(0, E.cierre, t), x: 540, y: 960 });
+
+function pinta(t, f) {
+  const tq = Math.floor(f / PASO) * PASO / 24;
+  dibujarAtras(lienzoAtras, t); dibujarFrente(lienzoFrente, t);
+  const c = camara(t), sb = 1 + (c.s - 1) * 0.8;
+  cam.style.transform = `translate(${540 - c.x * c.s}px, ${960 - c.y * c.s}px) scale(${c.s})`;
+  lienzoAtras.canvas.style.transform = `translate(${540 - c.x * sb}px, ${960 - c.y * sb}px) scale(${sb})`;
+  // Mango (a doses): mira el celular; al oír «4 semanas» se voltea a cámara con ojos abiertos
+  m.bocaImg("m"); m.ojos(ojosEn(f - (f % PASO)));
+  const rea = suave(E.l[5] - 0.1, E.l[5] + 0.25, tq) * (1 - suave(14.6, 15.0, tq));
+  m.girar(0.55 * (1 - rea) + 0.12 * Math.sin(tq * 0.8), 0.05 * Math.sin(tq * 1.3) - 0.1 * rea);
+  const salto = tq > E.l[5] - 0.05 && tq < E.l[5] + 0.4 ? 16 * Math.sin(((tq - E.l[5] + 0.05) / 0.45) * Math.PI) : 0;
+  mW.style.transform = `translate(${300 - 627}px, ${1370 - 627 - salto + 3 * Math.sin(tq * 1.6)}px) rotate(${2 * Math.sin(tq * 0.9)}deg) scale(0.4)`;
+  // rótulos
+  const fila = CAPS.find((r) => t >= r[0] && t < r[1]); const rotulo = fila ? fila[2] : "", t0 = fila ? fila[0] : 0;
+  const el = document.getElementById("titulo"); if (el.dataset.txt !== rotulo) { el.dataset.txt = rotulo; el.innerHTML = rotulo.split(" ").map((w) => `<span>${w}</span>`).join(" "); }
+  el.style.opacity = rotulo ? 1 : 0;
+  [...el.children].forEach((sp, i) => { const u = clamp((t - t0 - i * 0.07) / 0.25); sp.style.transform = `translateY(${(1 - Math.pow(1 - u, 3)) * -50 * (1 - u)}px) scale(${0.6 + 0.4 * u})`; sp.style.opacity = u; });
+  // «4 semanas»: cuatro casillas que se encienden y el sello final
+  const sem = document.getElementById("semanas"), a = E.l[5] + 0.1;
+  sem.style.opacity = t >= a && t < E.cierre ? 1 : 0; sem.style.transform = `scale(${0.8 + 0.2 * easeOutBack(clamp((t - a) / 0.4))})`;
+  [...sem.querySelectorAll(".s")].forEach((s, i) => { const on = clamp((t - (a + 0.5 + i * 0.5)) / 0.25); s.style.background = on > 0 ? `rgb(${lerp(251, 27, on)},${lerp(248, 47, on)},${lerp(245, 204, on)})` : "#fbf8f5"; s.style.color = on > 0.5 ? "#fbf8f5" : "#141e5c"; s.style.transform = `scale(${1 + 0.15 * Math.sin(on * Math.PI)})`; });
+  const lb = document.getElementById("lbl"), lu = clamp((t - (a + 2.6)) / 0.35); lb.style.opacity = lu; lb.style.transform = `scale(${0.6 + 0.4 * easeOutBack(lu)})`;
+  cierreFx(t);
+}
+
+/* ═══════════ cierre: motion graphics ═══════════ */
+function palabras(id, lista) { const el = document.getElementById(id); if (el.dataset.ok) return el.querySelectorAll("i"); el.dataset.ok = 1; el.innerHTML = lista.map(([w]) => `<span class="m"><i>${w}</i></span>`).join(" "); return el.querySelectorAll("i"); }
+const C0 = E.cierre;
+const L = { a1: [["¿Tu", C0 + 0.1], ["marca", C0 + 0.28]], a2: [["necesita", C0 + 0.55], ["la", C0 + 0.8], ["suya?", C0 + 0.9]], c2: [["Escríbenos.", C0 + 2.0]] };
+function subir(id, t, y0 = 120) { const is = palabras(id, L[id]); is.forEach((e, k) => { const u = clamp((t - L[id][k][1]) / 0.55), v = easeOutExpo(u); e.style.transform = `translateY(${(1 - v) * y0}%) rotate(${(1 - v) * 7}deg)`; e.style.opacity = u > 0 ? 1 : 0; }); }
+function cierreFx(t) {
+  const cierre = document.getElementById("cierre"), r = easeOutExpo(clamp((t - C0) / 0.55)) * 1750;
+  cierre.style.opacity = t >= C0 ? 1 : 0; cierre.style.clipPath = `circle(${r}px at 540px 960px)`;
+  const g = document.getElementById("cbg").getContext("2d"); g.clearRect(0, 0, 1080, 1920);
+  for (let k = 0; k < 5; k++) { const u = (Math.max(0, t - C0) * 0.16 + k / 5) % 1; g.strokeStyle = `rgba(245,227,179,${0.14 * (1 - u)})`; g.lineWidth = 6; g.beginPath(); g.arc(540, 960, 120 + u * 1100, 0, 6.2832); g.stroke(); }
+  subir("a1", t); subir("a2", t); subir("c2", t);
+  const bt = clamp((t - (C0 + 2.3)) / 0.6), btn = document.getElementById("cierreBtn");
+  btn.style.opacity = bt > 0 ? 1 : 0; btn.style.transform = `translateY(${(1 - easeOutExpo(bt)) * 90}px) scale(${0.5 + 0.5 * easeOutBack(bt)})`;
+}
+window.render = (t) => { pinta(t, Math.floor(t * 24 + 1e-6)); };
+window.cargar = async () => { await m.cargado(); await new Promise((r) => (img.complete ? r() : (img.onload = r))); return m.listo; };
+</script></body></html>
