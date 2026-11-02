@@ -13,6 +13,7 @@ import json, sys
 FPS = int(sys.argv[4]) if len(sys.argv) > 4 else 24
 ANTES = 2
 MIN_SOSTENIDO = 3          # un dibujo dura al menos 3 cuadros: menos cambios por segundo, menos temblor
+REJILLA = int(sys.argv[5]) if len(sys.argv) > 5 else 1     # 4 = animación a 4s: las claves caen en bloques de 4 cuadros
 DIBUJO = {"a": "a", "e": "e", "i": "i", "o": "o", "u": "u", "d": "dt", "t": "dt", "s": "sz", "m": "m", "p": "pb", "b": "pb", "f": "fv"}
 PESO = {"a": 9, "o": 8, "e": 7, "u": 6, "i": 5, "pb": 4, "m": 4, "sz": 3, "dt": 3, "fv": 3}
 
@@ -35,6 +36,12 @@ for f, d in claves:
         if PESO[d] > PESO[res[-1][1]]: res[-1] = (res[-1][0], d)
         continue
     res.append((f, d))
+if REJILLA > 1:
+    snap = {}
+    for f, d in res:
+        b = round(f / REJILLA) * REJILLA
+        if b not in snap or PESO[d] > PESO[snap[b]]: snap[b] = d
+    res = sorted(snap.items())
 bocas = {}; prev = "m"
 for f, d in res:
     if d != prev: bocas[str(f)] = d; prev = d

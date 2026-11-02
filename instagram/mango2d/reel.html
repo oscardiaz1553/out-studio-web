@@ -425,12 +425,12 @@ function prepararCambios() {
 const ojosEn = (t) => {
   if (HOJA) {
     const f = Math.floor(t * 24 + 1e-6);
-    // parpadeo al cambiar de expresión (breakdown: entreabiertos -> cerrado -> cerrado -> entreabiertos -> nueva expresión)
+    // parpadeo a 4s antes de cada cambio de expresión: entreabiertos (4 cuadros), cerrado (4 cuadros) y la nueva
     for (const e of EV_OJOS) {
       if (ESPECIALES.has(e.de) || ESPECIALES.has(e.a)) continue;
       const d = f - e.f;
-      if (d === -2 || d === 1) return "entreabiertos";
-      if (d === -1 || d === 0) return "parpadeo";
+      if (d >= -2 * PASO && d < -PASO) return "entreabiertos";
+      if (d >= -PASO && d < 0) return "parpadeo";
     }
     return claveEn("ojos", f, "normal");
   }
@@ -440,7 +440,14 @@ const capas = [["#capaMedia", 0.75], ["#capaMango", 0.35], ["#capaFrente", 1.25]
 const mW = document.getElementById("mangoW"), sombra = document.getElementById("sombra");
 const COLOR_AMB = (t) => (t < 3.3 ? "#f5e3b3" : t < 8.15 ? "#1b2fcc" : t < 13 ? "#bc6039" : t < 17.7 ? "#f5e3b3" : "#f5e3b3");
 
+const PASO = 4;                                    // Mango se anima «a cuatros»: un dibujo/pose cada 4 cuadros
+const habloMango = (t) => EV.some((e) => e.voz === "mango" && t >= e.t0 - 0.2 && t <= e.t1 + 0.15);
+
 window.render = (t) => {
+  const f24 = Math.floor(t * 24 + 1e-6), fq = Math.floor(f24 / PASO) * PASO, tq = fq / 24;   // tiempo «congelado» de Mango
+  // posición de Mango en el tiempo congelado (la ruta vive en la misma línea de tiempo)
+  tl.seek(tq, false);
+  const mpq = { x: mp.x, y: mp.y, s: mp.s, r: mp.r };
   tl.seek(t, false);
   ambiente(t, COLOR_AMB(t));
   explosiones(t);
@@ -449,34 +456,34 @@ window.render = (t) => {
     const s = 1 + (cam.s - 1) * z;
     el.style.transform = `translate(${cam.x * z}px, ${cam.y * z}px) rotate(${cam.r * z}deg) scale(${s})`;
   }
-  // Mango: boca, ojos, giro y actuación
-  const yo = habla(t, "mango"), el = hablaS(t, "narrador"), yoS = hablaS(t, "mango");
-  const k = Math.floor(t * 12);
-  // la boca se adelanta un cuadro al sonido (se lee mejor sincronizada)
-  const f24 = Math.floor(t * 24 + 1e-6);
-  let nb = HOJA ? claveEn("bocas", f24, "m") : (yo && k < BOCAS.length ? BOCAS[k] : "m");
-  if (HOJA) for (const e of CAMBIOS_BOCA) { const n = Math.min(2, e.hueco - 1); if (n > 0 && f24 >= e.f - n && f24 < e.f) { const nombre = `${e.de}__${e.a}__${f24 - (e.f - n) + (3 - n)}`; if (INB.has(nombre)) nb = nombre; } }
+  // ── Mango, todo a 4s ──
+  const yo = habloMango(tq), el = hablaS(tq, "narrador"), yoS = hablaS(tq, "mango");
+  let nb = "m";
+  if (HOJA) {
+    nb = claveEn("bocas", fq, "m");
+    for (const e of CAMBIOS_BOCA) if (e.hueco >= 2 * PASO && fq >= e.f - PASO && fq < e.f) { const nombre = `${e.de}__${e.a}__2`; if (INB.has(nombre)) nb = nombre; }   // inbetween en el bloque previo
+  } else { const k = Math.floor(tq * 12); nb = yo && k < BOCAS.length ? BOCAS[k] : "m"; }
+  if (!yo) nb = "m";                                              // cuando Mango no habla, la boca va cerrada
   m.bocaImg(nb);
-  m.ojos(ojosEn(t));
-  // apertura de boca suavizada (media de los últimos ~6 cuadros): el cuerpo sigue esta curva, no cada clave
+  m.ojos(ojosEn(tq));
+  // apertura de boca suavizada: el cuerpo sigue esta curva, no cada clave
   let env = 0, pesoT = 0;
-  if (HOJA) for (let j = 0; j < 7; j++) { const w = 1 - j / 8; env += w * (ABRE[claveEn("bocas", f24 - j, "m")] ?? 0.3); pesoT += w; env /= 1; }
+  if (HOJA && yo) for (let j = 0; j < 8; j += 2) { const w = 1 - j / 10; env += w * (ABRE[claveEn("bocas", fq - j, "m")] ?? 0.3); pesoT += w; }
   env = pesoT ? env / pesoT : 0;
-  const alzaBoca = env * 12, est = env * 0.03, anch = -env * 0.012;
-  // énfasis: solo las vocales abiertas, separadas al menos 0.3 s, dan un rebote
-  let alza = alzaBoca, cab = env * 0.1, gira = 0;
-  for (const e of EV_BOCA) { if (!e.fuerte) continue; const p = pulso(t - e.t, 0.36); if (!p) continue; alza += 9 * p; cab += 0.1 * p; }
-  for (const e of EV_OJOS) { const p = pulso(t - e.t + 0.04, 0.5); if (!p) continue; gira += e.dir * 3.2 * p; cab -= 0.16 * p; alza += 6 * p; }
-  const gm = golpe(t, "mango"), gn = golpe(t, "narrador");
-  const yaw = 0.42 * Math.sin(t * 0.8) - 0.5 * el + 0.3 * gm;
-  const pitch = 0.15 * Math.sin(t * 1.3) + 0.25 * gn - 0.18 * gm + cab;
+  let alza = env * 12, cab = env * 0.1, gira = 0;
+  for (const e of EV_BOCA) { if (!e.fuerte) continue; const p = pulso(tq - e.t, 0.36); if (!p) continue; alza += 9 * p; cab += 0.1 * p; }
+  for (const e of EV_OJOS) { const p = pulso(tq - e.t + 0.04, 0.5); if (!p) continue; gira += e.dir * 3.2 * p; cab -= 0.16 * p; alza += 6 * p; }
+  const est = env * 0.03, anch = -env * 0.012;
+  const gm = golpe(tq, "mango"), gn = golpe(tq, "narrador");
+  const yaw = 0.42 * Math.sin(tq * 0.8) - 0.5 * el + 0.3 * gm;
+  const pitch = 0.15 * Math.sin(tq * 1.3) + 0.25 * gn - 0.18 * gm + cab;
   m.girar(yaw, pitch);
-  const rot = mp.r + 2 * Math.sin(t * 0.9) - 2.5 * el + 2.5 * gm + gira;
+  const rot = mpq.r + 2 * Math.sin(tq * 0.9) - 2.5 * el + 2.5 * gm + gira;
   const sy = 1 + est + 0.03 * gm, sx = 1 + anch - 0.01 * gm;
-  const y = mp.y - alza - 20 * gm + 8 * gn + Math.sin(t * 1.6) * 6 - 4 * yoS;
-  mW.style.transform = `translate(${mp.x - 627 + yaw * 10}px, ${y - 627}px) rotate(${rot}deg) scale(${mp.s * sx}, ${mp.s * sy})`;
-  sombra.style.transform = `translate(${mp.x - 320}px, ${mp.y + 560 * mp.s - 40}px) scale(${mp.s * 1.2}, ${mp.s})`;
-  m.brillo(((t % 4.6) / 0.8));
+  const y = mpq.y - alza - 20 * gm + 8 * gn + Math.sin(tq * 1.6) * 6 - 4 * yoS;
+  mW.style.transform = `translate(${mpq.x - 627 + yaw * 10}px, ${y - 627}px) rotate(${rot}deg) scale(${mpq.s * sx}, ${mpq.s * sy})`;
+  sombra.style.transform = `translate(${mpq.x - 320}px, ${mpq.y + 560 * mpq.s - 40}px) scale(${mpq.s * 1.2}, ${mpq.s})`;
+  m.brillo(((tq % 4.6) / 0.8));
 };
 window.cargar = async (b, e, h, inb) => {
   BOCAS = b; EV = e; HOJA = h || null; prepararCambios(); construir();

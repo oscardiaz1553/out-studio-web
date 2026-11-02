@@ -113,7 +113,7 @@
         <button id="btnPlay" type="button" class="prim">Reproducir</button>
         <button id="btnAdelante" type="button" aria-label="Cuadro siguiente">Cuadro ▶</button>
         <button id="btnFrase" type="button" aria-pressed="false">Repetir frase</button>
-        <button id="btn4s" type="button" aria-pressed="false">A 4s</button>
+        <button id="btn4s" type="button" class="prim" aria-pressed="true">A 4s</button>
         <span class="tiempo" id="tiempo">Cuadro 1 · 0,00 s</span>
       </div>
       <input type="range" id="scrub" min="0" value="0" step="1" aria-label="Tiempo">
@@ -162,7 +162,7 @@
 
   /* ── estado ── */
   let claves = { bocas: {}, ojos: {} };
-  let cuadro = 0, tocando = false, repetir = false, sucio = false, rejilla = 1;
+  let cuadro = 0, tocando = false, repetir = false, sucio = false, rejilla = 4;
   const bloque = (f) => (rejilla > 1 ? Math.floor(f / rejilla) * rejilla : f);
 
   /* ── capas de la vista previa (todas cargadas, se muestra una) ── */
