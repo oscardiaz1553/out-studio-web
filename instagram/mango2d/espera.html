@@ -13,10 +13,13 @@
   #titulo { position: absolute; left: 70px; right: 70px; top: 130px; text-align: center; color: #141e5c; font-size: 96px; }
   #titulo span { display: inline-block; }
   #titulo { -webkit-text-stroke: 16px #f6e8c8; paint-order: stroke fill; }
-  #cierre { position: absolute; inset: 0; background: #1b2fcc; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; padding: 0 80px; text-align: center; }
-  #cierre .t { color: #fbf8f5; font-size: 104px; }
-  #cierre .t b { color: #f5e3b3; font-weight: 800; }
-  #cierre .btn { background: #f5e3b3; color: #1b2fcc; font-size: 56px; padding: 32px 60px; border-radius: 999px; font-weight: 500; }
+  #cierre { position: absolute; inset: 0; background: #1b2fcc; opacity: 0; overflow: hidden; }
+  #cierre canvas, #cierre svg { position: absolute; left: 0; top: 0; }
+  #cierre .fila { position: absolute; left: 0; right: 0; text-align: center; color: #fbf8f5; white-space: nowrap; }
+  #cierre .m { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 0.12em 0.14em; margin: 0 -0.08em; }
+  #cierre .m i { display: inline-block; font-style: normal; will-change: transform; }
+  #cierre .barra { position: absolute; left: 110px; right: 110px; height: 150px; background: #f5e3b3; border-radius: 22px; transform-origin: 0 50%; }
+  #cierre .btn { position: absolute; left: 50%; top: 1640px; margin-left: -290px; width: 580px; text-align: center; background: #f5e3b3; color: #1b2fcc; font-size: 56px; padding: 32px 0; border-radius: 999px; font-weight: 500; }
 </style></head>
 <body>
 <canvas id="atras" class="mundo" width="1480" height="2320"></canvas>
@@ -25,7 +28,19 @@
   <canvas id="frente" class="mundo" width="1480" height="2320"></canvas>
 </div>
 <div id="titulo" class="d"></div>
-<div id="cierre"><div class="t d" id="cierreTxt"><span id="c1" style="display:block">Una página lenta<br>no avisa:</span><span id="c2" style="display:block"><b>solo pierde ventas.</b></span></div><div class="btn" id="cierreBtn">outstudio.online</div></div>
+<div id="cierre">
+  <canvas id="cbg" width="1080" height="1920"></canvas>
+  <div id="gA" style="position:absolute;inset:0;transform-origin:540px 520px">
+    <div class="fila d" id="a1" style="top:520px;font-size:112px"></div>
+    <div class="fila d" id="a2" style="top:640px;font-size:112px"></div>
+  </div>
+  <div class="fila d" id="c0" style="top:660px;font-size:68px;color:#f5e3b3"></div>
+  <div class="barra" id="barra" style="top:735px"></div>
+  <div class="fila d" id="c1" style="top:722px;font-size:136px;color:#141e5c"></div>
+  <svg id="graf" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+  <div class="fila d" id="c2" style="top:1440px;font-size:104px;color:#fbf8f5"></div>
+  <div class="btn" id="cierreBtn">outstudio.online</div>
+</div>
 <script src="elementos.js"></script>
 <script src="rig.js"></script>
 <script>
@@ -158,7 +173,7 @@ function dibujarFrente(ctx, t) {
 }
 
 /* ═══════════ Mango: el único cutout ═══════════ */
-const IDX = {}; ["m", "o", "a", "e"].forEach((n) => (IDX[n] = { x: 450, y: 600 }));
+const IDX = {}; ["m", "kg", "e"].forEach((n) => (IDX[n] = { x: 450, y: 600 }));
 const OJOS = ["ojos-abiertos", "entreabiertos", "mirada-izq", "mirada-der", "mirada-arriba", "parpadeo"];
 const m = MangoRig.crear(document.getElementById("mangoW"), { webgl: true, bocas: { carpeta: "bocas", indice: IDX }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: OJOS } });
 const PASO = 2;
@@ -170,7 +185,7 @@ function ojosEn(f) {
   for (const b of PARP) { const fb = Math.round(b * 24 / PASO) * PASO, d = f - fb; if (d >= -2 * PASO && d < -PASO) return "entreabiertos"; if (d >= -PASO && d < PASO) return "parpadeo"; }
   return n;
 }
-function bocaEn(t) { return t >= E.ya && t < E.ya + 0.45 ? "a" : t >= E.ya + 0.45 && t < E.mango + 0.3 ? "o" : "m"; }
+function bocaEn(t) { return t >= E.ya && t < E.ya + 0.3 ? "e" : t >= E.ya + 0.3 && t < E.mango + 0.5 ? "kg" : "m"; }
 const lienzoAtras = document.getElementById("atras").getContext("2d"), lienzoFrente = document.getElementById("frente").getContext("2d");
 const mW = document.getElementById("mangoW"), cam = document.getElementById("cam");
 
@@ -190,9 +205,9 @@ function camara(t) {
 }
 function pinta(t, f) {
   const tq = Math.floor(f / PASO) * PASO / 24;
-  dibujarAtras(lienzoAtras, tq); dibujarFrente(lienzoFrente, tq);   // todo el mundo a doses, como Mango
+  dibujarAtras(lienzoAtras, t); dibujarFrente(lienzoFrente, t);   // el mundo va fluido; solo Mango se anima a doses
   // temblor al ver «Agotado»
-  const tr = t - E.ya, tem = tr > 0 && tr < 1.2 ? Math.exp(-tr * 3) : 0, tx = Math.sin(tq * 90) * 14 * tem, ty = Math.cos(tq * 77) * 10 * tem;
+  const tr = t - E.ya, tem = tr > 0 && tr < 1.2 ? Math.exp(-tr * 3) : 0, tx = Math.sin(t * 90) * 14 * tem, ty = Math.cos(t * 77) * 10 * tem;
   const c0 = camara(t), c1 = camara(t - 1 / 24), vel = Math.hypot(c0.x - c1.x, c0.y - c1.y) * c0.s + Math.abs(c0.s - c1.s) * 600;
   const s = c0.s, cx = c0.x, cy = c0.y, sb = 1 + (s - 1) * 0.8;
   const desenfoque = Math.min(5, Math.max(0, (vel - 40) * 0.2));
@@ -214,13 +229,48 @@ function pinta(t, f) {
   const el = document.getElementById("titulo"); if (el.dataset.txt !== rotulo) { el.dataset.txt = rotulo; el.innerHTML = rotulo.split(" ").map((w) => `<span>${w}</span>`).join(" "); }
   el.style.opacity = rotulo ? 1 : 0;
   [...el.children].forEach((sp, i) => { const u = clamp((t - t0 - i * 0.07) / 0.25); sp.style.transform = `translateY(${(1 - Math.pow(1 - u, 3)) * -50 * (1 - u)}px) scale(${0.6 + 0.4 * u})`; sp.style.opacity = u; });
-  // cierre sincronizado con la voz: «Una página lenta no avisa:» 10.45, «solo pierde ventas.» 12.45, «Escríbenos.» 14.14
-  const c = suave(E.mango, E.mango + 0.3, t); const cierre = document.getElementById("cierre"); cierre.style.opacity = c;
-  const pop = (a, d = 0.35) => { const u = clamp((t - a) / d); return { o: u, tr: `translateY(${(1 - Math.pow(1 - u, 3)) * 40 * (1 - u)}px) scale(${0.85 + 0.15 * u})` }; };
-  const l1 = pop(10.45), l2 = pop(12.45), bt = pop(14.1, 0.3);
-  const a1 = document.getElementById("c1"), a2 = document.getElementById("c2");
-  a1.style.opacity = l1.o; a1.style.transform = l1.tr; a2.style.opacity = l2.o; a2.style.transform = l2.tr;
-  const b = document.getElementById("cierreBtn"); b.style.opacity = bt.o; b.style.transform = `scale(${0.6 + 0.4 * bt.o * (1 + 0.12 * Math.sin(bt.o * Math.PI))})`;
+  cierreFx(t);
+}
+/* ═══════════ cierre: motion graphics sincronizado con la voz ═══════════ */
+const easeOutExpo = (u) => (u >= 1 ? 1 : 1 - Math.pow(2, -10 * u));
+const easeOutBack = (u) => { const c = 1.70158; return 1 + (c + 1) * Math.pow(u - 1, 3) + c * Math.pow(u - 1, 2); };
+function palabras(id, lista) {                                  // [palabra, tiempo en que entra]
+  const el = document.getElementById(id); if (el.dataset.ok) return el.querySelectorAll("i"); el.dataset.ok = 1;
+  el.innerHTML = lista.map(([w]) => `<span class="m"><i>${w}</i></span>`).join(" "); return el.querySelectorAll("i");
+}
+const L = {
+  a1: [["Una", 10.45], ["página", 10.66], ["lenta", 10.97]], a2: [["no", 11.4], ["avisa:", 11.6]],
+  c0: [["solo", 12.45]], c1: [["pierde", 12.75], ["ventas.", 13.15]], c2: [["Escríbenos.", 14.14]],
+};
+function subir(id, t, y0 = 120) {
+  const is = palabras(id, L[id]);
+  is.forEach((e, k) => { const u = clamp((t - L[id][k][1]) / 0.55), v = easeOutExpo(u); e.style.transform = `translateY(${(1 - v) * y0}%) rotate(${(1 - v) * 7}deg)`; e.style.opacity = u > 0 ? 1 : 0; });
+}
+const PUNTOS = [[130, 1030], [250, 1050], [330, 1020], [450, 1100], [540, 1090], [650, 1190], [740, 1210], [830, 1290], [950, 1330]];   // curva de ventas que se cae
+function cierreFx(t) {
+  const cierre = document.getElementById("cierre"), r = easeOutExpo(clamp((t - E.mango) / 0.55)) * 1750;
+  cierre.style.opacity = t >= E.mango ? 1 : 0; cierre.style.clipPath = `circle(${r}px at 540px 960px)`;
+  // fondo: ondas que salen del centro
+  const g = document.getElementById("cbg").getContext("2d"); g.clearRect(0, 0, 1080, 1920);
+  for (let k = 0; k < 5; k++) { const u = (Math.max(0, t - E.mango) * 0.16 + k / 5) % 1; g.strokeStyle = `rgba(245,227,179,${0.14 * (1 - u)})`; g.lineWidth = 6; g.beginPath(); g.arc(540, 960, 120 + u * 1100, 0, 6.2832); g.stroke(); }
+  // «Una página lenta no avisa:» sube y se aparta para dejar sitio al remate
+  subir("a1", t); subir("a2", t);
+  const ap = inOut(clamp((t - 12.15) / 0.5));
+  document.getElementById("gA").style.transform = `translateY(${-190 * ap}px) scale(${1 - 0.22 * ap})`; document.getElementById("gA").style.opacity = 1 - 0.35 * ap;
+  // «solo pierde ventas.» sobre una barra que se dibuja
+  subir("c0", t, 140); subir("c1", t, 130);
+  const bu = easeOutExpo(clamp((t - 12.55) / 0.5)); const barra = document.getElementById("barra");
+  barra.style.transform = `scaleX(${bu}) rotate(${-1.6 * bu}deg)`; barra.style.opacity = bu > 0 ? 1 : 0;
+  // curva de ventas que se desploma
+  const gr = document.getElementById("graf"), d = clamp((t - 13.0) / 1.0), n = d * (PUNTOS.length - 1);
+  let pts = "", ult = null;
+  for (let k = 0; k <= Math.floor(n); k++) { pts += `${PUNTOS[k][0]},${PUNTOS[k][1]} `; ult = PUNTOS[k]; }
+  if (n < PUNTOS.length - 1) { const a = PUNTOS[Math.floor(n)], b = PUNTOS[Math.floor(n) + 1], f = n - Math.floor(n); ult = [lerp(a[0], b[0], f), lerp(a[1], b[1], f)]; pts += `${ult[0]},${ult[1]}`; }
+  gr.innerHTML = d > 0 ? `<line x1="100" y1="1360" x2="980" y2="1360" stroke="rgba(245,227,179,.35)" stroke-width="4"/><polyline points="${pts}" fill="none" stroke="#f5e3b3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${ult[0]}" cy="${ult[1]}" r="${16 + 5 * Math.sin(t * 9) * (d >= 1 ? 1 : 0)}" fill="#ff6a4a" stroke="#f5e3b3" stroke-width="5"/>` : "";
+  // «Escríbenos.» y el botón con rebote
+  subir("c2", t);
+  const bt = clamp((t - 14.3) / 0.6), btn = document.getElementById("cierreBtn");
+  btn.style.opacity = bt > 0 ? 1 : 0; btn.style.transform = `translateY(${(1 - easeOutExpo(bt)) * 90}px) scale(${0.5 + 0.5 * easeOutBack(bt)})`;
 }
 window.render = (t) => { pinta(t, Math.floor(t * 24 + 1e-6)); };
 window.cargar = async () => { await m.cargado(); return m.listo; };
