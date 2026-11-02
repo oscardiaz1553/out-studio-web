@@ -16,8 +16,10 @@ import numpy as np
 from scipy.linalg import solve_toeplitz
 from scipy.signal import resample_poly
 
-ARCHIVO = sys.argv[1]
-FPS = int(sys.argv[2]) if len(sys.argv) > 2 else 12
+ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+NOMBRES = "--nombres" in sys.argv          # salida con nombres de boca de la hoja (m, pb, a, e, i, o, u, sz, h)
+ARCHIVO = ARGS[0]
+FPS = int(ARGS[1]) if len(ARGS) > 1 else 12
 
 w = wave.open(ARCHIVO)
 x = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float64) / 32768
@@ -72,21 +74,25 @@ for i in range(n):
     if nivel[i] < 0.12:
         est[i] = 0
     elif valle[i]:
-        est[i] = 0 if nivel[i] < 0.35 else 1
+        est[i] = (8 if NOMBRES else 0) if nivel[i] < 0.35 else 1
     elif zcr[i] > 0.6:                      # sonidos de aire: s, f, z
-        est[i] = 1
+        est[i] = 7 if NOMBRES else 1
     else:
         v = vocal(*F[i])
         fuerte = nivel[i] > 0.82
-        est[i] = {"a": 4 if fuerte else 3, "e": 2, "i": 1, "o": 5, "u": 5, "?": 2}[v]
+        est[i] = {"a": 4 if fuerte else 3, "e": 2, "i": 1, "o": 5, "u": 6 if NOMBRES else 5, "?": 2}[v]
 
 # a doces: un dibujo cada 1/FPS, gana el estado más repetido ponderado por volumen
 paso = int(round(100 / FPS))
 sal = []
 for k in range(0, n, paso):
     seg = est[k:k + paso]; pes = nivel[k:k + paso] + 0.05
-    sc = np.zeros(6)
+    sc = np.zeros(9)
     for e, p in zip(seg, pes):
         sc[e] += p
     sal.append(int(sc.argmax()))
-print(json.dumps({"fps": FPS, "estados": sal}))
+if NOMBRES:
+    N = ["m", "i", "e", "a", "h", "o", "u", "sz", "pb"]
+    print(json.dumps({"fps": FPS, "bocas": [N[k] for k in sal]}))
+else:
+    print(json.dumps({"fps": FPS, "estados": sal}))

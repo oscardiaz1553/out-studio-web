@@ -132,6 +132,21 @@
       menton.setAttribute("d", `M${f(cx - hw * 0.45)},${f(ym)} Q${cx},${f(ym + 14)} ${f(cx + hw * 0.45)},${f(ym)}`);
     }
     boca(0, 0);
+    // bocas dibujadas (hoja de bocas encajada en la cara): una imagen por boca, se muestra una sola
+    const imgs = {};
+    if (opc.bocas) {
+      g.style.display = "none";
+      for (const [nombre, pos] of Object.entries(opc.bocas.indice)) {
+        imgs[nombre] = el("image", { href: `${opc.bocas.carpeta}/boca-${nombre}.png`, x: pos.x, y: pos.y, width: 406, height: 190, visibility: "hidden" }, g0);
+      }
+    }
+    let actual = null;
+    function bocaImg(nombre) {
+      if (actual === nombre || !imgs[nombre]) return;
+      if (actual) imgs[actual].setAttribute("visibility", "hidden");
+      imgs[nombre].setAttribute("visibility", "visible");
+      actual = nombre;
+    }
     // brillo que cruza los lentes
     const lentes = [[495, 498], [805, 498]];
     const gl0 = el("g", {}, svg);
@@ -153,7 +168,7 @@
       gl0.setAttribute("transform", `translate(${f(yaw * dl * k)} ${f(pitch * dl * k)})`);
     }
     const listo = new Promise((r) => (img.complete ? r() : (img.onload = r)));
-    return { caja, img, svg, boca, visema: (n) => boca(...VISEMAS[n]), girar, brillo, listo };
+    return { caja, img, svg, boca, bocaImg, visema: (n) => boca(...VISEMAS[n]), girar, brillo, listo };
   }
   window.MangoRig = { crear, VISEMAS, profundidad };
 })();
