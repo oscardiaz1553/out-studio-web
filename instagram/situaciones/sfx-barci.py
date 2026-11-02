@@ -12,11 +12,11 @@ def barrido(d, f0, f1):
     t = np.arange(int(SR * d)) / SR; f = f0 + (f1 - f0) * t / d; return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.pi * t / d) * 0.4
 # «pop» suave al entrar cada rótulo (inicio de cada frase)
 for t in (0.3, 2.0, 4.0, 6.4, 9.4, 12.6): poner(t, tono(880, 0.12, 30, 0.25)); poner(t, tono(1320, 0.08, 40, 0.12))
-# el celular se desplaza: whoosh en cada salto de la pantalla
-for t, d in ((3.6, .8), (6.1, .9), (9.1, .9), (12.3, .7)): poner(t, barrido(d, 250, 1500), 0.4)
+# cortina que sube en cada cambio de escena
+for t in (2.0, 4.0, 6.4, 9.4, 12.6): poner(t - 0.05, barrido(0.5, 250, 1500), 0.4)
 # cuatro semanas: una nota por casilla y un acorde al sello
 for k, f in enumerate((523, 587, 659, 784)): poner(13.3 + k * 0.5, tono(f, 0.5, 6, 0.4))
-poner(15.3, tono(1047, 0.5, 5, 0.35)); poner(15.3, tono(1568, 0.5, 6, 0.2))
+poner(14.95, tono(1047, 0.5, 5, 0.35)); poner(14.95, tono(1568, 0.5, 6, 0.2))
 # cierre
 poner(15.55, barrido(0.5, 300, 1800), 0.5)
 [poner(15.7, tono(f, 0.9, 4, g)) for f, g in ((196, .4), (392, .25), (587, .15))]

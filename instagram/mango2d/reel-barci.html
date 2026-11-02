@@ -3,19 +3,19 @@
 <style>
   @font-face { font-family: "B"; src: url("assets/bricolage.woff2") format("woff2"); font-weight: 200 800; }
   @font-face { font-family: "I"; src: url("assets/instrument-500.woff2") format("woff2"); font-weight: 500; }
+  @font-face { font-family: "L"; src: url("assets/barci/lora.woff2") format("woff2"); font-weight: 400; }
   * { margin: 0; box-sizing: border-box; }
-  body { width: 1080px; height: 1920px; overflow: hidden; position: relative; background: #f6e8c8; font-family: "I", sans-serif; }
+  body { width: 1080px; height: 1920px; overflow: hidden; position: relative; background: #efe6da; font-family: "I", sans-serif; }
   .d { font-family: "B", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
-  canvas.mundo { position: absolute; left: -200px; top: -200px; }
-  #atras { transform-origin: 200px 200px; }
-  #cam { position: absolute; inset: 0; transform-origin: 0 0; }
+  .bg { position: absolute; inset: 0; }
+  .it { position: absolute; will-change: transform, opacity; }
+  .foto { border-radius: 30px; overflow: hidden; box-shadow: 0 24px 50px rgba(30,12,6,.28); background: #ddd; }
+  .foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
   #mangoW { position: absolute; left: 0; top: 0; width: 1254px; height: 1254px; transform-origin: 627px 627px; }
-  #titulo { position: absolute; left: 70px; right: 70px; top: 130px; text-align: center; color: #141e5c; font-size: 100px; -webkit-text-stroke: 16px #f6e8c8; paint-order: stroke fill; }
+  #titulo { position: absolute; left: 70px; right: 70px; top: 130px; text-align: center; font-size: 104px; }
   #titulo span { display: inline-block; }
-  #semanas { position: absolute; left: 60px; top: 950px; width: 400px; }
-  #semanas .fila { display: flex; gap: 12px; }
-  #semanas .s { flex: 1; height: 80px; border-radius: 26px; background: #fbf8f5; border: 5px solid #2b0d06; display: flex; align-items: center; justify-content: center; font: 800 34px "B"; letter-spacing: -0.03em; color: #141e5c; }
-  #semanas .lbl { margin-top: 18px; display: inline-block; background: #1b2fcc; color: #fbf8f5; border-radius: 40px; padding: 14px 34px; font: 800 38px "B"; letter-spacing: -0.03em; border: 5px solid #2b0d06; }
+  .pill { font: 800 44px "B"; letter-spacing: -0.03em; padding: 16px 38px; border-radius: 60px; white-space: nowrap; }
+  .banda { position: absolute; left: -20px; right: -20px; height: 86px; background: #cdbfae; border-top: 4px solid #3a2118; border-bottom: 4px solid #3a2118; overflow: hidden; white-space: nowrap; font: 800 44px/78px "B"; letter-spacing: -0.02em; color: #3a2118; }
   #cierre { position: absolute; inset: 0; background: #1b2fcc; opacity: 0; overflow: hidden; }
   #cierre canvas { position: absolute; left: 0; top: 0; }
   #cierre .fila { position: absolute; left: 0; right: 0; text-align: center; color: #fbf8f5; white-space: nowrap; }
@@ -24,13 +24,10 @@
   #cierre .btn { position: absolute; left: 50%; top: 1180px; margin-left: -290px; width: 580px; text-align: center; background: #f5e3b3; color: #1b2fcc; font-size: 56px; padding: 32px 0; border-radius: 999px; font-weight: 500; }
 </style></head>
 <body>
-<canvas id="atras" class="mundo" width="1480" height="2320"></canvas>
-<div id="cam">
-  <div id="mangoW"></div>
-  <canvas id="frente" class="mundo" width="1480" height="2320"></canvas>
-</div>
+<div id="fondos"></div>
+<div id="piezas"></div>
+<div id="mangoW"></div>
 <div id="titulo" class="d"></div>
-<div id="semanas"><div class="fila"><div class="s">S1</div><div class="s">S2</div><div class="s">S3</div><div class="s">S4</div></div><div class="lbl" id="lbl">Al aire y vendiendo</div></div>
 <div id="cierre">
   <canvas id="cbg" width="1080" height="1920"></canvas>
   <div class="fila d" id="a1" style="top:600px;font-size:128px"></div>
@@ -38,116 +35,116 @@
   <div class="fila d" id="c2" style="top:1000px;font-size:104px;color:#f5e3b3"></div>
   <div class="btn" id="cierreBtn">outstudio.online</div>
 </div>
-<script src="elementos.js"></script>
 <script src="rig.js"></script>
 <script>
 /* ═══════════ utilidades ═══════════ */
-const TINTA = "#2b0d06";
 const lerp = (a, b, t) => a + (b - a) * t;
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const suave = (a, b, x) => { const u = clamp((x - a) / (b - a)); return u * u * (3 - 2 * u); };
-const inOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 const easeOutExpo = (u) => (u >= 1 ? 1 : 1 - Math.pow(2, -10 * u));
 const easeOutBack = (u) => { const c = 1.70158; return 1 + (c + 1) * Math.pow(u - 1, 3) + c * Math.pow(u - 1, 2); };
-function interp(claves, t) {
-  if (t <= claves[0][0]) return claves[0][1];
-  for (let i = 0; i < claves.length - 1; i++) { const [t0, v0] = claves[i], [t1, v1] = claves[i + 1]; if (t <= t1) return lerp(v0, v1, inOut((t - t0) / (t1 - t0))); }
-  return claves[claves.length - 1][1];
-}
+const A = (n) => `assets/barci/${n}`;
 
 /* ═══════════ tiempos (s): se ajustan a la voz del narrador (voces/barci-narrador.mp3) ═══════════ */
-const E = {
-  l: [0.3, 2.0, 4.0, 6.4, 9.4, 12.6],               // inicio de cada frase del narrador (provisional)
-  cierre: 15.6, fin: 19.4,
-};
-// desplazamiento de la pantalla del celular: [t, píxeles de la captura larga (a 2x)]
-const SCROLL = [[0, 108], [3.5, 108], [4.4, 1500], [6.0, 1500], [7.0, 4560], [9.0, 4560], [10.0, 6000], [12.2, 6000], [13.0, 7000], [14.2, 7000], [15.0, 7500]];
-const CAPS = [[E.l[0], E.l[1], "Esta es BARCI."], [E.l[1], E.l[2], "Moda femenina colombiana."], [E.l[2], E.l[3], "Básicos, cápsulas y accesorios."], [E.l[3], E.l[4], "No cabe en una sola forma."], [E.l[4], E.l[5], "Y una cápsula: Brava."], [E.l[5], E.cierre, "En 4 semanas ya vendía."]];
+const E = { l: [0.3, 2.0, 4.0, 6.4, 9.4, 12.6], cierre: 15.6, fin: 19.4 };   // inicio de cada frase (provisional)
+const BEATS = [   // fondo, color del rótulo, rótulo
+  { t0: 0, t1: E.l[1], bg: "#efe6da", ink: "#3a2118", cap: "Esta es BARCI." },
+  { t0: E.l[1], t1: E.l[2], bg: "#3a2118", ink: "#efe6da", cap: "Moda femenina colombiana." },
+  { t0: E.l[2], t1: E.l[3], bg: "#efe6da", ink: "#3a2118", cap: "Básicos, cápsulas y accesorios." },
+  { t0: E.l[3], t1: E.l[4], bg: "#d8c9b7", ink: "#3a2118", cap: "No cabe en una sola forma." },
+  { t0: E.l[4], t1: E.l[5], bg: "#3a2118", ink: "#efe6da", cap: "Y una cápsula: Brava." },
+  { t0: E.l[5], t1: E.cierre, bg: "#1b2fcc", ink: "#fbf8f5", cap: "En 4 semanas ya vendía." },
+];
 
-/* ═══════════ dibujo del mundo ═══════════ */
-function contorno(ctx, relleno, ancho = 5) { ctx.fillStyle = relleno; ctx.fill(); ctx.lineWidth = ancho; ctx.strokeStyle = TINTA; ctx.lineJoin = "round"; ctx.stroke(); }
-function rect(ctx, x, y, w, h, r, color, ancho) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); contorno(ctx, color, ancho); }
-function planta(ctx, x, yBase, t) {
-  const alto = 330, sway = Math.sin(t * 1.2) * 8;
-  ctx.beginPath(); ctx.moveTo(x - 70, yBase - 120); ctx.lineTo(x + 70, yBase - 120); ctx.lineTo(x + 52, yBase + 20); ctx.lineTo(x - 52, yBase + 20); ctx.closePath(); contorno(ctx, "#bc6039");
-  rect(ctx, x - 82, yBase - 138, 164, 36, 10, "#d9784a");
-  const pt = (u) => ({ x: x + Math.sin(u * 2.4) * 22 + sway * u * u, y: yBase - 130 - alto * u });
-  ctx.beginPath(); for (let i = 0; i <= 20; i++) { const p = pt(i / 20); i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
-  ctx.lineWidth = 14; ctx.strokeStyle = TINTA; ctx.lineCap = "round"; ctx.stroke(); ctx.lineWidth = 8; ctx.strokeStyle = "#2f8a3c"; ctx.stroke();
-  for (let i = 0; i < 9; i++) {
-    const u = (i + 1) / 9.5, p = pt(u), lado = i % 2 ? 1 : -1, tam = (70 - u * 20) * (0.85 + 0.3 * ((i * 37) % 10) / 10);
-    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(lado * (0.9 + 0.15 * Math.sin(t * 1.2 + i)) - (lado > 0 ? 0 : 0.2));
-    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(tam * 0.6, -tam * 0.7, tam * 1.6, 0); ctx.quadraticCurveTo(tam * 0.6, tam * 0.7, 0, 0); contorno(ctx, i % 3 ? "#3f9a3a" : "#2c7a2f", 4);
-    ctx.beginPath(); ctx.moveTo(tam * 0.1, 0); ctx.lineTo(tam * 1.3, 0); ctx.lineWidth = 3; ctx.strokeStyle = "rgba(43,13,6,.5)"; ctx.stroke(); ctx.restore();
-  }
+/* ═══════════ piezas: cada una vive dentro de su escena y entra con su propio movimiento ═══════════ */
+const piezas = [];   // { el, b (escena), t0, x, y, w, h, rot, de: 'abajo'|'izq'|'der'|'arriba'|'escala'|'giro', dur, fn }
+const raiz = document.getElementById("piezas");
+function foto(nombre, o) {
+  const el = document.createElement("div"); el.className = "it foto"; el.style.cssText = `left:${o.x}px;top:${o.y}px;width:${o.w}px;height:${o.h}px;border-radius:${o.r ?? 30}px`;
+  el.innerHTML = `<img src="${A(nombre)}" style="object-position:${o.pos || "50% 50%"}">`; raiz.appendChild(el); piezas.push({ el, ...o }); return el;
 }
-const PH = { x: 790, y: 1568, w: 470, h: 1017, pad: 22 };    // celular de pie sobre la mesa: centro-base, tamaño de la pantalla
-const img = new Image(); img.src = "assets/barci-home.jpg";
-function dibujarAtras(ctx, t) {
-  ctx.setTransform(1, 0, 0, 1, 200, 200); ctx.clearRect(-200, -200, 1480, 2320);
-  ctx.fillStyle = "#f6e8c8"; ctx.fillRect(-200, -200, 1480, 2320);
-  ctx.fillStyle = "#ecd7a8"; ctx.fillRect(-200, 1120, 1480, 1000); ctx.fillStyle = TINTA; ctx.fillRect(-200, 1118, 1480, 5);
-  const wx = 70, wy = 430, ww = 380, wh = 470, hora = 10.5 + t * 0.04;
-  ctx.save(); ctx.beginPath(); ctx.roundRect(wx, wy, ww, wh, 16); ctx.clip(); ctx.translate(wx, wy); Cielo.dibujar(ctx, ww, wh, hora, { lluvia: 0, nieve: 0, nubes: 0.35 }); ctx.restore();
-  ctx.lineWidth = 12; ctx.strokeStyle = "#8d4a2c"; ctx.beginPath(); ctx.roundRect(wx, wy, ww, wh, 16); ctx.stroke();
-  ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(wx + ww / 2, wy); ctx.lineTo(wx + ww / 2, wy + wh); ctx.moveTo(wx, wy + wh / 2); ctx.lineTo(wx + ww, wy + wh / 2); ctx.stroke();
-  ctx.strokeStyle = TINTA; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(wx - 6, wy - 6, ww + 12, wh + 12, 20); ctx.stroke();
-  rect(ctx, wx - 24, wy + wh + 4, ww + 48, 30, 8, "#d9784a", 5);
-}
-function dibujarFrente(ctx, t) {
-  ctx.setTransform(1, 0, 0, 1, 200, 200); ctx.clearRect(-200, -200, 1480, 2320);
-  ctx.fillStyle = "#8d4a2c"; ctx.fillRect(-210, 1620, 1500, 520); ctx.strokeStyle = TINTA; ctx.lineWidth = 5; ctx.strokeRect(-210, 1620, 1500, 520);
-  ctx.fillStyle = "rgba(43,13,6,.18)"; for (let i = -1; i < 8; i++) ctx.fillRect(40 + i * 160, 1680, 6, 440);
-  rect(ctx, -220, 1556, 1520, 74, 14, "#bc6039", 6);
-  ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(-190, 1566, 1460, 10);
-  // celular con la tienda de BARCI (captura real de barci.com.co) que se desplaza
-  const off = interp(SCROLL, t), k = PH.w / 780, vh = PH.h / k;
-  ctx.save(); ctx.translate(PH.x, PH.y); ctx.rotate(-0.025);
-  rect(ctx, -PH.w / 2 - PH.pad, -PH.h - PH.pad * 2 + 0, PH.w + PH.pad * 2, PH.h + PH.pad * 2, 56, "#141e5c", 6);
-  ctx.save(); ctx.beginPath(); ctx.roundRect(-PH.w / 2, -PH.h - PH.pad, PH.w, PH.h, 40); ctx.clip();
-  if (img.complete && img.naturalWidth) ctx.drawImage(img, 0, off, 780, vh, -PH.w / 2, -PH.h - PH.pad, PH.w, PH.h);
-  ctx.restore(); ctx.fillStyle = "#0b1038"; ctx.beginPath(); ctx.arc(0, -PH.h - PH.pad + 16, 7, 0, 6.29); ctx.fill();
-  ctx.restore();
-  planta(ctx, 60, 1590, t);
-}
+function caja(html, estilo, o) { const el = document.createElement("div"); el.className = "it"; el.style.cssText = estilo; el.innerHTML = html; raiz.appendChild(el); piezas.push({ el, ...o }); return el; }
+
+// 1 · Esta es BARCI: el logo con el símbolo (flor de infinito) girando detrás
+caja(`<img src="${A("favicon-512x512.png")}" style="width:1000px;opacity:.1;display:block">`, "left:40px;top:260px;width:1000px", { b: 0, t0: 0.2, de: "escala", dur: 1.0, giro: 14, ancla: [500, 500] });
+caja(`<img src="${A("logo-barci.png")}" style="width:800px;display:block">`, "left:140px;top:560px;width:800px", { b: 0, t0: 0.35, de: "escala", dur: 0.7 });
+caja(`<span style="font:400 64px 'L';color:#3a2118;font-style:italic">Infinitas formas de ser tú</span>`, "left:0;right:0;top:960px;text-align:center", { b: 0, t0: 1.0, de: "abajo", dur: 0.6 });
+// 2 · Moda femenina colombiana: tres fotos que entran de lado + banda de envíos que corre
+[["bar-004-tank-top-serena-2.jpg", 50, 440, "izq", -5, 0.0], ["bar-006-camisa-basic-1.jpg", 380, 400, "abajo", 2, 0.2], ["bar-003-croptop-alma-1.jpg", 710, 440, "der", 5, 0.4]].forEach(([n, x, y, de, rot, d]) => foto(n, { b: 1, x, y, w: 320, h: 560, rot, t0: E.l[1] + 0.15 + d, de, dur: 0.7 }));
+const marq = "ENVÍOS A TODA COLOMBIA  ✿  HECHO EN COLOMBIA  ✿  ".repeat(6);
+caja(`<div class="marq" style="width:max-content">${marq}</div>`, "left:-20px;right:-20px;top:1130px;height:86px;background:#cdbfae;border-top:4px solid #3a2118;border-bottom:4px solid #3a2118;overflow:hidden;white-space:nowrap;font:800 44px/78px 'B';letter-spacing:-0.02em;color:#3a2118", { b: 1, t0: E.l[1] + 0.3, de: "izq", dur: 0.6, marq: -260, clase: "banda" });
+// 3 · Básicos, cápsulas y accesorios: tres tarjetas con su etiqueta
+[["Básicos", "bar-001-tshirt-barci-1.jpg", 50, 0.15], ["Cápsulas", "brv-005-tank-libre-1.jpg", 380, 0.75], ["Accesorios", "bar-009-panoleta-aura-1.jpg", 710, 1.35]].forEach(([t, n, x, d]) => {
+  foto(n, { b: 2, x, y: 420, w: 320, h: 580, rot: 0, t0: E.l[2] + 0.1 + d, de: "escala", dur: 0.6 });
+  caja(`<span class="pill" style="background:#3a2118;color:#efe6da">${t}</span>`, `left:${x}px;top:1040px;width:320px;text-align:center`, { b: 2, t0: E.l[2] + 0.3 + d, de: "abajo", dur: 0.5 });
+});
+// 4 · No cabe en una sola forma: la frase de la marca y una tira de productos que no para
+caja(`<span style="font:400 88px/1.12 'L';color:#3a2118;display:block;text-align:center">Tu estilo no tiene que encajar en una categoría:<br><i>tiene que sentirse tuyo.</i></span>`, "left:70px;right:70px;top:380px", { b: 3, t0: E.l[3] + 0.2, de: "abajo", dur: 0.9 });
+const tira = ["bar-004-tank-top-serena-2.jpg", "brv-004-tank-rebelde-1.jpg", "bar-007-gorra-nativa-2.jpg", "brv-001-panoleta-horse-1.jpg", "bar-006-camisa-basic-1.jpg", "bar-008-pava-brisa-2.jpg", "bar-001-tshirt-barci-1.jpg", "brv-003-bandana-brava-1.jpg"];
+caja(`<div class="tira" style="display:flex;gap:22px;width:max-content">${[...tira, ...tira, ...tira].map((n) => `<div class="foto" style="width:260px;height:340px;flex:none;border-radius:26px"><img src="${A(n)}"></div>`).join("")}</div>`, "left:0;right:0;top:960px;height:340px;overflow:hidden", { b: 3, t0: E.l[3] + 1.4, de: "der", dur: 0.7, marq: -150, clase: "tira" });
+// 5 · Brava: el banner y cuatro productos
+foto("Banner-Brava.jpg", { b: 4, x: 60, y: 380, w: 960, h: 426, rot: 0, t0: E.l[4] + 0.1, de: "escala", dur: 0.8, zoom: 0.08 });
+[["brv-001-panoleta-horse-1.jpg", 60], ["brv-002-panoleta-brava-1.jpg", 305], ["brv-003-bandana-brava-1.jpg", 550], ["brv-004-tank-rebelde-1.jpg", 795]].forEach(([n, x], i) => foto(n, { b: 4, x, y: 860, w: 230, h: 390, rot: (i % 2 ? 2 : -2), t0: E.l[4] + 0.9 + i * 0.28, de: "abajo", dur: 0.6, r: 24 }));
+// 6 · 4 semanas: contador, línea de tiempo y sello
+const S = E.l[5];
+caja(`<div class="num d" style="font-size:520px;color:#f5e3b3;text-align:center;line-height:.8">1</div>`, "left:0;right:0;top:400px", { b: 5, t0: S + 0.1, de: "escala", dur: 0.6, num: true });
+caja(`<div class="d" style="font-size:120px;color:#fbf8f5;text-align:center">semanas</div>`, "left:0;right:0;top:880px", { b: 5, t0: S + 0.3, de: "abajo", dur: 0.6 });
+caja(`<div class="linea"></div>`, "left:0;top:0;width:1080px;height:1920px", { b: 5, t0: S + 0.2, de: "nada", dur: 0.01, linea: true });
+caja(`<span class="pill" style="background:#f5e3b3;color:#1b2fcc;font-size:52px">Al aire y vendiendo</span>`, "left:0;right:0;top:1260px;text-align:center", { b: 5, t0: S + 2.3, de: "escala", dur: 0.5 });
+
+// fondos con cortina
+const fondos = BEATS.map((b) => { const d = document.createElement("div"); d.className = "bg"; d.style.background = b.bg; document.getElementById("fondos").appendChild(d); return d; });
 
 /* ═══════════ Mango: el único cutout ═══════════ */
 const OJOS = ["ojos-abiertos", "entreabiertos", "mirada-izq", "mirada-der", "mirada-arriba", "parpadeo"];
 const m = MangoRig.crear(document.getElementById("mangoW"), { webgl: true, bocas: { carpeta: "bocas", indice: { m: { x: 450, y: 600 } } }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: OJOS } });
 const PASO = 2;
-const LINEA_OJOS = [[0, "ojos-abiertos"], [0.8, "entreabiertos"], [1.6, "mirada-der"], [6.2, "entreabiertos"], [8.8, "mirada-der"], [12.5, "ojos-abiertos"], [14.6, "entreabiertos"]];
-const PARP = [0.8, 1.6, 6.2, 8.8, 12.5, 14.6];
+const LINEA_OJOS = [[0, "ojos-abiertos"], [0.8, "entreabiertos"], [E.l[2], "mirada-izq"], [E.l[3] - 0.3, "entreabiertos"], [E.l[4], "mirada-der"], [E.l[5] - 0.3, "ojos-abiertos"], [14.6, "entreabiertos"]];
+const PARP = [0.8, E.l[2], E.l[3] - 0.3, E.l[4], E.l[5] - 0.3, 14.6];
 function ojosEn(f) {
   const t = f / 24; let n = "entreabiertos"; for (const [t0, o] of LINEA_OJOS) if (t >= t0) n = o;
   for (const b of PARP) { const fb = Math.round(b * 24 / PASO) * PASO, d = f - fb; if (d >= -2 * PASO && d < -PASO) return "entreabiertos"; if (d >= -PASO && d < PASO) return "parpadeo"; }
   return n;
 }
-const lienzoAtras = document.getElementById("atras").getContext("2d"), lienzoFrente = document.getElementById("frente").getContext("2d");
-const mW = document.getElementById("mangoW"), cam = document.getElementById("cam");
-const camara = (t) => ({ s: 1 + 0.06 * suave(0, E.cierre, t), x: 540, y: 960 });
+const mW = document.getElementById("mangoW");
 
+/* ═══════════ cuadro a cuadro ═══════════ */
 function pinta(t, f) {
   const tq = Math.floor(f / PASO) * PASO / 24;
-  dibujarAtras(lienzoAtras, t); dibujarFrente(lienzoFrente, t);
-  const c = camara(t), sb = 1 + (c.s - 1) * 0.8;
-  cam.style.transform = `translate(${540 - c.x * c.s}px, ${960 - c.y * c.s}px) scale(${c.s})`;
-  lienzoAtras.canvas.style.transform = `translate(${540 - c.x * sb}px, ${960 - c.y * sb}px) scale(${sb})`;
-  // Mango (a doses): mira el celular; al oír «4 semanas» se voltea a cámara con ojos abiertos
+  // fondos: cada escena entra con una cortina que sube
+  const kb = BEATS.findIndex((b) => t >= b.t0 && t < b.t1);
+  fondos.forEach((d, i) => { const u = i === 0 ? 1 : easeOutExpo(clamp((t - BEATS[i].t0) / 0.55)); d.style.clipPath = `inset(${(1 - u) * 100}% 0 0 0)`; d.style.display = t >= BEATS[i].t0 ? "block" : "none"; });
+  // rótulo (Out) de cada escena
+  const b = BEATS[Math.max(0, kb)], titulo = document.getElementById("titulo");
+  if (titulo.dataset.txt !== b.cap) { titulo.dataset.txt = b.cap; titulo.innerHTML = b.cap.split(" ").map((w) => `<span>${w}</span>`).join(" "); }
+  titulo.style.color = b.ink; titulo.style.opacity = kb >= 0 ? 1 : 0;
+  [...titulo.children].forEach((sp, i) => { const u = clamp((t - b.t0 - 0.15 - i * 0.07) / 0.28); sp.style.transform = `translateY(${(1 - Math.pow(1 - u, 3)) * -50 * (1 - u)}px) scale(${0.6 + 0.4 * u})`; sp.style.opacity = u; });
+  // piezas
+  piezas.forEach((p) => {
+    const fin = BEATS[p.b].t1, u = clamp((t - p.t0) / (p.dur || 0.6)), e = easeOutExpo(u), sal = clamp((t - fin) / 0.35);
+    const vis = t >= p.t0 && t < fin + 0.4; p.el.style.display = vis ? "block" : "none"; if (!vis) return;
+    let dx = 0, dy = 0, sc = 1, rot = p.rot || 0;
+    if (p.de === "abajo") dy = (1 - e) * 220; else if (p.de === "arriba") dy = -(1 - e) * 220; else if (p.de === "izq") dx = -(1 - e) * 1200; else if (p.de === "der") dx = (1 - e) * 1200;
+    else if (p.de === "escala") sc = 0.4 + 0.6 * easeOutBack(u);
+    if (p.giro) rot += t * p.giro;
+    dy += -sal * 200 * (p.b === 5 ? 0 : 1); sc *= 1 - 0.1 * sal;
+    p.el.style.opacity = clamp(u * 3) * (1 - sal); p.el.style.transformOrigin = p.ancla ? `${p.ancla[0]}px ${p.ancla[1]}px` : "50% 50%";
+    p.el.style.transform = `translate(${dx}px,${dy}px) rotate(${rot}deg) scale(${sc})`;
+    if (p.marq) { const c = p.el.firstElementChild; const per = c.scrollWidth / (p.clase === "tira" ? 3 : 6); c.style.transform = `translateX(${(t * p.marq) % per}px)`; }
+    if (p.zoom) p.el.firstElementChild.style.transform = `scale(${1 + p.zoom * u})`;
+    if (p.num) { const k = clamp(Math.floor((t - (S + 0.6)) / 0.5) + 1, 1, 4), ult = S + 0.6 + (k - 1) * 0.5; p.el.firstElementChild.textContent = k; p.el.firstElementChild.style.transform = `scale(${1 + 0.18 * Math.max(0, 1 - (t - ult) * 5)})`; }
+    if (p.linea) { const el = p.el.firstElementChild; if (!el.dataset.ok) { el.dataset.ok = 1; el.innerHTML = `<svg width="1080" height="1920" style="position:absolute;left:0;top:0"><line x1="150" y1="1160" x2="930" y2="1160" stroke="rgba(251,248,245,.35)" stroke-width="10" stroke-linecap="round"/><line id="prog" x1="150" y1="1160" x2="150" y2="1160" stroke="#f5e3b3" stroke-width="10" stroke-linecap="round"/></svg>` + [0, 1, 2, 3].map((i) => `<div class="nodo" style="position:absolute;left:${150 + i * 260 - 38}px;top:${1160 - 38}px;width:76px;height:76px;border-radius:50%;background:#1b2fcc;border:8px solid #fbf8f5;color:#fbf8f5;font:800 28px/60px 'B';text-align:center">S${i + 1}</div>`).join(""); }
+      const prog = (t - (S + 0.6)) / 0.5; const kk = clamp(prog, 0, 3); el.querySelector("#prog").setAttribute("x2", 150 + kk * 260);
+      el.querySelectorAll(".nodo").forEach((n, i) => { const on = clamp(prog - i + 0.0); n.style.background = on > 0.5 ? "#f5e3b3" : "#1b2fcc"; n.style.color = on > 0.5 ? "#1b2fcc" : "#fbf8f5"; n.style.transform = `scale(${1 + 0.25 * Math.sin(clamp(on) * Math.PI) * (on > 0 && on < 1 ? 1 : 0)})`; });
+    }
+  });
+  // Mango (a doses): sube desde abajo al inicio, mira lo que se muestra y reacciona a las 4 semanas
   m.bocaImg("m"); m.ojos(ojosEn(f - (f % PASO)));
-  const rea = suave(E.l[5] - 0.1, E.l[5] + 0.25, tq) * (1 - suave(14.6, 15.0, tq));
-  m.girar(0.55 * (1 - rea) + 0.12 * Math.sin(tq * 0.8), 0.05 * Math.sin(tq * 1.3) - 0.1 * rea);
-  const salto = tq > E.l[5] - 0.05 && tq < E.l[5] + 0.4 ? 16 * Math.sin(((tq - E.l[5] + 0.05) / 0.45) * Math.PI) : 0;
-  mW.style.transform = `translate(${300 - 627}px, ${1370 - 627 - salto + 3 * Math.sin(tq * 1.6)}px) rotate(${2 * Math.sin(tq * 0.9)}deg) scale(0.4)`;
-  // rótulos
-  const fila = CAPS.find((r) => t >= r[0] && t < r[1]); const rotulo = fila ? fila[2] : "", t0 = fila ? fila[0] : 0;
-  const el = document.getElementById("titulo"); if (el.dataset.txt !== rotulo) { el.dataset.txt = rotulo; el.innerHTML = rotulo.split(" ").map((w) => `<span>${w}</span>`).join(" "); }
-  el.style.opacity = rotulo ? 1 : 0;
-  [...el.children].forEach((sp, i) => { const u = clamp((t - t0 - i * 0.07) / 0.25); sp.style.transform = `translateY(${(1 - Math.pow(1 - u, 3)) * -50 * (1 - u)}px) scale(${0.6 + 0.4 * u})`; sp.style.opacity = u; });
-  // «4 semanas»: cuatro casillas que se encienden y el sello final
-  const sem = document.getElementById("semanas"), a = E.l[5] + 0.1;
-  sem.style.opacity = t >= a && t < E.cierre ? 1 : 0; sem.style.transform = `scale(${0.8 + 0.2 * easeOutBack(clamp((t - a) / 0.4))})`;
-  [...sem.querySelectorAll(".s")].forEach((s, i) => { const on = clamp((t - (a + 0.5 + i * 0.5)) / 0.25); s.style.background = on > 0 ? `rgb(${lerp(251, 27, on)},${lerp(248, 47, on)},${lerp(245, 204, on)})` : "#fbf8f5"; s.style.color = on > 0.5 ? "#fbf8f5" : "#141e5c"; s.style.transform = `scale(${1 + 0.15 * Math.sin(on * Math.PI)})`; });
-  const lb = document.getElementById("lbl"), lu = clamp((t - (a + 2.6)) / 0.35); lb.style.opacity = lu; lb.style.transform = `scale(${0.6 + 0.4 * easeOutBack(lu)})`;
+  const rea = suave(S - 0.1, S + 0.25, tq) * (1 - suave(14.6, 15.0, tq));
+  m.girar(0.18 * Math.sin(tq * 0.9) * (1 - rea) - 0.0, 0.05 * Math.sin(tq * 1.3) - 0.1 * rea);
+  const salto = tq > S - 0.05 && tq < S + 0.4 ? 22 * Math.sin(((tq - S + 0.05) / 0.45) * Math.PI) : 0;
+  const sube = 1 - easeOutBack(clamp((tq - 0.1) / 0.7));
+  mW.style.transform = `translate(${540 - 627}px, ${1700 - 627 - salto + 4 * Math.sin(tq * 1.6) + sube * 600}px) rotate(${2 * Math.sin(tq * 0.9)}deg) scale(0.52)`;
   cierreFx(t);
 }
 
@@ -166,5 +163,9 @@ function cierreFx(t) {
   btn.style.opacity = bt > 0 ? 1 : 0; btn.style.transform = `translateY(${(1 - easeOutExpo(bt)) * 90}px) scale(${0.5 + 0.5 * easeOutBack(bt)})`;
 }
 window.render = (t) => { pinta(t, Math.floor(t * 24 + 1e-6)); };
-window.cargar = async () => { await m.cargado(); await new Promise((r) => (img.complete ? r() : (img.onload = r))); return m.listo; };
+window.cargar = async () => {
+  await m.cargado();
+  await Promise.all([...document.images].map((i) => (i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; }))));
+  await document.fonts.ready; return m.listo;
+};
 </script></body></html>
