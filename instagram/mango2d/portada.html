@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Portada del reel</title>
+<style>
+  @font-face { font-family: "B"; src: url("assets/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+  @font-face { font-family: "I"; src: url("assets/instrument-500.woff2") format("woff2"); font-weight: 500; }
+  * { margin: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1920px; overflow: hidden; position: relative; background: #1b2fcc; font-family: "I", sans-serif; }
+  .d { font-family: "B", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
+  #fondo { position: absolute; inset: 0; background: radial-gradient(70% 45% at 50% 62%, #3a4ee6 0%, #1b2fcc 58%, #18289f 100%); }
+  canvas { position: absolute; left: 0; top: 0; }
+  /* La cuadrícula del perfil recorta el centro de 4:5 (de y 285 a y 1635): todo lo importante va ahí */
+  #hud { position: absolute; left: 80px; top: 340px; width: 920px; height: 150px; border-radius: 75px; background: #141e5c; display: flex; align-items: center; justify-content: space-between; padding: 0 54px 0 62px; }
+  #hud .lb { font-size: 38px; color: #fbf8f5; opacity: .85; line-height: 1.1; }
+  #hud .am { font-size: 94px; color: #f5e3b3; }
+  #titulo { position: absolute; left: 80px; right: 80px; top: 545px; font-size: 118px; white-space: nowrap; color: #fbf8f5; }
+  #titulo span { color: #f5e3b3; }
+  #mango { position: absolute; left: 0; top: 0; width: 1254px; height: 1254px; transform-origin: 627px 627px; }
+  #sombra { position: absolute; left: 230px; top: 1560px; width: 620px; height: 80px; border-radius: 50%; background: #0d1550; opacity: .4; filter: blur(22px); }
+  #marca { position: absolute; left: 0; right: 0; top: 1760px; text-align: center; font-size: 40px; color: #fbf8f5; opacity: .85; }
+</style></head>
+<body>
+<div id="fondo"></div>
+<canvas id="trama" width="1080" height="1920"></canvas>
+<div id="hud"><div class="lb">Ventas<br>perdidas</div><div class="am d">$540.000</div></div>
+<div id="titulo" class="d">Esta clienta<br>quería <span>comprar.</span></div>
+<div id="sombra"></div>
+<div id="mango"></div>
+<div id="marca" class="d">outstudio.online</div>
+<script src="rig.js"></script>
+<script>
+  // trama de corchetes y llaves muy suave, igual que en las otras piezas de Out
+  const cx = document.getElementById("trama").getContext("2d");
+  cx.strokeStyle = "#f5e3b3"; cx.globalAlpha = 0.065; cx.lineWidth = 7; cx.lineJoin = "miter";
+  cx.translate(540, 960); cx.rotate(-0.21);
+  for (let r = -16; r < 16; r++) for (let c = -10; c < 10; c++) {
+    const x = c * 150 + (r % 2 ? 75 : 0), y = r * 150, curva = (r + c) % 2;
+    for (const lado of [-1, 1]) {
+      cx.beginPath();
+      const px = x + lado * 18, d = lado * 17;
+      if (curva) { cx.moveTo(px + d, y - 34); cx.quadraticCurveTo(px, y - 34, px, y - 20); cx.lineTo(px, y - 6); cx.quadraticCurveTo(px, y, px - d * 0.6, y); cx.quadraticCurveTo(px, y, px, y + 6); cx.lineTo(px, y + 20); cx.quadraticCurveTo(px, y + 34, px + d, y + 34); }
+      else { cx.moveTo(px + d, y - 34); cx.lineTo(px, y - 34); cx.lineTo(px, y + 34); cx.lineTo(px + d, y + 34); }
+      cx.stroke();
+    }
+  }
+  // Mango: ojos entreabiertos, boca cerrada y la cara girada un poco hacia el título
+  const NOMBRES_OJOS = ["ojos-abiertos","entreabiertos","mirada-izq","mirada-der","mirada-arriba","parpadeo"];
+  const IDX = {}; ["m", "pb", "a", "e", "i", "o", "u", "dt", "fv", "sz"].forEach((n) => (IDX[n] = { x: 450, y: 600 }));
+  const m = MangoRig.crear(document.getElementById("mango"), { webgl: true, bocas: { carpeta: "bocas", indice: IDX }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: NOMBRES_OJOS } });
+  const ESC = 0.64;
+  document.getElementById("mango").style.transform = `translate(${540 - 627}px, ${1225 - 627}px) rotate(-3deg) scale(${ESC})`;
+  window.listo = (async () => { await m.listo; await m.cargado(); m.bocaImg("m"); m.ojos("entreabiertos"); m.girar(0.32, 0.12); })();
+</script></body></html>

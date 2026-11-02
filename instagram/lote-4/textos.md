@@ -1,40 +1,38 @@
 # Instagram, lote 4
 
-Un reel para la publicación 3 del perfil: **La venta perdida**. Está hecho con
-HyperFrames (su proyecto vive en `instagram/hyperframes/reel-venta-perdida/`).
+**La venta perdida**, publicación 3 del perfil. La pieza principal es el reel con Mango
+ilustrado. La misma idea existe también como imagen y como reel sin Mango (ver más abajo).
+
+El reel está hecho con la skill `reel-con-mango` (`.claude/skills/reel-con-mango/`): Mango
+animado en 2D a 2s, lipsync por fonemas y voces de ElevenLabs.
 
 | Archivo | Qué es |
 |---|---|
-| `venta-perdida-imagen.png` | La misma idea en una sola imagen, 1080 × 1350. Es la que se sube como publicación 3 |
-| `reel-venta-perdida-mango.mp4` | Versión con Mango como narrador: habla con su voz de personaje, con globos de texto y música. Es la alternativa más llamativa |
-| `reel-venta-perdida-con-musica.mp4` | El reel con música original, 1080 × 1920, 28,6 segundos, sin voz. Alternativa si prefieres video |
-| `reel-venta-perdida.mp4` | El mismo reel sin audio, por si prefieres ponerle un sonido en trending de Instagram |
-| `voz-plan.json` | Los cortes de una grabación de voz que se probó y se descartó (ver «Voz en off») |
-| `reel-venta-perdida-portada.png` | La portada |
+| `reel-venta-perdida-mango-ilustrado.mp4` | **El reel.** 1080 × 1920, 28,6 s, 24 cuadros por segundo, con voces, música y efectos |
+| `reel-venta-perdida-portada.png` | La portada, 1080 × 1920. Lo importante queda en el centro 4:5 que recorta la cuadrícula del perfil |
+| `venta-perdida-imagen.png` | La misma idea en una sola imagen, 1080 × 1350 |
+| `reel-venta-perdida-con-musica.mp4`, `reel-venta-perdida.mp4` | Versiones sin Mango: con música original y sin audio |
+| `reel-venta-perdida-voces.mp4` | Versión sin Mango con las dos voces |
+| `reel-venta-perdida-mango.mp4` | Primer intento de Mango (la imagen deformada). Descartado |
+| `voz-plan.json` | Cortes de una grabación de voz de Oscar que se probó y se descartó |
 
 ## Qué muestra
 
-Seguimos a una clienta que quiere comprar en una tienda online. La tienda le
-falla de tres formas y un contador de «ventas perdidas» sube con cada fallo.
-Cada fallo termina con la misma frase, «Se fue.», que es lo que da ritmo.
+Seguimos a una clienta que quiere comprar en una tienda online. La tienda le falla de
+tres formas y un contador de «ventas perdidas» sube con cada fallo. Cada fallo termina
+con la misma frase, «Se fue.», que es lo que da ritmo.
 
 1. Tarda en cargar (el reloj llega a 7,4 segundos).
 2. No se ve bien en el celular (hace zoom y no lee nada).
 3. Pagar es un enredo (nueve campos antes de poder pagar).
 
-Cierre: tres ventas, tres errores, todos con arreglo, y la invitación a hablar.
+Cierre: tres ventas, tres errores, todos con arreglo, y Mango dice «Escríbenos.».
 
-## Cómo publicarlo
-
-- **Audio:** sube `reel-venta-perdida-con-musica.mp4`. La música es original (no
-  tiene derechos de autor) y los golpes caen sobre los de la pantalla. Si prefieres
-  un sonido que esté de moda en Reels, sube `reel-venta-perdida.mp4` (sin audio) y
-  elígelo en Instagram: los sonidos en tendencia suelen dar más alcance.
-- **Portada:** sube `reel-venta-perdida-portada.png`. En el perfil, la cuadrícula
-  recorta arriba y abajo, y el título queda a la vista.
-- **Cuándo:** martes o jueves, al mediodía o a las 7 p. m.
-- **Primer comentario:** fija uno tuyo con la pregunta del final del texto, para
-  que la gente conteste debajo.
+**Voces.** El narrador dice todo menos el cierre: «Esta clienta quiere comprar en tu
+tienda. Mira qué pasó. Tarda en cargar siete segundos. Se fue. No se ve bien en el celular.
+No lee nada. Se fue. Pagar es un enredo. Tiene nueve campos. Se fue. Tres ventas perdidas.
+Tres errores con arreglo. Y casi nunca te enteras. ¿Tu tienda tiene alguno?». Mango solo
+dice «Escríbenos.» y el resto del tiempo escucha con la boca cerrada.
 
 ## Texto de la publicación
 
@@ -50,73 +48,36 @@ Cierre: tres ventas, tres errores, todos con arreglo, y la invitación a hablar.
 >
 > ¿Cuál de las tres le pasa a tu tienda? Cuéntanos en los comentarios o escríbenos por DM y la revisamos contigo. También puedes cotizar en outstudio.online (link en la bio).
 >
-> Guárdalo para revisar tu tienda con calma.
+> Míralo con sonido y guárdalo para revisar tu tienda con calma.
 
 **Hashtags:** #TiendaOnline #Shopify #Ecommerce #EmprendimientoColombia #DiseñoWeb #DiseñoUXUI #VentasOnline
 
-**Texto alternativo:** Video de Out Studio que sigue a una clienta en una tienda online que falla de tres formas: carga lento, no se ve bien en el celular y pagar es un enredo. Un contador de ventas perdidas sube en cada fallo.
+**Texto alternativo:** Video de Out Studio con Mango, la mascota, y una clienta en una tienda online que falla de tres formas: carga lento, no se ve bien en el celular y pagar es un enredo. Un contador de ventas perdidas sube en cada fallo hasta 540.000 pesos. Al final Mango dice «Escríbenos».
 
-## Reel con Mango narrador
+**Primer comentario (fíjalo tú):** «¿Cuál de las tres le pasa a tu tienda: carga lento, no se ve bien en el celular o pagar es un enredo?»
 
-Mango (la cabeza, de `design-src/mono/mono-avatar.png`) asoma abajo a la derecha y
-cuenta la historia: la boca se abre y se cierra al ritmo de la voz, cabecea, mueve la
-cabeza de lado a lado en cada «Se fue.» y en el cierre crece y pasa al centro. Sus
-frases salen en globos de texto. La clienta ya no habla: narra Mango.
+## Cómo publicarlo
 
-**Cómo funciona.** No es un 3D con esqueleto. La imagen de Mango se deforma por tiras
-en la zona de la mandíbula, entre la nariz y la barba, para cerrar o abrir la boca
-(el original es la boca abierta). Cada cuadro del video lee un valor de 0 a 1 de la
-curva de volumen de la voz (`ENV` en el HTML) y calcula cuánto abrir. Todo depende
-solo del tiempo, así que renderiza igual siempre.
+- **Archivo:** sube `reel-venta-perdida-mango-ilustrado.mp4`. La música es original, sin derechos de autor.
+- **Portada:** en Reels elige «Subir desde el carrete» y usa `reel-venta-perdida-portada.png`. En el perfil, la cuadrícula recorta arriba y abajo, y el título y Mango quedan a la vista.
+- **Cuándo:** martes o jueves, al mediodía o a las 7 p. m.
+- **Después:** responde cada comentario y DM el mismo día y comparte el reel en tus historias y en tu estado de WhatsApp.
 
-**La voz.** Es la grabación de Oscar con el tono subido unos tres semitonos y el timbre
-movido (`--tono mango` en `scripts/poner-voz.py`), para que suene a personaje. Se puede
-cambiar por otra voz (de IA o una locución) sin tocar el video:
-1. Saca la curva con `python3 instagram/scripts/envolvente-voz.py voz.wav > env.json`.
-2. Pega la lista en la constante `ENV` de `hyperframes/reel-venta-perdida-mango/index.html`.
-3. Renderiza: `npx hyperframes@0.8.150 render -q high -o reel.mp4` desde esa carpeta.
-4. Mezcla la voz con la música (`scripts/musica-reel.py`) y comprime con ffmpeg.
+## Antes de publicar
 
-El proyecto está en `instagram/hyperframes/reel-venta-perdida-mango/`.
+- Las voces vienen de ElevenLabs: para uso comercial (un reel de Out lo es), el plan de la cuenta tiene que ser de pago. Confírmalo.
+- El texto promete una revisión por DM de la tienda de quien comente. Confirma que quieres ofrecerla; si no, cambia esa frase por «Escríbenos por DM» solamente.
+- Los montos ($180.000 y $540.000) son un ejemplo. El texto lo aclara; no lo quites.
 
-## Voz en off (probada y descartada)
+## Cómo se regenera
 
-Se probó con la voz de Oscar, grabada en una toma, en tres tratamientos (natural,
-cálida y grave), y no convenció, así que el reel se publica sin voz y con música.
-El video quedó ajustado al ritmo de esa lectura (por eso el cierre es más pausado
-y dura 28,6 s). La herramienta y el guion se dejan por si se quiere retomar.
+- **Portada:** `cd instagram/mango2d && NODE_PATH=$(npm root -g) node portada.cjs ../lote-4/reel-venta-perdida-portada.png` (la hace con el mismo Mango del reel: ojos entreabiertos, boca cerrada).
+- **Reel:** ver la skill `reel-con-mango` (flujo completo y comandos). Los datos de este reel: voces en `instagram/voces/`, plan de cortes en `instagram/dialogo/plan.json`, claves de boca y ojos en `instagram/dialogo/hoja-venta-perdida.json`, escenas en `instagram/mango2d/reel.html`.
+- **Imagen:** `node instagram/scripts/lote-4.cjs`.
 
-| Desde | Frase | Qué pasa en pantalla |
-|---|---|---|
-| 0,4 s | Esta clienta quiere comprar en tu tienda. Mira qué pasó. | Gancho, el carrito de $180.000 |
-| 3,95 s | Tarda en cargar siete segundos. | El reloj sube hasta 7,4 s |
-| 6,95 s | Se fue. | Cae «Se fue.» y sube el contador |
-| 8,5 s | No se ve bien en el celular. No lee nada. | Zoom con los dedos |
-| 11,95 s | Se fue. | Cae «Se fue.» |
-| 13,4 s | Pagar es un enredo. Tiene nueve campos. | Los campos se apilan |
-| 16,7 s | Se fue. | Cae «Se fue.» |
-| 18,0 s | Tres ventas perdidas. Tres errores con arreglo. | La suma de $540.000 |
-| 21,35 s | Y casi… nunca te enteras. | El texto grande sobre la suma |
-| 24,0 s | ¿Tu tienda tiene alguno? | Entra el cierre |
-| 27,2 s | Escríbenos. | Mango y el botón |
+## Publicación de imagen (alternativa)
 
-### Cómo se pone
-
-La toma salió de corrido, sin pausas claras entre frases, así que los cortes están
-a mano en `voz-plan.json` (segundo de inicio y fin dentro de la grabación, y el
-segundo del video donde entra). Para volver a mezclar:
-`python3 instagram/scripts/poner-voz.py toma.m4a --plan instagram/lote-4/voz-plan.json`
-
-Si grabas otra toma con una pausa de un segundo entre frases, el script las
-separa solo, sin plan: `python3 instagram/scripts/poner-voz.py toma.m4a`.
-
-## Publicación de imagen
-
-Imagen: `venta-perdida-imagen.png` (1080 × 1350). Se regenera con
-`node instagram/scripts/lote-4.cjs`. Muestra el contador de ventas perdidas, a la
-clienta que quiere comprar, las tres cosas que fallaron y «Se fue.» en cada una.
-
-**Texto:**
+Imagen: `venta-perdida-imagen.png` (1080 × 1350). Muestra el contador de ventas perdidas, a la clienta que quiere comprar, las tres cosas que fallaron y «Se fue.» en cada una.
 
 > Esta clienta quiere comprar en tu tienda. Y se va.
 >
@@ -132,52 +93,16 @@ clienta que quiere comprar, las tres cosas que fallaron y «Se fue.» en cada un
 >
 > Guárdalo para revisar tu tienda con calma.
 
-**Hashtags:** #TiendaOnline #Shopify #Ecommerce #EmprendimientoColombia #DiseñoWeb #DiseñoUXUI #VentasOnline
-
 **Texto alternativo:** Imagen de Out Studio con un contador de ventas perdidas de 540.000 pesos. Una clienta quería comprar y se fue por tres fallos de la tienda: tarda en cargar 7,4 segundos, no se ve bien en el celular y pagar tiene 9 campos. Las tres tienen arreglo.
 
-## Antes de publicar
+## Versiones anteriores del reel (por si se retoman)
 
-- El texto promete una revisión por DM de la tienda de quien comente. Confirma
-  que quieres ofrecerla; si no, cambia esa frase por «Escríbenos por DM» solamente.
-- Responde cada comentario y DM el mismo día y comparte el reel en tus historias
-  y en tu estado de WhatsApp.
-
-## Para regenerarlo
-
-Desde `instagram/hyperframes/reel-venta-perdida/`:
-`npx hyperframes@0.8.150 render -q high -o reel.mp4` (pide Node 22 y FFmpeg).
-La portada es el cuadro del segundo 2,85 del video:
-`ffmpeg -ss 2.85 -i reel.mp4 -frames:v 1 portada.png`.
+- **Sin Mango, con música** (`reel-venta-perdida-con-musica.mp4`): el mismo reel sin voz. Se regenera con
+  `python3 instagram/scripts/musica-reel.py --video instagram/lote-4/reel-venta-perdida.mp4` (HyperFrames: `instagram/hyperframes/reel-venta-perdida/`).
+- **Sin Mango, con dos voces** (`reel-venta-perdida-voces.mp4`): narrador y Mango solo en voz, sin animación.
+- **Mango con la imagen deformada** (`reel-venta-perdida-mango.mp4`, proyecto `instagram/hyperframes/reel-venta-perdida-mango/`): la boca se deformaba por tiras; no funcionó y se reemplazó por el Mango ilustrado.
+- **Voz de Oscar:** se probó en tres tratamientos y no convenció (`voz-plan.json`, `scripts/poner-voz.py`).
 
 ## Música
 
-Está hecha con `instagram/scripts/musica-reel.py` (numpy y scipy, todo sintetizado, sin
-muestras ni derechos de autor). Va a 114 BPM, con la rejilla desplazada para que los
-cambios de escena y las tres «Se fue.» caigan sobre el pulso. Va creciendo con las
-escenas (intro, reloj, zoom, formulario), se corta justo antes de cada «Se fue.» para
-que el golpe pegue más, hace un respiro antes de «nunca te enteras» y pasa de acordes
-menores y tensos a mayores y esperanzados cuando llega la suma. Cierra con silencio y
-un golpe final con campanitas.
-
-Para regenerarla y mezclarla con el video:
-`python3 instagram/scripts/musica-reel.py --video instagram/lote-4/reel-venta-perdida.mp4`
-Se puede ajustar el volumen con `--volumen 0.8` (requiere numpy, scipy y ffmpeg).
-
-## Reel con dos voces (narrador y Mango)
-
-Archivo: `reel-venta-perdida-voces.mp4` (28,6 s, 1080 × 1920). Es el mismo reel de «La venta perdida», sin personajes animados, con dos voces de ElevenLabs y la música original por debajo (baja sola cuando hablan).
-
-- **Narrador:** cuenta lo que pasa. «Esta clienta quiere comprar en tu tienda. Tarda en cargar siete segundos. No se ve bien en el celular. No lee nada. Pagar es un enredo. Tiene nueve campos. Tres ventas perdidas. ¿Tu tienda tiene alguno?»
-- **Mango (voz):** comenta. «Mira qué pasó. Se fue. Se fue. Se fue. Tres errores con arreglo. Y casi nunca te enteras. Escríbenos.»
-- Las voces están en `instagram/voces/`; `instagram/dialogo/plan.json` dice en qué segundo cae cada frase y `instagram/scripts/dialogo.py` las acomoda. Si cambias una voz, vuelve a correr el script y a mezclar.
-- Antes de publicar: ElevenLabs pide plan de pago para uso comercial.
-
-## Reel con Mango ilustrado (versión final de voces)
-
-Archivo: `reel-venta-perdida-mango-ilustrado.mp4` (28,6 s, 24 cuadros por segundo). Mango animado en 2s, con la boca de tus dibujos y lipsync por fonemas.
-
-- **Narrador:** dice todo menos el cierre. «Esta clienta quiere comprar en tu tienda. Mira qué pasó. Tarda en cargar siete segundos. Se fue. No se ve bien en el celular. No lee nada. Se fue. Pagar es un enredo. Tiene nueve campos. Se fue. Tres ventas perdidas. Tres errores con arreglo. Y casi nunca te enteras. ¿Tu tienda tiene alguno?»
-- **Mango (voz):** solo «Escríbenos.», al final. El resto del tiempo escucha con la boca cerrada.
-- Voces en `instagram/voces/` (`narrador.mp3`, `narrador2.mp3`, `mango.mp3`); plan de cortes en `instagram/dialogo/plan.json`; hoja de exposición en `instagram/dialogo/hoja-venta-perdida.json`.
-- Antes de publicar: ElevenLabs pide plan de pago para uso comercial.
+Hecha con `instagram/scripts/musica-reel.py` (numpy y scipy, todo sintetizado, sin muestras ni derechos de autor). Va a 114 BPM, con la rejilla desplazada para que los cambios de escena y las tres «Se fue.» caigan sobre el pulso. Cambia de acordes menores y tensos a mayores y esperanzados cuando llega la suma, y cierra con un golpe final con campanitas. Los efectos de sonido salen de `instagram/scripts/sfx-reel.py`.
