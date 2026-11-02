@@ -17,8 +17,8 @@ poner(1.95, tono(900, 0.12, 40, 0.5)); poner(1.95, clic())
 for k in range(0, 20): poner(2.4 + k * 0.32, tono(330 + (k % 4) * 30, 0.2, 18, 0.12))
 # reloj: tic tac durante «una hora después»
 for k in range(0, 8): poner(4.15 + k * 0.17, tono(1800 if k % 2 else 1400, 0.04, 90, 0.35))
-# whooshes de cámara (alineados a los planos)
-for t, d in ((1.4, .35), (3.2, .35), (4.95, .65), (6.5, .45), (7.4, .45), (8.6, .4), (9.3, .3), (9.8, .3)): poner(t, barrido(d, 300, 1800), 0.55)
+# whooshes de cámara (solo el cierre del plano y el golpe de zoom)
+for t, d in ((4.8, .6), (9.85, .3)): poner(t, barrido(d, 300, 1800), 0.5)   # solo los dos movimientos de cámara
 for k in range(24): poner(5.62 + k * 0.13, rng.normal(0, 1, int(SR * 0.12)) * np.exp(-np.arange(int(SR * 0.12)) / SR * 14) * 0.18)   # páginas de calendario
 # lluvia (ruido filtrado) bajo la ventana
 t = np.arange(int(SR * 1.2)) / SR; r = rng.normal(0, 1, len(t)) * 0.07 * np.sin(np.pi * t / 1.2); poner(7.6, np.convolve(r, np.ones(6) / 6, mode="same"))

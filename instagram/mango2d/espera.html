@@ -54,12 +54,12 @@ function horaMundo(t) {
   if (t < EV.cuelga) return 10 + t * 0.03;
   if (t < EV.hora) return interp([[EV.cuelga, 10.1], [EV.hora, 11]], t);
   if (t < EV.dias) return interp([[EV.hora, 11], [EV.dias, 83]], t);
-  if (t < EV.anio) return 83 + (t - EV.dias) * 90;
+  if (t < EV.anio) return 83 + (t - EV.dias) * 18;
   return 13.5;
 }
 const clima = (t) => ({ lluvia: suave(9.6, 10.0, t) * (1 - suave(10.7, 11.1, t)), nieve: suave(11.0, 11.4, t) * (1 - suave(11.9, 12.3, t)), nubes: 0.3 + 0.5 * suave(9.4, 10, t) * (1 - suave(12, 12.8, t)) });
 const crece = (t) => interp([[0, 0.05], [EV.cuelga, 0.1], [EV.hora, 0.18], [EV.dias, 0.55], [EV.anio, 1]], t);
-const tazas = (t) => Math.floor(interp([[0, 0], [EV.cuelga, 0], [EV.hora, 1.4], [EV.dias, 6.9], [EV.anio, 17.9]], t));
+const tazas = (t) => (interp([[0, 0], [EV.cuelga, 0], [EV.hora, 1.4], [EV.dias, 6.9], [EV.anio, 17.9]], t));
 const telaranas = (t) => suave(EV.hora + 0.8, EV.anio - 0.5, t);
 
 /* ═══════════ dibujo del mundo (estilo plano con contorno, como Mango) ═══════════ */
@@ -67,7 +67,7 @@ function contorno(ctx, relleno, ancho = 5) { ctx.fillStyle = relleno; ctx.fill()
 function rect(ctx, x, y, w, h, r, color, ancho) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); contorno(ctx, color, ancho); }
 
 function planta(ctx, x, yBase, g, t) {
-  const alto = 150 + g * 760, hojas = Math.floor(3 + g * 15), sway = Math.sin(t * 1.4) * (6 + 14 * g);
+  const alto = 150 + g * 760, hojas = 18, nv = 3 + g * 15, sway = Math.sin(t * 1.4) * (6 + 14 * g);
   // maceta
   ctx.beginPath(); ctx.moveTo(x - 70, yBase - 120); ctx.lineTo(x + 70, yBase - 120); ctx.lineTo(x + 52, yBase + 20); ctx.lineTo(x - 52, yBase + 20); ctx.closePath(); contorno(ctx, "#bc6039");
   rect(ctx, x - 82, yBase - 138, 164, 36, 10, "#d9784a");
@@ -76,7 +76,7 @@ function planta(ctx, x, yBase, g, t) {
   ctx.beginPath(); for (let i = 0; i <= 20; i++) { const p = pt(i / 20); i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
   ctx.lineWidth = 10 + 10 * g; ctx.strokeStyle = TINTA; ctx.lineCap = "round"; ctx.stroke(); ctx.lineWidth = 5 + 10 * g; ctx.strokeStyle = "#2f8a3c"; ctx.stroke();
   for (let i = 0; i < hojas; i++) {
-    const u = (i + 1) / (hojas + 0.5), p = pt(u), lado = i % 2 ? 1 : -1, tam = (34 + 120 * g) * (1 - u * 0.35) * (0.8 + 0.4 * hash(i, 3));
+    const u = (i + 1) / (hojas + 0.5), p = pt(u), lado = i % 2 ? 1 : -1, brote = suave(0, 1, nv - i); if (brote <= 0) continue; const tam = (34 + 120 * g) * (1 - u * 0.35) * (0.8 + 0.4 * hash(i, 3)) * brote;
     ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(lado * (0.9 + 0.2 * Math.sin(t * 1.2 + i)) - (lado > 0 ? 0 : 0.2));
     ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(tam * 0.6, -tam * 0.7, tam * 1.6, 0); ctx.quadraticCurveTo(tam * 0.6, tam * 0.7, 0, 0); contorno(ctx, i % 3 ? "#3f9a3a" : "#2c7a2f", 4);
     ctx.beginPath(); ctx.moveTo(tam * 0.1, 0); ctx.lineTo(tam * 1.3, 0); ctx.lineWidth = 3; ctx.strokeStyle = "rgba(43,13,6,.5)"; ctx.stroke(); ctx.restore();
@@ -129,7 +129,7 @@ function dibujarFrente(ctx, t) {
   ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(-190, 1566, 1460, 10);
   // tazas que se acumulan (torres)
   const n = tazas(W(t));
-  for (let i = 0; i < Math.min(n, 14); i++) { const torre = Math.floor(i / 7), piso = i % 7; taza(ctx, 62 + torre * 78 + (piso % 2) * 5, 1556 - piso * 55, i); }   // dos torres en la esquina, lejos de la cara
+  for (let i = 0; i < 14; i++) { const pp = clamp((n - i) * 1.6); if (pp <= 0) break; const torre = Math.floor(i / 7), piso = i % 7; ctx.globalAlpha = Math.min(1, pp * 3); taza(ctx, 62 + torre * 78 + (piso % 2) * 5, 1556 - piso * 55 - (1 - pp) * (1 - pp) * 170, i); ctx.globalAlpha = 1; }   // dos torres en la esquina, lejos de la cara
   // celular de pie con la pantalla hacia la cámara
   const fase = t < 2.3 ? "producto" : t < E.anio ? "cargando" : "agotado";
   const prog = t < E.carga ? 0.05 + 0.1 * clamp((t - 2.3) / (E.carga - 2.3)) : t < E.anio ? lerp(0.15, 1, (t - E.carga) / (E.anio - E.carga)) : 1;
@@ -177,15 +177,9 @@ const mW = document.getElementById("mangoW"), cam = document.getElementById("cam
 /* ═══════════ cámara ═══════════ */
 // planos de cámara: [t, zoom, x, y] (centro del encuadre en el mundo). Entre claves, ease in-out; claves juntas = barrido rápido
 const PLANOS = [
-  [0.0, 1.0, 540, 1000], [1.35, 1.18, 590, 1300],            // abre en plano general: Mango y el celular
-  [1.75, 1.9, 880, 1260], [2.7, 1.9, 880, 1260],            // toque en «Comprar»: golpe de zoom al celular
-  [3.4, 1.05, 560, 1180], [4.9, 1.05, 560, 1180],            // vuelve atrás: el spinner da vueltas
-  [5.6, 1.4, 330, 720], [6.3, 1.45, 310, 740],               // barrido al reloj de pared
-  [6.8, 1.5, 270, 1400], [7.2, 1.55, 280, 1390],             // baja a la torre de tazas
-  [7.8, 1.3, 620, 790], [8.35, 1.35, 640, 800],              // sube a la ventana: llueve, nieva
-  [8.9, 1.0, 540, 960], [9.1, 1.0, 540, 960],                // plano general: todo cubierto
-  [9.45, 1.9, 880, 1260], [9.7, 1.9, 880, 1260],             // empuje al celular: «Agotado»
-  [9.95, 2.1, 380, 1340], [10.5, 2.2, 380, 1340], [10.8, 1.0, 540, 960],   // látigo a la cara de Mango
+  [0.0, 1.2, 590, 1240], [4.0, 1.22, 592, 1240],             // plano medio: Mango y el celular (casi quieto)
+  [5.4, 1.0, 540, 960], [9.55, 1.0, 540, 960],               // «una hora después»: se abre al plano general y se queda (el mundo es el que cambia)
+  [10.0, 2.1, 380, 1340], [10.9, 2.2, 380, 1340],            // un solo golpe de zoom a la cara de Mango al ver «Agotado»
 ];
 function camara(t) {
   let a = PLANOS[0], b = PLANOS[PLANOS.length - 1];
@@ -196,12 +190,12 @@ function camara(t) {
 }
 function pinta(t, f) {
   const tq = Math.floor(f / PASO) * PASO / 24;
-  dibujarAtras(lienzoAtras, t); dibujarFrente(lienzoFrente, t);
+  dibujarAtras(lienzoAtras, tq); dibujarFrente(lienzoFrente, tq);   // todo el mundo a doses, como Mango
   // temblor al ver «Agotado»
-  const tr = t - E.ya, tem = tr > 0 && tr < 1.2 ? Math.exp(-tr * 3) : 0, tx = Math.sin(t * 90) * 14 * tem, ty = Math.cos(t * 77) * 10 * tem;
+  const tr = t - E.ya, tem = tr > 0 && tr < 1.2 ? Math.exp(-tr * 3) : 0, tx = Math.sin(tq * 90) * 14 * tem, ty = Math.cos(tq * 77) * 10 * tem;
   const c0 = camara(t), c1 = camara(t - 1 / 24), vel = Math.hypot(c0.x - c1.x, c0.y - c1.y) * c0.s + Math.abs(c0.s - c1.s) * 600;
   const s = c0.s, cx = c0.x, cy = c0.y, sb = 1 + (s - 1) * 0.8;
-  const desenfoque = Math.min(8, Math.max(0, (vel - 16) * 0.22));
+  const desenfoque = Math.min(5, Math.max(0, (vel - 40) * 0.2));
   cam.style.transform = `translate(${540 - cx * s + tx}px, ${960 - cy * s + ty}px) scale(${s})`;
   lienzoAtras.canvas.style.transform = `translate(${540 - cx * sb + tx}px, ${960 - cy * sb + ty}px) scale(${sb})`;
   document.body.style.filter = desenfoque > 0.4 ? `blur(${desenfoque.toFixed(1)}px)` : "none";
