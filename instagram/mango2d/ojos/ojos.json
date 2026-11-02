@@ -1,0 +1,28 @@
+{
+ "x": 330,
+ "y": 300,
+ "ancho": 640,
+ "alto": 320,
+ "nombres": [
+  "normal",
+  "feliz",
+  "sorprendido",
+  "enojado",
+  "triste",
+  "serio",
+  "parpadeo",
+  "guino-izq",
+  "guino-der",
+  "ojos-abiertos",
+  "entreabiertos",
+  "mirada-izq",
+  "mirada-der",
+  "mirada-arriba",
+  "mirada-abajo",
+  "ceja-der",
+  "ceja-izq",
+  "ceja-fruncida",
+  "ceja-triste",
+  "ceja-sorprendida"
+ ]
+}

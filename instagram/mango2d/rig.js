@@ -140,6 +140,15 @@
         imgs[nombre] = el("image", { href: `${opc.bocas.carpeta}/boca-${nombre}.png`, x: pos.x, y: pos.y, width: 406, height: 190, visibility: "hidden" }, g0);
       }
     }
+    // ojos y cejas (hoja de expresiones encajada): se mueven con los lentes
+    const ojos = {};
+    let ojoAct = null;
+    function ponerOjos(nombre) {
+      if (ojoAct === nombre) return;
+      if (ojoAct && ojos[ojoAct]) ojos[ojoAct].setAttribute("visibility", "hidden");
+      if (ojos[nombre]) ojos[nombre].setAttribute("visibility", "visible");
+      ojoAct = nombre;
+    }
     let actual = null;
     function bocaImg(nombre) {
       if (actual === nombre || !imgs[nombre]) return;
@@ -156,6 +165,14 @@
       const gg = el("g", { "clip-path": `url(#${cid})` }, gl0);
       return el("rect", { x: x - 260, y: y - 200, width: 46, height: 400, fill: "#fff", opacity: 0.55, transform: `rotate(28 ${x} ${y})` }, gg);
     });
+    if (opc.ojos) {
+      const o = opc.ojos;
+      const primero = gl0.firstChild;    // los brillos quedan encima de los ojos
+      for (const nombre of o.nombres) {
+        ojos[nombre] = el("image", { href: `${o.carpeta}/ojos-${nombre}.png`, x: o.x, y: o.y, width: o.ancho, height: o.alto, visibility: "hidden" });
+        gl0.insertBefore(ojos[nombre], primero);
+      }
+    }
     function brillo(p) {          // p: 0..1 recorrido del destello
       brillos.forEach((r, i) => r.setAttribute("x", f(lentes[i][0] - 260 + p * 520)));
     }
@@ -168,7 +185,7 @@
       gl0.setAttribute("transform", `translate(${f(yaw * dl * k)} ${f(pitch * dl * k)})`);
     }
     const listo = new Promise((r) => (img.complete ? r() : (img.onload = r)));
-    return { caja, img, svg, boca, bocaImg, visema: (n) => boca(...VISEMAS[n]), girar, brillo, listo };
+    return { caja, img, svg, boca, bocaImg, ojos: ponerOjos, visema: (n) => boca(...VISEMAS[n]), girar, brillo, listo };
   }
   window.MangoRig = { crear, VISEMAS, profundidad };
 })();

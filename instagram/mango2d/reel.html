@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>La venta perdida con Mango</title>
+<style>
+  @font-face { font-family: "B"; src: url("assets/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+  @font-face { font-family: "I"; src: url("assets/instrument-400.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "I"; src: url("assets/instrument-500.woff2") format("woff2"); font-weight: 500; }
+  * { margin: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1920px; overflow: hidden; position: relative; font-family: "I", sans-serif; background: #1b2fcc; }
+  .abs { position: absolute; }
+  .d { font-family: "B", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
+  .w { display: inline-block; }
+
+  #bg { position: absolute; inset: 0; background: #1b2fcc; }
+  #wipe { position: absolute; inset: 0; clip-path: circle(0px at 540px 960px); }
+  #vineta { position: absolute; inset: 0; background: radial-gradient(70% 55% at 50% 58%, rgba(255,255,255,0) 55%, rgba(10,16,60,.38) 100%); pointer-events: none; }
+  canvas.fx { position: absolute; left: 0; top: 0; }
+
+  .capa { position: absolute; inset: 0; transform-origin: 540px 960px; }
+  #mangoW { position: absolute; left: 0; top: 0; width: 1254px; height: 1254px; transform-origin: 627px 627px; }
+  #sombra { position: absolute; width: 640px; height: 80px; border-radius: 50%; background: #0d1550; opacity: .35; filter: blur(20px); }
+
+  /* tarjetas 2.5D */
+  .tel { position: absolute; width: 400px; height: 780px; border-radius: 62px; background: #141e5c; padding: 18px; box-shadow: 0 40px 80px rgba(8,12,50,.45); }
+  .pant { position: relative; width: 100%; height: 100%; border-radius: 46px; background: #fbf8f5; overflow: hidden; }
+
+  /* escena 1: producto */
+  #p1 .foto { position: absolute; left: 22px; right: 22px; top: 70px; height: 300px; border-radius: 30px; background: #f5e3b3; display: flex; align-items: center; justify-content: center; }
+  #p1 .nom { position: absolute; left: 30px; top: 400px; font-size: 34px; font-weight: 500; color: #141e5c; }
+  #p1 .pre { position: absolute; left: 30px; top: 446px; font-size: 64px; color: #1b2fcc; }
+  #p1 .btn { position: absolute; left: 22px; right: 22px; top: 560px; height: 104px; border-radius: 52px; background: #1b2fcc; color: #fbf8f5; display: flex; align-items: center; justify-content: center; font-size: 42px; }
+  #tap { position: absolute; width: 90px; height: 90px; border-radius: 50%; border: 8px solid #f5e3b3; opacity: 0; }
+  #clienta { position: absolute; width: 150px; height: 150px; border-radius: 50%; background: #141e5c; overflow: hidden; border: 8px solid #f5e3b3; }
+
+  /* escena 2: carga */
+  #spin { position: absolute; left: 112px; top: 150px; width: 140px; height: 140px; border-radius: 50%; border: 18px solid #e6dfd8; border-top-color: #1b2fcc; }
+  #timer { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 120px; color: #1b2fcc; }
+  #track { position: absolute; left: 44px; right: 44px; top: 500px; height: 26px; border-radius: 13px; background: #e6dfd8; overflow: hidden; }
+  #fill { width: 100%; height: 100%; background: #bc6039; transform-origin: 0 50%; transform: scaleX(0); }
+  #wait { position: absolute; left: 0; right: 0; top: 556px; text-align: center; font-size: 32px; font-weight: 500; color: #585d88; }
+
+  /* escena 3: página diminuta */
+  #page { position: absolute; left: 0; top: 0; width: 364px; height: 744px; padding: 22px 14px; transform-origin: 0 0; }
+  .pg-bar { height: 7px; border-radius: 3px; background: #b9b2ab; margin-bottom: 7px; }
+  .pg-nav { display: flex; gap: 6px; margin-bottom: 10px; }
+  .pg-nav i { flex: 1; height: 8px; border-radius: 3px; background: #1b2fcc; display: block; }
+  .pg-hero { height: 90px; border-radius: 6px; background: #1b2fcc; margin: 8px 0 10px; }
+  .pg-row { display: flex; gap: 6px; margin-top: 8px; }
+  .pg-tile { flex: 1; height: 52px; border-radius: 5px; background: #f5e3b3; }
+  .dedo { position: absolute; width: 74px; height: 74px; border-radius: 50%; background: rgba(20,30,92,.3); border: 6px solid #141e5c; opacity: 0; }
+
+  /* escena 4: formulario en perspectiva */
+  #pila { position: absolute; left: 140px; top: 520px; width: 800px; height: 900px; perspective: 1400px; }
+  .campo { position: absolute; left: 0; width: 800px; height: 104px; border-radius: 26px; background: #fbf8f5; border: 4px solid #d9d1c8; display: flex; align-items: center; padding: 0 36px; font-size: 40px; font-weight: 500; color: #585d88; opacity: 0; box-shadow: 0 18px 40px rgba(5,8,40,.35); }
+  .campo.pagar { background: #c9c3bd; border-color: #c9c3bd; color: #fbf8f5; justify-content: center; font-family: "B"; font-weight: 800; font-size: 48px; }
+  #nCampos { position: absolute; left: 140px; top: 1460px; text-align: left; font-size: 52px; font-weight: 500; color: #fbf8f5; opacity: 0; }
+  #nCampos b { font-family: "B"; font-weight: 800; color: #f5e3b3; font-size: 84px; }
+
+  /* escena 5: íconos que orbitan */
+  .ico { position: absolute; width: 190px; height: 190px; border-radius: 48px; background: #fbf8f5; display: flex; align-items: center; justify-content: center; box-shadow: 0 24px 50px rgba(5,8,40,.4); opacity: 0; }
+  .ok { position: absolute; right: -18px; top: -18px; width: 76px; height: 76px; border-radius: 50%; background: #f5e3b3; border: 6px solid #141e5c; display: flex; align-items: center; justify-content: center; transform: scale(0); }
+
+  /* textos */
+  #hud { position: absolute; left: 80px; top: 92px; width: 920px; height: 160px; border-radius: 80px; background: #141e5c; display: flex; align-items: center; justify-content: space-between; padding: 0 56px 0 62px; opacity: 0; }
+  #hud .lb { font-size: 38px; font-weight: 500; color: #fbf8f5; opacity: .82; line-height: 1.1; }
+  #hud .am { font-size: 98px; color: #f5e3b3; }
+  #hudflash { position: absolute; left: 80px; top: 92px; width: 920px; height: 160px; border-radius: 80px; border: 10px solid #bc6039; opacity: 0; }
+  .cap { position: absolute; left: 80px; right: 80px; color: #fbf8f5; }
+  .cap .w { opacity: 0; }
+  .globo { position: absolute; padding: 30px 46px; border-radius: 44px; background: #f5e3b3; color: #141e5c; font-family: "B"; font-weight: 800; font-size: 64px; letter-spacing: -0.035em; line-height: 1; white-space: nowrap; transform: scale(0); }
+  .sefue { position: absolute; left: 0; right: 0; text-align: center; font-size: 210px; color: #bc6039; opacity: 0; }
+  #suma { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 210px; color: #fbf8f5; opacity: 0; }
+  #boton { position: absolute; left: 50%; top: 1640px; padding: 36px 64px; border-radius: 999px; background: #f5e3b3; color: #1b2fcc; font-weight: 500; font-size: 58px; transform: translateX(-50%) scale(0); white-space: nowrap; }
+  #logo { position: absolute; left: 470px; top: 1800px; width: 140px; opacity: 0; }
+  .sl { position: absolute; left: 0; height: 12px; width: 1200px; border-radius: 6px; background: #f5e3b3; opacity: 0; }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="wipe"></div>
+<canvas id="fondoFx" class="fx" width="1080" height="1920"></canvas>
+
+<!-- capa media: tarjetas detrás de Mango -->
+<div id="capaMedia" class="capa">
+  <div id="p1" class="tel" style="left:40px;top:560px">
+    <div class="pant">
+      <div class="foto"><svg width="210" height="150" viewBox="0 0 210 150"><path d="M10 110 C40 108 60 70 92 64 C120 60 130 82 160 84 C185 86 200 96 200 110 L200 128 L10 128 Z" fill="#bc6039"/><path d="M10 128 L200 128 L200 140 L10 140 Z" fill="#141e5c"/><circle cx="70" cy="96" r="6" fill="#f5e3b3"/><circle cx="92" cy="92" r="6" fill="#f5e3b3"/></svg></div>
+      <div class="nom">Tenis urbanos</div>
+      <div class="pre d">$180.000</div>
+      <div class="btn d">Comprar</div>
+    </div>
+  </div>
+  <div id="clienta" style="left:370px;top:500px"><svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="38" r="17" fill="#f5e3b3"/><path d="M14 100 C14 70 30 60 50 60 C70 60 86 70 86 100 Z" fill="#f5e3b3"/></svg></div>
+  <div id="tap" style="left:200px;top:1130px"></div>
+
+  <div id="p2" class="tel" style="left:340px;top:560px;opacity:0">
+    <div class="pant"><div id="spin"></div><div id="timer" class="d">0,0 s</div><div id="track"><div id="fill"></div></div><div id="wait">Cargando…</div></div>
+  </div>
+
+  <div id="p3" class="tel" style="left:340px;top:560px;opacity:0">
+    <div class="pant">
+      <div id="page">
+        <div class="pg-nav"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="pg-hero"></div>
+        <div class="pg-bar" style="width:52%"></div><div class="pg-bar"></div><div class="pg-bar" style="width:94%"></div><div class="pg-bar" style="width:88%"></div><div class="pg-bar" style="width:96%"></div><div class="pg-bar" style="width:70%"></div>
+        <div class="pg-row"><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div></div>
+        <div class="pg-row"><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div><div class="pg-tile"></div></div>
+        <div class="pg-bar" style="margin-top:14px"></div><div class="pg-bar" style="width:90%"></div><div class="pg-bar" style="width:82%"></div><div class="pg-bar" style="width:76%"></div>
+      </div>
+      <div id="d1" class="dedo"></div><div id="d2" class="dedo"></div>
+    </div>
+  </div>
+
+  <div id="pila">
+    <div class="campo" style="top:0">Nombre</div><div class="campo" style="top:0">Apellido</div><div class="campo" style="top:0">Correo</div>
+    <div class="campo" style="top:0">Teléfono</div><div class="campo" style="top:0">Dirección</div><div class="campo" style="top:0">Ciudad</div>
+    <div class="campo" style="top:0">Código postal</div><div class="campo" style="top:0">Crea una contraseña</div><div class="campo" style="top:0">Confirma tu contraseña</div>
+    <div class="campo pagar" style="top:0">Pagar</div>
+  </div>
+  <div id="nCampos">Campos: <b id="nC">0</b></div>
+</div>
+
+<!-- Mango -->
+<div id="capaMango" class="capa">
+  <div id="sombra"></div>
+  <div id="mangoW"></div>
+</div>
+
+<!-- capa frontal: íconos, textos grandes -->
+<div id="capaFrente" class="capa">
+  <div class="ico" id="i1" style="left:70px;top:560px"><svg width="110" height="110" viewBox="0 0 110 110"><circle cx="55" cy="55" r="40" fill="none" stroke="#e6dfd8" stroke-width="14"/><path d="M55 15 A40 40 0 0 1 95 55" fill="none" stroke="#1b2fcc" stroke-width="14" stroke-linecap="round"/></svg><div class="ok"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 21 L17 30 L33 11" fill="none" stroke="#141e5c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  <div class="ico" id="i2" style="left:445px;top:470px"><svg width="80" height="130" viewBox="0 0 80 130"><rect x="4" y="4" width="72" height="122" rx="16" fill="#141e5c"/><rect x="12" y="16" width="56" height="96" rx="8" fill="#f5e3b3"/></svg><div class="ok"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 21 L17 30 L33 11" fill="none" stroke="#141e5c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  <div class="ico" id="i3" style="left:820px;top:560px"><svg width="110" height="110" viewBox="0 0 110 110"><rect x="12" y="14" width="86" height="18" rx="9" fill="#d9d1c8"/><rect x="12" y="44" width="86" height="18" rx="9" fill="#d9d1c8"/><rect x="12" y="74" width="86" height="22" rx="11" fill="#bc6039"/></svg><div class="ok"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 21 L17 30 L33 11" fill="none" stroke="#141e5c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+</div>
+
+<canvas id="frenteFx" class="fx" width="1080" height="1920"></canvas>
+<div id="vineta"></div>
+
+<!-- textos fuera de la cámara -->
+<div id="caps"></div>
+<div id="g1" class="globo">Mira qué pasó.</div>
+<div id="sf1" class="sefue d" style="top:330px">Se fue.</div>
+<div id="sf2" class="sefue d" style="top:330px">Se fue.</div>
+<div id="sf3" class="sefue d" style="top:330px">Se fue.</div>
+<div id="suma" class="d">$540.000</div>
+<div id="g2" class="globo">Tres errores con arreglo.</div>
+<div id="g3" class="globo">Y casi nunca te enteras.</div>
+<div id="g4" class="globo" style="font-size:96px;padding:36px 60px">Escríbenos.</div>
+<div id="boton">outstudio.online</div>
+<svg id="logo" viewBox="0 0 126.12 91.76"><path fill="#fbf8f5" d="M29.19,72.04c-3.3,0-6.27-.52-8.930-1.55-2.66-1.04-4.93-2.57-6.82-4.59-1.88-2.02-3.32-4.54-4.31-7.56-.99-3.01-1.48-6.47-1.48-10.38,0-5.550,.93-10.13,2.79-13.74,1.86-3.6,4.45-6.3,7.77-8.09,3.32-1.79,7.12-2.68,11.41-2.68,3.34,0,6.33,.51,8.97,1.52,2.64,1.01,4.9,2.53,6.78,4.56,1.88,2.02,3.32,4.55,4.31,7.59,.99,3.04,1.48,6.56,1.48,10.56s-.52,7.6-1.55,10.66c-1.04,3.06-2.53,5.6-4.48,7.63-1.95,2.02-4.27,3.54-6.96,4.56-2.68,1.01-5.67,1.52-8.97,1.52Zm.42-9.25c2.17,0,3.98-.54,5.44-1.62,1.46-1.08,2.54-2.71,3.25-4.87,.71-2.16,1.06-4.85,1.06-8.05,0-3.44-.38-6.29-1.13-8.55-.75-2.26-1.87-3.98-3.35-5.16-1.48-1.18-3.35-1.77-5.61-1.77-2.12,0-3.91,.57-5.37,1.7-1.46,1.13-2.57,2.8-3.32,5.01-.75,2.21-1.13,4.97-1.13,8.26,0,2.45,.21,4.63,.64,6.53,.42,1.91,1.07,3.48,1.94,4.73,.87,1.25,1.94,2.19,3.21,2.82,1.27,.64,2.73,.95,4.38,.95Z"/><path fill="#fbf8f5" d="M65.42,72.04c-4.19,0-7.3-1.44-9.32-4.31-2.02-2.87-3.04-7.27-3.04-13.21v-20.76h11.44v20.27c0,2.92,.42,5.01,1.27,6.29s2.09,1.91,3.74,1.91c1.08,0,2.07-.28,2.97-.85,.89-.56,1.67-1.41,2.33-2.54,.66-1.13,1.15-2.53,1.48-4.2,.33-1.67,.49-3.61,.49-5.83v-15.04h11.44v37.29h-9.53l-.07-13.63h-.78c-.38,3.39-1.07,6.17-2.08,8.33-1.01,2.17-2.38,3.76-4.1,4.77-1.72,1.01-3.8,1.52-6.25,1.52Z"/><path fill="#fbf8f5" d="M113.05,65.87c0-1.83,.51-3.55,1.4-5.01-.59,.31-1.24,.55-1.94,.73-.73,.19-1.45,.28-2.15,.28-1.41,0-2.54-.37-3.39-1.13s-1.27-2-1.27-3.74v-14.05h8.69v-9.18h-8.69v-8.47h-6.57l-.05,1.36c-.02,.5-.06,1.01-.16,1.5-.36,1.89-1,2.57-2.01,3.47-1.21,1.09-2.99,1.85-5.49,2.13h-1.27l-.07,8.9h4.45v15.25c0,4.8,1.06,8.33,3.18,10.59,2.12,2.26,5.37,3.39,9.75,3.39,.9,0,1.920-.06,3.07-.18,1.14-.12,2.45-.38,3.93-.8-.9-1.48-1.42-3.21-1.42-5.06Z"/></svg>
+<div id="sl1" class="sl" style="top:520px"></div><div id="sl2" class="sl" style="top:900px"></div><div id="sl3" class="sl" style="top:1260px"></div><div id="sl4" class="sl" style="top:1580px"></div>
+<div id="hudflash"></div>
+<div id="hud"><div class="lb">Ventas<br>perdidas</div><div class="am d" id="monto">$0</div></div>
+
+<script src="assets/gsap.min.js"></script>
+<script src="rig.js"></script>
+<script>
+/* ════ datos ════ */
+let BOCAS = [], EV = [];
+const NOMBRES_OJOS = ["normal","feliz","sorprendido","enojado","triste","serio","parpadeo","guino-izq","guino-der","ojos-abiertos","entreabiertos","mirada-izq","mirada-der","mirada-arriba","mirada-abajo","ceja-der","ceja-izq","ceja-fruncida","ceja-triste","ceja-sorprendida"];
+const IDX_B = {}; ["m","pb","a","e","i","o","u","dt","fv","sz","l","r","ch","j","kg","q","n","th","w","h"].forEach((n) => (IDX_B[n] = { x: 450, y: 600 }));
+const m = MangoRig.crear(document.getElementById("mangoW"), { webgl: true, bocas: { carpeta: "bocas", indice: IDX_B }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: NOMBRES_OJOS } });
+
+/* expresión de ojos en el tiempo: [desde, nombre] */
+const OJOS = [[0, "feliz"], [1.2, "mirada-izq"], [2.25, "sorprendido"], [3.3, "normal"], [4.2, "entreabiertos"], [5.6, "mirada-der"], [6.85, "triste"], [8.2, "normal"],
+  [9.0, "entreabiertos"], [10.4, "mirada-abajo"], [11.85, "ceja-triste"], [13.0, "serio"], [14.4, "enojado"], [16.6, "triste"], [17.7, "sorprendido"], [19.4, "serio"],
+  [20.4, "feliz"], [21.2, "ceja-der"], [23.0, "normal"], [23.9, "mirada-arriba"], [24.9, "ceja-sorprendida"], [26.4, "feliz"], [27.15, "guino-der"]];
+const PARPADEOS = [3.9, 9.6, 14.0, 19.0, 25.9];
+
+/* ════ línea de tiempo (GSAP) ════ */
+const tl = gsap.timeline({ paused: true });
+const E = "expo.out", P4 = "power4.out";
+const cam = { s: 1, x: 0, y: 0, r: 0 };                         // cámara: afecta a las capas según su profundidad
+const mp = { x: 540, y: 1180, s: 0.78, r: 0, op: 1 };            // posición de Mango
+const camTo = (v, t, d, ease) => tl.to(cam, { ...v, duration: d, ease: ease || "power3.inOut" }, t);
+const mangoTo = (v, t, d, ease) => tl.to(mp, { ...v, duration: d, ease: ease || "power3.inOut" }, t);
+const $ = (s) => document.querySelector(s);
+
+function flip(t, color, cx, cy) {
+  tl.set("#wipe", { backgroundColor: color, clipPath: `circle(0px at ${cx}px ${cy}px)` }, t);
+  tl.to("#wipe", { clipPath: `circle(2300px at ${cx}px ${cy}px)`, duration: 0.5, ease: "power3.out" }, t);
+  tl.set("#bg", { backgroundColor: color }, t + 0.52);
+  tl.set("#wipe", { clipPath: `circle(0px at ${cx}px ${cy}px)` }, t + 0.52);
+}
+function speed(t) {
+  ["#sl1", "#sl2", "#sl3", "#sl4"].forEach((id, i) => {
+    tl.fromTo(id, { x: -1300, opacity: 0.95 }, { x: 1300, opacity: 0.95, duration: 0.36, ease: "power2.in", immediateRender: false }, t + i * 0.04);
+    tl.set(id, { opacity: 0 }, t + 0.6);
+  });
+}
+/* subtítulos del narrador: palabra por palabra a lo largo de la frase */
+const capsEl = $("#caps");
+function caption(e, top, color, size) {
+  const div = document.createElement("div");
+  div.className = "cap d"; div.style.top = top + "px"; div.style.fontSize = size + "px"; div.style.color = color;
+  div.innerHTML = e.texto.split(" ").map((w) => `<span class="w">${w}</span>`).join(" ");
+  capsEl.appendChild(div);
+  const ws = div.querySelectorAll(".w"), dur = e.t1 - e.t0;
+  ws.forEach((w, i) => tl.fromTo(w, { y: -70, rotation: -8, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.42, ease: "back.out(2.4)" }, e.t0 + (dur * i) / ws.length * 0.85));
+  return div;
+}
+function globo(sel, t, x, y, origen) {
+  tl.set(sel, { left: x, top: y, transformOrigin: origen || "0% 100%" }, 0);
+  tl.fromTo(sel, { scale: 0, rotation: -6 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2.6)" }, t);
+}
+function globoFuera(sel, t) { tl.to(sel, { scale: 0, duration: 0.2, ease: "power3.in" }, t); }
+function seFue(sel, t) {
+  tl.fromTo(sel, { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: P4 }, t);
+  tl.to(sel, { opacity: 0, y: 60, duration: 0.3, ease: "power2.in" }, t + 1.05);
+  tl.to(cam, { keyframes: { x: [0, -18, 15, -9, 5, 0], y: [0, 10, -12, 7, -3, 0] }, duration: 0.34, ease: "none" }, t);
+  rafagas.push({ t, x: 540, y: 430, n: 70, col: ["#f5e3b3", "#bc6039", "#fbf8f5"], v: 1300 });
+}
+const dinero = { v: 0 }, fmt = (n) => "$" + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+function perder(t, a, b) {
+  tl.fromTo(dinero, { v: a }, { v: b, duration: 0.7, ease: "power2.out", onUpdate: () => ($("#monto").textContent = fmt(dinero.v)), immediateRender: false }, t);
+  tl.fromTo("#hudflash", { scale: 1, opacity: 1 }, { scale: 1.16, opacity: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+  tl.fromTo("#hud", { scale: 1.08 }, { scale: 1, duration: 0.5, ease: "back.out(2.4)", immediateRender: false }, t);
+}
+const rafagas = [];      // explosiones de partículas: {t, x, y, n, col, v}
+
+function construir() {
+  const N = EV.filter((e) => e.voz === "narrador"), M = EV.filter((e) => e.voz === "mango");
+
+  /* ── 1 · gancho (0–3.3) ── */
+  tl.set("#bg", { backgroundColor: "#1b2fcc" }, 0);
+  tl.set(cam, { s: 1.5, r: -6 }, 0);
+  camTo({ s: 1, r: 0 }, 0.05, 0.9, E);
+  tl.set(mp, { x: 720, y: 1300, s: 0.66 }, 0);
+  tl.fromTo("#p1", { y: 900, rotationY: -40, rotation: -14, transformPerspective: 1200 }, { y: 0, rotationY: -18, rotation: -6, duration: 0.8, ease: "back.out(1.5)" }, 0.25);
+  tl.fromTo("#clienta", { scale: 0 }, { scale: 1, duration: 0.5, ease: "back.out(2.4)" }, 0.75);
+  caption(N[0], 110, "#fbf8f5", 104);
+  tl.fromTo("#tap", { scale: 0.3, opacity: 1 }, { scale: 2.2, opacity: 0, duration: 0.55, ease: "power2.out" }, 1.55);
+  tl.to("#p1 .btn", { scale: 0.92, duration: 0.08, yoyo: true, repeat: 1 }, 1.55);
+  globo("#g1", M[0].t0, 520, 640, "20% 100%");
+  camTo({ s: 1.18, x: -120, y: -120 }, M[0].t0, 0.7, E);
+  tl.to(capsEl.children[0], { opacity: 0, duration: 0.2 }, M[0].t0);
+  speed(3.0);
+  camTo({ s: 1.7, r: 9, x: -240 }, 3.02, 0.28, "power3.in");
+  globoFuera("#g1", 3.05);
+
+  /* ── 2 · tarda en cargar (3.3–8.15) ── */
+  flip(3.3, "#f3ede7", 540, 1000);
+  tl.set("#p1, #clienta", { opacity: 0 }, 3.3);
+  tl.set(cam, { s: 1.3, r: -5, x: 0, y: 0 }, 3.32);
+  camTo({ s: 1, r: 0 }, 3.34, 0.8, E);
+  tl.set(mp, { x: 860, y: 1580, s: 0.42, r: -12 }, 3.32);
+  tl.fromTo(mp, { y: 2300 }, { y: 1580, duration: 0.6, ease: "back.out(1.6)", immediateRender: false }, 3.6);
+  tl.set("#hud", { opacity: 0 }, 0);
+  tl.fromTo("#hud", { y: -300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.8)" }, 3.5);
+  tl.set("#p2", { opacity: 0 }, 0); tl.set("#p2", { opacity: 1 }, 3.45);
+  tl.fromTo("#p2", { y: 1100, rotationX: 30, transformPerspective: 1400 }, { y: 0, rotationX: 0, duration: 0.75, ease: "back.out(1.4)", immediateRender: false }, 3.45);
+  caption(N[1], 300, "#1b2fcc", 100);
+  const reloj = { t: 0 };
+  tl.fromTo("#spin", { rotation: 0 }, { rotation: 360 * 5, duration: 3.0, ease: "none" }, 3.9);
+  tl.fromTo(reloj, { t: 0 }, { t: 7.4, duration: 3.0, ease: "none", onUpdate: () => ($("#timer").textContent = reloj.t.toFixed(1).replace(".", ",") + " s") }, 3.9);
+  tl.fromTo("#fill", { scaleX: 0 }, { keyframes: { scaleX: [0, 0.05, 0.06, 0.1, 0.11, 0.14] }, duration: 3.0, ease: "none" }, 3.9);
+  tl.to("#timer", { color: "#bc6039", duration: 0.2 }, 5.6);
+  camTo({ s: 1.12 }, 3.9, 3.0, "sine.inOut");
+  tl.to(capsEl.children[1], { opacity: 0, duration: 0.2 }, 6.8);
+  tl.to("#p2", { x: 1300, rotation: 26, duration: 0.45, ease: "power3.in" }, 6.85);
+  camTo({ s: 1 }, 6.85, 0.4, "power3.out");
+  mangoTo({ x: 540, y: 1330, s: 0.62, r: 0 }, 6.8, 0.45, "back.out(1.4)");
+  seFue("#sf1", M[1].t0); perder(M[1].t0, 0, 180000);
+  speed(7.8);
+  camTo({ s: 0.8, r: -9 }, 7.85, 0.3, "power3.in");
+
+  /* ── 3 · no se ve en el celular (8.15–13) ── */
+  flip(8.15, "#f5e3b3", 900, 1000);
+  tl.set(cam, { s: 1.35, r: 5, x: 0, y: 0 }, 8.17);
+  camTo({ s: 1, r: 0 }, 8.19, 0.8, E);
+  tl.set(mp, { x: 220, y: 1600, s: 0.42, r: 12 }, 8.17);
+  tl.fromTo(mp, { y: 2300 }, { y: 1600, duration: 0.6, ease: "back.out(1.6)", immediateRender: false }, 8.5);
+  tl.set("#p3", { opacity: 0 }, 0); tl.set("#p3", { opacity: 1 }, 8.3);
+  tl.fromTo("#p3", { y: 1100, rotationY: 30, transformPerspective: 1400 }, { y: 0, rotationY: 8, duration: 0.75, ease: "back.out(1.4)", immediateRender: false }, 8.3);
+  caption(N[2], 300, "#1b2fcc", 92);
+  tl.fromTo("#d1", { x: 120, y: 300, opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2 }, 9.7);
+  tl.fromTo("#d2", { x: 170, y: 340, opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2 }, 9.7);
+  tl.to("#d1", { x: 40, y: 200, duration: 0.5, ease: "power2.inOut" }, 9.9);
+  tl.to("#d2", { x: 250, y: 450, duration: 0.5, ease: "power2.inOut" }, 9.9);
+  tl.fromTo("#page", { scale: 1 }, { scale: 3.2, duration: 0.55, ease: "power2.inOut" }, 9.9);
+  camTo({ s: 1.18, y: 40 }, 9.88, 0.55, "expo.inOut");
+  tl.to("#page", { x: -160, y: -40, duration: 0.45, ease: "power2.inOut" }, 10.6);
+  tl.to("#page", { keyframes: { x: [-160, -220, -120, -200, -160] }, duration: 0.7, ease: "none" }, 11.05);
+  tl.to(["#d1", "#d2"], { opacity: 0, duration: 0.15 }, 10.7);
+  tl.to(capsEl.children[2], { opacity: 0, duration: 0.2 }, 11.8);
+  tl.to("#p3", { x: -1300, rotation: -26, duration: 0.45, ease: "power3.in" }, 11.85);
+  camTo({ s: 1, y: 0 }, 11.85, 0.4, "power3.out");
+  mangoTo({ x: 540, y: 1330, s: 0.62, r: 0 }, 11.8, 0.45, "back.out(1.4)");
+  seFue("#sf2", M[2].t0); perder(M[2].t0, 180000, 360000);
+  speed(12.6);
+  camTo({ s: 1.6, r: -8, x: 240 }, 12.78, 0.22, "power3.in");
+
+  /* ── 4 · pagar es un enredo (13–17.7) ── */
+  flip(13.0, "#141e5c", 540, 990);
+  tl.set(cam, { s: 1.3, r: 6, x: 0, y: 0 }, 13.02);
+  camTo({ s: 1, r: 0 }, 13.04, 0.8, E);
+  tl.set(mp, { x: 880, y: 1680, s: 0.4, r: -10 }, 13.02);
+  tl.fromTo(mp, { y: 2300 }, { y: 1680, duration: 0.6, ease: "back.out(1.6)", immediateRender: false }, 13.4);
+  caption(N[3], 300, "#f5e3b3", 92);
+  const campos = document.querySelectorAll(".campo"), nc = { n: 0 };
+  campos.forEach((c, i) => {
+    const t = 13.6 + i * 0.22;
+    tl.fromTo(c, { opacity: 0, y: 900, rotationX: -60, z: -200 }, { opacity: 1, y: 40 + i * 84, rotationX: 22, z: -i * 30, duration: 0.45, ease: "back.out(1.3)" }, t);
+  });
+  tl.fromTo("#nCampos", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3 }, 13.8);
+  tl.fromTo(nc, { n: 0 }, { n: 9, duration: 1.9, ease: "none", onUpdate: () => ($("#nC").textContent = Math.round(nc.n)) }, 13.6);
+  camTo({ s: 1.1, r: -2 }, 13.9, 2.6, "sine.inOut");
+  tl.to(capsEl.children[3], { opacity: 0, duration: 0.2 }, 16.5);
+  tl.to("#pila", { x: 1300, rotation: 14, duration: 0.45, ease: "power3.in" }, 16.55);
+  tl.to("#nCampos", { opacity: 0, duration: 0.2 }, 16.55);
+  camTo({ s: 1, r: 0 }, 16.55, 0.4, "power3.out");
+  mangoTo({ x: 540, y: 1330, s: 0.62, r: 0 }, 16.5, 0.45, "back.out(1.4)");
+  seFue("#sf3", M[3].t0); perder(M[3].t0, 360000, 540000);
+  speed(17.4);
+  camTo({ s: 2.0, r: 6 }, 17.42, 0.25, "power3.in");
+
+  /* ── 5 · la suma (17.7–23.8) ── */
+  flip(17.7, "#1b2fcc", 540, 700);
+  tl.to("#hud", { y: -300, opacity: 0, duration: 0.3, ease: "power3.in" }, 17.6);
+  tl.set(cam, { s: 1.4, r: 5, x: 0, y: 0 }, 17.72);
+  camTo({ s: 1, r: 0 }, 17.74, 0.9, E);
+  tl.set(mp, { x: 540, y: 1330, s: 0.74, r: 0 }, 17.72);
+  caption(N[4], 210, "#fbf8f5", 110);
+  tl.fromTo("#suma", { scale: 2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: P4 }, 18.5);
+  tl.set("#suma", { top: 470 }, 0);
+  rafagas.push({ t: 18.5, x: 540, y: 500, n: 60, col: ["#f5e3b3", "#fbf8f5"], v: 1100 });
+  tl.to(capsEl.children[4], { opacity: 0, duration: 0.2 }, 19.3);
+  tl.to("#suma", { scale: 0.5, y: -330, duration: 0.5, ease: "power3.inOut" }, 19.35);
+  globo("#g2", M[4].t0, 120, 330, "50% 100%");
+  ["#i1", "#i2", "#i3"].forEach((id, i) => {
+    tl.fromTo(id, { opacity: 0, scale: 0, rotation: -20 }, { opacity: 1, scale: 1, rotation: [-8, 0, 8][i], duration: 0.5, ease: "back.out(2.2)" }, 19.6 + i * 0.12);
+    tl.to(`${id} .ok`, { scale: 1, duration: 0.35, ease: "back.out(3)" }, 20.3 + i * 0.22);
+    rafagas.push({ t: 20.3 + i * 0.22, x: [165, 540, 915][i], y: [655, 565, 655][i], n: 18, col: ["#f5e3b3", "#fbf8f5"], v: 600 });
+  });
+  globoFuera("#g2", 21.05);
+  globo("#g3", 21.15, 130, 330, "50% 100%");
+  camTo({ s: 1.12, y: -60 }, 20.2, 2.6, "sine.inOut");
+  globoFuera("#g3", 23.2);
+  tl.to(["#i1", "#i2", "#i3", "#suma"], { opacity: 0, scale: 0.3, duration: 0.3, ease: "power3.in" }, 23.3);
+  speed(23.5);
+  camTo({ s: 1.5, r: -8, x: 220 }, 23.58, 0.22, "power3.in");
+
+  /* ── 6 · cierre (23.8–28.6) ── */
+  flip(23.8, "#1b2fcc", 540, 700);
+  tl.set(cam, { s: 1.4, r: 5, x: 0, y: 0 }, 23.82);
+  camTo({ s: 1, r: 0 }, 23.84, 0.9, E);
+  tl.set(mp, { x: 540, y: 1220, s: 0.8, r: 0 }, 23.82);
+  caption(N[5], 230, "#fbf8f5", 116);
+  camTo({ s: 1.15, y: 60 }, 24.6, 2.4, "sine.inOut");
+  tl.to(capsEl.children[5], { opacity: 0, y: -40, duration: 0.3 }, 26.9);
+  camTo({ s: 1, y: 0 }, 26.95, 0.35, "back.out(1.6)");
+  mangoTo({ y: 1120, s: 0.74 }, 26.95, 0.35, "back.out(1.6)");
+  globo("#g4", M[5].t0, 290, 250, "50% 100%");
+  rafagas.push({ t: M[5].t0, x: 540, y: 420, n: 90, col: ["#f5e3b3", "#bc6039", "#fbf8f5"], v: 1500, confeti: true });
+  tl.fromTo("#boton", { scale: 0 }, { scale: 1, duration: 0.5, ease: "back.out(2.6)" }, M[5].t0 + 0.25);
+  tl.fromTo("#logo", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4 }, M[5].t0 + 0.5);
+}
+
+/* ════ partículas ════ */
+const fF = document.getElementById("fondoFx").getContext("2d"), fR = document.getElementById("frenteFx").getContext("2d");
+const hash = (i, k) => { const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return x - Math.floor(x); };
+const AMB = Array.from({ length: 50 }, (_, i) => ({ x: hash(i, 1) * 1080, y: hash(i, 2) * 1920, v: 20 + hash(i, 3) * 50, s: 8 + hash(i, 4) * 20, a: hash(i, 5) * 6.28, tipo: hash(i, 6) > 0.55 ? 1 : 0, o: 0.12 + hash(i, 7) * 0.3, z: 0.3 + hash(i, 8) * 0.6 }));
+function ambiente(t, color) {
+  fF.clearRect(0, 0, 1080, 1920);
+  for (const p of AMB) {
+    const y = ((p.y - t * p.v) % 2100 + 2100) % 2100 - 90 + cam.y * p.z, x = p.x + Math.sin(t * 0.7 + p.a) * 24 + cam.x * p.z;
+    fF.globalAlpha = p.o; fF.strokeStyle = color; fF.fillStyle = color; fF.lineWidth = 4;
+    if (p.tipo) { const s = p.s; fF.beginPath(); fF.moveTo(x + s * 0.45, y - s); fF.lineTo(x, y - s); fF.lineTo(x, y + s); fF.lineTo(x + s * 0.45, y + s); fF.stroke(); }
+    else { fF.beginPath(); fF.arc(x, y, p.s * 0.24, 0, 6.29); fF.fill(); }
+  }
+  fF.globalAlpha = 1;
+}
+function explosiones(t) {
+  fR.clearRect(0, 0, 1080, 1920);
+  rafagas.forEach((r, j) => {
+    const d = t - r.t; if (d < 0 || d > 1.6) return;
+    for (let i = 0; i < r.n; i++) {
+      const ang = hash(i, j + 11) * 6.283, v = r.v * (0.35 + hash(i, j + 12) * 0.65);
+      const x = r.x + Math.cos(ang) * v * d * (1 - d * 0.35), y = r.y + Math.sin(ang) * v * d * (1 - d * 0.35) + 900 * d * d * (r.confeti ? 0.6 : 0.4);
+      const a = Math.max(0, 1 - d / 1.5);
+      fR.globalAlpha = a; fR.fillStyle = r.col[i % r.col.length];
+      if (r.confeti || i % 3 === 0) { fR.save(); fR.translate(x, y); fR.rotate(d * 8 + i); fR.fillRect(-9, -5, 18, 10); fR.restore(); }
+      else { fR.beginPath(); fR.arc(x, y, 5 + hash(i, j + 13) * 7, 0, 6.29); fR.fill(); }
+    }
+  });
+  fR.globalAlpha = 1;
+}
+
+/* ════ cuadro a cuadro ════ */
+const habla = (t, voz) => EV.some((e) => e.voz === voz && t >= e.t0 - 0.04 && t <= e.t1 + 0.08);
+const golpe = (t, voz) => { let g = 0; for (const e of EV) { const d = t - e.t0; if (d >= 0 && d < 0.6 && (!voz || e.voz === voz)) g = Math.max(g, Math.exp(-d * 6)); } return g; };
+const ojosEn = (t) => { let n = "normal"; for (const [t0, nombre] of OJOS) if (t >= t0) n = nombre; if (PARPADEOS.some((b) => t >= b && t < b + 0.12)) n = "parpadeo"; return n; };
+const capas = [["#capaMedia", 0.75], ["#capaMango", 1.0], ["#capaFrente", 1.25]].map(([s, z]) => [document.querySelector(s), z]);
+const mW = document.getElementById("mangoW"), sombra = document.getElementById("sombra");
+const COLOR_AMB = (t) => (t < 3.3 ? "#f5e3b3" : t < 8.15 ? "#1b2fcc" : t < 13 ? "#bc6039" : t < 17.7 ? "#f5e3b3" : "#f5e3b3");
+
+window.render = (t) => {
+  tl.seek(t, false);
+  ambiente(t, COLOR_AMB(t));
+  explosiones(t);
+  // cámara por capas (2.5D): las capas cercanas se mueven y escalan más
+  for (const [el, z] of capas) {
+    const s = 1 + (cam.s - 1) * z;
+    el.style.transform = `translate(${cam.x * z}px, ${cam.y * z}px) rotate(${cam.r * z}deg) scale(${s})`;
+  }
+  // Mango: boca, ojos, giro y actuación
+  const yo = habla(t, "mango"), el = habla(t, "narrador");
+  const k = Math.floor(t * 12);
+  const nb = yo && k < BOCAS.length ? BOCAS[k] : "m";
+  m.bocaImg(nb);
+  m.ojos(ojosEn(t));
+  const abre = { m: 0, pb: 0.05, i: 0.2, sz: 0.2, e: 0.45, a: 0.75, h: 0.9, o: 0.6, u: 0.35 }[nb] || 0;
+  const gm = golpe(t, "mango"), gn = golpe(t, "narrador");
+  const yaw = 0.45 * Math.sin(t * 0.8) + (el ? -0.5 : 0) + gm * 0.4;
+  const pitch = 0.16 * Math.sin(t * 1.3) + gn * 0.3 - gm * 0.25 + abre * 0.08;
+  m.girar(yaw, pitch);
+  const rebote = yo ? Math.abs(Math.sin(t * 7.5)) * 12 + abre * 10 : 0;
+  const rot = mp.r + 2 * Math.sin(t * 0.9) + (el ? -2.5 : 0) + gm * 3;
+  const sy = 1 + abre * 0.02 + gm * 0.05, sx = 1 - abre * 0.012;
+  const y = mp.y - rebote - gm * 26 + gn * 8 + Math.sin(t * 1.6) * 6;
+  mW.style.transform = `translate(${mp.x - 627 + yaw * 10}px, ${y - 627}px) rotate(${rot}deg) scale(${mp.s * sx}, ${mp.s * sy})`;
+  sombra.style.transform = `translate(${mp.x - 320}px, ${mp.y + 560 * mp.s - 40}px) scale(${mp.s * 1.2}, ${mp.s})`;
+  m.brillo(((t % 4.6) / 0.8));
+};
+window.cargar = (b, e) => { BOCAS = b; EV = e; construir(); return m.listo; };
+</script>
+</body>
+</html>
