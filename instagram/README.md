@@ -12,6 +12,7 @@ cada publicación y los scripts que las generan.
 | Lote 3 | Carrusel "¿De qué depende el precio de una página web?", reel "3 señales de que tu página necesita un rediseño" (video y portada), carrusel "Así trabajamos" | `lote-3/` |
 | Lote 4 | «La venta perdida», publicación 3: reel con Mango ilustrado (video, portada y texto), imagen y versiones sin Mango | `lote-4/` |
 | Lote 5 | Borrador del reel «Tres pruebas gratis para tu página», primero de la serie «Consejos de Mango» (`serie-consejos.md`) | `lote-5/` |
+| Lote 6 | Borrador del reel «Así hacemos hablar a Mango», detrás de cámaras del método de animación | `lote-6/` |
 | Perfil | Foto de perfil, portadas de destacados, historias de cada destacado, biografía y datos del perfil | `perfil/` |
 | Videos personales | Cinco guiones para grabar con tu cara y tu voz (quién eres, revisión de una página, precio, caso Diario Deportes, un día de trabajo) | `videos-personales/` |
 
