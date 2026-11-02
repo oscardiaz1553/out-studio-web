@@ -153,6 +153,7 @@
 
 <script>
 (() => {
+  const HOJA_ID = "venta-perdida";   // nombre del documento en la base de datos: hojas/<HOJA_ID>
   const FPS = 24, DUR = 28.6, N = Math.round(DUR * FPS), PX = 12;
   const EV = [{"voz":"narrador","t0":0.35,"t1":2.41,"texto":"Esta clienta quiere comprar en tu tienda."},{"voz":"narrador","t0":2.3,"t1":3.08,"texto":"Mira qué pasó."},{"voz":"narrador","t0":3.55,"t1":5.46,"texto":"Tarda en cargar siete segundos."},{"voz":"narrador","t0":6.95,"t1":7.49,"texto":"Se fue."},{"voz":"narrador","t0":8.4,"t1":11.32,"texto":"No se ve bien en el celular. No lee nada."},{"voz":"narrador","t0":11.95,"t1":12.62,"texto":"Se fue."},{"voz":"narrador","t0":13.25,"t1":16.45,"texto":"Pagar es un enredo. Tiene nueve campos."},{"voz":"narrador","t0":16.7,"t1":17.43,"texto":"Se fue."},{"voz":"narrador","t0":17.85,"t1":19.12,"texto":"Tres ventas perdidas."},{"voz":"narrador","t0":19.5,"t1":22.9,"texto":"Tres errores con arreglo. Y casi nunca te enteras."},{"voz":"narrador","t0":23.95,"t1":25.16,"texto":"¿Tu tienda tiene alguno?"},{"voz":"mango","t0":27.2,"t1":28.0,"texto":"Escríbenos."}];
   const BOCAS = [["m","M"],["pb","P / B"],["a","A"],["e","E"],["i","I"],["o","O"],["u","U"],["dt","D / T"],["fv","F / V"],["sz","S / Z"],["l","L"],["r","R"],["ch","CH / SH"],["j","J"],["kg","K / G"],["q","Q"],["n","N"],["th","TH"],["w","W"],["h","H"]];
@@ -366,7 +367,7 @@
   /* ── guardar en la base de datos del artefacto ── */
   let ref = null, guardando = false, otraVez = false, temp = null;
   function estado(txt, cls) { const e = $("estado"); e.textContent = txt; e.className = "estado " + (cls || ""); }
-  function local() { try { localStorage.setItem("hoja-mango", JSON.stringify(claves)); } catch (e) {} }
+  function local() { try { localStorage.setItem("hoja-mango-" + HOJA_ID, JSON.stringify(claves)); } catch (e) {} }
   function guardar() {
     sucio = true; local();
     if (!ref) { estado("Guardado solo en este navegador", "mal"); return; }
@@ -386,13 +387,13 @@
     claves = { bocas: { ...(d.bocas || {}) }, ojos: { ...(d.ojos || {}) } };
     ordenar(); pintarHoja(); pintarCuadro();
   }
-  try { const l = JSON.parse(localStorage.getItem("hoja-mango") || "null"); if (l) cargar(l); } catch (e) {}
+  try { const l = JSON.parse(localStorage.getItem("hoja-mango-" + HOJA_ID) || "null"); if (l) cargar(l); } catch (e) {}
   ordenar(); pintarHoja(); pintarCuadro();
 
   (async () => {
     const db = window.claude && window.claude.use ? await window.claude.use("db") : null;
     if (!db) { estado("Sin conexión: guarda con «Copiar claves»", "mal"); return; }
-    ref = db.doc("hojas/venta-perdida");
+    ref = db.doc("hojas/" + HOJA_ID);
     const reloj = setTimeout(() => estado("Todavía cargando las claves guardadas…", "mal"), 10000);
     ref.onSnapshot((snap) => {
       if (!snap.metadata.fromCache) clearTimeout(reloj);
