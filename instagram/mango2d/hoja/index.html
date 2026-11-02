@@ -113,7 +113,7 @@
         <button id="btnPlay" type="button" class="prim">Reproducir</button>
         <button id="btnAdelante" type="button" aria-label="Cuadro siguiente">Cuadro ▶</button>
         <button id="btnFrase" type="button" aria-pressed="false">Repetir frase</button>
-        <button id="btn4s" type="button" class="prim" aria-pressed="true">A 4s</button>
+        <button id="btn4s" type="button" class="prim" aria-pressed="true">A 2s</button>
         <span class="tiempo" id="tiempo">Cuadro 1 · 0,00 s</span>
       </div>
       <input type="range" id="scrub" min="0" value="0" step="1" aria-label="Tiempo">
@@ -133,9 +133,9 @@
       <div class="mini">
         <button id="btnQuitarB" type="button">Quitar clave de boca</button>
         <button id="btnQuitarO" type="button">Quitar clave de ojos</button>
-        <button id="btnPasar4" type="button">Pasar todas las claves a 4s</button>
+        <button id="btnPasar4" type="button">Ajustar todas las claves a la rejilla</button>
       </div>
-      <p class="ayuda">Mover un slider o tocar una miniatura pone una clave, y se mantiene hasta la siguiente, como en la hoja. Con «A 4s» activo la clave cae al inicio del bloque de 4 cuadros donde estás, así la boca cambia como máximo 6 veces por segundo. Teclado: <kbd>Espacio</kbd> reproducir, <kbd>←</kbd> <kbd>→</kbd> cuadro a cuadro (con <kbd>Mayús</kbd>, de bloque en bloque), letras para la boca: <kbd>M</kbd> <kbd>P</kbd> <kbd>A</kbd> <kbd>E</kbd> <kbd>I</kbd> <kbd>O</kbd> <kbd>U</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>S</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>C</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>Q</kbd> <kbd>N</kbd> <kbd>T</kbd> <kbd>W</kbd> <kbd>H</kbd>.</p>
+      <p class="ayuda">Mover un slider o tocar una miniatura pone una clave, y se mantiene hasta la siguiente, como en la hoja. Con la rejilla activa («A 2s» o «A 4s»; el botón cambia entre 2, 4 y cuadro a cuadro) la clave cae al inicio del bloque donde estás. Teclado: <kbd>Espacio</kbd> reproducir, <kbd>←</kbd> <kbd>→</kbd> cuadro a cuadro (con <kbd>Mayús</kbd>, de bloque en bloque), letras para la boca: <kbd>M</kbd> <kbd>P</kbd> <kbd>A</kbd> <kbd>E</kbd> <kbd>I</kbd> <kbd>O</kbd> <kbd>U</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>S</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>C</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>Q</kbd> <kbd>N</kbd> <kbd>T</kbd> <kbd>W</kbd> <kbd>H</kbd>.</p>
     </section>
   </div>
 
@@ -162,7 +162,7 @@
 
   /* ── estado ── */
   let claves = { bocas: {}, ojos: {} };
-  let cuadro = 0, tocando = false, repetir = false, sucio = false, rejilla = 4;
+  let cuadro = 0, tocando = false, repetir = false, sucio = false, rejilla = 2;
   const bloque = (f) => (rejilla > 1 ? Math.floor(f / rejilla) * rejilla : f);
 
   /* ── capas de la vista previa (todas cargadas, se muestra una) ── */
@@ -325,13 +325,13 @@
   $("btnAdelante").addEventListener("click", () => { if (tocando) play(); irA(cuadro + 1, true); });
   $("btnPlay").addEventListener("click", play);
   $("btnFrase").addEventListener("click", (e) => { repetir = !repetir; e.target.setAttribute("aria-pressed", repetir); e.target.classList.toggle("prim", repetir); });
-  $("btn4s").addEventListener("click", (e) => { rejilla = rejilla > 1 ? 1 : 4; const on = rejilla > 1; e.target.setAttribute("aria-pressed", on); e.target.classList.toggle("prim", on); pintarHoja(); pintarCuadro(); });
+  $("btn4s").addEventListener("click", (e) => { rejilla = rejilla === 2 ? 4 : rejilla === 4 ? 1 : 2; const on = rejilla > 1; e.target.setAttribute("aria-pressed", on); e.target.classList.toggle("prim", on); e.target.textContent = on ? `A ${rejilla}s` : "Cuadro a cuadro"; pintarHoja(); pintarCuadro(); });
   const PRI = { a: 9, h: 9, q: 9, o: 8, e: 7, u: 6, w: 6, i: 5, l: 5, r: 5, n: 5, dt: 4, th: 4, kg: 4, j: 4, ch: 4, sz: 4, fv: 4, pb: 3, m: 0 };
   function aCuatros(mapa, prioridad) {
     // en cada bloque de 4 gana la clave más importante (vocales antes que consonantes; cierres antes que silencio)
     const bloques = {};
     for (const f of Object.keys(mapa).map(Number).sort((a, b) => a - b)) {
-      const b = Math.floor(f / 4) * 4, k = mapa[f];
+      const G = rejilla > 1 ? rejilla : 2, b = Math.round(f / G) * G, k = mapa[f];
       if (bloques[b] === undefined || (prioridad && (PRI[k] ?? 1) > (PRI[bloques[b]] ?? 1)) || (!prioridad)) bloques[b] = k;
     }
     const res = {}; let prev = null;
@@ -340,8 +340,8 @@
   }
   $("btnPasar4").addEventListener("click", () => {
     claves = { bocas: aCuatros(claves.bocas, true), ojos: aCuatros(claves.ojos, false) };
-    rejilla = 4; $("btn4s").setAttribute("aria-pressed", true); $("btn4s").classList.add("prim");
-    ordenar(); pintarHoja(); pintarCuadro(); guardar(); estado("Claves pasadas a 4s", "ok");
+    if (rejilla < 2) { rejilla = 2; $("btn4s").textContent = "A 2s"; } $("btn4s").setAttribute("aria-pressed", true); $("btn4s").classList.add("prim");
+    ordenar(); pintarHoja(); pintarCuadro(); guardar(); estado("Claves ajustadas a la rejilla", "ok");
   });
   $("btnZoom").addEventListener("click", (e) => { const on = $("stage").classList.toggle("cara"); e.target.setAttribute("aria-pressed", on); e.target.textContent = on ? "Ver cabeza" : "Acercar cara"; });
   document.addEventListener("keydown", (e) => {
