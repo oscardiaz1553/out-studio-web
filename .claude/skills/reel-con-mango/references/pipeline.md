@@ -51,8 +51,10 @@ Formato de la hoja: `{ "fps": 24, "bocas": {"<cuadro>": "<boca>"}, "ojos": {"<cu
 
 ## 4. Hoja de exposición (revisión del animador)
 
-1. Copia `instagram/mango2d/hoja/index.html`, cambia `HOJA_ID` y la lista `EV` (pégale `eventos.json`), y deja junto a ella `mango.png` (la ilustración a mitad de tamaño), `dialogo.mp3`, y las carpetas `bocas/` y `ojos/` a mitad de tamaño (hay una copia lista en la carpeta de trabajo de «La venta perdida»; se regenera reduciendo los PNG de `instagram/mango2d/` al 50 %).
-2. Publica con la herramienta Artifact y `capabilities: {"db": {}}`.
+1. Arma la carpeta del artefacto:
+   `python3 instagram/mango2d/hoja/preparar.py $T/eventos.json $T/dialogo.wav <hoja_id> $T/hoja`
+   Copia `index.html` con el id de la hoja y las frases del reel, y deja junto a él el audio y las imágenes a mitad de tamaño.
+2. Publica `$T/hoja/index.html` con la herramienta Artifact (`root` = `$T/hoja`, `files` con todos los archivos de la carpeta) y `capabilities: {"db": {}}`.
 3. Siembra `hojas/<HOJA_ID>` con `ArtifactData` (`set`, con la hoja) la primera vez. Después, **lee la versión** antes de escribir; si el usuario ya editó, no lo pises.
 4. El usuario ajusta claves a 2s (botón de rejilla: 2, 4 o cuadro a cuadro). Lee el documento con `ArtifactData get` para renderizar.
 
