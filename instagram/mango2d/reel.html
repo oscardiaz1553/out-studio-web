@@ -226,7 +226,21 @@ function perder(t, a, b) {
 const rafagas = [];      // explosiones de partículas: {t, x, y, n, col, v}
 
 function construir() {
-  const N = EV.filter((e) => e.voz === "narrador"), M = EV.filter((e) => e.voz === "mango");
+  const buscar = (txt, i = 0) => EV.filter((e) => e.texto.startsWith(txt))[i];
+  const N = ["Esta clienta", "Tarda", "No se ve", "Pagar", "Tres ventas", "¿Tu tienda"].map((x) => buscar(x));
+  const SF = EV.filter((e) => e.texto === "Se fue.");                       // los tres «Se fue.»
+  const MIRA = buscar("Mira"), ERRORES = buscar("Tres errores"), ESCRIBE = buscar("Escríbenos");
+  // subtítulos extra (van en otro contenedor para no mover los índices de los demás)
+  const caps2 = document.createElement("div"); document.body.insertBefore(caps2, document.getElementById("g1"));
+  function capLibre(e, top, color, size, sale) {
+    const div = document.createElement("div");
+    div.className = "cap d"; div.style.top = top + "px"; div.style.fontSize = size + "px"; div.style.color = color;
+    div.innerHTML = e.texto.split(" ").map((w) => `<span class="w">${w}</span>`).join(" ");
+    caps2.appendChild(div);
+    const ws = div.querySelectorAll(".w"), dur = e.t1 - e.t0;
+    ws.forEach((w, i) => tl.fromTo(w, { y: -70, rotation: -8, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.42, ease: "back.out(2.4)" }, e.t0 + (dur * i) / ws.length * 0.85));
+    tl.to(div, { opacity: 0, duration: 0.25 }, sale ?? e.t1 + 0.5);
+  }
 
 
   /* ── Mango: una sola ruta continua entre escenas (nunca desaparece ni salta) ── */
@@ -257,12 +271,11 @@ function construir() {
   caption(N[0], 110, "#fbf8f5", 104);
   tl.fromTo("#tap", { scale: 0.3, opacity: 1 }, { scale: 2.2, opacity: 0, duration: 0.55, ease: "power2.out" }, 1.55);
   tl.to("#p1 .btn", { scale: 0.92, duration: 0.08, yoyo: true, repeat: 1 }, 1.55);
-  globo("#g1", M[0].t0, 520, 640, "20% 100%");
-  camTo({ s: 1.18, x: -120, y: -120 }, M[0].t0, 0.7, E);
-  tl.to(capsEl.children[0], { opacity: 0, duration: 0.2 }, M[0].t0);
+  capLibre(MIRA, 110, "#f5e3b3", 112, 3.0);
+  camTo({ s: 1.18, x: -120, y: -120 }, MIRA.t0, 0.7, E);
+  tl.to(capsEl.children[0], { opacity: 0, duration: 0.2 }, MIRA.t0);
   speed(3.0);
   camTo({ s: 1.7, r: 9, x: -240 }, 3.02, 0.28, "power3.in");
-  globoFuera("#g1", 3.05);
 
   /* ── 2 · tarda en cargar (3.3–8.15) ── */
   flip(3.3, "#f3ede7", 540, 1000);
@@ -282,7 +295,7 @@ function construir() {
   tl.to(capsEl.children[1], { opacity: 0, duration: 0.2 }, 6.8);
   tl.to("#p2", { x: 1300, rotation: 26, duration: 0.45, ease: "power3.in" }, 6.85);
   camTo({ s: 1 }, 6.85, 0.4, "power3.out");
-  seFue("#sf1", M[1].t0); perder(M[1].t0, 0, 180000);
+  seFue("#sf1", SF[0].t0); perder(SF[0].t0, 0, 180000);
   speed(7.8);
   camTo({ s: 0.8, r: -9 }, 7.85, 0.3, "power3.in");
 
@@ -304,7 +317,7 @@ function construir() {
   tl.to(capsEl.children[2], { opacity: 0, duration: 0.2 }, 11.8);
   tl.to("#p3", { x: -1300, rotation: -26, duration: 0.45, ease: "power3.in" }, 11.85);
   camTo({ s: 1, y: 0 }, 11.85, 0.4, "power3.out");
-  seFue("#sf2", M[2].t0); perder(M[2].t0, 180000, 360000);
+  seFue("#sf2", SF[1].t0); perder(SF[1].t0, 180000, 360000);
   speed(12.6);
   camTo({ s: 1.6, r: -8, x: 240 }, 12.78, 0.22, "power3.in");
 
@@ -324,7 +337,7 @@ function construir() {
   tl.to("#pila", { x: 1300, rotation: 14, duration: 0.45, ease: "power3.in" }, 16.55);
   tl.to("#nCampos", { opacity: 0, duration: 0.2 }, 16.55);
   camTo({ s: 1, r: 0 }, 16.55, 0.4, "power3.out");
-  seFue("#sf3", M[3].t0); perder(M[3].t0, 360000, 540000);
+  seFue("#sf3", SF[2].t0); perder(SF[2].t0, 360000, 540000);
   speed(17.4);
   camTo({ s: 2.0, r: 6 }, 17.42, 0.25, "power3.in");
 
@@ -338,16 +351,13 @@ function construir() {
   rafagas.push({ t: 18.5, x: 540, y: 500, n: 60, col: ["#f5e3b3", "#fbf8f5"], v: 1100 });
   tl.to(capsEl.children[4], { opacity: 0, duration: 0.2 }, 19.3);
   tl.to("#suma", { scale: 0.5, y: -330, duration: 0.5, ease: "power3.inOut" }, 19.35);
-  globo("#g2", M[4].t0, 120, 330, "50% 100%");
+  capLibre(ERRORES, 300, "#f5e3b3", 92, 23.2);
   ["#i1", "#i2", "#i3"].forEach((id, i) => {
     tl.fromTo(id, { opacity: 0, scale: 0, rotation: -20 }, { opacity: 1, scale: 1, rotation: [-8, 0, 8][i], duration: 0.5, ease: "back.out(2.2)" }, 19.6 + i * 0.12);
     tl.to(`${id} .ok`, { scale: 1, duration: 0.35, ease: "back.out(3)" }, 20.3 + i * 0.22);
     rafagas.push({ t: 20.3 + i * 0.22, x: [165, 540, 915][i], y: [655, 565, 655][i], n: 18, col: ["#f5e3b3", "#fbf8f5"], v: 600 });
   });
-  globoFuera("#g2", 21.05);
-  globo("#g3", 21.15, 130, 330, "50% 100%");
   camTo({ s: 1.12, y: -60 }, 20.2, 2.6, "sine.inOut");
-  globoFuera("#g3", 23.2);
   tl.to(["#i1", "#i2", "#i3", "#suma"], { opacity: 0, scale: 0.3, duration: 0.3, ease: "power3.in" }, 23.3);
   speed(23.5);
   camTo({ s: 1.5, r: -8, x: 220 }, 23.58, 0.22, "power3.in");
@@ -359,10 +369,10 @@ function construir() {
   camTo({ s: 1.15, y: 60 }, 24.6, 2.4, "sine.inOut");
   tl.to(capsEl.children[5], { opacity: 0, y: -40, duration: 0.3 }, 26.9);
   camTo({ s: 1, y: 0 }, 26.95, 0.35, "back.out(1.6)");
-  globo("#g4", M[5].t0, 290, 250, "50% 100%");
-  rafagas.push({ t: M[5].t0, x: 540, y: 420, n: 90, col: ["#f5e3b3", "#bc6039", "#fbf8f5"], v: 1500, confeti: true });
-  tl.fromTo("#boton", { scale: 0 }, { scale: 1, duration: 0.5, ease: "back.out(2.6)" }, M[5].t0 + 0.25);
-  tl.fromTo("#logo", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4 }, M[5].t0 + 0.5);
+  globo("#g4", ESCRIBE.t0, 290, 250, "50% 100%");
+  rafagas.push({ t: ESCRIBE.t0, x: 540, y: 420, n: 90, col: ["#f5e3b3", "#bc6039", "#fbf8f5"], v: 1500, confeti: true });
+  tl.fromTo("#boton", { scale: 0 }, { scale: 1, duration: 0.5, ease: "back.out(2.6)" }, ESCRIBE.t0 + 0.25);
+  tl.fromTo("#logo", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4 }, ESCRIBE.t0 + 0.5);
 }
 
 /* ════ partículas ════ */

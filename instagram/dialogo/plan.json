@@ -9,11 +9,12 @@
    "texto": "Esta clienta quiere comprar en tu tienda."
   },
   {
-   "voz": "mango",
+   "voz": "narrador",
    "a": 0.04,
    "b": 0.93,
    "t": 2.3,
-   "texto": "Mira qué pasó."
+   "texto": "Mira qué pasó.",
+   "archivo": "narrador2"
   },
   {
    "voz": "narrador",
@@ -23,11 +24,12 @@
    "texto": "Tarda en cargar siete segundos."
   },
   {
-   "voz": "mango",
+   "voz": "narrador",
    "a": 1.23,
    "b": 1.84,
    "t": 6.95,
-   "texto": "Se fue."
+   "texto": "Se fue.",
+   "archivo": "narrador2"
   },
   {
    "voz": "narrador",
@@ -37,11 +39,12 @@
    "texto": "No se ve bien en el celular. No lee nada."
   },
   {
-   "voz": "mango",
+   "voz": "narrador",
    "a": 2.03,
    "b": 2.69,
    "t": 11.95,
-   "texto": "Se fue."
+   "texto": "Se fue.",
+   "archivo": "narrador2"
   },
   {
    "voz": "narrador",
@@ -51,11 +54,12 @@
    "texto": "Pagar es un enredo. Tiene nueve campos."
   },
   {
-   "voz": "mango",
+   "voz": "narrador",
    "a": 2.84,
    "b": 3.5,
    "t": 16.7,
-   "texto": "Se fue."
+   "texto": "Se fue.",
+   "archivo": "narrador2"
   },
   {
    "voz": "narrador",
@@ -65,11 +69,12 @@
    "texto": "Tres ventas perdidas."
   },
   {
-   "voz": "mango",
+   "voz": "narrador",
    "a": 3.89,
    "b": 7.19,
    "t": 19.5,
-   "texto": "Tres errores con arreglo. Y casi nunca te enteras."
+   "texto": "Tres errores con arreglo. Y casi nunca te enteras.",
+   "archivo": "narrador2"
   },
   {
    "voz": "narrador",

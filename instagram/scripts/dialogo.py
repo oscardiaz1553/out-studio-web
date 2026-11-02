@@ -20,7 +20,7 @@ def pistas(voz):
     for l in plan["lineas"]:
         if l["voz"] != voz:
             continue
-        cmd += ["-i", os.path.join(base, f"{voz}.mp3")]
+        cmd += ["-i", os.path.join(base, f"{l.get('archivo', voz)}.mp3")]
         d = l["b"] - l["a"]
         ms = int(l["t"] * 1000)
         filtros.append(f"[{n}:a]atrim={l['a']}:{l['b']},asetpts=PTS-STARTPTS,aformat=sample_rates=44100:channel_layouts=mono,"

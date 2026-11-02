@@ -1,0 +1,90 @@
+{
+ "nota": "Cada entrada recorta [a,b] segundos del audio de la voz y lo pone en el segundo t de la línea de tiempo.",
+ "lineas": [
+  {
+   "voz": "narrador",
+   "a": 0.04,
+   "b": 2.1,
+   "t": 0.35,
+   "texto": "Esta clienta quiere comprar en tu tienda."
+  },
+  {
+   "voz": "mango",
+   "a": 0.04,
+   "b": 0.93,
+   "t": 2.3,
+   "texto": "Mira qué pasó."
+  },
+  {
+   "voz": "narrador",
+   "a": 2.52,
+   "b": 4.43,
+   "t": 3.55,
+   "texto": "Tarda en cargar siete segundos."
+  },
+  {
+   "voz": "mango",
+   "a": 1.23,
+   "b": 1.84,
+   "t": 6.95,
+   "texto": "Se fue."
+  },
+  {
+   "voz": "narrador",
+   "a": 4.75,
+   "b": 7.67,
+   "t": 8.4,
+   "texto": "No se ve bien en el celular. No lee nada."
+  },
+  {
+   "voz": "mango",
+   "a": 2.03,
+   "b": 2.69,
+   "t": 11.95,
+   "texto": "Se fue."
+  },
+  {
+   "voz": "narrador",
+   "a": 8.01,
+   "b": 11.21,
+   "t": 13.25,
+   "texto": "Pagar es un enredo. Tiene nueve campos."
+  },
+  {
+   "voz": "mango",
+   "a": 2.84,
+   "b": 3.5,
+   "t": 16.7,
+   "texto": "Se fue."
+  },
+  {
+   "voz": "narrador",
+   "a": 11.53,
+   "b": 12.8,
+   "t": 17.85,
+   "texto": "Tres ventas perdidas."
+  },
+  {
+   "voz": "mango",
+   "a": 3.89,
+   "b": 7.19,
+   "t": 19.5,
+   "texto": "Tres errores con arreglo. Y casi nunca te enteras."
+  },
+  {
+   "voz": "narrador",
+   "a": 13.17,
+   "b": 14.38,
+   "t": 23.95,
+   "texto": "¿Tu tienda tiene alguno?"
+  },
+  {
+   "voz": "mango",
+   "a": 7.48,
+   "b": 8.28,
+   "t": 27.2,
+   "texto": "Escríbenos."
+  }
+ ],
+ "duracion": 28.6
+}
