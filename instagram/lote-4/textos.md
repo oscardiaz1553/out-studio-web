@@ -172,3 +172,12 @@ Archivo: `reel-venta-perdida-voces.mp4` (28,6 s, 1080 × 1920). Es el mismo reel
 - **Mango (voz):** comenta. «Mira qué pasó. Se fue. Se fue. Se fue. Tres errores con arreglo. Y casi nunca te enteras. Escríbenos.»
 - Las voces están en `instagram/voces/`; `instagram/dialogo/plan.json` dice en qué segundo cae cada frase y `instagram/scripts/dialogo.py` las acomoda. Si cambias una voz, vuelve a correr el script y a mezclar.
 - Antes de publicar: ElevenLabs pide plan de pago para uso comercial.
+
+## Reel con Mango ilustrado (versión final de voces)
+
+Archivo: `reel-venta-perdida-mango-ilustrado.mp4` (28,6 s, 24 cuadros por segundo). Mango animado en 2s, con la boca de tus dibujos y lipsync por fonemas.
+
+- **Narrador:** dice todo menos el cierre. «Esta clienta quiere comprar en tu tienda. Mira qué pasó. Tarda en cargar siete segundos. Se fue. No se ve bien en el celular. No lee nada. Se fue. Pagar es un enredo. Tiene nueve campos. Se fue. Tres ventas perdidas. Tres errores con arreglo. Y casi nunca te enteras. ¿Tu tienda tiene alguno?»
+- **Mango (voz):** solo «Escríbenos.», al final. El resto del tiempo escucha con la boca cerrada.
+- Voces en `instagram/voces/` (`narrador.mp3`, `narrador2.mp3`, `mango.mp3`); plan de cortes en `instagram/dialogo/plan.json`; hoja de exposición en `instagram/dialogo/hoja-venta-perdida.json`.
+- Antes de publicar: ElevenLabs pide plan de pago para uso comercial.
