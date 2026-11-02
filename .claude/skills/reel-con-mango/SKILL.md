@@ -23,7 +23,7 @@ Quien anima es el usuario (animador 2D) y revisa cuadro a cuadro: las correccion
 8. **Sin squash and stretch.** Se probó y no gustó: la escala de Mango es siempre uniforme.
 9. **Mango nunca desaparece ni salta.** Sigue una ruta continua entre escenas con ease in-out, la cámara lo afecta poco (factor 0.35) y nunca sale de cuadro. Prohibido recolocarlo con un salto instantáneo o hacerlo entrar desde fuera de cuadro.
 10. **Ningún texto se pisa con otro elemento.** Revisa cada subtítulo contra los íconos, montos y tarjetas con capturas de cuadros; el zoom de cámara mueve las capas.
-11. **Voces:** el narrador cuenta; Mango habla poco (en «La venta perdida» solo dice «Escríbenos.»). Cuando Mango no habla escucha: mira al narrador y asiente.
+11. **Voces:** todo lo dice el narrador, cierre incluido («Escríbenos.»). La voz de Mango se descartó porque suena infantil: Mango no habla en los reels nuevos (en «La venta perdida» todavía dice «Escríbenos.»). Mango escucha: mira al narrador, parpadea y reacciona con los ojos. Si algún día vuelve a hablar, hace falta una voz nueva y el método de lipsync sigue igual.
 
 ## Piezas (todo está en el repo)
 

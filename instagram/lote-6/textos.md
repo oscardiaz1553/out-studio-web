@@ -2,7 +2,7 @@
 
 **Así hacemos hablar a Mango.** Reel de «detrás de cámaras» que enseña el método de `.claude/skills/reel-con-mango/` con datos y dibujos reales del reel «La venta perdida». Sirve de dos formas: muestra el oficio de Out y le da a otros animadores y creadores una técnica que pueden copiar.
 
-Mango solo dice «Escríbenos.» al final (se reutiliza `instagram/voces/mango.mp3`). Solo hace falta un audio nuevo, el del narrador.
+Todo lo dice el narrador, también «Escríbenos.» (la voz de Mango se descartó). Mango aparece en silencio.
 
 ## Guion (narrador) y escenas
 
@@ -17,12 +17,12 @@ Todo lo que sale en pantalla es real: las hojas de bocas y ojos que dibujó el u
 | Entre un dibujo y otro van dibujos intermedios, y todo se mueve cada dos cuadros. | Una boca que pasa de A a E por sus dos intermedios; el contador de cuadros de dos en dos |
 | Así se ve fluido, como animación de verdad. | Antes y después: la misma frase brusca y suave, lado a lado |
 | ¿Quieres un personaje así para tu marca? | Mango escucha, parpadea |
-| (Mango) Escríbenos. | Mango, botón y logo |
+| Escríbenos. | Mango en silencio, botón y logo |
 
 ## Audio que hay que generar (ElevenLabs, voz del narrador)
 
 ```
-Así hacemos hablar a Mango. <break time="2s" /> Primero, los dibujos: veinte bocas y veinte pares de ojos, hechos una sola vez. <break time="2s" /> Después escuchamos la voz y buscamos las letras que mandan: a, e, i, o, u, de, ese, te, eme y pe. <break time="2s" /> Cada dibujo entra dos cuadros antes del sonido. <break time="2s" /> Entre un dibujo y otro van dibujos intermedios, y todo se mueve cada dos cuadros. <break time="2s" /> Así se ve fluido, como animación de verdad. <break time="2s" /> ¿Quieres un personaje así para tu marca?
+Así hacemos hablar a Mango. <break time="2s" /> Primero, los dibujos: veinte bocas y veinte pares de ojos, hechos una sola vez. <break time="2s" /> Después escuchamos la voz y buscamos las letras que mandan: a, e, i, o, u, de, ese, te, eme y pe. <break time="2s" /> Cada dibujo entra dos cuadros antes del sonido. <break time="2s" /> Entre un dibujo y otro van dibujos intermedios, y todo se mueve cada dos cuadros. <break time="2s" /> Así se ve fluido, como animación de verdad. <break time="2s" /> ¿Quieres un personaje así para tu marca? <break time="2s" /> Escríbenos.
 ```
 
 ## Texto de la publicación (borrador)

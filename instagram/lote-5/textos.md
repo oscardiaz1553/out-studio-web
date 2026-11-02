@@ -4,7 +4,7 @@
 
 ## Guion (narrador) y escenas
 
-Mango solo dice «Escríbenos.» al final (se reutiliza `instagram/voces/mango.mp3`). Solo hace falta un audio nuevo, el del narrador.
+Todo lo dice el narrador, también «Escríbenos.» (la voz de Mango se descartó). Mango aparece en silencio.
 
 | Frase del narrador | Escena |
 |---|---|
@@ -17,14 +17,14 @@ Mango solo dice «Escríbenos.» al final (se reutiliza `instagram/voces/mango.m
 | La de la velocidad. | Medidor de velocidad |
 | Pon tu enlace en PageSpeed Insights, de Google. Es gratis y te dice qué tan rápida es en el celular. | El enlace entra y el medidor sube hasta una nota |
 | Si falla alguna, tiene arreglo. | Cierre |
-| (Mango) Escríbenos. | Mango, botón y logo |
+| Escríbenos. | Mango en silencio, botón y logo |
 
 Los nombres de las pruebas salen en pantalla como títulos, sin numerar.
 
 ## Audio que hay que generar (ElevenLabs, voz del narrador)
 
 ```
-Tres pruebas gratis para saber si tu página funciona. <break time="2s" /> La de los cinco segundos. <break time="2s" /> Enséñasela a alguien cinco segundos y pregúntale: ¿qué venden? Si no sabe, tu primera pantalla no lo dice. <break time="2s" /> La del celular. <break time="2s" /> Ábrela con datos, no con wifi. Si tarda o tienes que hacer zoom para leer, así la ve tu cliente. <break time="2s" /> La de la velocidad. <break time="2s" /> Pon tu enlace en PageSpeed Insights, de Google. Es gratis y te dice qué tan rápida es en el celular. <break time="2s" /> Si falla alguna, tiene arreglo.
+Tres pruebas gratis para saber si tu página funciona. <break time="2s" /> La de los cinco segundos. <break time="2s" /> Enséñasela a alguien cinco segundos y pregúntale: ¿qué venden? Si no sabe, tu primera pantalla no lo dice. <break time="2s" /> La del celular. <break time="2s" /> Ábrela con datos, no con wifi. Si tarda o tienes que hacer zoom para leer, así la ve tu cliente. <break time="2s" /> La de la velocidad. <break time="2s" /> Pon tu enlace en PageSpeed Insights, de Google. Es gratis y te dice qué tan rápida es en el celular. <break time="2s" /> Si falla alguna, tiene arreglo. <break time="2s" /> Escríbenos.
 ```
 
 ## Texto de la publicación (borrador)

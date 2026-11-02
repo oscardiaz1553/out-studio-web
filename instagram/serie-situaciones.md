@@ -1,6 +1,6 @@
 # Serie de situaciones (reels pensados para viralidad)
 
-En vez de consejos, cada reel cuenta **una situación** que cualquiera ha vivido como cliente de una tienda online, exagerada y bien narrada, ilustrada en 2.5D (personajes cutout, fondos por capas y cámara con profundidad). El error de la tienda es el chiste; Out aparece al final con Mango.
+En vez de consejos, cada reel cuenta **una situación** que cualquiera ha vivido como cliente de una tienda online, exagerada y bien narrada, ilustrada en 2.5D (personajes cutout, fondos por capas y cámara con profundidad). El error de la tienda es el chiste; Out aparece al final con Mango, que no habla.
 
 ## Qué buscamos en cada reel
 
@@ -11,7 +11,7 @@ En vez de consejos, cada reel cuenta **una situación** que cualquiera ha vivido
 - **Final que empalma con el inicio** cuando se pueda, para que se vea en bucle.
 - **Sonido trabajado:** efectos en cada golpe, música y voces de personaje. Subtítulos siempre (mucha gente lo ve sin sonido).
 - **Personajes que vuelven:** la clienta (y más adelante el emprendedor) se vuelven conocidos episodio a episodio.
-- **Mango de cameo al final:** «Escríbenos.», nada más. El reel no vende, entretiene.
+- **Mango de cameo al final, en silencio.** El narrador dice «Escríbenos.» (la voz de Mango se descartó por sonar infantil). El reel no vende, entretiene.
 
 ## Situaciones
 
@@ -62,4 +62,6 @@ Subir la ilustración de Mango (`design-src/mono/ilustrado/mango-ilustrado.png`)
 1. POV: la clienta en el sofá toca «Comprar» en su celular. Aparece el cargador.
 2. Espera: el cargador gira mientras por la ventana pasa el día y la noche, la planta crece, a ella le crece el pelo, cambia de posición en el sofá (aburrida, dormida), cae la nieve (en Colombia: el chiste es justamente que no nieva).
 3. Remate: por fin carga la página: «Agotado». Su cara.
-4. Cameo: Mango «Escríbenos.». Texto final: «Una página lenta pierde ventas».
+4. Cierre: Mango en silencio y el narrador: «Una página lenta no avisa: solo pierde ventas. Escríbenos.».
+
+Prompts de las imágenes y guion: `situaciones/la-espera/`.
