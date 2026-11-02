@@ -1,0 +1,8 @@
+<!doctype html><meta charset="utf-8"><body style="margin:0;background:#222;display:flex;flex-wrap:wrap;gap:8px;padding:8px;width:1200px">
+<script src="elementos.js"></script>
+<script>
+const casos=[[6.8,{}],[10,{}],[15,{nubes:.6}],[18.5,{}],[21,{}],[3,{}],[11,{lluvia:1,nubes:1}],[14,{nieve:1,nubes:.8}]];
+casos.forEach(([hora,clima])=>{const c=document.createElement("canvas");c.width=220;c.height=300;document.body.appendChild(c);Cielo.dibujar(c.getContext("2d"),220,300,hora,clima);});
+[["producto",0,0],["cargando",1.3,.12],["agotado",0,0]].forEach(([fase,t,p])=>{const c=document.createElement("canvas");c.width=200;c.height=360;document.body.appendChild(c);Pantalla.dibujar(c.getContext("2d"),200,360,{fase,t,progreso:p});});
+const c=document.createElement("canvas");c.width=200;c.height=200;document.body.appendChild(c);const x=c.getContext("2d");x.fillStyle="#f5e3b3";x.fillRect(0,0,200,200);x.translate(100,100);x.fillStyle="#fbf8f5";x.beginPath();x.arc(0,0,90,0,6.29);x.fill();Reloj.dibujar(x,90,10.1);
+</script>
