@@ -158,7 +158,12 @@
 <script src="rig.js"></script>
 <script>
 /* ════ datos ════ */
-let BOCAS = [], EV = [];
+let BOCAS = [], EV = [], HOJA = null;   // HOJA: claves de la hoja de exposición (24 cps), si las hay
+function claveEn(pista, f, defecto) {
+  const k = HOJA[pista]; let mejor = -1;
+  for (const c in k) { const n = +c; if (n <= f && n > mejor) mejor = n; }
+  return mejor < 0 ? defecto : k[mejor];
+}
 const NOMBRES_OJOS = ["normal","feliz","sorprendido","enojado","triste","serio","parpadeo","guino-izq","guino-der","ojos-abiertos","entreabiertos","mirada-izq","mirada-der","mirada-arriba","mirada-abajo","ceja-der","ceja-izq","ceja-fruncida","ceja-triste","ceja-sorprendida"];
 const IDX_B = {}; ["m","pb","a","e","i","o","u","dt","fv","sz","l","r","ch","j","kg","q","n","th","w","h"].forEach((n) => (IDX_B[n] = { x: 450, y: 600 }));
 const m = MangoRig.crear(document.getElementById("mangoW"), { webgl: true, bocas: { carpeta: "bocas", indice: IDX_B }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: NOMBRES_OJOS } });
@@ -391,7 +396,7 @@ function explosiones(t) {
 /* ════ cuadro a cuadro ════ */
 const habla = (t, voz) => EV.some((e) => e.voz === voz && t >= e.t0 - 0.04 && t <= e.t1 + 0.08);
 const golpe = (t, voz) => { let g = 0; for (const e of EV) { const d = t - e.t0; if (d >= 0 && d < 0.6 && (!voz || e.voz === voz)) g = Math.max(g, Math.exp(-d * 6)); } return g; };
-const ojosEn = (t) => { let n = "normal"; for (const [t0, nombre] of OJOS) if (t >= t0) n = nombre; if (PARPADEOS.some((b) => t >= b && t < b + 0.12)) n = "parpadeo"; return n; };
+const ojosEn = (t) => { if (HOJA) return claveEn("ojos", Math.floor(t * 24 + 1e-6), "normal"); let n = "normal"; for (const [t0, nombre] of OJOS) if (t >= t0) n = nombre; if (PARPADEOS.some((b) => t >= b && t < b + 0.12)) n = "parpadeo"; return n; };
 const capas = [["#capaMedia", 0.75], ["#capaMango", 1.0], ["#capaFrente", 1.25]].map(([s, z]) => [document.querySelector(s), z]);
 const mW = document.getElementById("mangoW"), sombra = document.getElementById("sombra");
 const COLOR_AMB = (t) => (t < 3.3 ? "#f5e3b3" : t < 8.15 ? "#1b2fcc" : t < 13 ? "#bc6039" : t < 17.7 ? "#f5e3b3" : "#f5e3b3");
@@ -408,7 +413,7 @@ window.render = (t) => {
   // Mango: boca, ojos, giro y actuación
   const yo = habla(t, "mango"), el = habla(t, "narrador");
   const k = Math.floor(t * 12);
-  const nb = yo && k < BOCAS.length ? BOCAS[k] : "m";
+  const nb = HOJA ? claveEn("bocas", Math.floor(t * 24 + 1e-6), "m") : (yo && k < BOCAS.length ? BOCAS[k] : "m");
   m.bocaImg(nb);
   m.ojos(ojosEn(t));
   const abre = { m: 0, pb: 0.05, i: 0.2, sz: 0.2, e: 0.45, a: 0.75, h: 0.9, o: 0.6, u: 0.35 }[nb] || 0;
@@ -424,7 +429,7 @@ window.render = (t) => {
   sombra.style.transform = `translate(${mp.x - 320}px, ${mp.y + 560 * mp.s - 40}px) scale(${mp.s * 1.2}, ${mp.s})`;
   m.brillo(((t % 4.6) / 0.8));
 };
-window.cargar = (b, e) => { BOCAS = b; EV = e; construir(); return m.listo; };
+window.cargar = (b, e, h) => { BOCAS = b; EV = e; HOJA = h || null; construir(); return m.listo; };
 </script>
 </body>
 </html>

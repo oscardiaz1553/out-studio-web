@@ -17,7 +17,8 @@ const srv = http.createServer((q, r) => { const p = path.join(raiz, decodeURICom
   await p.goto('http://localhost:8765/' + (process.env.PAGINA || 'habla.html'));
   await p.evaluate(() => document.fonts.ready);
   const b = JSON.parse(fs.readFileSync(bocasF)).estados, e = JSON.parse(fs.readFileSync(evF));
-  await p.evaluate(([b, e]) => window.cargar(b, e), [b, e]);
+  const h = process.env.HOJA ? JSON.parse(fs.readFileSync(process.env.HOJA)) : null;
+  await p.evaluate(([b, e, h]) => window.cargar(b, e, h), [b, e, h]);
   await p.waitForTimeout(300);
   const n = Math.round(+dur * FPS);
   for (let i = 0; i < n; i++) {
