@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+  *{margin:0}
+  body{width:1080px;height:1920px;overflow:hidden;background:#1b2fcc;position:relative}
+  #glow{position:absolute;inset:0;background:radial-gradient(60% 40% at 50% 62%, #3a4ee6 0%, #1b2fcc 60%, #141e5c 100%)}
+  #fx{position:absolute;inset:0}
+  #mango{position:absolute;left:0;top:0;transform-origin:627px 1150px}
+  #sombra{position:absolute;left:250px;top:1700px;width:580px;height:70px;border-radius:50%;background:#0d1550;opacity:.45;filter:blur(18px)}
+</style></head><body>
+<div id="glow"></div><canvas id="fx" width="1080" height="1920"></canvas><div id="sombra"></div><div id="mango"></div>
+<script src="rig.js"></script>
+<script>
+const m = MangoRig.crear(document.getElementById("mango"), { webgl: true });
+const host = document.getElementById("mango");
+let BOCAS = [], EV = [];
+const fx = document.getElementById("fx").getContext("2d");
+// partículas deterministas: corchetes y puntos que flotan
+const PART = Array.from({length: 46}, (_, i) => { const r = (k) => { const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return x - Math.floor(x); };
+  return { x: r(1) * 1080, y: r(2) * 1920, v: 18 + r(3) * 40, s: 6 + r(4) * 18, a: r(5) * 6.28, tipo: r(6) > 0.6 ? 1 : 0, o: 0.15 + r(7) * 0.35 }; });
+function particulas(t) {
+  fx.clearRect(0, 0, 1080, 1920);
+  for (const p of PART) {
+    const y = ((p.y - t * p.v) % 2100 + 2100) % 2100 - 90, x = p.x + Math.sin(t * 0.7 + p.a) * 24;
+    fx.globalAlpha = p.o; fx.strokeStyle = "#f5e3b3"; fx.fillStyle = "#f5e3b3"; fx.lineWidth = 3;
+    if (p.tipo) { fx.beginPath(); fx.moveTo(x + p.s * 0.4, y - p.s); fx.lineTo(x, y - p.s); fx.lineTo(x, y + p.s); fx.lineTo(x + p.s * 0.4, y + p.s); fx.stroke(); }
+    else { fx.beginPath(); fx.arc(x, y, p.s * 0.22, 0, 6.29); fx.fill(); }
+  }
+  fx.globalAlpha = 1;
+}
+const habla = (t, voz) => EV.some((e) => e.voz === voz && t >= e.t0 - 0.04 && t <= e.t1 + 0.08);
+const golpe = (t, voz) => { let g = 0; for (const e of EV) { const d = t - e.t0; if (d >= 0 && d < 0.6 && (!voz || e.voz === voz)) g = Math.max(g, Math.exp(-d * 6)); } return g; };
+window.render = (t) => {
+  particulas(t);
+  const yo = habla(t, "mango"), el = habla(t, "narrador");
+  const k = Math.floor(t * 12);
+  const vis = yo && k < BOCAS.length ? BOCAS[k] : 0;
+  m.visema(vis);
+  const gm = golpe(t, "mango"), gn = golpe(t, "narrador");
+  const abre = MangoRig.VISEMAS[vis][0];
+  // giro de cabeza: deriva lenta, mira hacia el narrador (izquierda) cuando él habla, y gira al frente para hablar
+  const yaw = 0.45 * Math.sin(t * 0.8) + (el ? -0.55 : 0) + gm * 0.4;
+  const pitch = 0.18 * Math.sin(t * 1.3) + gn * 0.35 - gm * 0.25 + abre * 0.08;
+  m.girar(yaw, pitch);
+  // cuerpo: rebote al hablar, asentimiento al escuchar
+  const rebote = yo ? Math.abs(Math.sin(t * 7.5)) * 10 + abre * 8 : 0;
+  const y = 300 - rebote - gm * 26 + gn * 10 + Math.sin(t * 1.6) * 6;
+  const rot = 2.2 * Math.sin(t * 0.9) + (el ? -2.5 : 0) + gm * 3;
+  const sy = 1 + abre * 0.018 + gm * 0.04, sx = 1 - abre * 0.01;
+  host.style.transform = `translate(${(1080 - 1254 * 0.95) / 2 + yaw * 10}px, ${y}px) scale(0.95) rotate(${rot}deg) scale(${sx}, ${sy})`;
+  // destello en las gafas cada ~5 s
+  m.brillo(((t % 5.2) / 0.9));
+};
+window.cargar = (b, e) => { BOCAS = b; EV = e; return m.listo; };
+</script></body></html>

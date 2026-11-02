@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><body style="margin:0;background:#ff8c03;display:grid;grid-template-columns:repeat(3,460px);gap:8px;padding:8px">
+<script src="rig.js"></script>
+<script>
+for (let i=0;i<6;i++){
+  const v=document.createElement("div"); v.style.cssText="width:460px;height:300px;overflow:hidden;position:relative";
+  document.body.appendChild(v);
+  const inner=document.createElement("div"); inner.style.cssText="position:absolute;left:-420px;top:-540px"; v.appendChild(inner);
+  MangoRig.crear(inner).visema(i);
+}
+</script>
