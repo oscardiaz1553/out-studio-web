@@ -1,0 +1,7 @@
+<!doctype html><meta charset="utf-8"><body style="margin:0;background:#1b2fcc;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px">
+<div id="a"></div><div id="b"></div><div id="c"></div><div id="d"></div>
+<script src="mango.js"></script>
+<script>
+const v=[[0.12,0,0,0],[0.9,0,0,0],[0.6,1,0.5,-0.2],[0.45,0,-0.6,0.1]];
+["a","b","c","d"].forEach((id,i)=>{const m=MangoSVG.crear(document.getElementById(id),{ancho:290});m.boca(v[i][0],v[i][1]);m.mirar(v[i][2],v[i][3]);});
+</script>
