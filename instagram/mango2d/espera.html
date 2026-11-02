@@ -25,7 +25,7 @@
   <canvas id="frente" class="mundo" width="1480" height="2320"></canvas>
 </div>
 <div id="titulo" class="d"></div>
-<div id="cierre"><div class="t d" id="cierreTxt"></div><div class="btn" id="cierreBtn">outstudio.online</div></div>
+<div id="cierre"><div class="t d" id="cierreTxt"><span id="c1" style="display:block">Una página lenta<br>no avisa:</span><span id="c2" style="display:block"><b>solo pierde ventas.</b></span></div><div class="btn" id="cierreBtn">outstudio.online</div></div>
 <script src="elementos.js"></script>
 <script src="rig.js"></script>
 <script>
@@ -44,20 +44,23 @@ function interp(claves, t) {                         // [[t, valor], ...] con ea
   }
   return claves[claves.length - 1][1];
 }
-const E = { cuelga: 4.0, hora: 5.5, dias: 9.0, anio: 13.0, ya: 14.0, mango: 16.0 };    // marcas de tiempo (s) de las escenas
+// marcas de tiempo (s) sincronizadas con la voz del narrador (voces/espera-narrador.mp3)
+const E = { tap: 1.5, carga0: 2.35, cuelga: 4.1, hora: 5.56, dias: 7.22, carga: 8.68, anio: 9.55, ya: 9.7, mango: 10.3, fin: 15.6 };
+const EV = { cuelga: 4.0, hora: 5.5, dias: 9.0, anio: 13.0 };   // tiempos "de mundo" originales del lapso (cielo, plantas, tazas)
+const W = (t) => (t < E.cuelga ? t * 4.0 / E.cuelga : t < E.hora ? interp([[E.cuelga, 4.0], [E.hora, 5.5]], t) : t < E.dias ? interp([[E.hora, 5.5], [E.dias, 9.0]], t) : t < E.anio ? interp([[E.dias, 9.0], [E.anio, 13.0]], t) : 13.5);
 
 /* ═══════════ el mundo: hora, clima, crecimiento ═══════════ */
 function horaMundo(t) {
-  if (t < E.cuelga) return 10 + t * 0.03;
-  if (t < E.hora) return interp([[E.cuelga, 10.1], [E.hora, 11]], t);
-  if (t < E.dias) return interp([[E.hora, 11], [E.dias, 83]], t);
-  if (t < E.anio) return 83 + (t - E.dias) * 90;
+  if (t < EV.cuelga) return 10 + t * 0.03;
+  if (t < EV.hora) return interp([[EV.cuelga, 10.1], [EV.hora, 11]], t);
+  if (t < EV.dias) return interp([[EV.hora, 11], [EV.dias, 83]], t);
+  if (t < EV.anio) return 83 + (t - EV.dias) * 90;
   return 13.5;
 }
 const clima = (t) => ({ lluvia: suave(9.6, 10.0, t) * (1 - suave(10.7, 11.1, t)), nieve: suave(11.0, 11.4, t) * (1 - suave(11.9, 12.3, t)), nubes: 0.3 + 0.5 * suave(9.4, 10, t) * (1 - suave(12, 12.8, t)) });
-const crece = (t) => interp([[0, 0.05], [E.cuelga, 0.1], [E.hora, 0.18], [E.dias, 0.55], [E.anio, 1]], t);
-const tazas = (t) => Math.floor(interp([[0, 0], [E.cuelga, 0], [E.hora, 1.4], [E.dias, 6.9], [E.anio, 17.9]], t));
-const telaranas = (t) => suave(E.hora + 0.8, E.anio - 0.5, t);
+const crece = (t) => interp([[0, 0.05], [EV.cuelga, 0.1], [EV.hora, 0.18], [EV.dias, 0.55], [EV.anio, 1]], t);
+const tazas = (t) => Math.floor(interp([[0, 0], [EV.cuelga, 0], [EV.hora, 1.4], [EV.dias, 6.9], [EV.anio, 17.9]], t));
+const telaranas = (t) => suave(EV.hora + 0.8, EV.anio - 0.5, t);
 
 /* ═══════════ dibujo del mundo (estilo plano con contorno, como Mango) ═══════════ */
 function contorno(ctx, relleno, ancho = 5) { ctx.fillStyle = relleno; ctx.fill(); ctx.lineWidth = ancho; ctx.strokeStyle = TINTA; ctx.lineJoin = "round"; ctx.stroke(); }
@@ -103,7 +106,7 @@ function dibujarAtras(ctx, t) {
   // ventana con el cielo del mundo
   const wx = 540, wy = 250, ww = 470, wh = 600;
   ctx.save(); ctx.beginPath(); ctx.roundRect(wx, wy, ww, wh, 16); ctx.clip(); ctx.translate(wx, wy);
-  Cielo.dibujar(ctx, ww, wh, horaMundo(t), clima(t)); ctx.restore();
+  Cielo.dibujar(ctx, ww, wh, horaMundo(W(t)), clima(W(t))); ctx.restore();
   ctx.lineWidth = 12; ctx.strokeStyle = "#8d4a2c"; ctx.beginPath(); ctx.roundRect(wx, wy, ww, wh, 16); ctx.stroke();
   ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(wx + ww / 2, wy); ctx.lineTo(wx + ww / 2, wy + wh); ctx.moveTo(wx, wy + wh / 2); ctx.lineTo(wx + ww, wy + wh / 2); ctx.stroke();
   ctx.strokeStyle = TINTA; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(wx - 6, wy - 6, ww + 12, wh + 12, 20); ctx.stroke();
@@ -112,9 +115,9 @@ function dibujarAtras(ctx, t) {
   ctx.save(); ctx.translate(250, 440); ctx.beginPath(); ctx.arc(0, 0, 108, 0, 6.29); contorno(ctx, "#8d4a2c", 6);
   ctx.beginPath(); ctx.arc(0, 0, 92, 0, 6.29); contorno(ctx, "#fbf8f5", 4);
   for (let i = 0; i < 12; i++) { const a = (i / 12) * 6.2832; ctx.beginPath(); ctx.moveTo(Math.sin(a) * 76, -Math.cos(a) * 76); ctx.lineTo(Math.sin(a) * 86, -Math.cos(a) * 86); ctx.lineWidth = 4; ctx.strokeStyle = TINTA; ctx.stroke(); }
-  Reloj.dibujar(ctx, 90, horaMundo(t)); ctx.restore();
+  Reloj.dibujar(ctx, 90, horaMundo(W(t))); ctx.restore();
   // planta que crece, detrás de la mesa
-  planta(ctx, 150, 1590, crece(t), t);
+  planta(ctx, 150, 1590, crece(W(t)), t);
 }
 
 function dibujarFrente(ctx, t) {
@@ -125,30 +128,30 @@ function dibujarFrente(ctx, t) {
   rect(ctx, -220, 1556, 1520, 74, 14, "#bc6039", 6);
   ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(-190, 1566, 1460, 10);
   // tazas que se acumulan (torres)
-  const n = tazas(t);
+  const n = tazas(W(t));
   for (let i = 0; i < Math.min(n, 14); i++) { const torre = Math.floor(i / 7), piso = i % 7; taza(ctx, 62 + torre * 78 + (piso % 2) * 5, 1556 - piso * 55, i); }   // dos torres en la esquina, lejos de la cara
   // celular de pie con la pantalla hacia la cámara
-  const fase = t < 3.2 ? "producto" : t < E.anio ? "cargando" : "agotado";
-  const prog = t < E.anio - 0.5 ? 0.05 + 0.1 * clamp((t - 3.2) / 9.5) : t < E.anio ? lerp(0.15, 1, (t - (E.anio - 0.5)) / 0.5) : 1;
+  const fase = t < 2.3 ? "producto" : t < E.anio ? "cargando" : "agotado";
+  const prog = t < E.carga ? 0.05 + 0.1 * clamp((t - 2.3) / (E.carga - 2.3)) : t < E.anio ? lerp(0.15, 1, (t - E.carga) / (E.anio - E.carga)) : 1;
   Pantalla.dibujar(lienzoPantalla.getContext("2d"), 236, 520, { fase: t >= E.anio ? "agotado" : fase, t, progreso: prog });
   ctx.save(); ctx.translate(900, 1568); ctx.rotate(-0.06);
   rect(ctx, -138, -600, 276, 600, 38, "#141e5c", 6);
   ctx.save(); ctx.beginPath(); ctx.roundRect(-118, -580, 236, 520, 22); ctx.clip(); ctx.drawImage(lienzoPantalla, -118, -580); ctx.restore();
   ctx.fillStyle = "#0b1038"; ctx.beginPath(); ctx.arc(0, -592, 6, 0, 6.29); ctx.fill();
   // el dedo que toca «Comprar»
-  if (t > 2.4 && t < 3.4) { const k = suave(2.4, 3.0, t) * (1 - suave(3.1, 3.4, t)); ctx.globalAlpha = k; ctx.fillStyle = "rgba(20,30,92,.35)"; ctx.strokeStyle = "#141e5c"; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(0, -118 - 30 * (1 - suave(2.4, 3.0, t)), 36 * (1.3 - 0.3 * suave(2.9, 3.1, t)), 0, 6.29); ctx.fill(); ctx.stroke(); ctx.globalAlpha = 1; }
+  if (t > 1.5 && t < 2.3) { const k = suave(1.5, 1.9, t) * (1 - suave(2.0, 2.3, t)); ctx.globalAlpha = k; ctx.fillStyle = "rgba(20,30,92,.35)"; ctx.strokeStyle = "#141e5c"; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(0, -118 - 30 * (1 - suave(1.5, 1.9, t)), 36 * (1.3 - 0.3 * suave(1.85, 2.0, t)), 0, 6.29); ctx.fill(); ctx.stroke(); ctx.globalAlpha = 1; }
   ctx.restore();
   // enredadera que sube por la mesa
   const v = suave(E.dias, E.anio, t);
   if (v > 0) { ctx.strokeStyle = TINTA; ctx.lineWidth = 16; ctx.lineCap = "round"; ctx.beginPath(); for (let i = 0; i <= 40; i++) { const u = i / 40 * v; const x = 40 + u * 700, y = 1560 + Math.sin(u * 14) * 18; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); ctx.strokeStyle = "#2f8a3c"; ctx.lineWidth = 9; ctx.stroke();
     for (let i = 0; i < 12; i++) { const u = (i + 1) / 13; if (u > v) break; const x = 40 + u * 700, y = 1560 + Math.sin(u * 14) * 18; ctx.save(); ctx.translate(x, y); ctx.rotate(-1 + (i % 2) * 2); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(26, -20, 56, 0); ctx.quadraticCurveTo(26, 20, 0, 0); contorno(ctx, "#3f9a3a", 4); ctx.restore(); } }
   // telarañas en las esquinas
-  const a = telaranas(t);
+  const a = telaranas(W(t));
   if (a > 0) { telarana(ctx, -40, 0, 1, 1, a, 360 * a + 80); telarana(ctx, 1120, 0, -1, 1, a, 320 * a + 60); telarana(ctx, -40, 1500, 1, -1, a, 220 * a); telarana(ctx, 1000, 1000, -1, 1, a, 200 * a); }
   // páginas de calendario que vuelan
   const MESES = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
   for (let i = 0; i < 24; i++) {
-    const ts = E.hora + 0.3 + i * 0.3, d = (t - ts) / 1.5; if (d < 0 || d > 1) continue;
+    const ts = E.hora + 0.05 + i * 0.13, d = (t - ts) / 0.9; if (d < 0 || d > 1) continue;
     const x = lerp(1180, -160, d), y = 640 + hash(i, 1) * 560 + Math.sin(d * 7) * 70, rot = (d * 3 + hash(i, 2)) * 2.4;
     ctx.save(); ctx.translate(x, y); ctx.rotate(rot); rect(ctx, -52, -62, 104, 124, 8, "#fbf8f5", 4); ctx.fillStyle = "#bc6039"; ctx.fillRect(-52, -62, 104, 34); ctx.fillStyle = "#fbf8f5"; ctx.font = "800 24px B, sans-serif"; ctx.textAlign = "center"; ctx.fillText(MESES[i % 12], 0, -36); ctx.fillStyle = TINTA; ctx.font = "800 44px B, sans-serif"; ctx.fillText(String(1 + ((i * 7) % 28)), 0, 24); ctx.restore();
   }
@@ -160,31 +163,29 @@ const OJOS = ["ojos-abiertos", "entreabiertos", "mirada-izq", "mirada-der", "mir
 const m = MangoRig.crear(document.getElementById("mangoW"), { webgl: true, bocas: { carpeta: "bocas", indice: IDX }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: OJOS } });
 const PASO = 2;
 // expresión de ojos en el tiempo: [desde, ojos]
-const LINEA_OJOS = [[0, "ojos-abiertos"], [1.2, "entreabiertos"], [2.3, "mirada-der"], [4.0, "entreabiertos"], [5.0, "mirada-arriba"], [5.9, "entreabiertos"], [7.2, "mirada-izq"], [8.0, "entreabiertos"],
-  [9.6, "mirada-der"], [10.4, "entreabiertos"], [11.6, "mirada-arriba"], [12.3, "entreabiertos"], [13.0, "mirada-der"], [13.5, "ojos-abiertos"], [16.0, "entreabiertos"]];
-const PARP = [1.2, 3.9, 5.7, 7.9, 10.3, 12.2, 16.0];    // parpadeos entre expresiones y de tanto en tanto
+const LINEA_OJOS = [[0, "ojos-abiertos"], [0.8, "entreabiertos"], [1.5, "mirada-der"], [3.3, "entreabiertos"], [5.1, "mirada-arriba"], [6.2, "entreabiertos"], [7.7, "mirada-arriba"], [8.4, "entreabiertos"], [9.0, "mirada-der"], [9.55, "ojos-abiertos"]];
+const PARP = [0.8, 1.5, 3.3, 5.1, 6.2, 7.7, 8.4, 9.0, 9.55];    // un parpadeo antes de cada cambio de expresión
 function ojosEn(f) {
   const t = f / 24; let n = "entreabiertos"; for (const [t0, o] of LINEA_OJOS) if (t >= t0) n = o;
   for (const b of PARP) { const fb = Math.round(b * 24 / PASO) * PASO, d = f - fb; if (d >= -2 * PASO && d < -PASO) return "entreabiertos"; if (d >= -PASO && d < PASO) return "parpadeo"; }
   return n;
 }
-function bocaEn(t) { return t >= E.ya && t < E.ya + 1.3 ? "a" : t >= E.ya + 1.3 && t < E.mango ? "o" : "m"; }
+function bocaEn(t) { return t >= E.ya && t < E.ya + 0.45 ? "a" : t >= E.ya + 0.45 && t < E.mango + 0.3 ? "o" : "m"; }
 const lienzoAtras = document.getElementById("atras").getContext("2d"), lienzoFrente = document.getElementById("frente").getContext("2d");
 const mW = document.getElementById("mangoW"), cam = document.getElementById("cam");
 
 /* ═══════════ cámara ═══════════ */
 // planos de cámara: [t, zoom, x, y] (centro del encuadre en el mundo). Entre claves, ease in-out; claves juntas = barrido rápido
 const PLANOS = [
-  [0.0, 1.0, 540, 1000], [2.1, 1.18, 590, 1300],            // abre: Mango y el celular, empuje lento
-  [2.4, 1.9, 880, 1260], [3.4, 1.9, 880, 1260],              // toque en «Comprar»: golpe de zoom al celular
-  [4.3, 1.05, 560, 1180],                                       // vuelve atrás: el spinner da vueltas
-  [5.2, 1.05, 560, 1180], [5.9, 1.4, 330, 720],               // barrido al reloj de pared
-  [7.0, 1.5, 300, 760], [7.7, 1.5, 270, 1400],               // baja a la torre de tazas
-  [8.9, 1.55, 280, 1390], [9.6, 1.3, 620, 790],              // sube a la ventana: llueve, nieva
-  [11.7, 1.35, 640, 800], [12.5, 1.0, 540, 960],             // plano general: todo cubierto de plantas y telarañas
-  [13.1, 1.0, 540, 960], [13.95, 1.9, 880, 1260],            // empuje al celular: «Agotado»
-  [14.0, 1.9, 880, 1260], [14.35, 2.1, 380, 1340],           // látigo a la cara de Mango
-  [15.7, 2.2, 380, 1340], [16.4, 1.0, 540, 960],
+  [0.0, 1.0, 540, 1000], [1.35, 1.18, 590, 1300],            // abre en plano general: Mango y el celular
+  [1.75, 1.9, 880, 1260], [2.7, 1.9, 880, 1260],            // toque en «Comprar»: golpe de zoom al celular
+  [3.4, 1.05, 560, 1180], [4.9, 1.05, 560, 1180],            // vuelve atrás: el spinner da vueltas
+  [5.6, 1.4, 330, 720], [6.3, 1.45, 310, 740],               // barrido al reloj de pared
+  [6.8, 1.5, 270, 1400], [7.2, 1.55, 280, 1390],             // baja a la torre de tazas
+  [7.8, 1.3, 620, 790], [8.35, 1.35, 640, 800],              // sube a la ventana: llueve, nieva
+  [8.9, 1.0, 540, 960], [9.1, 1.0, 540, 960],                // plano general: todo cubierto
+  [9.45, 1.9, 880, 1260], [9.7, 1.9, 880, 1260],             // empuje al celular: «Agotado»
+  [9.95, 2.1, 380, 1340], [10.5, 2.2, 380, 1340], [10.8, 1.0, 540, 960],   // látigo a la cara de Mango
 ];
 function camara(t) {
   let a = PLANOS[0], b = PLANOS[PLANOS.length - 1];
@@ -207,22 +208,25 @@ function pinta(t, f) {
   // Mango (a doses): ojos, boca, giro y cabeceo
   m.bocaImg(bocaEn(tq)); m.ojos(ojosEn(f - (f % PASO)));
   const sueno = suave(E.hora, E.anio, tq);
-  const yaw = (tq > 2.3 && tq < E.anio ? 0.55 : 0) * (1 - 0.5 * sueno) + 0.2 * Math.sin(tq * 0.8) - (tq > E.ya ? 0.6 : 0);
+  const yaw = (tq > 1.5 && tq < E.anio ? 0.55 : 0) * (1 - 0.5 * sueno) + 0.2 * Math.sin(tq * 0.8) - (tq > E.ya ? 0.6 : 0);
   const pitch = 0.06 * Math.sin(tq * 1.3) + 0.22 * sueno * Math.sin(tq * 1.7) - 0.12 * suave(E.ya - 0.2, E.ya, tq);
   m.girar(yaw, pitch);
   const rot = 2 * Math.sin(tq * 0.9) + 6 * sueno * Math.sin(tq * 1.3) + (tq > E.ya ? 4 * Math.sin(tq * 60) * tem : 0);
   const salto = tq > E.ya - 0.05 && tq < E.ya + 0.4 ? 14 * Math.sin(((tq - E.ya + 0.05) / 0.45) * Math.PI) : 0;
   mW.style.transform = `translate(${380 - 627}px, ${1370 - 627 - salto + 3 * Math.sin(tq * 1.6)}px) rotate(${rot}deg) scale(0.4)`;
   // textos
-  const rotulo = t < 2.2 ? "POV: tu página carga lento" : t >= E.cuelga && t < E.hora ? "Una hora después." : t >= E.hora && t < E.dias ? "Tres días después." : t >= E.dias && t < E.anio ? "Un año después." : t >= E.anio && t < E.ya ? "Por fin cargó." : "";
+  const R = [[0, E.cuelga, "POV: tu página carga lento"], [E.cuelga, E.hora, "Una hora después."], [E.hora, E.dias, "Tres días después."], [E.dias, E.carga, "Un año después."], [E.carga, E.mango, "Por fin cargó."]];
+  const fila = R.find((r) => t >= r[0] && t < r[1]); const rotulo = fila ? fila[2] : "", t0 = fila ? fila[0] : 0;
   const el = document.getElementById("titulo"); if (el.dataset.txt !== rotulo) { el.dataset.txt = rotulo; el.innerHTML = rotulo.split(" ").map((w) => `<span>${w}</span>`).join(" "); }
   el.style.opacity = rotulo ? 1 : 0;
-  const t0 = t < 2.2 ? 0 : t < E.hora ? E.cuelga : t < E.dias ? E.hora : t < E.anio ? E.dias : E.anio;
-  [...el.children].forEach((sp, i) => { const u = clamp((t - t0 - i * 0.08) / 0.3); sp.style.transform = `translateY(${(1 - Math.pow(1 - u, 3)) * -50 * (1 - u)}px) scale(${0.6 + 0.4 * u})`; sp.style.opacity = u; });
-  // cierre
-  const c = suave(E.mango, E.mango + 0.4, t); const cierre = document.getElementById("cierre"); cierre.style.opacity = c;
-  document.getElementById("cierreTxt").innerHTML = "Una página lenta<br>no avisa: solo <b>pierde ventas.</b>";
-  document.getElementById("cierreBtn").style.transform = `scale(${suave(E.mango + 0.6, E.mango + 1.0, t)})`;
+  [...el.children].forEach((sp, i) => { const u = clamp((t - t0 - i * 0.07) / 0.25); sp.style.transform = `translateY(${(1 - Math.pow(1 - u, 3)) * -50 * (1 - u)}px) scale(${0.6 + 0.4 * u})`; sp.style.opacity = u; });
+  // cierre sincronizado con la voz: «Una página lenta no avisa:» 10.45, «solo pierde ventas.» 12.45, «Escríbenos.» 14.14
+  const c = suave(E.mango, E.mango + 0.3, t); const cierre = document.getElementById("cierre"); cierre.style.opacity = c;
+  const pop = (a, d = 0.35) => { const u = clamp((t - a) / d); return { o: u, tr: `translateY(${(1 - Math.pow(1 - u, 3)) * 40 * (1 - u)}px) scale(${0.85 + 0.15 * u})` }; };
+  const l1 = pop(10.45), l2 = pop(12.45), bt = pop(14.1, 0.3);
+  const a1 = document.getElementById("c1"), a2 = document.getElementById("c2");
+  a1.style.opacity = l1.o; a1.style.transform = l1.tr; a2.style.opacity = l2.o; a2.style.transform = l2.tr;
+  const b = document.getElementById("cierreBtn"); b.style.opacity = bt.o; b.style.transform = `scale(${0.6 + 0.4 * bt.o * (1 + 0.12 * Math.sin(bt.o * Math.PI))})`;
 }
 window.render = (t) => { pinta(t, Math.floor(t * 24 + 1e-6)); };
 window.cargar = async () => { await m.cargado(); return m.listo; };
