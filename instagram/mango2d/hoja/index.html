@@ -135,7 +135,7 @@
         <button id="btnQuitarO" type="button">Quitar clave de ojos</button>
         <button id="btnPasar4" type="button">Ajustar todas las claves a la rejilla</button>
       </div>
-      <p class="ayuda">Mover un slider o tocar una miniatura pone una clave, y se mantiene hasta la siguiente, como en la hoja. Con la rejilla activa («A 2s» o «A 4s»; el botón cambia entre 2, 4 y cuadro a cuadro) la clave cae al inicio del bloque donde estás. Teclado: <kbd>Espacio</kbd> reproducir, <kbd>←</kbd> <kbd>→</kbd> cuadro a cuadro (con <kbd>Mayús</kbd>, de bloque en bloque), letras para la boca: <kbd>M</kbd> <kbd>P</kbd> <kbd>A</kbd> <kbd>E</kbd> <kbd>I</kbd> <kbd>O</kbd> <kbd>U</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>S</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>C</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>Q</kbd> <kbd>N</kbd> <kbd>T</kbd> <kbd>W</kbd> <kbd>H</kbd>.</p>
+      <p class="ayuda">Los dibujos de ojos y cejas atenuados (feliz, sorprendido, enojado y similares) no se usan: en ellos las gafas solo muestran el reflejo y los ojos desaparecen, y eso se lee como un salto. Solo se usan los que dejan ver los ojos. Mover un slider o tocar una miniatura pone una clave, y se mantiene hasta la siguiente, como en la hoja. Con la rejilla activa («A 2s» o «A 4s»; el botón cambia entre 2, 4 y cuadro a cuadro) la clave cae al inicio del bloque donde estás. Teclado: <kbd>Espacio</kbd> reproducir, <kbd>←</kbd> <kbd>→</kbd> cuadro a cuadro (con <kbd>Mayús</kbd>, de bloque en bloque), letras para la boca: <kbd>M</kbd> <kbd>P</kbd> <kbd>A</kbd> <kbd>E</kbd> <kbd>I</kbd> <kbd>O</kbd> <kbd>U</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>S</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>C</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>Q</kbd> <kbd>N</kbd> <kbd>T</kbd> <kbd>W</kbd> <kbd>H</kbd>.</p>
     </section>
   </div>
 
@@ -159,6 +159,7 @@
   const OJOS = [["normal","Normal"],["feliz","Feliz"],["sorprendido","Sorprendido"],["enojado","Enojado"],["triste","Triste"],["serio","Serio"],["parpadeo","Parpadeo"],["guino-izq","Guiño izquierdo"],["guino-der","Guiño derecho"],["ojos-abiertos","Ojos abiertos"],["entreabiertos","Entreabiertos"],["mirada-izq","Mirada izquierda"],["mirada-der","Mirada derecha"],["mirada-arriba","Mirada arriba"],["mirada-abajo","Mirada abajo"],["ceja-der","Ceja derecha arriba"],["ceja-izq","Ceja izquierda arriba"],["ceja-fruncida","Ceja fruncida"],["ceja-triste","Ceja triste"],["ceja-sorprendida","Ceja sorprendida"]];
   const TECLAS = { m: "m", p: "pb", b: "pb", a: "a", e: "e", i: "i", o: "o", u: "u", d: "dt", f: "fv", v: "fv", s: "sz", z: "sz", l: "l", r: "r", c: "ch", j: "j", k: "kg", g: "kg", q: "q", n: "n", t: "th", w: "w", h: "h" };
   const $ = (id) => document.getElementById(id);
+  const SIN_OJOS = new Set(["normal","feliz","sorprendido","enojado","triste","serio","guino-izq","guino-der","mirada-abajo","ceja-der","ceja-izq","ceja-fruncida","ceja-triste","ceja-sorprendida"]);   // en estos dibujos los ojos no se ven: no se usan
 
   /* ── estado ── */
   let claves = { bocas: {}, ojos: {} };
@@ -180,6 +181,7 @@
     lista.forEach(([k, nombre], i) => {
       const b = document.createElement("button"); b.type = "button"; b.dataset.k = k; b.title = nombre;
       b.innerHTML = `<img src="${carpeta}/${pref}-${k}.png" alt=""><span>${nombre}</span>`;
+      if (pref === "ojos" && SIN_OJOS.has(k)) { b.style.opacity = ".45"; b.title = nombre + " (los ojos no se ven: no se usa)"; }
       b.addEventListener("click", () => alElegir(i));
       cont.appendChild(b);
     });
@@ -195,7 +197,7 @@
     while (lo <= hi) { const mid = (lo + hi) >> 1; if (orden[mid] <= f) { r = mid; lo = mid + 1; } else hi = mid - 1; }
     return r < 0 ? defecto : claves[pista][orden[r]];
   }
-  const bocaEn = (f) => valor("bocas", ordB, f, "m"), ojosEn = (f) => valor("ojos", ordO, f, "normal");
+  const bocaEn = (f) => valor("bocas", ordB, f, "m"), ojosEn = (f) => valor("ojos", ordO, f, "ojos-abiertos");
 
   /* ── pintar ── */
   const nombreB = Object.fromEntries(BOCAS), nombreO = Object.fromEntries(OJOS);
@@ -253,7 +255,7 @@
       cx.fillStyle = "#fbf8f5"; cx.font = "600 12px Instrument Sans, sans-serif"; cx.fillText(e.texto, x0 + 5, Y.voz + 4); cx.restore();
     });
     pista("bocas", ordB, Y.boca, (k) => nombreB[k], "m");
-    pista("ojos", ordO, Y.ojos, (k) => nombreO[k], "normal");
+    pista("ojos", ordO, Y.ojos, (k) => nombreO[k], "ojos-abiertos");
     cx.fillStyle = "#b7bcdf"; cx.font = "600 10px Instrument Sans, sans-serif";
   }
   function pista(p, orden, y, nombre, defecto) {

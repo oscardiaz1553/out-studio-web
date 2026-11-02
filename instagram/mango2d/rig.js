@@ -173,7 +173,7 @@
       const cid = id + "-l" + i;
       el("clipPath", { id: cid }, defs).appendChild(el("circle", { cx: x, cy: y, r: 112 }));
       const gg = el("g", { "clip-path": `url(#${cid})` }, gl0);
-      return el("rect", { x: x - 260, y: y - 200, width: 46, height: 400, fill: "#fff", opacity: 0.55, transform: `rotate(28 ${x} ${y})` }, gg);
+      return el("rect", { x: x - 260, y: y - 200, width: 30, height: 400, fill: "#fff", opacity: 0.2, transform: `rotate(28 ${x} ${y})` }, gg);
     });
     if (opc.ojos) {
       const o = opc.ojos;

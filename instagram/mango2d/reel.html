@@ -130,9 +130,9 @@
 
 <!-- capa frontal: íconos, textos grandes -->
 <div id="capaFrente" class="capa">
-  <div class="ico" id="i1" style="left:70px;top:560px"><svg width="110" height="110" viewBox="0 0 110 110"><circle cx="55" cy="55" r="40" fill="none" stroke="#e6dfd8" stroke-width="14"/><path d="M55 15 A40 40 0 0 1 95 55" fill="none" stroke="#1b2fcc" stroke-width="14" stroke-linecap="round"/></svg><div class="ok"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 21 L17 30 L33 11" fill="none" stroke="#141e5c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-  <div class="ico" id="i2" style="left:445px;top:470px"><svg width="80" height="130" viewBox="0 0 80 130"><rect x="4" y="4" width="72" height="122" rx="16" fill="#141e5c"/><rect x="12" y="16" width="56" height="96" rx="8" fill="#f5e3b3"/></svg><div class="ok"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 21 L17 30 L33 11" fill="none" stroke="#141e5c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-  <div class="ico" id="i3" style="left:820px;top:560px"><svg width="110" height="110" viewBox="0 0 110 110"><rect x="12" y="14" width="86" height="18" rx="9" fill="#d9d1c8"/><rect x="12" y="44" width="86" height="18" rx="9" fill="#d9d1c8"/><rect x="12" y="74" width="86" height="22" rx="11" fill="#bc6039"/></svg><div class="ok"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 21 L17 30 L33 11" fill="none" stroke="#141e5c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  <div class="ico" id="i1" style="left:70px;top:740px"><svg width="110" height="110" viewBox="0 0 110 110"><circle cx="55" cy="55" r="40" fill="none" stroke="#e6dfd8" stroke-width="14"/><path d="M55 15 A40 40 0 0 1 95 55" fill="none" stroke="#1b2fcc" stroke-width="14" stroke-linecap="round"/></svg><div class="ok"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 21 L17 30 L33 11" fill="none" stroke="#141e5c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  <div class="ico" id="i2" style="left:445px;top:650px"><svg width="80" height="130" viewBox="0 0 80 130"><rect x="4" y="4" width="72" height="122" rx="16" fill="#141e5c"/><rect x="12" y="16" width="56" height="96" rx="8" fill="#f5e3b3"/></svg><div class="ok"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 21 L17 30 L33 11" fill="none" stroke="#141e5c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  <div class="ico" id="i3" style="left:820px;top:740px"><svg width="110" height="110" viewBox="0 0 110 110"><rect x="12" y="14" width="86" height="18" rx="9" fill="#d9d1c8"/><rect x="12" y="44" width="86" height="18" rx="9" fill="#d9d1c8"/><rect x="12" y="74" width="86" height="22" rx="11" fill="#bc6039"/></svg><div class="ok"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 21 L17 30 L33 11" fill="none" stroke="#141e5c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
 </div>
 
 <canvas id="frenteFx" class="fx" width="1080" height="1920"></canvas>
@@ -357,7 +357,7 @@ function construir() {
   ["#i1", "#i2", "#i3"].forEach((id, i) => {
     tl.fromTo(id, { opacity: 0, scale: 0, rotation: -20 }, { opacity: 1, scale: 1, rotation: [-8, 0, 8][i], duration: 0.5, ease: "back.out(2.2)" }, 19.6 + i * 0.12);
     tl.to(`${id} .ok`, { scale: 1, duration: 0.35, ease: "back.out(3)" }, 20.3 + i * 0.22);
-    rafagas.push({ t: 20.3 + i * 0.22, x: [165, 540, 915][i], y: [655, 565, 655][i], n: 18, col: ["#f5e3b3", "#fbf8f5"], v: 600 });
+    rafagas.push({ t: 20.3 + i * 0.22, x: [165, 540, 915][i], y: [835, 745, 835][i], n: 18, col: ["#f5e3b3", "#fbf8f5"], v: 600 });
   });
   camTo({ s: 1.12, y: -60 }, 20.2, 2.6, "sine.inOut");
   tl.to(["#i1", "#i2", "#i3", "#suma"], { opacity: 0, scale: 0.3, duration: 0.3, ease: "power3.in" }, 23.3);
@@ -446,7 +446,7 @@ const ojosEn = (t) => {
       if (d >= -2 * PASO && d < -PASO) return "entreabiertos";
       if (d >= -PASO && d < 0) return "parpadeo";
     }
-    return claveEn("ojos", f, "normal");
+    return claveEn("ojos", f, "ojos-abiertos");
   }
   let n = "normal"; for (const [t0, nombre] of OJOS) if (t >= t0) n = nombre; if (PARPADEOS.some((b) => t >= b && t < b + 0.12)) n = "parpadeo"; return n;
 };
