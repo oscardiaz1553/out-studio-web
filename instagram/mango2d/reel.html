@@ -228,11 +228,29 @@ const rafagas = [];      // explosiones de partículas: {t, x, y, n, col, v}
 function construir() {
   const N = EV.filter((e) => e.voz === "narrador"), M = EV.filter((e) => e.voz === "mango");
 
+
+  /* ── Mango: una sola ruta continua entre escenas (nunca desaparece ni salta) ── */
+  const RUTA = [
+    [0.0, 720, 1300, 0.66, 0], [2.9, 860, 1560, 0.46, -7],         // escena 2: abajo a la derecha
+    [6.8, 540, 1330, 0.62, 0],                                      // «Se fue.» al centro
+    [7.85, 250, 1580, 0.46, 7],                                     // escena 3: abajo a la izquierda
+    [11.8, 540, 1330, 0.62, 0],
+    [12.75, 850, 1620, 0.46, -6],                                   // escena 4
+    [16.5, 540, 1330, 0.62, 0],
+    [17.6, 540, 1330, 0.74, 0],                                     // escena 5
+    [23.7, 540, 1220, 0.8, 0],                                      // cierre
+    [26.9, 540, 1130, 0.74, 0],
+  ];
+  tl.set(mp, { x: RUTA[0][1], y: RUTA[0][2], s: RUTA[0][3], r: RUTA[0][4] }, 0);
+  for (let i = 1; i < RUTA.length; i++) {
+    const [t0, x, y, sc, r] = RUTA[i], dur = i % 2 ? 0.95 : 0.55;
+    tl.to(mp, { x, y, s: sc, r, duration: dur, ease: "power2.inOut" }, t0);
+  }
+
   /* ── 1 · gancho (0–3.3) ── */
   tl.set("#bg", { backgroundColor: "#1b2fcc" }, 0);
   tl.set(cam, { s: 1.5, r: -6 }, 0);
   camTo({ s: 1, r: 0 }, 0.05, 0.9, E);
-  tl.set(mp, { x: 720, y: 1300, s: 0.66 }, 0);
   tl.fromTo("#p1", { y: 900, rotationY: -40, rotation: -14, transformPerspective: 1200 }, { y: 0, rotationY: -18, rotation: -6, duration: 0.8, ease: "back.out(1.5)" }, 0.25);
   tl.fromTo("#clienta", { scale: 0 }, { scale: 1, duration: 0.5, ease: "back.out(2.4)" }, 0.75);
   caption(N[0], 110, "#fbf8f5", 104);
@@ -248,10 +266,7 @@ function construir() {
   /* ── 2 · tarda en cargar (3.3–8.15) ── */
   flip(3.3, "#f3ede7", 540, 1000);
   tl.set("#p1, #clienta", { opacity: 0 }, 3.3);
-  tl.set(cam, { s: 1.3, r: -5, x: 0, y: 0 }, 3.32);
-  camTo({ s: 1, r: 0 }, 3.34, 0.8, E);
-  tl.set(mp, { x: 860, y: 1580, s: 0.42, r: -12 }, 3.32);
-  tl.fromTo(mp, { y: 2300 }, { y: 1580, duration: 0.6, ease: "back.out(1.6)", immediateRender: false }, 3.6);
+  camTo({ s: 1, r: 0, x: 0, y: 0 }, 3.34, 0.9, E);
   tl.set("#hud", { opacity: 0 }, 0);
   tl.fromTo("#hud", { y: -300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.8)" }, 3.5);
   tl.set("#p2", { opacity: 0 }, 0); tl.set("#p2", { opacity: 1 }, 3.45);
@@ -266,17 +281,13 @@ function construir() {
   tl.to(capsEl.children[1], { opacity: 0, duration: 0.2 }, 6.8);
   tl.to("#p2", { x: 1300, rotation: 26, duration: 0.45, ease: "power3.in" }, 6.85);
   camTo({ s: 1 }, 6.85, 0.4, "power3.out");
-  mangoTo({ x: 540, y: 1330, s: 0.62, r: 0 }, 6.8, 0.45, "back.out(1.4)");
   seFue("#sf1", M[1].t0); perder(M[1].t0, 0, 180000);
   speed(7.8);
   camTo({ s: 0.8, r: -9 }, 7.85, 0.3, "power3.in");
 
   /* ── 3 · no se ve en el celular (8.15–13) ── */
   flip(8.15, "#f5e3b3", 900, 1000);
-  tl.set(cam, { s: 1.35, r: 5, x: 0, y: 0 }, 8.17);
-  camTo({ s: 1, r: 0 }, 8.19, 0.8, E);
-  tl.set(mp, { x: 220, y: 1600, s: 0.42, r: 12 }, 8.17);
-  tl.fromTo(mp, { y: 2300 }, { y: 1600, duration: 0.6, ease: "back.out(1.6)", immediateRender: false }, 8.5);
+  camTo({ s: 1, r: 0, x: 0, y: 0 }, 8.19, 0.9, E);
   tl.set("#p3", { opacity: 0 }, 0); tl.set("#p3", { opacity: 1 }, 8.3);
   tl.fromTo("#p3", { y: 1100, rotationY: 30, transformPerspective: 1400 }, { y: 0, rotationY: 8, duration: 0.75, ease: "back.out(1.4)", immediateRender: false }, 8.3);
   caption(N[2], 300, "#1b2fcc", 92);
@@ -292,17 +303,13 @@ function construir() {
   tl.to(capsEl.children[2], { opacity: 0, duration: 0.2 }, 11.8);
   tl.to("#p3", { x: -1300, rotation: -26, duration: 0.45, ease: "power3.in" }, 11.85);
   camTo({ s: 1, y: 0 }, 11.85, 0.4, "power3.out");
-  mangoTo({ x: 540, y: 1330, s: 0.62, r: 0 }, 11.8, 0.45, "back.out(1.4)");
   seFue("#sf2", M[2].t0); perder(M[2].t0, 180000, 360000);
   speed(12.6);
   camTo({ s: 1.6, r: -8, x: 240 }, 12.78, 0.22, "power3.in");
 
   /* ── 4 · pagar es un enredo (13–17.7) ── */
   flip(13.0, "#141e5c", 540, 990);
-  tl.set(cam, { s: 1.3, r: 6, x: 0, y: 0 }, 13.02);
-  camTo({ s: 1, r: 0 }, 13.04, 0.8, E);
-  tl.set(mp, { x: 880, y: 1680, s: 0.4, r: -10 }, 13.02);
-  tl.fromTo(mp, { y: 2300 }, { y: 1680, duration: 0.6, ease: "back.out(1.6)", immediateRender: false }, 13.4);
+  camTo({ s: 1, r: 0, x: 0, y: 0 }, 13.04, 0.9, E);
   caption(N[3], 300, "#f5e3b3", 92);
   const campos = document.querySelectorAll(".campo"), nc = { n: 0 };
   campos.forEach((c, i) => {
@@ -316,7 +323,6 @@ function construir() {
   tl.to("#pila", { x: 1300, rotation: 14, duration: 0.45, ease: "power3.in" }, 16.55);
   tl.to("#nCampos", { opacity: 0, duration: 0.2 }, 16.55);
   camTo({ s: 1, r: 0 }, 16.55, 0.4, "power3.out");
-  mangoTo({ x: 540, y: 1330, s: 0.62, r: 0 }, 16.5, 0.45, "back.out(1.4)");
   seFue("#sf3", M[3].t0); perder(M[3].t0, 360000, 540000);
   speed(17.4);
   camTo({ s: 2.0, r: 6 }, 17.42, 0.25, "power3.in");
@@ -324,9 +330,7 @@ function construir() {
   /* ── 5 · la suma (17.7–23.8) ── */
   flip(17.7, "#1b2fcc", 540, 700);
   tl.to("#hud", { y: -300, opacity: 0, duration: 0.3, ease: "power3.in" }, 17.6);
-  tl.set(cam, { s: 1.4, r: 5, x: 0, y: 0 }, 17.72);
-  camTo({ s: 1, r: 0 }, 17.74, 0.9, E);
-  tl.set(mp, { x: 540, y: 1330, s: 0.74, r: 0 }, 17.72);
+  camTo({ s: 1, r: 0, x: 0, y: 0 }, 17.74, 1.0, E);
   caption(N[4], 210, "#fbf8f5", 110);
   tl.fromTo("#suma", { scale: 2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: P4 }, 18.5);
   tl.set("#suma", { top: 470 }, 0);
@@ -349,14 +353,11 @@ function construir() {
 
   /* ── 6 · cierre (23.8–28.6) ── */
   flip(23.8, "#1b2fcc", 540, 700);
-  tl.set(cam, { s: 1.4, r: 5, x: 0, y: 0 }, 23.82);
-  camTo({ s: 1, r: 0 }, 23.84, 0.9, E);
-  tl.set(mp, { x: 540, y: 1220, s: 0.8, r: 0 }, 23.82);
+  camTo({ s: 1, r: 0, x: 0, y: 0 }, 23.84, 1.0, E);
   caption(N[5], 230, "#fbf8f5", 116);
   camTo({ s: 1.15, y: 60 }, 24.6, 2.4, "sine.inOut");
   tl.to(capsEl.children[5], { opacity: 0, y: -40, duration: 0.3 }, 26.9);
   camTo({ s: 1, y: 0 }, 26.95, 0.35, "back.out(1.6)");
-  mangoTo({ y: 1120, s: 0.74 }, 26.95, 0.35, "back.out(1.6)");
   globo("#g4", M[5].t0, 290, 250, "50% 100%");
   rafagas.push({ t: M[5].t0, x: 540, y: 420, n: 90, col: ["#f5e3b3", "#bc6039", "#fbf8f5"], v: 1500, confeti: true });
   tl.fromTo("#boton", { scale: 0 }, { scale: 1, duration: 0.5, ease: "back.out(2.6)" }, M[5].t0 + 0.25);
@@ -407,11 +408,12 @@ let EV_BOCA = [], EV_OJOS = [], CAMBIOS_BOCA = []; const INB = new Set();       
 function prepararCambios() {
   EV_BOCA = []; EV_OJOS = []; CAMBIOS_BOCA = [];
   if (HOJA) {
-    let prev = "m", fPrev = -99;
+    let prev = "m", fPrev = -99, ultimoFuerte = -9;
     for (const f of Object.keys(HOJA.bocas).map(Number).sort((a, b) => a - b)) {
       const k = HOJA.bocas[f]; if (k === prev) continue;
       CAMBIOS_BOCA.push({ f, de: prev, a: k, hueco: f - fPrev }); fPrev = f;
-      EV_BOCA.push({ t: f / 24, o: ABRE[k] ?? 0.3, cierre: (ABRE[k] ?? 0.3) < 0.1 && (ABRE[prev] ?? 0) > 0.3 }); prev = k;
+      const fuerte = (ABRE[k] ?? 0) >= 0.6 && f / 24 - ultimoFuerte >= 0.3; if (fuerte) ultimoFuerte = f / 24;
+      EV_BOCA.push({ t: f / 24, fuerte }); prev = k;
     }
     prev = "normal";
     for (const f of Object.keys(HOJA.ojos).map(Number).sort((a, b) => a - b)) {
@@ -434,7 +436,7 @@ const ojosEn = (t) => {
   }
   let n = "normal"; for (const [t0, nombre] of OJOS) if (t >= t0) n = nombre; if (PARPADEOS.some((b) => t >= b && t < b + 0.12)) n = "parpadeo"; return n;
 };
-const capas = [["#capaMedia", 0.75], ["#capaMango", 1.0], ["#capaFrente", 1.25]].map(([s, z]) => [document.querySelector(s), z]);
+const capas = [["#capaMedia", 0.75], ["#capaMango", 0.35], ["#capaFrente", 1.25]].map(([s, z]) => [document.querySelector(s), z]);
 const mW = document.getElementById("mangoW"), sombra = document.getElementById("sombra");
 const COLOR_AMB = (t) => (t < 3.3 ? "#f5e3b3" : t < 8.15 ? "#1b2fcc" : t < 13 ? "#bc6039" : t < 17.7 ? "#f5e3b3" : "#f5e3b3");
 
@@ -456,9 +458,14 @@ window.render = (t) => {
   if (HOJA) for (const e of CAMBIOS_BOCA) { const n = Math.min(2, e.hueco - 1); if (n > 0 && f24 >= e.f - n && f24 < e.f) { const nombre = `${e.de}__${e.a}__${f24 - (e.f - n) + (3 - n)}`; if (INB.has(nombre)) nb = nombre; } }
   m.bocaImg(nb);
   m.ojos(ojosEn(t));
-  // rebotes con ease in-out en cada cambio de boca (suben y estiran al abrir, aplastan al cerrar) y de expresión
-  let alza = 0, est = 0, anch = 0, cab = 0, gira = 0;
-  for (const e of EV_BOCA) { const p = pulso(t - e.t, 0.3); if (!p) continue; alza += e.o * 16 * p; est += (e.o * 0.035 - (e.cierre ? 0.02 : 0)) * p; anch += (-e.o * 0.015 + (e.cierre ? 0.012 : 0)) * p; cab += e.o * 0.14 * p; }
+  // apertura de boca suavizada (media de los últimos ~6 cuadros): el cuerpo sigue esta curva, no cada clave
+  let env = 0, pesoT = 0;
+  if (HOJA) for (let j = 0; j < 7; j++) { const w = 1 - j / 8; env += w * (ABRE[claveEn("bocas", f24 - j, "m")] ?? 0.3); pesoT += w; env /= 1; }
+  env = pesoT ? env / pesoT : 0;
+  const alzaBoca = env * 12, est = env * 0.03, anch = -env * 0.012;
+  // énfasis: solo las vocales abiertas, separadas al menos 0.3 s, dan un rebote
+  let alza = alzaBoca, cab = env * 0.1, gira = 0;
+  for (const e of EV_BOCA) { if (!e.fuerte) continue; const p = pulso(t - e.t, 0.36); if (!p) continue; alza += 9 * p; cab += 0.1 * p; }
   for (const e of EV_OJOS) { const p = pulso(t - e.t + 0.04, 0.5); if (!p) continue; gira += e.dir * 3.2 * p; cab -= 0.16 * p; alza += 6 * p; }
   const gm = golpe(t, "mango"), gn = golpe(t, "narrador");
   const yaw = 0.42 * Math.sin(t * 0.8) - 0.5 * el + 0.3 * gm;
