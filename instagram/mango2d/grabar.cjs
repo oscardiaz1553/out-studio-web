@@ -18,7 +18,8 @@ const srv = http.createServer((q, r) => { const p = path.join(raiz, decodeURICom
   await p.evaluate(() => document.fonts.ready);
   const b = JSON.parse(fs.readFileSync(bocasF)).estados, e = JSON.parse(fs.readFileSync(evF));
   const h = process.env.HOJA ? JSON.parse(fs.readFileSync(process.env.HOJA)) : null;
-  await p.evaluate(([b, e, h]) => window.cargar(b, e, h), [b, e, h]);
+  const inb = fs.existsSync(path.join(raiz, 'inb/manifest.json')) && h ? JSON.parse(fs.readFileSync(path.join(raiz, 'inb/manifest.json'))) : [];
+  await p.evaluate(([b, e, h, inb]) => window.cargar(b, e, h, inb), [b, e, h, inb]);
   await p.waitForTimeout(300);
   const n = Math.round(+dur * FPS);
   for (let i = 0; i < n; i++) {

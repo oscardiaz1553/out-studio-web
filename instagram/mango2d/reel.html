@@ -403,13 +403,14 @@ const hablaS = (t, voz) => { let v = 0; for (const e of EV) if (e.voz === voz) v
 const golpe = (t, voz) => { let g = 0; for (const e of EV) if (!voz || e.voz === voz) g = Math.max(g, pulso(t - e.t0 + 0.05, 0.5)); return g; };
 const ABRE = { m: 0, pb: 0.05, i: 0.2, sz: 0.2, fv: 0.15, dt: 0.3, th: 0.3, n: 0.25, l: 0.35, r: 0.35, kg: 0.35, j: 0.3, ch: 0.25, e: 0.45, u: 0.35, w: 0.3, o: 0.6, q: 0.7, a: 0.75, h: 0.9 };
 const ESPECIALES = new Set(["parpadeo", "guino-izq", "guino-der"]);
-let EV_BOCA = [], EV_OJOS = [];         // cambios de dibujo: disparan rebotes (y parpadeos en los ojos)
+let EV_BOCA = [], EV_OJOS = [], CAMBIOS_BOCA = []; const INB = new Set();         // cambios de dibujo: disparan rebotes (y parpadeos en los ojos)
 function prepararCambios() {
-  EV_BOCA = []; EV_OJOS = [];
+  EV_BOCA = []; EV_OJOS = []; CAMBIOS_BOCA = [];
   if (HOJA) {
     let prev = "m";
     for (const f of Object.keys(HOJA.bocas).map(Number).sort((a, b) => a - b)) {
       const k = HOJA.bocas[f]; if (k === prev) continue;
+      CAMBIOS_BOCA.push({ f, de: prev, a: k });
       EV_BOCA.push({ t: (f - 1) / 24, o: ABRE[k] ?? 0.3, cierre: (ABRE[k] ?? 0.3) < 0.1 && (ABRE[prev] ?? 0) > 0.3 }); prev = k;
     }
     prev = "normal";
@@ -422,8 +423,13 @@ function prepararCambios() {
 const ojosEn = (t) => {
   if (HOJA) {
     const f = Math.floor(t * 24 + 1e-6);
-    // parpadeo al cambiar de expresión: tapa el cambio de dibujo (un cuadro antes, durante y después)
-    for (const e of EV_OJOS) if (f >= e.f - 1 && f <= e.f + 1 && !ESPECIALES.has(e.de) && !ESPECIALES.has(e.a)) return "parpadeo";
+    // parpadeo al cambiar de expresión (breakdown: entreabiertos -> cerrado -> cerrado -> entreabiertos -> nueva expresión)
+    for (const e of EV_OJOS) {
+      if (ESPECIALES.has(e.de) || ESPECIALES.has(e.a)) continue;
+      const d = f - e.f;
+      if (d === -2 || d === 1) return "entreabiertos";
+      if (d === -1 || d === 0) return "parpadeo";
+    }
     return claveEn("ojos", f, "normal");
   }
   let n = "normal"; for (const [t0, nombre] of OJOS) if (t >= t0) n = nombre; if (PARPADEOS.some((b) => t >= b && t < b + 0.12)) n = "parpadeo"; return n;
@@ -445,7 +451,9 @@ window.render = (t) => {
   const yo = habla(t, "mango"), el = hablaS(t, "narrador"), yoS = hablaS(t, "mango");
   const k = Math.floor(t * 12);
   // la boca se adelanta un cuadro al sonido (se lee mejor sincronizada)
-  const nb = HOJA ? claveEn("bocas", Math.floor(t * 24 + 1e-6) + 1, "m") : (yo && k < BOCAS.length ? BOCAS[k] : "m");
+  const f24 = Math.floor(t * 24 + 1e-6) + 1;
+  let nb = HOJA ? claveEn("bocas", f24, "m") : (yo && k < BOCAS.length ? BOCAS[k] : "m");
+  if (HOJA) for (const e of CAMBIOS_BOCA) if (f24 >= e.f - 2 && f24 < e.f) { const n = `${e.de}__${e.a}__${f24 - (e.f - 2) + 1}`; if (INB.has(n)) nb = n; }
   m.bocaImg(nb);
   m.ojos(ojosEn(t));
   // rebotes con ease in-out en cada cambio de boca (suben y estiran al abrir, aplastan al cerrar) y de expresión
@@ -463,7 +471,11 @@ window.render = (t) => {
   sombra.style.transform = `translate(${mp.x - 320}px, ${mp.y + 560 * mp.s - 40}px) scale(${mp.s * 1.2}, ${mp.s})`;
   m.brillo(((t % 4.6) / 0.8));
 };
-window.cargar = (b, e, h) => { BOCAS = b; EV = e; HOJA = h || null; prepararCambios(); construir(); return m.listo; };
+window.cargar = async (b, e, h, inb) => {
+  BOCAS = b; EV = e; HOJA = h || null; prepararCambios(); construir();
+  for (const n of inb || []) { m.bocaExtra(n, `inb/boca-${n}.png`, { x: 450, y: 600 }); INB.add(n); }
+  return m.listo;
+};
 </script>
 </body>
 </html>

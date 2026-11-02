@@ -150,6 +150,9 @@
       ojoAct = nombre;
     }
     let actual = null;
+    function bocaExtra(nombre, href, pos) {      // dibujo suelto (por ejemplo, un inbetween generado)
+      imgs[nombre] = el("image", { href, x: pos.x, y: pos.y, width: 406, height: 190, visibility: "hidden" }, g0);
+    }
     function bocaImg(nombre) {
       if (actual === nombre || !imgs[nombre]) return;
       if (actual) imgs[actual].setAttribute("visibility", "hidden");
@@ -185,7 +188,7 @@
       gl0.setAttribute("transform", `translate(${f(yaw * dl * k)} ${f(pitch * dl * k)})`);
     }
     const listo = new Promise((r) => (img.complete ? r() : (img.onload = r)));
-    return { caja, img, svg, boca, bocaImg, ojos: ponerOjos, visema: (n) => boca(...VISEMAS[n]), girar, brillo, listo };
+    return { caja, img, svg, boca, bocaImg, bocaExtra, ojos: ponerOjos, visema: (n) => boca(...VISEMAS[n]), girar, brillo, listo };
   }
   window.MangoRig = { crear, VISEMAS, profundidad };
 })();
