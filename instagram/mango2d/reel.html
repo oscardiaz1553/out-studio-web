@@ -407,11 +407,11 @@ let EV_BOCA = [], EV_OJOS = [], CAMBIOS_BOCA = []; const INB = new Set();       
 function prepararCambios() {
   EV_BOCA = []; EV_OJOS = []; CAMBIOS_BOCA = [];
   if (HOJA) {
-    let prev = "m";
+    let prev = "m", fPrev = -99;
     for (const f of Object.keys(HOJA.bocas).map(Number).sort((a, b) => a - b)) {
       const k = HOJA.bocas[f]; if (k === prev) continue;
-      CAMBIOS_BOCA.push({ f, de: prev, a: k });
-      EV_BOCA.push({ t: (f - 1) / 24, o: ABRE[k] ?? 0.3, cierre: (ABRE[k] ?? 0.3) < 0.1 && (ABRE[prev] ?? 0) > 0.3 }); prev = k;
+      CAMBIOS_BOCA.push({ f, de: prev, a: k, hueco: f - fPrev }); fPrev = f;
+      EV_BOCA.push({ t: f / 24, o: ABRE[k] ?? 0.3, cierre: (ABRE[k] ?? 0.3) < 0.1 && (ABRE[prev] ?? 0) > 0.3 }); prev = k;
     }
     prev = "normal";
     for (const f of Object.keys(HOJA.ojos).map(Number).sort((a, b) => a - b)) {
@@ -451,9 +451,9 @@ window.render = (t) => {
   const yo = habla(t, "mango"), el = hablaS(t, "narrador"), yoS = hablaS(t, "mango");
   const k = Math.floor(t * 12);
   // la boca se adelanta un cuadro al sonido (se lee mejor sincronizada)
-  const f24 = Math.floor(t * 24 + 1e-6) + 1;
+  const f24 = Math.floor(t * 24 + 1e-6);
   let nb = HOJA ? claveEn("bocas", f24, "m") : (yo && k < BOCAS.length ? BOCAS[k] : "m");
-  if (HOJA) for (const e of CAMBIOS_BOCA) if (f24 >= e.f - 2 && f24 < e.f) { const n = `${e.de}__${e.a}__${f24 - (e.f - 2) + 1}`; if (INB.has(n)) nb = n; }
+  if (HOJA) for (const e of CAMBIOS_BOCA) { const n = Math.min(2, e.hueco - 1); if (n > 0 && f24 >= e.f - n && f24 < e.f) { const nombre = `${e.de}__${e.a}__${f24 - (e.f - n) + (3 - n)}`; if (INB.has(nombre)) nb = nombre; } }
   m.bocaImg(nb);
   m.ojos(ojosEn(t));
   // rebotes con ease in-out en cada cambio de boca (suben y estiran al abrir, aplastan al cerrar) y de expresión
