@@ -38,7 +38,7 @@ H, W, _ = base.shape
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
 # zona de la boca en la ilustración (hocico bajo la nariz), con borde suave
 masc = ((xx - 652) / 188) ** 2 + ((yy - 694) / 74) ** 2
-alfa = np.clip((1.0 - masc) / 0.35, 0, 1)
+alfa = np.clip((1.0 - masc) / 0.6, 0, 1) ** 1.3
 nariz = ((xx - 653) / 120) ** 2 + ((yy - 596) / 46) ** 2
 alfa *= np.clip((nariz - 1.0) / 0.6, 0, 1)
 y0b, y1b, x0b, x1b = 600, 790, 450, 856

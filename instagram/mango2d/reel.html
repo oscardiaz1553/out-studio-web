@@ -474,7 +474,7 @@ window.render = (t) => {
 window.cargar = async (b, e, h, inb) => {
   BOCAS = b; EV = e; HOJA = h || null; prepararCambios(); construir();
   for (const n of inb || []) { m.bocaExtra(n, `inb/boca-${n}.png`, { x: 450, y: 600 }); INB.add(n); }
-  return m.listo;
+  await m.cargado(); return m.listo;
 };
 </script>
 </body>

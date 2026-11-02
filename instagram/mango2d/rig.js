@@ -25,7 +25,7 @@
     for (const [lx, ly] of LENTES) if (Math.hypot(x - lx, y - ly) < 0.092) d += 0.25;
     return d;
   }
-  function webgl(cv, img) {
+  function webgl(cv, fuente) {
     const gl = cv.getContext("webgl", { premultipliedAlpha: false, preserveDrawingBuffer: true, alpha: true });
     const vs = "attribute vec2 p; varying vec2 v; void main(){ v = vec2(p.x*0.5+0.5, 0.5-p.y*0.5); gl_Position = vec4(p,0.,1.); }";
     const fs = `precision mediump float; varying vec2 v; uniform sampler2D t; uniform vec2 r;
@@ -46,14 +46,14 @@
     let cargada = false;
     const subir = () => {
       gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, fuente);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
       cargada = true;
     };
     const ur = gl.getUniformLocation(pr, "r");
     return (yaw, pitch) => {
-      if (!cargada) { if (!img.complete) return; subir(); }
+      if (!cargada) subir(); else { gl.bindTexture(gl.TEXTURE_2D, tex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, fuente); }
       gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform2f(ur, yaw, pitch); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
@@ -67,13 +67,18 @@
     host.appendChild(caja);
     const img = new Image();
     img.src = opc.src || "mango-sin-boca.png";
-    let giro = null;
+    let giro = null, comp = null, compCx = null;
+    const capas = { boca: null, ojos: null };          // dibujos actuales (modo webgl)
+    const pendientes = [];
+    const cargaImg = (href) => { const i = new Image(); pendientes.push(new Promise((r) => { i.onload = i.onerror = r; })); i.src = href; return i; };
     if (opc.webgl) {
       const cv = document.createElement("canvas");
       cv.width = S; cv.height = S;
       cv.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
       caja.appendChild(cv);
-      giro = webgl(cv, img);
+      comp = document.createElement("canvas"); comp.width = S; comp.height = S;
+      compCx = comp.getContext("2d");
+      giro = webgl(cv, comp);
     } else {
       img.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
       caja.appendChild(img);
@@ -137,7 +142,7 @@
     if (opc.bocas) {
       g.style.display = "none";
       for (const [nombre, pos] of Object.entries(opc.bocas.indice)) {
-        imgs[nombre] = el("image", { href: `${opc.bocas.carpeta}/boca-${nombre}.png`, x: pos.x, y: pos.y, width: 406, height: 190, visibility: "hidden" }, g0);
+        imgs[nombre] = comp ? { img: cargaImg(`${opc.bocas.carpeta}/boca-${nombre}.png`), x: pos.x, y: pos.y } : el("image", { href: `${opc.bocas.carpeta}/boca-${nombre}.png`, x: pos.x, y: pos.y, width: 406, height: 190, visibility: "hidden" }, g0);
       }
     }
     // ojos y cejas (hoja de expresiones encajada): se mueven con los lentes
@@ -145,16 +150,18 @@
     let ojoAct = null;
     function ponerOjos(nombre) {
       if (ojoAct === nombre) return;
+      if (comp) { capas.ojos = ojos[nombre] || null; ojoAct = nombre; return; }
       if (ojoAct && ojos[ojoAct]) ojos[ojoAct].setAttribute("visibility", "hidden");
       if (ojos[nombre]) ojos[nombre].setAttribute("visibility", "visible");
       ojoAct = nombre;
     }
     let actual = null;
     function bocaExtra(nombre, href, pos) {      // dibujo suelto (por ejemplo, un inbetween generado)
-      imgs[nombre] = el("image", { href, x: pos.x, y: pos.y, width: 406, height: 190, visibility: "hidden" }, g0);
+      imgs[nombre] = comp ? { img: cargaImg(href), x: pos.x, y: pos.y } : el("image", { href, x: pos.x, y: pos.y, width: 406, height: 190, visibility: "hidden" }, g0);
     }
     function bocaImg(nombre) {
       if (actual === nombre || !imgs[nombre]) return;
+      if (comp) { capas.boca = imgs[nombre]; actual = nombre; return; }
       if (actual) imgs[actual].setAttribute("visibility", "hidden");
       imgs[nombre].setAttribute("visibility", "visible");
       actual = nombre;
@@ -172,6 +179,7 @@
       const o = opc.ojos;
       const primero = gl0.firstChild;    // los brillos quedan encima de los ojos
       for (const nombre of o.nombres) {
+        if (comp) { ojos[nombre] = { img: cargaImg(`${o.carpeta}/ojos-${nombre}.png`), x: o.x, y: o.y }; continue; }
         ojos[nombre] = el("image", { href: `${o.carpeta}/ojos-${nombre}.png`, x: o.x, y: o.y, width: o.ancho, height: o.alto, visibility: "hidden" });
         gl0.insertBefore(ojos[nombre], primero);
       }
@@ -181,14 +189,20 @@
     }
     brillo(1);
     function girar(yaw, pitch) {
-      if (giro) giro(yaw, pitch);
+      if (giro) {
+        // base, ojos y boca se componen en un solo dibujo y se deforman juntos: así nada se desliza ni se tuerce
+        compCx.clearRect(0, 0, S, S); compCx.drawImage(img, 0, 0, S, S);
+        if (capas.ojos && capas.ojos.img.complete) compCx.drawImage(capas.ojos.img, capas.ojos.x, capas.ojos.y);
+        if (capas.boca && capas.boca.img.complete) compCx.drawImage(capas.boca.img, capas.boca.x, capas.boca.y);
+        giro(yaw, pitch);
+      }
       const k = 0.035 * S;
       const dm = profundidad(0.52, 0.55), dl = profundidad(0.52, 0.4);
-      g0.setAttribute("transform", `translate(${f(yaw * dm * k)} ${f(pitch * dm * k)})`);
+      if (!comp) g0.setAttribute("transform", `translate(${f(yaw * dm * k)} ${f(pitch * dm * k)})`);
       gl0.setAttribute("transform", `translate(${f(yaw * dl * k)} ${f(pitch * dl * k)})`);
     }
     const listo = new Promise((r) => (img.complete ? r() : (img.onload = r)));
-    return { caja, img, svg, boca, bocaImg, bocaExtra, ojos: ponerOjos, visema: (n) => boca(...VISEMAS[n]), girar, brillo, listo };
+    return { caja, img, svg, boca, bocaImg, bocaExtra, ojos: ponerOjos, visema: (n) => boca(...VISEMAS[n]), girar, brillo, listo, cargado: () => Promise.all(pendientes) };
   }
   window.MangoRig = { crear, VISEMAS, profundidad };
 })();
