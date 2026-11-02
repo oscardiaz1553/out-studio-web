@@ -446,7 +446,7 @@ const ojosEn = (t) => {
       if (d >= -2 * PASO && d < -PASO) return "entreabiertos";
       if (d >= -PASO && d < 0) return "parpadeo";
     }
-    return claveEn("ojos", f, "ojos-abiertos");
+    return claveEn("ojos", f, "entreabiertos");
   }
   let n = "normal"; for (const [t0, nombre] of OJOS) if (t >= t0) n = nombre; if (PARPADEOS.some((b) => t >= b && t < b + 0.12)) n = "parpadeo"; return n;
 };

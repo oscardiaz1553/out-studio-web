@@ -197,7 +197,7 @@
     while (lo <= hi) { const mid = (lo + hi) >> 1; if (orden[mid] <= f) { r = mid; lo = mid + 1; } else hi = mid - 1; }
     return r < 0 ? defecto : claves[pista][orden[r]];
   }
-  const bocaEn = (f) => valor("bocas", ordB, f, "m"), ojosEn = (f) => valor("ojos", ordO, f, "ojos-abiertos");
+  const bocaEn = (f) => valor("bocas", ordB, f, "m"), ojosEn = (f) => valor("ojos", ordO, f, "entreabiertos");
 
   /* ── pintar ── */
   const nombreB = Object.fromEntries(BOCAS), nombreO = Object.fromEntries(OJOS);
@@ -255,7 +255,7 @@
       cx.fillStyle = "#fbf8f5"; cx.font = "600 12px Instrument Sans, sans-serif"; cx.fillText(e.texto, x0 + 5, Y.voz + 4); cx.restore();
     });
     pista("bocas", ordB, Y.boca, (k) => nombreB[k], "m");
-    pista("ojos", ordO, Y.ojos, (k) => nombreO[k], "ojos-abiertos");
+    pista("ojos", ordO, Y.ojos, (k) => nombreO[k], "entreabiertos");
     cx.fillStyle = "#b7bcdf"; cx.font = "600 10px Instrument Sans, sans-serif";
   }
   function pista(p, orden, y, nombre, defecto) {
