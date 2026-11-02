@@ -18,7 +18,7 @@ for k in range(0, 40): poner(3.4 + k * 0.32, tono(330 + (k % 4) * 30, 0.2, 18, 0
 # reloj: tic tac durante «una hora después»
 for k in range(0, 8): poner(4.0 + k * 0.2, tono(1800 if k % 2 else 1400, 0.04, 90, 0.35))
 # paso del tiempo: barridos cada día y cada estación
-for t in (5.5, 9.0): poner(t, barrido(0.6, 200, 1400), 0.8)
+for t, d in ((2.2, .35), (5.2, .7), (7.0, .7), (8.9, .7), (12.0, .6), (13.2, .75), (14.0, .35)): poner(t, barrido(d, 300, 1800), 0.55)   # whooshes de cámara
 for k in range(24): poner(5.8 + k * 0.3, rng.normal(0, 1, int(SR * 0.18)) * np.exp(-np.arange(int(SR * 0.18)) / SR * 14) * 0.18)   # páginas de calendario
 # lluvia (ruido filtrado) 9.6 a 10.9
 t = np.arange(int(SR * 1.3)) / SR; r = rng.normal(0, 1, len(t)) * 0.07 * np.sin(np.pi * t / 1.3); poner(9.6, np.convolve(r, np.ones(6) / 6, mode="same"))

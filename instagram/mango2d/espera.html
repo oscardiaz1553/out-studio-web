@@ -7,20 +7,22 @@
   body { width: 1080px; height: 1920px; overflow: hidden; position: relative; background: #f6e8c8; font-family: "I", sans-serif; }
   .d { font-family: "B", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
   #cam { position: absolute; inset: 0; transform-origin: 0 0; }
-  canvas.mundo { position: absolute; left: 0; top: 0; }
+  canvas.mundo { position: absolute; left: -200px; top: -200px; }
+  #atras { transform-origin: 200px 200px; }
   #mangoW { position: absolute; left: 0; top: 0; width: 1254px; height: 1254px; transform-origin: 627px 627px; }
   #titulo { position: absolute; left: 70px; right: 70px; top: 130px; text-align: center; color: #141e5c; font-size: 96px; }
   #titulo span { display: inline-block; }
+  #titulo { -webkit-text-stroke: 16px #f6e8c8; paint-order: stroke fill; }
   #cierre { position: absolute; inset: 0; background: #1b2fcc; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; padding: 0 80px; text-align: center; }
   #cierre .t { color: #fbf8f5; font-size: 104px; }
   #cierre .t b { color: #f5e3b3; font-weight: 800; }
   #cierre .btn { background: #f5e3b3; color: #1b2fcc; font-size: 56px; padding: 32px 60px; border-radius: 999px; font-weight: 500; }
 </style></head>
 <body>
+<canvas id="atras" class="mundo" width="1480" height="2320"></canvas>
 <div id="cam">
-  <canvas id="atras" class="mundo" width="1080" height="1920"></canvas>
   <div id="mangoW"></div>
-  <canvas id="frente" class="mundo" width="1080" height="1920"></canvas>
+  <canvas id="frente" class="mundo" width="1480" height="2320"></canvas>
 </div>
 <div id="titulo" class="d"></div>
 <div id="cierre"><div class="t d" id="cierreTxt"></div><div class="btn" id="cierreBtn">outstudio.online</div></div>
@@ -93,11 +95,11 @@ function telarana(ctx, x0, y0, sx, sy, a, r) {
 
 const lienzoPantalla = document.createElement("canvas"); lienzoPantalla.width = 236; lienzoPantalla.height = 520;
 function dibujarAtras(ctx, t) {
-  ctx.clearRect(0, 0, 1080, 1920);
+  ctx.setTransform(1, 0, 0, 1, 200, 200); ctx.clearRect(-200, -200, 1480, 2320);
   // pared y zócalo
-  ctx.fillStyle = "#f6e8c8"; ctx.fillRect(0, 0, 1080, 1920);
-  ctx.fillStyle = "#ecd7a8"; ctx.fillRect(0, 0, 1080, 1920 * 0.0); ctx.fillRect(0, 1120, 1080, 800);
-  ctx.fillStyle = TINTA; ctx.fillRect(0, 1118, 1080, 5);
+  ctx.fillStyle = "#f6e8c8"; ctx.fillRect(-200, -200, 1480, 2320);
+  ctx.fillStyle = "#ecd7a8"; ctx.fillRect(-200, 1120, 1480, 1000);
+  ctx.fillStyle = TINTA; ctx.fillRect(-200, 1118, 1480, 5);
   // ventana con el cielo del mundo
   const wx = 540, wy = 250, ww = 470, wh = 600;
   ctx.save(); ctx.beginPath(); ctx.roundRect(wx, wy, ww, wh, 16); ctx.clip(); ctx.translate(wx, wy);
@@ -116,12 +118,12 @@ function dibujarAtras(ctx, t) {
 }
 
 function dibujarFrente(ctx, t) {
-  ctx.clearRect(0, 0, 1080, 1920);
+  ctx.setTransform(1, 0, 0, 1, 200, 200); ctx.clearRect(-200, -200, 1480, 2320);
   // mesa
-  ctx.fillStyle = "#8d4a2c"; ctx.fillRect(-10, 1620, 1100, 320); ctx.strokeStyle = TINTA; ctx.lineWidth = 5; ctx.strokeRect(-10, 1620, 1100, 320);
-  ctx.fillStyle = "rgba(43,13,6,.18)"; for (let i = 0; i < 7; i++) ctx.fillRect(40 + i * 160, 1680, 6, 240);
-  rect(ctx, -20, 1556, 1120, 74, 14, "#bc6039", 6);
-  ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(10, 1566, 1060, 10);
+  ctx.fillStyle = "#8d4a2c"; ctx.fillRect(-210, 1620, 1500, 520); ctx.strokeStyle = TINTA; ctx.lineWidth = 5; ctx.strokeRect(-210, 1620, 1500, 520);
+  ctx.fillStyle = "rgba(43,13,6,.18)"; for (let i = -1; i < 8; i++) ctx.fillRect(40 + i * 160, 1680, 6, 440);
+  rect(ctx, -220, 1556, 1520, 74, 14, "#bc6039", 6);
+  ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(-190, 1566, 1460, 10);
   // tazas que se acumulan (torres)
   const n = tazas(t);
   for (let i = 0; i < Math.min(n, 14); i++) { const torre = Math.floor(i / 7), piso = i % 7; taza(ctx, 62 + torre * 78 + (piso % 2) * 5, 1556 - piso * 55, i); }   // dos torres en la esquina, lejos de la cara
@@ -142,7 +144,7 @@ function dibujarFrente(ctx, t) {
     for (let i = 0; i < 12; i++) { const u = (i + 1) / 13; if (u > v) break; const x = 40 + u * 700, y = 1560 + Math.sin(u * 14) * 18; ctx.save(); ctx.translate(x, y); ctx.rotate(-1 + (i % 2) * 2); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(26, -20, 56, 0); ctx.quadraticCurveTo(26, 20, 0, 0); contorno(ctx, "#3f9a3a", 4); ctx.restore(); } }
   // telarañas en las esquinas
   const a = telaranas(t);
-  if (a > 0) { telarana(ctx, 0, 0, 1, 1, a, 360 * a + 80); telarana(ctx, 1080, 0, -1, 1, a, 320 * a + 60); telarana(ctx, 0, 1480, 1, -1, a, 200 * a); }
+  if (a > 0) { telarana(ctx, -40, 0, 1, 1, a, 360 * a + 80); telarana(ctx, 1120, 0, -1, 1, a, 320 * a + 60); telarana(ctx, -40, 1500, 1, -1, a, 220 * a); telarana(ctx, 1000, 1000, -1, 1, a, 200 * a); }
   // páginas de calendario que vuelan
   const MESES = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
   for (let i = 0; i < 24; i++) {
@@ -171,18 +173,37 @@ const lienzoAtras = document.getElementById("atras").getContext("2d"), lienzoFre
 const mW = document.getElementById("mangoW"), cam = document.getElementById("cam");
 
 /* ═══════════ cámara ═══════════ */
-const CAM = {
-  s: [[0, 1.0], [E.anio, 1.08], [E.anio + 0.15, 1.08], [E.anio + 0.9, 1.7], [E.ya, 1.7], [E.ya + 0.35, 1.5], [E.mango - 0.3, 1.5], [E.mango + 0.4, 1.0]],
-  x: [[0, 540], [E.anio + 0.15, 540], [E.anio + 0.9, 880], [E.ya, 880], [E.ya + 0.35, 430], [E.mango - 0.3, 430], [E.mango + 0.4, 540]],
-  y: [[0, 960], [E.anio + 0.15, 960], [E.anio + 0.9, 1270], [E.ya, 1270], [E.ya + 0.35, 1180], [E.mango - 0.3, 1180], [E.mango + 0.4, 960]],
-};
+// planos de cámara: [t, zoom, x, y] (centro del encuadre en el mundo). Entre claves, ease in-out; claves juntas = barrido rápido
+const PLANOS = [
+  [0.0, 1.0, 540, 1000], [2.1, 1.18, 590, 1300],            // abre: Mango y el celular, empuje lento
+  [2.4, 1.9, 880, 1260], [3.4, 1.9, 880, 1260],              // toque en «Comprar»: golpe de zoom al celular
+  [4.3, 1.05, 560, 1180],                                       // vuelve atrás: el spinner da vueltas
+  [5.2, 1.05, 560, 1180], [5.9, 1.4, 330, 720],               // barrido al reloj de pared
+  [7.0, 1.5, 300, 760], [7.7, 1.5, 270, 1400],               // baja a la torre de tazas
+  [8.9, 1.55, 280, 1390], [9.6, 1.3, 620, 790],              // sube a la ventana: llueve, nieva
+  [11.7, 1.35, 640, 800], [12.5, 1.0, 540, 960],             // plano general: todo cubierto de plantas y telarañas
+  [13.1, 1.0, 540, 960], [13.95, 1.9, 880, 1260],            // empuje al celular: «Agotado»
+  [14.0, 1.9, 880, 1260], [14.35, 2.1, 380, 1340],           // látigo a la cara de Mango
+  [15.7, 2.2, 380, 1340], [16.4, 1.0, 540, 960],
+];
+function camara(t) {
+  let a = PLANOS[0], b = PLANOS[PLANOS.length - 1];
+  if (t <= a[0]) b = a; else if (t >= b[0]) a = b; else for (let i = 0; i < PLANOS.length - 1; i++) if (t <= PLANOS[i + 1][0]) { a = PLANOS[i]; b = PLANOS[i + 1]; break; }
+  const u = a === b ? 1 : inOut((t - a[0]) / (b[0] - a[0]));
+  const s = lerp(a[1], b[1], u);
+  return { s, x: lerp(a[2], b[2], u) + 9 * Math.sin(t * 0.8) / s, y: lerp(a[3], b[3], u) + 7 * Math.sin(t * 1.15 + 1) / s };
+}
 function pinta(t, f) {
   const tq = Math.floor(f / PASO) * PASO / 24;
   dibujarAtras(lienzoAtras, t); dibujarFrente(lienzoFrente, t);
   // temblor al ver «Agotado»
   const tr = t - E.ya, tem = tr > 0 && tr < 1.2 ? Math.exp(-tr * 3) : 0, tx = Math.sin(t * 90) * 14 * tem, ty = Math.cos(t * 77) * 10 * tem;
-  const s = interp(CAM.s, t), cx = interp(CAM.x, t), cy = interp(CAM.y, t);
+  const c0 = camara(t), c1 = camara(t - 1 / 24), vel = Math.hypot(c0.x - c1.x, c0.y - c1.y) * c0.s + Math.abs(c0.s - c1.s) * 600;
+  const s = c0.s, cx = c0.x, cy = c0.y, sb = 1 + (s - 1) * 0.8;
+  const desenfoque = Math.min(8, Math.max(0, (vel - 16) * 0.22));
   cam.style.transform = `translate(${540 - cx * s + tx}px, ${960 - cy * s + ty}px) scale(${s})`;
+  lienzoAtras.canvas.style.transform = `translate(${540 - cx * sb + tx}px, ${960 - cy * sb + ty}px) scale(${sb})`;
+  document.body.style.filter = desenfoque > 0.4 ? `blur(${desenfoque.toFixed(1)}px)` : "none";
   // Mango (a doses): ojos, boca, giro y cabeceo
   m.bocaImg(bocaEn(tq)); m.ojos(ojosEn(f - (f % PASO)));
   const sueno = suave(E.hora, E.anio, tq);
@@ -190,8 +211,8 @@ function pinta(t, f) {
   const pitch = 0.06 * Math.sin(tq * 1.3) + 0.22 * sueno * Math.sin(tq * 1.7) - 0.12 * suave(E.ya - 0.2, E.ya, tq);
   m.girar(yaw, pitch);
   const rot = 2 * Math.sin(tq * 0.9) + 6 * sueno * Math.sin(tq * 1.3) + (tq > E.ya ? 4 * Math.sin(tq * 60) * tem : 0);
-  const salto = tq > E.ya - 0.05 && tq < E.ya + 0.4 ? 26 * Math.sin(((tq - E.ya + 0.05) / 0.45) * Math.PI) : 0;
-  mW.style.transform = `translate(${430 - 627}px, ${1250 - 627 - salto + 6 * Math.sin(tq * 1.6)}px) rotate(${rot}deg) scale(0.78)`;
+  const salto = tq > E.ya - 0.05 && tq < E.ya + 0.4 ? 14 * Math.sin(((tq - E.ya + 0.05) / 0.45) * Math.PI) : 0;
+  mW.style.transform = `translate(${380 - 627}px, ${1370 - 627 - salto + 3 * Math.sin(tq * 1.6)}px) rotate(${rot}deg) scale(0.4)`;
   // textos
   const rotulo = t < 2.2 ? "POV: tu página carga lento" : t >= E.cuelga && t < E.hora ? "Una hora después." : t >= E.hora && t < E.dias ? "Tres días después." : t >= E.dias && t < E.anio ? "Un año después." : t >= E.anio && t < E.ya ? "Por fin cargó." : "";
   const el = document.getElementById("titulo"); if (el.dataset.txt !== rotulo) { el.dataset.txt = rotulo; el.innerHTML = rotulo.split(" ").map((w) => `<span>${w}</span>`).join(" "); }
