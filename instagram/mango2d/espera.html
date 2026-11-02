@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>La espera</title>
+<style>
+  @font-face { font-family: "B"; src: url("assets/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+  @font-face { font-family: "I"; src: url("assets/instrument-500.woff2") format("woff2"); font-weight: 500; }
+  * { margin: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1920px; overflow: hidden; position: relative; background: #f6e8c8; font-family: "I", sans-serif; }
+  .d { font-family: "B", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
+  #cam { position: absolute; inset: 0; transform-origin: 0 0; }
+  canvas.mundo { position: absolute; left: 0; top: 0; }
+  #mangoW { position: absolute; left: 0; top: 0; width: 1254px; height: 1254px; transform-origin: 627px 627px; }
+  #titulo { position: absolute; left: 70px; right: 70px; top: 130px; text-align: center; color: #141e5c; font-size: 96px; }
+  #titulo span { display: inline-block; }
+  #cierre { position: absolute; inset: 0; background: #1b2fcc; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; padding: 0 80px; text-align: center; }
+  #cierre .t { color: #fbf8f5; font-size: 104px; }
+  #cierre .t b { color: #f5e3b3; font-weight: 800; }
+  #cierre .btn { background: #f5e3b3; color: #1b2fcc; font-size: 56px; padding: 32px 60px; border-radius: 999px; font-weight: 500; }
+</style></head>
+<body>
+<div id="cam">
+  <canvas id="atras" class="mundo" width="1080" height="1920"></canvas>
+  <div id="mangoW"></div>
+  <canvas id="frente" class="mundo" width="1080" height="1920"></canvas>
+</div>
+<div id="titulo" class="d"></div>
+<div id="cierre"><div class="t d" id="cierreTxt"></div><div class="btn" id="cierreBtn">outstudio.online</div></div>
+<script src="elementos.js"></script>
+<script src="rig.js"></script>
+<script>
+/* ═══════════ datos y utilidades ═══════════ */
+const TINTA = "#2b0d06";
+const hash = (i, k) => { const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return x - Math.floor(x); };
+const lerp = (a, b, t) => a + (b - a) * t;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const suave = (a, b, x) => { const u = clamp((x - a) / (b - a)); return u * u * (3 - 2 * u); };
+const inOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+function interp(claves, t) {                         // [[t, valor], ...] con ease in-out entre claves
+  if (t <= claves[0][0]) return claves[0][1];
+  for (let i = 0; i < claves.length - 1; i++) {
+    const [t0, v0] = claves[i], [t1, v1] = claves[i + 1];
+    if (t <= t1) return lerp(v0, v1, inOut((t - t0) / (t1 - t0)));
+  }
+  return claves[claves.length - 1][1];
+}
+const E = { cuelga: 4.0, hora: 5.5, dias: 9.0, anio: 13.0, ya: 14.0, mango: 16.0 };    // marcas de tiempo (s) de las escenas
+
+/* ═══════════ el mundo: hora, clima, crecimiento ═══════════ */
+function horaMundo(t) {
+  if (t < E.cuelga) return 10 + t * 0.03;
+  if (t < E.hora) return interp([[E.cuelga, 10.1], [E.hora, 11]], t);
+  if (t < E.dias) return interp([[E.hora, 11], [E.dias, 83]], t);
+  if (t < E.anio) return 83 + (t - E.dias) * 90;
+  return 13.5;
+}
+const clima = (t) => ({ lluvia: suave(9.6, 10.0, t) * (1 - suave(10.7, 11.1, t)), nieve: suave(11.0, 11.4, t) * (1 - suave(11.9, 12.3, t)), nubes: 0.3 + 0.5 * suave(9.4, 10, t) * (1 - suave(12, 12.8, t)) });
+const crece = (t) => interp([[0, 0.05], [E.cuelga, 0.1], [E.hora, 0.18], [E.dias, 0.55], [E.anio, 1]], t);
+const tazas = (t) => Math.floor(interp([[0, 0], [E.cuelga, 0], [E.hora, 1.4], [E.dias, 6.9], [E.anio, 17.9]], t));
+const telaranas = (t) => suave(E.hora + 0.8, E.anio - 0.5, t);
+
+/* ═══════════ dibujo del mundo (estilo plano con contorno, como Mango) ═══════════ */
+function contorno(ctx, relleno, ancho = 5) { ctx.fillStyle = relleno; ctx.fill(); ctx.lineWidth = ancho; ctx.strokeStyle = TINTA; ctx.lineJoin = "round"; ctx.stroke(); }
+function rect(ctx, x, y, w, h, r, color, ancho) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); contorno(ctx, color, ancho); }
+
+function planta(ctx, x, yBase, g, t) {
+  const alto = 150 + g * 760, hojas = Math.floor(3 + g * 15), sway = Math.sin(t * 1.4) * (6 + 14 * g);
+  // maceta
+  ctx.beginPath(); ctx.moveTo(x - 70, yBase - 120); ctx.lineTo(x + 70, yBase - 120); ctx.lineTo(x + 52, yBase + 20); ctx.lineTo(x - 52, yBase + 20); ctx.closePath(); contorno(ctx, "#bc6039");
+  rect(ctx, x - 82, yBase - 138, 164, 36, 10, "#d9784a");
+  // tallo
+  const pt = (u) => ({ x: x + Math.sin(u * 2.4) * 30 * (0.4 + g) + sway * u * u, y: yBase - 130 - alto * u });
+  ctx.beginPath(); for (let i = 0; i <= 20; i++) { const p = pt(i / 20); i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
+  ctx.lineWidth = 10 + 10 * g; ctx.strokeStyle = TINTA; ctx.lineCap = "round"; ctx.stroke(); ctx.lineWidth = 5 + 10 * g; ctx.strokeStyle = "#2f8a3c"; ctx.stroke();
+  for (let i = 0; i < hojas; i++) {
+    const u = (i + 1) / (hojas + 0.5), p = pt(u), lado = i % 2 ? 1 : -1, tam = (34 + 120 * g) * (1 - u * 0.35) * (0.8 + 0.4 * hash(i, 3));
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(lado * (0.9 + 0.2 * Math.sin(t * 1.2 + i)) - (lado > 0 ? 0 : 0.2));
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(tam * 0.6, -tam * 0.7, tam * 1.6, 0); ctx.quadraticCurveTo(tam * 0.6, tam * 0.7, 0, 0); contorno(ctx, i % 3 ? "#3f9a3a" : "#2c7a2f", 4);
+    ctx.beginPath(); ctx.moveTo(tam * 0.1, 0); ctx.lineTo(tam * 1.3, 0); ctx.lineWidth = 3; ctx.strokeStyle = "rgba(43,13,6,.5)"; ctx.stroke(); ctx.restore();
+  }
+}
+function taza(ctx, x, y, i) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(1.05, 1.05); ctx.translate(-x, -y);
+  rect(ctx, x - 30, y - 56, 60, 56, 10, i % 2 ? "#fbf8f5" : "#f5e3b3", 4);
+  ctx.beginPath(); ctx.arc(x + 32, y - 30, 17, -1.2, 1.2); ctx.lineWidth = 8; ctx.strokeStyle = TINTA; ctx.stroke(); ctx.lineWidth = 3.5; ctx.strokeStyle = i % 2 ? "#fbf8f5" : "#f5e3b3"; ctx.stroke();
+  ctx.fillStyle = "#5c2a14"; ctx.beginPath(); ctx.ellipse(x, y - 54, 24, 6, 0, 0, 6.29); ctx.fill();
+  ctx.restore();
+}
+function telarana(ctx, x0, y0, sx, sy, a, r) {
+  ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = "rgba(255,255,255,.95)"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
+  const n = 6; for (let i = 0; i < n; i++) { const ang = (i / (n - 1)) * (Math.PI / 2); ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + sx * Math.cos(ang) * r, y0 + sy * Math.sin(ang) * r); ctx.stroke(); }
+  for (let k = 1; k <= 5; k++) { ctx.beginPath(); for (let i = 0; i < n; i++) { const ang = (i / (n - 1)) * (Math.PI / 2), rr = r * k / 5 * (i % 2 ? 0.9 : 1); const px = x0 + sx * Math.cos(ang) * rr, py = y0 + sy * Math.sin(ang) * rr; i ? ctx.quadraticCurveTo((px + ctx._lx) / 2 - sx * 6, (py + ctx._ly) / 2 - sy * 6, px, py) : ctx.moveTo(px, py); ctx._lx = px; ctx._ly = py; } ctx.stroke(); }
+  ctx.restore();
+}
+
+const lienzoPantalla = document.createElement("canvas"); lienzoPantalla.width = 236; lienzoPantalla.height = 520;
+function dibujarAtras(ctx, t) {
+  ctx.clearRect(0, 0, 1080, 1920);
+  // pared y zócalo
+  ctx.fillStyle = "#f6e8c8"; ctx.fillRect(0, 0, 1080, 1920);
+  ctx.fillStyle = "#ecd7a8"; ctx.fillRect(0, 0, 1080, 1920 * 0.0); ctx.fillRect(0, 1120, 1080, 800);
+  ctx.fillStyle = TINTA; ctx.fillRect(0, 1118, 1080, 5);
+  // ventana con el cielo del mundo
+  const wx = 540, wy = 250, ww = 470, wh = 600;
+  ctx.save(); ctx.beginPath(); ctx.roundRect(wx, wy, ww, wh, 16); ctx.clip(); ctx.translate(wx, wy);
+  Cielo.dibujar(ctx, ww, wh, horaMundo(t), clima(t)); ctx.restore();
+  ctx.lineWidth = 12; ctx.strokeStyle = "#8d4a2c"; ctx.beginPath(); ctx.roundRect(wx, wy, ww, wh, 16); ctx.stroke();
+  ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(wx + ww / 2, wy); ctx.lineTo(wx + ww / 2, wy + wh); ctx.moveTo(wx, wy + wh / 2); ctx.lineTo(wx + ww, wy + wh / 2); ctx.stroke();
+  ctx.strokeStyle = TINTA; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(wx - 6, wy - 6, ww + 12, wh + 12, 20); ctx.stroke();
+  rect(ctx, wx - 24, wy + wh + 4, ww + 48, 30, 8, "#d9784a", 5);
+  // reloj de pared
+  ctx.save(); ctx.translate(250, 440); ctx.beginPath(); ctx.arc(0, 0, 108, 0, 6.29); contorno(ctx, "#8d4a2c", 6);
+  ctx.beginPath(); ctx.arc(0, 0, 92, 0, 6.29); contorno(ctx, "#fbf8f5", 4);
+  for (let i = 0; i < 12; i++) { const a = (i / 12) * 6.2832; ctx.beginPath(); ctx.moveTo(Math.sin(a) * 76, -Math.cos(a) * 76); ctx.lineTo(Math.sin(a) * 86, -Math.cos(a) * 86); ctx.lineWidth = 4; ctx.strokeStyle = TINTA; ctx.stroke(); }
+  Reloj.dibujar(ctx, 90, horaMundo(t)); ctx.restore();
+  // planta que crece, detrás de la mesa
+  planta(ctx, 150, 1590, crece(t), t);
+}
+
+function dibujarFrente(ctx, t) {
+  ctx.clearRect(0, 0, 1080, 1920);
+  // mesa
+  ctx.fillStyle = "#8d4a2c"; ctx.fillRect(-10, 1620, 1100, 320); ctx.strokeStyle = TINTA; ctx.lineWidth = 5; ctx.strokeRect(-10, 1620, 1100, 320);
+  ctx.fillStyle = "rgba(43,13,6,.18)"; for (let i = 0; i < 7; i++) ctx.fillRect(40 + i * 160, 1680, 6, 240);
+  rect(ctx, -20, 1556, 1120, 74, 14, "#bc6039", 6);
+  ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(10, 1566, 1060, 10);
+  // tazas que se acumulan (torres)
+  const n = tazas(t);
+  for (let i = 0; i < Math.min(n, 14); i++) { const torre = Math.floor(i / 7), piso = i % 7; taza(ctx, 62 + torre * 78 + (piso % 2) * 5, 1556 - piso * 55, i); }   // dos torres en la esquina, lejos de la cara
+  // celular de pie con la pantalla hacia la cámara
+  const fase = t < 3.2 ? "producto" : t < E.anio ? "cargando" : "agotado";
+  const prog = t < E.anio - 0.5 ? 0.05 + 0.1 * clamp((t - 3.2) / 9.5) : t < E.anio ? lerp(0.15, 1, (t - (E.anio - 0.5)) / 0.5) : 1;
+  Pantalla.dibujar(lienzoPantalla.getContext("2d"), 236, 520, { fase: t >= E.anio ? "agotado" : fase, t, progreso: prog });
+  ctx.save(); ctx.translate(900, 1568); ctx.rotate(-0.06);
+  rect(ctx, -138, -600, 276, 600, 38, "#141e5c", 6);
+  ctx.save(); ctx.beginPath(); ctx.roundRect(-118, -580, 236, 520, 22); ctx.clip(); ctx.drawImage(lienzoPantalla, -118, -580); ctx.restore();
+  ctx.fillStyle = "#0b1038"; ctx.beginPath(); ctx.arc(0, -592, 6, 0, 6.29); ctx.fill();
+  // el dedo que toca «Comprar»
+  if (t > 2.4 && t < 3.4) { const k = suave(2.4, 3.0, t) * (1 - suave(3.1, 3.4, t)); ctx.globalAlpha = k; ctx.fillStyle = "rgba(20,30,92,.35)"; ctx.strokeStyle = "#141e5c"; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(0, -118 - 30 * (1 - suave(2.4, 3.0, t)), 36 * (1.3 - 0.3 * suave(2.9, 3.1, t)), 0, 6.29); ctx.fill(); ctx.stroke(); ctx.globalAlpha = 1; }
+  ctx.restore();
+  // enredadera que sube por la mesa
+  const v = suave(E.dias, E.anio, t);
+  if (v > 0) { ctx.strokeStyle = TINTA; ctx.lineWidth = 16; ctx.lineCap = "round"; ctx.beginPath(); for (let i = 0; i <= 40; i++) { const u = i / 40 * v; const x = 40 + u * 700, y = 1560 + Math.sin(u * 14) * 18; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); ctx.strokeStyle = "#2f8a3c"; ctx.lineWidth = 9; ctx.stroke();
+    for (let i = 0; i < 12; i++) { const u = (i + 1) / 13; if (u > v) break; const x = 40 + u * 700, y = 1560 + Math.sin(u * 14) * 18; ctx.save(); ctx.translate(x, y); ctx.rotate(-1 + (i % 2) * 2); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(26, -20, 56, 0); ctx.quadraticCurveTo(26, 20, 0, 0); contorno(ctx, "#3f9a3a", 4); ctx.restore(); } }
+  // telarañas en las esquinas
+  const a = telaranas(t);
+  if (a > 0) { telarana(ctx, 0, 0, 1, 1, a, 360 * a + 80); telarana(ctx, 1080, 0, -1, 1, a, 320 * a + 60); telarana(ctx, 0, 1480, 1, -1, a, 200 * a); }
+  // páginas de calendario que vuelan
+  const MESES = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+  for (let i = 0; i < 24; i++) {
+    const ts = E.hora + 0.3 + i * 0.3, d = (t - ts) / 1.5; if (d < 0 || d > 1) continue;
+    const x = lerp(1180, -160, d), y = 640 + hash(i, 1) * 560 + Math.sin(d * 7) * 70, rot = (d * 3 + hash(i, 2)) * 2.4;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot); rect(ctx, -52, -62, 104, 124, 8, "#fbf8f5", 4); ctx.fillStyle = "#bc6039"; ctx.fillRect(-52, -62, 104, 34); ctx.fillStyle = "#fbf8f5"; ctx.font = "800 24px B, sans-serif"; ctx.textAlign = "center"; ctx.fillText(MESES[i % 12], 0, -36); ctx.fillStyle = TINTA; ctx.font = "800 44px B, sans-serif"; ctx.fillText(String(1 + ((i * 7) % 28)), 0, 24); ctx.restore();
+  }
+}
+
+/* ═══════════ Mango: el único cutout ═══════════ */
+const IDX = {}; ["m", "o", "a", "e"].forEach((n) => (IDX[n] = { x: 450, y: 600 }));
+const OJOS = ["ojos-abiertos", "entreabiertos", "mirada-izq", "mirada-der", "mirada-arriba", "parpadeo"];
+const m = MangoRig.crear(document.getElementById("mangoW"), { webgl: true, bocas: { carpeta: "bocas", indice: IDX }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: OJOS } });
+const PASO = 2;
+// expresión de ojos en el tiempo: [desde, ojos]
+const LINEA_OJOS = [[0, "ojos-abiertos"], [1.2, "entreabiertos"], [2.3, "mirada-der"], [4.0, "entreabiertos"], [5.0, "mirada-arriba"], [5.9, "entreabiertos"], [7.2, "mirada-izq"], [8.0, "entreabiertos"],
+  [9.6, "mirada-der"], [10.4, "entreabiertos"], [11.6, "mirada-arriba"], [12.3, "entreabiertos"], [13.0, "mirada-der"], [13.5, "ojos-abiertos"], [16.0, "entreabiertos"]];
+const PARP = [1.2, 3.9, 5.7, 7.9, 10.3, 12.2, 16.0];    // parpadeos entre expresiones y de tanto en tanto
+function ojosEn(f) {
+  const t = f / 24; let n = "entreabiertos"; for (const [t0, o] of LINEA_OJOS) if (t >= t0) n = o;
+  for (const b of PARP) { const fb = Math.round(b * 24 / PASO) * PASO, d = f - fb; if (d >= -2 * PASO && d < -PASO) return "entreabiertos"; if (d >= -PASO && d < PASO) return "parpadeo"; }
+  return n;
+}
+function bocaEn(t) { return t >= E.ya && t < E.ya + 1.3 ? "a" : t >= E.ya + 1.3 && t < E.mango ? "o" : "m"; }
+const lienzoAtras = document.getElementById("atras").getContext("2d"), lienzoFrente = document.getElementById("frente").getContext("2d");
+const mW = document.getElementById("mangoW"), cam = document.getElementById("cam");
+
+/* ═══════════ cámara ═══════════ */
+const CAM = {
+  s: [[0, 1.0], [E.anio, 1.08], [E.anio + 0.15, 1.08], [E.anio + 0.9, 1.7], [E.ya, 1.7], [E.ya + 0.35, 1.5], [E.mango - 0.3, 1.5], [E.mango + 0.4, 1.0]],
+  x: [[0, 540], [E.anio + 0.15, 540], [E.anio + 0.9, 880], [E.ya, 880], [E.ya + 0.35, 430], [E.mango - 0.3, 430], [E.mango + 0.4, 540]],
+  y: [[0, 960], [E.anio + 0.15, 960], [E.anio + 0.9, 1270], [E.ya, 1270], [E.ya + 0.35, 1180], [E.mango - 0.3, 1180], [E.mango + 0.4, 960]],
+};
+function pinta(t, f) {
+  const tq = Math.floor(f / PASO) * PASO / 24;
+  dibujarAtras(lienzoAtras, t); dibujarFrente(lienzoFrente, t);
+  // temblor al ver «Agotado»
+  const tr = t - E.ya, tem = tr > 0 && tr < 1.2 ? Math.exp(-tr * 3) : 0, tx = Math.sin(t * 90) * 14 * tem, ty = Math.cos(t * 77) * 10 * tem;
+  const s = interp(CAM.s, t), cx = interp(CAM.x, t), cy = interp(CAM.y, t);
+  cam.style.transform = `translate(${540 - cx * s + tx}px, ${960 - cy * s + ty}px) scale(${s})`;
+  // Mango (a doses): ojos, boca, giro y cabeceo
+  m.bocaImg(bocaEn(tq)); m.ojos(ojosEn(f - (f % PASO)));
+  const sueno = suave(E.hora, E.anio, tq);
+  const yaw = (tq > 2.3 && tq < E.anio ? 0.55 : 0) * (1 - 0.5 * sueno) + 0.2 * Math.sin(tq * 0.8) - (tq > E.ya ? 0.6 : 0);
+  const pitch = 0.06 * Math.sin(tq * 1.3) + 0.22 * sueno * Math.sin(tq * 1.7) - 0.12 * suave(E.ya - 0.2, E.ya, tq);
+  m.girar(yaw, pitch);
+  const rot = 2 * Math.sin(tq * 0.9) + 6 * sueno * Math.sin(tq * 1.3) + (tq > E.ya ? 4 * Math.sin(tq * 60) * tem : 0);
+  const salto = tq > E.ya - 0.05 && tq < E.ya + 0.4 ? 26 * Math.sin(((tq - E.ya + 0.05) / 0.45) * Math.PI) : 0;
+  mW.style.transform = `translate(${430 - 627}px, ${1250 - 627 - salto + 6 * Math.sin(tq * 1.6)}px) rotate(${rot}deg) scale(0.78)`;
+  // textos
+  const rotulo = t < 2.2 ? "POV: tu página carga lento" : t >= E.cuelga && t < E.hora ? "Una hora después." : t >= E.hora && t < E.dias ? "Tres días después." : t >= E.dias && t < E.anio ? "Un año después." : t >= E.anio && t < E.ya ? "Por fin cargó." : "";
+  const el = document.getElementById("titulo"); if (el.dataset.txt !== rotulo) { el.dataset.txt = rotulo; el.innerHTML = rotulo.split(" ").map((w) => `<span>${w}</span>`).join(" "); }
+  el.style.opacity = rotulo ? 1 : 0;
+  const t0 = t < 2.2 ? 0 : t < E.hora ? E.cuelga : t < E.dias ? E.hora : t < E.anio ? E.dias : E.anio;
+  [...el.children].forEach((sp, i) => { const u = clamp((t - t0 - i * 0.08) / 0.3); sp.style.transform = `translateY(${(1 - Math.pow(1 - u, 3)) * -50 * (1 - u)}px) scale(${0.6 + 0.4 * u})`; sp.style.opacity = u; });
+  // cierre
+  const c = suave(E.mango, E.mango + 0.4, t); const cierre = document.getElementById("cierre"); cierre.style.opacity = c;
+  document.getElementById("cierreTxt").innerHTML = "Una página lenta<br>no avisa: solo <b>pierde ventas.</b>";
+  document.getElementById("cierreBtn").style.transform = `scale(${suave(E.mango + 0.6, E.mango + 1.0, t)})`;
+}
+window.render = (t) => { pinta(t, Math.floor(t * 24 + 1e-6)); };
+window.cargar = async () => { await m.cargado(); return m.listo; };
+</script></body></html>
