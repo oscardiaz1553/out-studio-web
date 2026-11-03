@@ -1,67 +1,60 @@
 # Serie de situaciones (reels pensados para viralidad)
 
-En vez de consejos, cada reel cuenta **una situación** que cualquiera ha vivido como cliente de una tienda online, exagerada y bien narrada, ilustrada en 2.5D (personajes cutout, fondos por capas y cámara con profundidad). El error de la tienda es el chiste; Out aparece al final con Mango, que no habla.
+En vez de consejos, cada reel cuenta **una situación** que cualquiera ha vivido como cliente de una tienda online, exagerada y bien narrada. El error de la tienda es el chiste; Out aparece al final y Mango, que no habla, es el único personaje.
+
+**Método vigente (nov 2026): todo en código, Mango es el único cutout.** Los decorados, objetos, pantallas, clima y gráficos se dibujan con código (canvas 2D y HTML). Lo único animado como cutout es Mango. No se usan imágenes generadas con IA ni personajes extra: se probó con ChatGPT y Gemini y no funcionó (límites de imágenes, partes que no encajan, mucho trabajo manual). Piloto hecho y publicable: **La espera** (`instagram/situaciones/la-espera/`).
 
 ## Qué buscamos en cada reel
 
-- **Gancho en el primer segundo** con texto en pantalla: «POV: intentas comprar en una tienda online».
+- **Gancho en el primer segundo** con texto en pantalla: «POV: tu página carga lento».
 - **Una sola situación, un solo error,** exagerado hasta el absurdo. Que la gente diga «me pasó» y se lo mande a alguien.
 - **Escalada y remate:** cada golpe peor que el anterior y un final inesperado.
-- **Corto:** 12 a 20 segundos. Cuanto más se repite completo, más se muestra.
-- **Final que empalma con el inicio** cuando se pueda, para que se vea en bucle.
-- **Sonido trabajado:** efectos en cada golpe, música y voces de personaje. Subtítulos siempre (mucha gente lo ve sin sonido).
-- **Personajes que vuelven:** la clienta (y más adelante el emprendedor) se vuelven conocidos episodio a episodio.
-- **Mango de cameo al final, en silencio.** El narrador dice «Escríbenos.» (la voz de Mango se descartó por sonar infantil). El reel no vende, entretiene.
+- **Corto:** 12 a 20 segundos. La espera dura 15,6 s.
+- **Voz del narrador que va con la imagen:** cada escena entra en el instante en que el narrador dice su frase. Subtítulos siempre (mucha gente lo ve sin sonido).
+- **Mango reacciona, no habla.** El narrador dice todo, «Escríbenos.» incluido (la voz de Mango suena infantil y se descartó).
+- **Sonido trabajado:** efectos sintetizados en cada golpe y movimiento de cámara. La música es opcional.
+- **Cierre con motion graphics**, no un texto «puesto ahí»: las palabras suben una a una al ritmo de la voz, hay un gráfico que cuenta el remate y el botón entra con rebote.
 
 ## Situaciones
 
 | Situación | El chiste | Remate |
 |---|---|---|
-| **La espera** (carga lenta) | La clienta toca «Comprar» y la página carga mientras pasan el día y la noche, crece una planta, le sale barba, cambian las estaciones | Por fin carga: «Agotado» |
+| **La espera** (carga lenta) — hecha | Mango toca «Comprar» y la página carga: pasan una hora, tres días, un año; crece la planta, se acumulan las tazas, cambian las estaciones | Por fin carga: «Agotado». Su cara |
 | **La invasión de ventanas** | Cada vez que cierra una ventana emergente aparecen dos más (cupones, cookies, notificaciones, chat) | Cuando las cierra todas, la tienda cerró |
 | **El formulario infinito** | Para pagar le piden nombre, cédula, tipo de sangre, el nombre de su primera mascota... | Se va a comprar a la competencia en un clic |
-| **El botón de WhatsApp que tapa todo** | El botón flotante tapa justo el «Pagar» y la persigue por la pantalla | Termina escribiendo por WhatsApp y nadie responde |
+| **El botón de WhatsApp que tapa todo** | El botón flotante tapa justo el «Pagar» y lo persigue por la pantalla | Termina escribiendo por WhatsApp y nadie responde |
 | **El zoom** | En el celular las letras son diminutas; hace zoom, luego más zoom, hasta entrar a los píxeles | Adentro solo dice «Precio: consultar» |
 | **El link en la bio** | El link de la bio lleva a 8 links, que llevan a otros 8 | Termina en un formulario de Google |
-| **El código que nunca llega** | El código de verificación no llega: revisa el correo, el spam, la ventana, le escribe a su mamá | Llega cuando ya cerró la pestaña |
+| **El código que nunca llega** | El código de verificación no llega: revisa el correo, el spam, la ventana | Llega cuando ya cerró la pestaña |
 
-## Cómo se produce en 2.5D (sin 3D)
+## Cómo se produce
 
-Es el mismo método de Mango (skill `reel-con-mango`), ampliado a más personajes y a escenarios:
+Es el mismo método de Mango (skill `reel-con-mango`), con un decorado hecho en código. La plantilla es `instagram/mango2d/espera.html`.
 
-1. **Personajes cutout.** Cada personaje se dibuja una vez en el estilo ilustrado de Mango y se separa en partes que se animan: cabeza, torso, brazos, manos, más hojas de bocas y de ojos (como las de Mango). Las partes se mueven a 2s con pivotes, y la cabeza gira en 2.5D con el mismo rig.
-2. **Fondos por capas.** Cada escenario (sala, bus, oficina) se ilustra en 3 o 4 capas (fondo, medio, primer plano). La cámara se mueve entre ellas con paralaje: es lo que da la sensación de profundidad sin 3D. Los cambios de día a noche y de estación se hacen con color y luz en código.
-3. **Pantallas en código.** Celulares, ventanas emergentes, formularios, cargadores: nítidos, editables y con el texto exacto.
-4. **Cámara y montaje.** Acercamientos, barridos, cortes a primer plano de la cara, planos detalle del dedo y del celular.
-5. **Voces y sonido.** Voces de personaje en ElevenLabs, efectos en cada golpe, música. Subtítulos palabra por palabra.
+1. **Mango asoma, no hay cuerpo.** Mango es una cabeza: se coloca pequeño (escala 0,4) asomando sobre una mesa, con el borde de la mesa tapando el cuello. Mira lo que pasa, parpadea al cambiar de expresión y reacciona. Sigue las reglas de la skill (a 2s, ojos visibles, boca cerrada si no habla).
+2. **Mundo en canvas 2D.** `instagram/mango2d/elementos.js` trae el cielo (hora y clima), el reloj y la pantalla de celular (cargando, agotado); el resto (planta, tazas, telarañas, calendario, mesa, ventana) se dibuja en `espera.html`. Estilo plano con contorno oscuro, como Mango. Cada pieza es una **función del tiempo**: el mismo `t` da siempre el mismo dibujo, lo que hace estable el render cuadro a cuadro.
+3. **El mundo va fluido, solo Mango va a 2s.** Probado: todo el mundo a 2s se siente cortado. El crecimiento tiene que ser gradual: cada hoja brota creciendo desde cero y cada taza cae y se apoya (nada de objetos que aparecen de golpe).
+4. **Cuidado con el aliasing.** Un lapso de tiempo (reloj, ciclo día y noche) no puede girar más de unos 3 giros por segundo, o a 24 cuadros por segundo se ve trabado o al revés.
+5. **Cámara: menos es más.** Dos movimientos, cada uno con motivo. En La espera: abrir al plano general cuando empieza el paso del tiempo y un golpe de zoom a la cara de Mango al ver «Agotado». Los barridos sin motivo (reloj, ventana, tazas) se probaron y se descartaron.
+6. **Voz primero, escenas después.** El narrador graba la frase completa con `<break time="2s" />` entre frases; con `cortar-voz.py` se leen los tiempos y se ajustan las marcas de tiempo del HTML (`E`) y los efectos. El mundo puede ir con su propio reloj (`W(t)`) para comprimir el lapso a lo que dura la frase.
+7. **Expresión coherente.** Un susto = ojos abiertos + jadeo (boca `e`) y mueca de dientes (`kg`). Ojos abiertos con boca de silbido y cejas relajadas no dice nada. Los ojos siempre visibles.
+8. **Cierre y portada.** Cierre por motion graphics (iris circular, palabras que suben desde una máscara, curva que se desploma, botón con rebote). Portada con `portada-espera.cjs`: el título queda dentro del centro 4:5 de la cuadrícula del perfil.
 
-## Qué hace falta (y quién lo hace)
+## Variante: reel de un caso con motion graphics (BARCI)
 
-- **Arte de cada personaje** (el usuario, con ChatGPT, con las indicaciones de abajo): una hoja de partes, una de bocas y una de ojos, en el mismo estilo de la ilustración de Mango.
-- **Fondos por capas** (el usuario, con ChatGPT): cada escenario, una imagen por capa sobre fondo liso.
-- **Voces** (el usuario, en ElevenLabs).
-- **Todo lo demás** (Claude): separar y encajar las partes, rig, escenas, pantallas, cámara, lipsync, sonido, render y revisión.
+Cuando el reel muestra el trabajo de un cliente en vez de una situación, el escenario ilustrado sobra: fondos lisos con la paleta de la marca, fotos y logo reales de la tienda (con permiso de la clienta), gráficos que cuentan el dato y Mango asomando abajo como único cutout. Plantilla: `instagram/mango2d/reel-barci.html` (la espera y este reel comparten Mango, voz y cierre). Detalles y guion en `instagram/barci/`.
 
-### Indicaciones para ChatGPT: la clienta
+## Cómo se trabaja con el usuario
 
-Subir la ilustración de Mango (`design-src/mono/ilustrado/mango-ilustrado.png`) como referencia de estilo y pedir, una por mensaje:
+1. Se acuerda la situación y el guion corto.
+2. El usuario genera la voz en ElevenLabs con las frases separadas por `<break time="2s" />`.
+3. Claude arma la escena, sincroniza a la voz, sintetiza los efectos, mezcla y revisa con hojas de contactos y tiras de cuadros.
+4. El usuario opina sobre lo que es de gusto (ritmo, cámara, expresión). Claude corrige lo que puede ver solo.
+5. Portada y texto de la publicación en la carpeta del reel (`textos.md`).
 
-1. «Personaje para una serie animada, mismo estilo de ilustración y de luz que esta imagen de referencia: mujer joven latina, ropa casual, expresiva y simpática. Hoja de personaje: de frente, de tres cuartos y de perfil, cuerpo completo, de pie, brazos a los lados, fondo liso de un solo color, sin sombras en el piso, sin texto.»
-2. «La misma mujer, de frente. Hoja de partes separadas para animar como cutout, cada parte suelta con espacio alrededor: cabeza sin boca, torso, brazo superior, antebrazo y mano de cada lado (mano abierta, mano señalando, mano sosteniendo un celular), piernas. Fondo liso, sin texto.»
-3. «La misma mujer. Hoja de bocas para lipsync, de frente, solo la parte de abajo de la cara: cerrada, A, E, I, O, U, M/P/B, F/V, S, y sonrisa. Fondo liso, cada boca con su etiqueta.»
-4. «La misma mujer. Hoja de ojos y cejas: normal, aburrida, sorprendida, enojada, desesperada, dormida, mirando al celular. Fondo liso, cada una con su etiqueta.»
+## Archivos
 
-### Indicaciones para ChatGPT: un fondo por capas (la sala de «La espera»)
-
-«Escenario para una animación en el mismo estilo de ilustración que la imagen de referencia: la sala de un apartamento en Colombia, con un sofá, una ventana grande y una planta. Formato vertical 9:16. Dame tres imágenes separadas con el mismo encuadre: 1) solo la pared y la ventana; 2) solo el sofá y la planta, con fondo transparente o liso; 3) un objeto de primer plano (una mesa de centro), con fondo liso. Sin personajes, sin texto.»
-
-## Piloto propuesto: «La espera»
-
-12 a 18 segundos, un personaje, un escenario.
-
-1. POV: la clienta en el sofá toca «Comprar» en su celular. Aparece el cargador.
-2. Espera: el cargador gira mientras por la ventana pasa el día y la noche, la planta crece, a ella le crece el pelo, cambia de posición en el sofá (aburrida, dormida), cae la nieve (en Colombia: el chiste es justamente que no nieva).
-3. Remate: por fin carga la página: «Agotado». Su cara.
-4. Cierre: Mango en silencio y el narrador: «Una página lenta no avisa: solo pierde ventas. Escríbenos.».
-
-Prompts de las imágenes y guion: `situaciones/la-espera/`.
+- `instagram/mango2d/espera.html`: plantilla de situación (mundo en código, cámara por planos, cierre).
+- `instagram/mango2d/elementos.js`: cielo, reloj, pantalla de celular.
+- `instagram/situaciones/sfx-espera.py`, `sfx-barci.py`: efectos sintetizados, con los tiempos de la voz de cada reel.
+- `instagram/situaciones/la-espera/`: reel final, portada y texto.
