@@ -2,24 +2,29 @@
 
 **Tres pruebas gratis para tu página.** Primer reel de la serie «Consejos de Mango» (`../serie-consejos.md`). Se hace con la skill `reel-con-mango`.
 
+## Estado
+
+Escena hecha en código (`instagram/mango2d/reel-pruebas.html`) con tiempos **provisionales**. Falta la voz del narrador: al tenerla (`instagram/voces/pruebas-narrador.mp3`) se ajusta el objeto `T` del HTML y de `instagram/situaciones/sfx-pruebas.py`, se mezcla y se hace la portada.
+
 ## Guion (narrador) y escenas
 
-Todo lo dice el narrador, también «Escríbenos.» (la voz de Mango se descartó). Mango aparece en silencio.
+Todo lo dice el narrador, también «Escríbenos.» (Mango no habla). Mango asoma desde abajo, mira lo que se muestra y reacciona a la nota. Todo son motion graphics hechos con código, sin imágenes.
 
 | Frase del narrador | Escena |
 |---|---|
-| Tres pruebas gratis para saber si tu página funciona. | Gancho: una página en un celular y un visto bueno que aparece y desaparece |
-| La de los cinco segundos. | Cuenta regresiva de 5 a 0 sobre la página |
-| Enséñasela a alguien cinco segundos y pregúntale: ¿qué venden? | La página se tapa; globo con «¿Qué venden?» |
-| Si no sabe, tu primera pantalla no lo dice. | La pregunta queda sin respuesta |
-| La del celular. | Celular con la barra de señal de datos, no de wifi |
-| Ábrela con datos, no con wifi. Si tarda o tienes que hacer zoom para leer, así la ve tu cliente. | Carga lenta; zoom para leer |
+| Tres pruebas gratis para saber si tu página funciona. | Una página en una ventana y un visto bueno que aparece y se va; salen los nombres de las tres pruebas |
+| La de los cinco segundos. | Anillo con cuenta regresiva de 5 a 0 |
+| Enséñasela a alguien cinco segundos y pregúntale: ¿qué venden? | Una página vaga («Soluciones integrales para el futuro de tu negocio») que se tapa; alguien pregunta «¿Qué venden?» |
+| Si no sabe, tu primera pantalla no lo dice. | La respuesta: «No sé…» |
+| La del celular. | Un celular dibujado sube desde abajo |
+| Ábrela con datos, no con wifi. | Ajustes: el interruptor de Wi-Fi se apaga y el de Datos se enciende; la barra de estado pasa a 4G |
+| Si tarda o tienes que hacer zoom para leer, así la ve tu cliente. | Carga lenta y dos dedos que hacen zoom para leer un precio diminuto |
 | La de la velocidad. | Medidor de velocidad |
-| Pon tu enlace en PageSpeed Insights, de Google. Es gratis y te dice qué tan rápida es en el celular. | El enlace entra y el medidor sube hasta una nota |
-| Si falla alguna, tiene arreglo. | Cierre |
-| Escríbenos. | Mango en silencio, botón y logo |
+| Pon tu enlace en PageSpeed Insights, de Google. Es gratis y te dice qué tan rápida es en el celular. | Se escribe un enlace, se pulsa «Analizar» y la aguja sube a una nota de ejemplo (87) |
+| Si falla alguna, tiene arreglo. | Tarjeta azul con las palabras en movimiento |
+| Escríbenos. | Botón outstudio.online |
 
-Los nombres de las pruebas salen en pantalla como títulos, sin numerar.
+Los nombres de las pruebas salen en pantalla como títulos, sin numerar. La nota (87) es de ejemplo y el reel lo dice en pantalla.
 
 ## Audio que hay que generar (ElevenLabs, voz del narrador)
 
@@ -43,4 +48,4 @@ Tres pruebas gratis para saber si tu página funciona. <break time="2s" /> La de
 
 **Hashtags:** #DiseñoWeb #TiendaOnline #PáginaWeb #Ecommerce #EmprendimientoColombia #ConsejosParaEmprendedores
 
-**Pendiente:** confirmar la oferta de revisión por DM (ya se ofreció en el reel anterior) y que la voz de ElevenLabs tenga licencia comercial.
+**Pendiente:** el audio del narrador; confirmar la oferta de revisión por DM (ya se ofreció en el reel anterior) y que la voz de ElevenLabs tenga licencia comercial.

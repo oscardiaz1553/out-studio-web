@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Tres pruebas gratis</title>
+<style>
+  @font-face { font-family: "B"; src: url("assets/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+  @font-face { font-family: "I"; src: url("assets/instrument-500.woff2") format("woff2"); font-weight: 500; }
+  * { margin: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1920px; overflow: hidden; position: relative; background: #1b2fcc; font-family: "I", sans-serif; }
+  .d { font-family: "B", sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
+  .bg { position: absolute; inset: 0; }
+  .esc { position: absolute; inset: 0; display: none; }
+  .abs { position: absolute; }
+  .pill { display: inline-block; font: 800 44px "B"; letter-spacing: -0.03em; padding: 16px 38px; border-radius: 60px; white-space: nowrap; }
+  #mangoW { position: absolute; left: 0; top: 0; width: 1254px; height: 1254px; transform-origin: 627px 627px; }
+  #titulo { position: absolute; left: 70px; right: 70px; top: 130px; text-align: center; font-size: 104px; }
+  #titulo span { display: inline-block; }
+  #cierre { position: absolute; inset: 0; background: #1b2fcc; opacity: 0; overflow: hidden; }
+  #cierre canvas { position: absolute; left: 0; top: 0; }
+  #cierre .fila { position: absolute; left: 0; right: 0; text-align: center; color: #fbf8f5; white-space: nowrap; }
+  #cierre .m { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 0.12em 0.14em; margin: 0 -0.08em; }
+  #cierre .m i { display: inline-block; font-style: normal; }
+  #cierre .btn { position: absolute; left: 50%; top: 1180px; margin-left: -290px; width: 580px; text-align: center; background: #f5e3b3; color: #1b2fcc; font-size: 56px; padding: 32px 0; border-radius: 999px; font-weight: 500; }
+</style></head>
+<body>
+<div id="fondos"></div>
+<div id="escenas"></div>
+<div id="mangoW"></div>
+<div id="titulo" class="d"></div>
+<div id="cierre">
+  <canvas id="cbg" width="1080" height="1920"></canvas>
+  <div class="fila d" id="a1" style="top:600px;font-size:128px"></div>
+  <div class="fila d" id="a2" style="top:740px;font-size:128px"></div>
+  <div class="fila d" id="c2" style="top:1000px;font-size:112px;color:#f5e3b3"></div>
+  <div class="btn" id="cierreBtn">outstudio.online</div>
+</div>
+<script src="rig.js"></script>
+<script>
+/* ═══════════ utilidades ═══════════ */
+const KL = "#1b2fcc", CA = "#f5e3b3", DE = "#141e5c", PU = "#fbf8f5", PA = "#f3ede7", TE = "#bc6039";
+const lerp = (a, b, t) => a + (b - a) * t;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const suave = (a, b, x) => { const u = clamp((x - a) / (b - a)); return u * u * (3 - 2 * u); };
+const easeOutExpo = (u) => (u >= 1 ? 1 : 1 - Math.pow(2, -10 * u));
+const easeOutBack = (u) => { const c = 1.70158; return 1 + (c + 1) * Math.pow(u - 1, 3) + c * Math.pow(u - 1, 2); };
+const inOut = (u) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2);
+const pop = (t, t0, d = 0.5) => easeOutBack(clamp((t - t0) / d));        // 0 → 1 con rebote
+const ent = (t, t0, d = 0.5) => easeOutExpo(clamp((t - t0) / d));        // 0 → 1 suave
+
+/* ═══════════ tiempos (s): provisionales hasta tener la voz (voces/pruebas-narrador.mp3) ═══════════ */
+const T = {
+  hook: 0.1, cinco: 3.8, queVenden: 5.9, noLoDice: 9.3, celular: 11.8, datos: 13.7, zoom: 15.9, veloz: 19.6, enlace: 21.8, nota: 24.6, cierre: 28.3, fin: 33.4,
+};
+const ESC = [   // escenas: fondo, color del rótulo, desde, hasta
+  { id: "hook", bg: KL, ink: PU, t0: 0, t1: T.cinco },
+  { id: "cinco", bg: CA, ink: DE, t0: T.cinco, t1: T.queVenden },
+  { id: "venden", bg: DE, ink: PU, t0: T.queVenden, t1: T.celular },
+  { id: "cel", bg: CA, ink: DE, t0: T.celular, t1: T.veloz },
+  { id: "veloz", bg: KL, ink: PU, t0: T.veloz, t1: T.cierre },
+];
+const CAPS = [
+  [0.1, T.cinco, "Tres pruebas gratis."], [T.cinco, T.queVenden, "La de los cinco segundos."], [T.queVenden, T.noLoDice, "¿Qué venden?"], [T.noLoDice, T.celular, "Tu primera pantalla no lo dice."],
+  [T.celular, T.datos, "La del celular."], [T.datos, T.zoom, "Con datos, no con wifi."], [T.zoom, T.veloz, "¿Tarda o toca hacer zoom?"],
+  [T.veloz, T.enlace, "La de la velocidad."], [T.enlace, T.nota, "PageSpeed Insights, de Google."], [T.nota, T.cierre, "Es gratis y mide el celular."],
+];
+
+/* ═══════════ escenas en código ═══════════ */
+const cont = document.getElementById("escenas");
+const escenas = {};
+function nueva(id, html) { const d = document.createElement("div"); d.className = "esc"; d.innerHTML = html; cont.appendChild(d); return d; }
+const $ = (e, s) => e.querySelector(s);
+const tf = (el, x = 0, y = 0, s = 1, r = 0) => { el.style.transform = `translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`; };
+const esqueleto = (w, h) => `<div style="width:${w}px;height:${h}px;background:${PU};border:6px solid ${DE};border-radius:36px;overflow:hidden;position:relative">
+  <div style="height:70px;background:${PA};border-bottom:6px solid ${DE};display:flex;gap:12px;align-items:center;padding:0 26px"><i style="width:18px;height:18px;border-radius:50%;background:${TE}"></i><i style="width:18px;height:18px;border-radius:50%;background:${CA}"></i><i style="width:18px;height:18px;border-radius:50%;background:${KL}"></i></div>
+  <div style="padding:34px 40px"><div style="width:42%;height:30px;border-radius:15px;background:${CA}"></div><div style="margin-top:24px;height:${h - 330}px;border-radius:24px;background:${PA}"></div><div style="margin-top:26px;width:210px;height:62px;border-radius:31px;background:${KL}"></div></div></div>`;
+
+// 1 · Gancho: una página y un visto bueno que va y viene; los nombres de las tres pruebas
+escenas.hook = { el: nueva("hook", `
+  <div id="h-card" class="abs" style="left:140px;top:430px">${esqueleto(800, 540)}</div>
+  <div id="h-ok" class="abs" style="left:700px;top:360px;width:170px;height:170px;border-radius:50%;background:${CA};border:8px solid ${DE};display:flex;align-items:center;justify-content:center"><svg width="90" height="90" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="${DE}" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div id="h-p" class="abs" style="left:0;right:0;top:1050px;text-align:center;display:flex;gap:18px;justify-content:center"><span class="pill" style="background:${CA};color:${KL}">5 segundos</span><span class="pill" style="background:${CA};color:${KL}">Celular</span><span class="pill" style="background:${CA};color:${KL}">Velocidad</span></div>`),
+  up(t) { const c = $(this.el, "#h-card"), o = $(this.el, "#h-ok"), p = [...$(this.el, "#h-p").children];
+    tf(c, 0, (1 - ent(t, 0.1, 0.7)) * 400, 0.9 + 0.1 * ent(t, 0.1, 0.7)); c.style.opacity = ent(t, 0.1, 0.3);
+    const ok = pop(t, 1.3, 0.4) * (1 - suave(2.3, 2.6, t)); tf(o, 0, 0, ok, -10 * (1 - ok)); o.style.opacity = ok > 0.02 ? 1 : 0;
+    p.forEach((e, i) => { const k = pop(t, 2.3 + i * 0.35, 0.45); tf(e, 0, (1 - Math.min(1, k)) * 60, Math.max(0, k)); e.style.opacity = k > 0.02 ? 1 : 0; }); } };
+
+// 2 · Cinco segundos: anillo con cuenta regresiva
+escenas.cinco = { el: nueva("cinco", `
+  <svg class="abs" style="left:230px;top:400px" width="620" height="620" viewBox="0 0 620 620"><circle cx="310" cy="310" r="270" fill="none" stroke="rgba(20,30,92,.18)" stroke-width="40"/><circle id="c-arc" cx="310" cy="310" r="270" fill="none" stroke="${KL}" stroke-width="40" stroke-linecap="round" transform="rotate(-90 310 310)" stroke-dasharray="1696" stroke-dashoffset="0"/></svg>
+  <div id="c-n" class="abs d" style="left:230px;top:530px;width:620px;text-align:center;font-size:340px;color:${DE};line-height:.9">5</div>
+  <div class="abs d" style="left:0;right:0;top:1090px;text-align:center;font-size:70px;color:${DE}">segundos</div>`),
+  up(t) { const a = $(this.el, "#c-arc"), n = $(this.el, "#c-n"), u = clamp((t - (T.cinco + 0.2)) / 1.5);
+    a.setAttribute("stroke-dashoffset", 1696 * u); const k = Math.max(0, 5 - Math.floor(u * 5)); n.textContent = u >= 1 ? 0 : Math.max(1, k);
+    n.style.transform = `scale(${0.8 + 0.2 * easeOutBack(clamp(((u * 5) % 1) * 5))})`; } };
+
+// 3 · ¿Qué venden?: una página vaga, alguien que la mira cinco segundos y no sabe
+escenas.venden = { el: nueva("venden", `
+  <div id="v-card" class="abs" style="left:150px;top:420px;width:780px;height:470px;background:${PU};border:6px solid ${PU};border-radius:36px;overflow:hidden;padding:44px 50px">
+    <div style="width:130px;height:30px;border-radius:15px;background:${CA}"></div>
+    <div class="d" style="margin-top:34px;font-size:64px;color:${DE};line-height:1">Soluciones integrales para el futuro de tu negocio</div>
+    <div style="margin-top:34px;display:inline-block;background:${KL};color:${PU};font:800 34px 'B';padding:18px 44px;border-radius:44px">Saber más</div></div>
+  <div id="v-av" class="abs" style="left:150px;top:830px;width:220px;height:260px"><div style="position:absolute;left:60px;top:0;width:100px;height:100px;border-radius:50%;background:${CA}"></div><div style="position:absolute;left:0;top:116px;width:220px;height:150px;border-radius:110px 110px 0 0;background:${KL}"></div></div>
+  <div id="v-b1" class="abs" style="left:380px;top:790px;background:${CA};color:${DE};font:800 56px 'B';letter-spacing:-0.03em;padding:28px 44px;border-radius:44px 44px 44px 6px">¿Qué venden?</div>
+  <div id="v-b2" class="abs" style="left:300px;top:960px;background:${PU};color:${DE};font:800 56px 'B';letter-spacing:-0.03em;padding:28px 44px;border-radius:44px 44px 6px 44px">No sé…</div>`),
+  up(t) { const c = $(this.el, "#v-card"), a = $(this.el, "#v-av"), b1 = $(this.el, "#v-b1"), b2 = $(this.el, "#v-b2");
+    const t1 = T.queVenden + 1.5, t2 = T.queVenden + 2.0;   // la tarjeta aguanta 1,5 s y se tapa
+    tf(c, 0, (1 - ent(t, T.queVenden + 0.05, 0.6)) * 500 - suave(t1, t1 + 0.4, t) * 900, 0.9 + 0.1 * ent(t, T.queVenden + 0.05, 0.6), -4 * suave(t1, t1 + 0.4, t)); c.style.opacity = ent(t, T.queVenden + 0.05, 0.3);
+    const ka = pop(t, t2, 0.5); tf(a, 0, (1 - Math.min(1, ka)) * 120, Math.max(0, ka)); a.style.opacity = ka > 0.02 ? 1 : 0;
+    const k1 = pop(t, t2 + 0.5, 0.45); tf(b1, 0, 0, Math.max(0, k1)); b1.style.opacity = k1 > 0.02 ? 1 : 0; b1.style.transformOrigin = "0 100%";
+    const k2 = pop(t, T.noLoDice + 0.2, 0.45), wob = Math.sin(t * 14) * 4 * (k2 > 0.5 ? 1 : 0); tf(b2, 0, 0, Math.max(0, k2), wob); b2.style.opacity = k2 > 0.02 ? 1 : 0; b2.style.transformOrigin = "100% 100%"; } };
+
+// 4 · Celular: datos y no wifi; carga lenta; zoom para leer
+const lineasTxt = (n) => Array.from({ length: n }, (_, i) => `<div style="height:${i % 3 === 0 ? 12 : 9}px;margin-top:11px;border-radius:5px;background:rgba(20,30,92,${i % 3 === 0 ? 0.55 : 0.28});width:${[92, 100, 84, 96, 70, 100, 88][i % 7]}%"></div>`).join("");
+escenas.cel = { el: nueva("cel", `
+  <div id="p-tel" class="abs" style="left:300px;top:380px;width:480px;height:900px;background:${DE};border-radius:70px;padding:22px;box-shadow:0 30px 60px rgba(20,30,92,.3)">
+    <div id="p-scr" style="width:100%;height:100%;background:${PU};border-radius:52px;overflow:hidden;position:relative">
+      <div style="position:absolute;left:0;right:0;top:0;height:78px;display:flex;justify-content:space-between;align-items:center;padding:0 38px;font:800 28px 'B';color:${DE};z-index:3"><span>9:41</span><span id="p-red" style="display:flex;gap:14px;align-items:center"></span></div>
+      <div id="p-ajustes" style="position:absolute;left:26px;right:26px;top:150px">
+        <div style="background:${PA};border-radius:30px;padding:26px 30px;display:flex;justify-content:space-between;align-items:center;font:800 40px 'B';color:${DE}">Wi-Fi<span id="p-sw1" style="width:110px;height:62px;border-radius:31px;background:${KL};position:relative"><i style="position:absolute;top:6px;left:54px;width:50px;height:50px;border-radius:50%;background:${PU}"></i></span></div>
+        <div style="margin-top:22px;background:${PA};border-radius:30px;padding:26px 30px;display:flex;justify-content:space-between;align-items:center;font:800 40px 'B';color:${DE}">Datos<span id="p-sw2" style="width:110px;height:62px;border-radius:31px;background:#b8b4cf;position:relative"><i style="position:absolute;top:6px;left:6px;width:50px;height:50px;border-radius:50%;background:${PU}"></i></span></div></div>
+      <div id="p-web" style="position:absolute;left:0;right:0;top:78px;bottom:0;padding:30px;overflow:hidden;transform-origin:50% 22%">
+        <div id="p-load" style="position:absolute;left:0;right:0;top:300px;text-align:center"><div id="p-spin" style="width:110px;height:110px;margin:0 auto;border-radius:50%;border:14px solid rgba(20,30,92,.15);border-top-color:${KL}"></div><div style="margin:34px auto 0;width:300px;height:16px;border-radius:8px;background:rgba(20,30,92,.12);overflow:hidden"><i id="p-bar" style="display:block;height:100%;width:6%;background:${TE}"></i></div></div>
+        <div id="p-cont" style="opacity:0"><div style="width:48%;height:22px;border-radius:11px;background:${CA}"></div><div style="margin-top:22px;height:190px;border-radius:20px;background:${PA}"></div>${lineasTxt(7)}<div class="d" style="margin-top:26px;font-size:30px;color:${DE};font-weight:800;letter-spacing:-0.02em">Precio: $89.900</div>${lineasTxt(5)}</div></div>
+    </div></div>
+  <div id="p-d1" class="abs" style="left:0;top:0;width:120px;height:120px;border-radius:50%;background:rgba(20,30,92,.35);border:6px solid ${DE}"></div>
+  <div id="p-d2" class="abs" style="left:0;top:0;width:120px;height:120px;border-radius:50%;background:rgba(20,30,92,.35);border:6px solid ${DE}"></div>`),
+  up(t) {
+    const tel = $(this.el, "#p-tel"), red = $(this.el, "#p-red"), aj = $(this.el, "#p-ajustes"), web = $(this.el, "#p-web"), sw1 = $(this.el, "#p-sw1"), sw2 = $(this.el, "#p-sw2");
+    const ke = ent(t, T.celular + 0.05, 0.7); tf(tel, 0, (1 - ke) * 700, 0.9 + 0.1 * ke, 0);
+    // barra de estado: wifi (con ondas) o datos (barras + 4G)
+    const sinWifi = t > T.datos + 1.0;
+    red.innerHTML = sinWifi ? `<b style="font:800 24px 'B'">4G</b><svg width="42" height="28" viewBox="0 0 42 28"><rect x="0" y="18" width="7" height="10" fill="${DE}"/><rect x="11" y="12" width="7" height="16" fill="${DE}"/><rect x="22" y="6" width="7" height="22" fill="${DE}"/><rect x="33" y="0" width="7" height="28" fill="${DE}"/></svg>` : `<svg width="42" height="30" viewBox="0 0 42 30" fill="none" stroke="${DE}" stroke-width="4" stroke-linecap="round"><path d="M3 11c10-9 26-9 36 0"/><path d="M10 18c6-5 16-5 22 0"/><circle cx="21" cy="25" r="2.5" fill="${DE}"/></svg>`;
+    const ajOn = t >= T.datos - 0.3 && t < T.zoom - 0.5; aj.style.display = ajOn ? "block" : "none"; aj.style.opacity = ent(t, T.datos - 0.3, 0.3);
+    const s1 = suave(T.datos + 0.4, T.datos + 0.75, t), s2 = suave(T.datos + 0.9, T.datos + 1.25, t);
+    sw1.style.background = s1 > 0.5 ? "#b8b4cf" : KL; sw1.firstElementChild.style.left = `${lerp(54, 6, s1)}px`; sw2.style.background = s2 > 0.5 ? KL : "#b8b4cf"; sw2.firstElementChild.style.left = `${lerp(6, 54, s2)}px`;
+    // página: carga lenta y luego zoom
+    const web0 = T.zoom; web.style.display = t >= web0 - 0.5 ? "block" : "none";
+    const lo = $(this.el, "#p-load"), co = $(this.el, "#p-cont"), tc = T.zoom + 1.4;
+    lo.style.display = t < tc ? "block" : "none"; $(this.el, "#p-spin").style.transform = `rotate(${(t * 90) % 360}deg)`; $(this.el, "#p-bar").style.width = `${6 + 22 * clamp((t - web0) / 1.4)}%`;
+    co.style.opacity = suave(tc, tc + 0.3, t);
+    const z = 1 + 1.6 * inOut(clamp((t - (tc + 0.5)) / 1.4)); web.style.transform = `scale(${z})`;
+    // dos dedos que se separan para hacer zoom
+    const d1 = $(this.el, "#p-d1"), d2 = $(this.el, "#p-d2"), pk = suave(tc + 0.3, tc + 0.6, t) * (1 - suave(tc + 2.0, tc + 2.3, t)), sep = inOut(clamp((t - (tc + 0.5)) / 1.4));
+    tf(d1, 380 + (1 - sep) * 20 - sep * 90, 880 + (1 - sep) * 30 + sep * 70, pk > 0 ? 0.6 + 0.4 * pk : 0); d1.style.opacity = pk;
+    tf(d2, 560 - (1 - sep) * 20 + sep * 90, 780 - (1 - sep) * 30 - sep * 70, pk > 0 ? 0.6 + 0.4 * pk : 0); d2.style.opacity = pk;
+  } };
+
+// 5 · Velocidad: el medidor, el enlace que se escribe y la nota que sube
+const gauge = (cx, cy, r) => { const arc = (a0, a1) => { const p = (a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)]; const [x0, y0] = p(a0), [x1, y1] = p(a1); return `M${x0},${y0} A${r},${r} 0 0 1 ${x1},${y1}`; };
+  return `<path d="${arc(Math.PI, Math.PI * 1.34)}" stroke="#ff6a4a" stroke-width="48" fill="none" stroke-linecap="butt"/><path d="${arc(Math.PI * 1.36, Math.PI * 1.66)}" stroke="#ffc93c" stroke-width="48" fill="none"/><path d="${arc(Math.PI * 1.68, Math.PI * 2)}" stroke="#3fbf6f" stroke-width="48" fill="none"/>`; };
+escenas.veloz = { el: nueva("veloz", `
+  <svg class="abs" style="left:0;top:0" width="1080" height="1920" viewBox="0 0 1080 1920"><g id="g-arcos" opacity=".95">${gauge(540, 1050, 250)}</g><g id="g-aguja"><line x1="540" y1="1050" x2="540" y2="840" stroke="${PU}" stroke-width="14" stroke-linecap="round"/><circle cx="540" cy="1050" r="28" fill="${PU}"/></g></svg>
+  <div id="g-n" class="abs d" style="left:0;right:0;top:1110px;text-align:center;font-size:200px;color:${PU};line-height:.9">0</div>
+  <div id="g-url" class="abs" style="left:100px;top:490px;width:880px;height:112px;border-radius:56px;background:${PU};display:flex;align-items:center;padding:0 44px;font:500 44px 'I';color:${DE}"><span id="g-tx"></span><i id="g-cur" style="display:inline-block;width:4px;height:50px;background:${KL};margin-left:4px"></i></div>
+  <div id="g-chip" class="abs" style="left:100px;top:410px"><span class="pill" style="background:${CA};color:${KL};font-size:36px;padding:10px 28px">pagespeed.web.dev</span></div>
+  <div id="g-btn" class="abs pill" style="left:380px;top:640px;background:${CA};color:${KL}">Analizar</div>
+  <div id="g-nota" class="abs" style="left:0;right:0;top:1300px;text-align:center"><span class="pill" style="background:rgba(251,248,245,.16);color:${PU};font-size:34px;padding:10px 30px">Nota de ejemplo</span></div>`),
+  up(t) { const sc = (id) => $(this.el, id);
+    const ag = sc("#g-aguja"), n = sc("#g-n"), arcs = sc("#g-arcos"), url = sc("#g-url"), chip = sc("#g-chip"), btn = sc("#g-btn"), nota = sc("#g-nota");
+    // medidor entra en «La de la velocidad»
+    const ke = ent(t, T.veloz + 0.1, 0.8); arcs.style.opacity = ke * 0.95; ag.style.opacity = ke;
+    const ruido = (t < T.nota ? 1 : 0) * Math.sin(t * 3.1) * 0.03;
+    const valor = t < T.nota ? 0 : 87 * inOut(clamp((t - T.nota) / 2.4));
+    const ang = -90 + 180 * clamp((valor / 100) + ruido + 0.0) ; ag.style.transformOrigin = "540px 1050px"; ag.style.transform = `rotate(${ang}deg)`;
+    n.textContent = Math.round(valor); n.style.opacity = t >= T.nota ? 1 : 0;
+    // el medidor se hace pequeño cuando entra el enlace
+    const ge = suave(T.enlace - 0.2, T.enlace + 0.5, t), ge2 = t >= T.enlace ? 1 : 0;
+    // enlace tecleado
+    const kc = pop(t, T.enlace + 0.1, 0.5); tf(url, 0, 0, Math.max(0, kc)); url.style.opacity = kc > 0.02 ? 1 : 0; tf(chip, 0, 0, Math.max(0, kc)); chip.style.opacity = kc > 0.02 ? 1 : 0;
+    const txt = "tutienda.com"; sc("#g-tx").textContent = txt.slice(0, Math.floor(clamp((t - (T.enlace + 1.2)) / 1.1) * txt.length)); sc("#g-cur").style.opacity = Math.floor(t * 3) % 2 ? 0.2 : 1;
+    const kb = pop(t, T.enlace + 2.0, 0.45) * (1 - 0.06 * Math.sin(clamp((t - (T.nota - 0.3)) / 0.25) * Math.PI)); tf(btn, 0, 0, Math.max(0, kb)); btn.style.opacity = kb > 0.02 ? 1 : 0;
+    const kn = pop(t, T.nota + 2.2, 0.4); tf(nota, 0, 0, Math.max(0, kn)); nota.style.opacity = kn > 0.02 ? 1 : 0;
+    n.style.color = valor > 90 ? "#3fbf6f" : PU;
+  } };
+
+// fondos con cortina
+const fondos = ESC.map((e) => { const d = document.createElement("div"); d.className = "bg"; d.style.background = e.bg; document.getElementById("fondos").appendChild(d); return d; });
+
+/* ═══════════ Mango: el único cutout ═══════════ */
+const OJOS = ["ojos-abiertos", "entreabiertos", "mirada-izq", "mirada-der", "mirada-arriba", "parpadeo"];
+const m = MangoRig.crear(document.getElementById("mangoW"), { webgl: true, bocas: { carpeta: "bocas", indice: { m: { x: 450, y: 600 } } }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: OJOS } });
+const PASO = 2;
+const LINEA_OJOS = [[0, "ojos-abiertos"], [0.7, "entreabiertos"], [T.cinco + 0.2, "mirada-arriba"], [T.queVenden, "entreabiertos"], [T.queVenden + 2.5, "mirada-izq"], [T.noLoDice + 0.3, "mirada-der"], [T.celular, "entreabiertos"], [T.datos, "mirada-der"], [T.zoom, "entreabiertos"], [T.veloz, "mirada-arriba"], [T.nota, "ojos-abiertos"], [T.cierre - 0.4, "entreabiertos"]];
+const PARP = LINEA_OJOS.slice(1).map((x) => x[0]);
+function ojosEn(f) {
+  const t = f / 24; let n = "entreabiertos"; for (const [t0, o] of LINEA_OJOS) if (t >= t0) n = o;
+  for (const b of PARP) { const fb = Math.round(b * 24 / PASO) * PASO, d = f - fb; if (d >= -2 * PASO && d < -PASO) return "entreabiertos"; if (d >= -PASO && d < PASO) return "parpadeo"; }
+  return n;
+}
+const mW = document.getElementById("mangoW");
+
+/* ═══════════ cuadro a cuadro ═══════════ */
+function pinta(t, f) {
+  const tq = Math.floor(f / PASO) * PASO / 24;
+  const ke = ESC.findIndex((e) => t >= e.t0 && t < e.t1);
+  fondos.forEach((d, i) => { const u = i === 0 ? 1 : easeOutExpo(clamp((t - ESC[i].t0) / 0.55)); d.style.clipPath = `inset(${(1 - u) * 100}% 0 0 0)`; d.style.display = t >= ESC[i].t0 ? "block" : "none"; });
+  ESC.forEach((e, i) => { const s = escenas[e.id]; const vis = t >= e.t0 && t < e.t1 + 0.3; s.el.style.display = vis ? "block" : "none"; if (vis) { s.up(t); s.el.style.opacity = 1 - suave(e.t1, e.t1 + 0.3, t); } });
+  // rótulo
+  const e0 = ESC[Math.max(0, ke)], fila = CAPS.find((r) => t >= r[0] && t < r[1]), rot = fila ? fila[2] : "", titulo = document.getElementById("titulo");
+  if (titulo.dataset.txt !== rot) { titulo.dataset.txt = rot; titulo.innerHTML = rot.split(" ").map((w) => `<span>${w}</span>`).join(" "); }
+  titulo.style.color = e0.ink; titulo.style.opacity = rot && ke >= 0 ? 1 : 0;
+  const tc = fila ? fila[0] : 0; [...titulo.children].forEach((sp, i) => { const u = clamp((t - tc - 0.1 - i * 0.07) / 0.28); sp.style.transform = `translateY(${(1 - Math.pow(1 - u, 3)) * -50 * (1 - u)}px) scale(${0.6 + 0.4 * u})`; sp.style.opacity = u; });
+  // Mango (a doses) asoma desde abajo; se inclina un poco hacia lo que mira
+  m.bocaImg("m"); m.ojos(ojosEn(f - (f % PASO)));
+  const rea = suave(T.nota - 0.1, T.nota + 0.25, tq) * (1 - suave(T.cierre - 0.6, T.cierre - 0.2, tq));
+  m.girar(0.16 * Math.sin(tq * 0.9) * (1 - rea), 0.05 * Math.sin(tq * 1.3) - 0.1 * rea);
+  const salto = tq > T.nota - 0.05 && tq < T.nota + 0.4 ? 20 * Math.sin(((tq - T.nota + 0.05) / 0.45) * Math.PI) : 0;
+  const sube = 1 - easeOutBack(clamp((tq - 0.1) / 0.7));
+  mW.style.transform = `translate(${540 - 627}px, ${1700 - 627 - salto + 4 * Math.sin(tq * 1.6) + sube * 600}px) rotate(${2 * Math.sin(tq * 0.9)}deg) scale(0.52)`;
+  cierreFx(t);
+}
+
+/* ═══════════ cierre: motion graphics ═══════════ */
+function palabras(id, lista) { const el = document.getElementById(id); if (el.dataset.ok) return el.querySelectorAll("i"); el.dataset.ok = 1; el.innerHTML = lista.map(([w]) => `<span class="m"><i>${w}</i></span>`).join(" "); return el.querySelectorAll("i"); }
+const C0 = T.cierre;
+const L = { a1: [["Si", C0 + 0.1], ["falla", C0 + 0.3], ["alguna,", C0 + 0.55]], a2: [["tiene", C0 + 1.0], ["arreglo.", C0 + 1.25]], c2: [["Escríbenos.", C0 + 2.3]] };
+function subir(id, t, y0 = 120) { const is = palabras(id, L[id]); is.forEach((e, k) => { const u = clamp((t - L[id][k][1]) / 0.55), v = easeOutExpo(u); e.style.transform = `translateY(${(1 - v) * y0}%) rotate(${(1 - v) * 7}deg)`; e.style.opacity = u > 0 ? 1 : 0; }); }
+function cierreFx(t) {
+  const cierre = document.getElementById("cierre"), r = easeOutExpo(clamp((t - C0) / 0.55)) * 1750;
+  cierre.style.opacity = t >= C0 ? 1 : 0; cierre.style.clipPath = `circle(${r}px at 540px 960px)`;
+  const g = document.getElementById("cbg").getContext("2d"); g.clearRect(0, 0, 1080, 1920);
+  for (let k = 0; k < 5; k++) { const u = (Math.max(0, t - C0) * 0.16 + k / 5) % 1; g.strokeStyle = `rgba(245,227,179,${0.14 * (1 - u)})`; g.lineWidth = 6; g.beginPath(); g.arc(540, 960, 120 + u * 1100, 0, 6.2832); g.stroke(); }
+  subir("a1", t); subir("a2", t); subir("c2", t);
+  const bt = clamp((t - (C0 + 2.7)) / 0.6), btn = document.getElementById("cierreBtn");
+  btn.style.opacity = bt > 0 ? 1 : 0; btn.style.transform = `translateY(${(1 - easeOutExpo(bt)) * 90}px) scale(${0.5 + 0.5 * easeOutBack(bt)})`;
+}
+window.render = (t) => { pinta(t, Math.floor(t * 24 + 1e-6)); };
+window.cargar = async () => { await m.cargado(); await document.fonts.ready; return m.listo; };
+</script></body></html>
