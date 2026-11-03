@@ -54,3 +54,34 @@ cifras de ventas** y el post no las inventa: el dato real es que la tienda estab
 - **Sin resultados.** No hay ventas, pedidos ni conversión que contar. Si la clienta retoma el proyecto y hay cifras, hacemos una segunda parte del caso.
 - **Handle.** El Instagram que enlaza la tienda es @bybarci; confirma que es el correcto.
 - **Alcance de lo que hicimos.** La lámina 6 enumera lo que se ve en la tienda. Revisa que cada punto sea lo que entregamos y ajusta si algo lo hizo la clienta.
+
+---
+
+# Reel de BARCI con Mango
+
+Archivos: `reel/reel-barci.mp4` (1080 × 1920, 19 s, con la voz del narrador y efectos) y `reel/portada.png`.
+Guion, escenas y cómo se regenera: `reel-guion.md`. Portada: `cd instagram/mango2d && NODE_PATH=$(npm root -g) node portada-barci.cjs ../barci/reel/portada.png`.
+
+## Texto de la publicación del reel
+
+> Su tienda, lista en 4 semanas.
+>
+> BARCI es moda femenina colombiana con básicos para combinar, cápsulas para atreverse y accesorios para completar. Le armamos una tienda que crece con cada lanzamiento sin perder su identidad.
+>
+> Hecha en Shopify, pensada primero para el celular, con su cápsula Brava y a las 4 semanas ya estaba vendiendo.
+>
+> ¿Tienes una marca y necesitas tu tienda? Escríbenos por DM o cotiza en outstudio.online (link en la bio).
+>
+> Visita la tienda: barci.com.co · @bybarci
+
+**Hashtags:** #TiendaOnline #Shopify #ModaColombiana #EmprendimientoColombia #DiseñoWeb #Ecommerce #MarcaDeRopa
+
+**Texto alternativo:** Video animado de Out Studio con Mango, la mascota, asomándose desde abajo mientras se muestran el logo de BARCI, fotos de sus productos, su cápsula Brava y un contador de 4 semanas. Cierra con «¿Tu marca necesita la suya? Escríbenos» y outstudio.online.
+
+**Primer comentario (fíjalo tú):** «¿Qué le pedirías a tu tienda: más rápida, más clara o más tuya?»
+
+## Antes de publicar el reel
+
+- Voz de ElevenLabs: para uso comercial, el plan de la cuenta tiene que ser de pago.
+- Las fotos y el logo son de la tienda de BARCI y la clienta autorizó publicar el caso; avísale antes de que salga.
+- Publica el carrusel y el reel con unos días de diferencia, no el mismo día. Sugerencia: reel primero (alcance) y carrusel después (detalle).

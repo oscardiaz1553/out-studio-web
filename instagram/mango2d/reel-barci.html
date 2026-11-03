@@ -46,7 +46,8 @@ const easeOutBack = (u) => { const c = 1.70158; return 1 + (c + 1) * Math.pow(u 
 const A = (n) => `assets/barci/${n}`;
 
 /* ═══════════ tiempos (s): se ajustan a la voz del narrador (voces/barci-narrador.mp3) ═══════════ */
-const E = { l: [0.3, 2.0, 4.0, 6.4, 9.4, 12.6], cierre: 15.6, fin: 19.4 };   // inicio de cada frase (provisional)
+const E = { l: [0.06, 1.66, 3.5, 6.19, 9.08, 12.54], cierre: 15.4, fin: 19.0 };   // inicio de cada frase de la voz (voces/barci-narrador.mp3)
+const S0 = E.l[5] + 0.35, PASO_SEM = 0.45;   // la semana 1 se enciende aquí y cada semana tarda PASO_SEM
 const BEATS = [   // fondo, color del rótulo, rótulo
   { t0: 0, t1: E.l[1], bg: "#efe6da", ink: "#3a2118", cap: "Esta es BARCI." },
   { t0: E.l[1], t1: E.l[2], bg: "#3a2118", ink: "#efe6da", cap: "Moda femenina colombiana." },
@@ -90,7 +91,7 @@ const S = E.l[5];
 caja(`<div class="num d" style="font-size:520px;color:#f5e3b3;text-align:center;line-height:.8">1</div>`, "left:0;right:0;top:400px", { b: 5, t0: S + 0.1, de: "escala", dur: 0.6, num: true });
 caja(`<div class="d" style="font-size:120px;color:#fbf8f5;text-align:center">semanas</div>`, "left:0;right:0;top:880px", { b: 5, t0: S + 0.3, de: "abajo", dur: 0.6 });
 caja(`<div class="linea"></div>`, "left:0;top:0;width:1080px;height:1920px", { b: 5, t0: S + 0.2, de: "nada", dur: 0.01, linea: true });
-caja(`<span class="pill" style="background:#f5e3b3;color:#1b2fcc;font-size:52px">Al aire y vendiendo</span>`, "left:0;right:0;top:1260px;text-align:center", { b: 5, t0: S + 2.3, de: "escala", dur: 0.5 });
+caja(`<span class="pill" style="background:#f5e3b3;color:#1b2fcc;font-size:52px">Al aire y vendiendo</span>`, "left:0;right:0;top:1260px;text-align:center", { b: 5, t0: S + 2.1, de: "escala", dur: 0.5 });
 
 // fondos con cortina
 const fondos = BEATS.map((b) => { const d = document.createElement("div"); d.className = "bg"; d.style.background = b.bg; document.getElementById("fondos").appendChild(d); return d; });
@@ -99,8 +100,8 @@ const fondos = BEATS.map((b) => { const d = document.createElement("div"); d.cla
 const OJOS = ["ojos-abiertos", "entreabiertos", "mirada-izq", "mirada-der", "mirada-arriba", "parpadeo"];
 const m = MangoRig.crear(document.getElementById("mangoW"), { webgl: true, bocas: { carpeta: "bocas", indice: { m: { x: 450, y: 600 } } }, ojos: { carpeta: "ojos", x: 330, y: 300, ancho: 640, alto: 320, nombres: OJOS } });
 const PASO = 2;
-const LINEA_OJOS = [[0, "ojos-abiertos"], [0.8, "entreabiertos"], [E.l[2], "mirada-izq"], [E.l[3] - 0.3, "entreabiertos"], [E.l[4], "mirada-der"], [E.l[5] - 0.3, "ojos-abiertos"], [14.6, "entreabiertos"]];
-const PARP = [0.8, E.l[2], E.l[3] - 0.3, E.l[4], E.l[5] - 0.3, 14.6];
+const LINEA_OJOS = [[0, "ojos-abiertos"], [0.7, "entreabiertos"], [E.l[2], "mirada-izq"], [E.l[3] - 0.3, "entreabiertos"], [E.l[4], "mirada-der"], [E.l[5] - 0.3, "ojos-abiertos"], [14.9, "entreabiertos"]];
+const PARP = [0.7, E.l[2], E.l[3] - 0.3, E.l[4], E.l[5] - 0.3, 14.9];
 function ojosEn(f) {
   const t = f / 24; let n = "entreabiertos"; for (const [t0, o] of LINEA_OJOS) if (t >= t0) n = o;
   for (const b of PARP) { const fb = Math.round(b * 24 / PASO) * PASO, d = f - fb; if (d >= -2 * PASO && d < -PASO) return "entreabiertos"; if (d >= -PASO && d < PASO) return "parpadeo"; }
@@ -132,15 +133,15 @@ function pinta(t, f) {
     p.el.style.transform = `translate(${dx}px,${dy}px) rotate(${rot}deg) scale(${sc})`;
     if (p.marq) { const c = p.el.firstElementChild; const per = c.scrollWidth / (p.clase === "tira" ? 3 : 6); c.style.transform = `translateX(${(t * p.marq) % per}px)`; }
     if (p.zoom) p.el.firstElementChild.style.transform = `scale(${1 + p.zoom * u})`;
-    if (p.num) { const k = clamp(Math.floor((t - (S + 0.6)) / 0.5) + 1, 1, 4), ult = S + 0.6 + (k - 1) * 0.5; p.el.firstElementChild.textContent = k; p.el.firstElementChild.style.transform = `scale(${1 + 0.18 * Math.max(0, 1 - (t - ult) * 5)})`; }
+    if (p.num) { const k = clamp(Math.floor((t - S0) / PASO_SEM) + 1, 1, 4), ult = S0 + (k - 1) * PASO_SEM; p.el.firstElementChild.textContent = k; p.el.firstElementChild.style.transform = `scale(${1 + 0.18 * Math.max(0, 1 - (t - ult) * 5)})`; }
     if (p.linea) { const el = p.el.firstElementChild; if (!el.dataset.ok) { el.dataset.ok = 1; el.innerHTML = `<svg width="1080" height="1920" style="position:absolute;left:0;top:0"><line x1="150" y1="1160" x2="930" y2="1160" stroke="rgba(251,248,245,.35)" stroke-width="10" stroke-linecap="round"/><line id="prog" x1="150" y1="1160" x2="150" y2="1160" stroke="#f5e3b3" stroke-width="10" stroke-linecap="round"/></svg>` + [0, 1, 2, 3].map((i) => `<div class="nodo" style="position:absolute;left:${150 + i * 260 - 38}px;top:${1160 - 38}px;width:76px;height:76px;border-radius:50%;background:#1b2fcc;border:8px solid #fbf8f5;color:#fbf8f5;font:800 28px/60px 'B';text-align:center">S${i + 1}</div>`).join(""); }
-      const prog = (t - (S + 0.6)) / 0.5; const kk = clamp(prog, 0, 3); el.querySelector("#prog").setAttribute("x2", 150 + kk * 260);
+      const prog = (t - S0) / PASO_SEM; const kk = clamp(prog, 0, 3); el.querySelector("#prog").setAttribute("x2", 150 + kk * 260);
       el.querySelectorAll(".nodo").forEach((n, i) => { const on = clamp(prog - i + 0.0); n.style.background = on > 0.5 ? "#f5e3b3" : "#1b2fcc"; n.style.color = on > 0.5 ? "#1b2fcc" : "#fbf8f5"; n.style.transform = `scale(${1 + 0.25 * Math.sin(clamp(on) * Math.PI) * (on > 0 && on < 1 ? 1 : 0)})`; });
     }
   });
   // Mango (a doses): sube desde abajo al inicio, mira lo que se muestra y reacciona a las 4 semanas
   m.bocaImg("m"); m.ojos(ojosEn(f - (f % PASO)));
-  const rea = suave(S - 0.1, S + 0.25, tq) * (1 - suave(14.6, 15.0, tq));
+  const rea = suave(S - 0.1, S + 0.25, tq) * (1 - suave(14.9, 15.3, tq));
   m.girar(0.18 * Math.sin(tq * 0.9) * (1 - rea) - 0.0, 0.05 * Math.sin(tq * 1.3) - 0.1 * rea);
   const salto = tq > S - 0.05 && tq < S + 0.4 ? 22 * Math.sin(((tq - S + 0.05) / 0.45) * Math.PI) : 0;
   const sube = 1 - easeOutBack(clamp((tq - 0.1) / 0.7));
@@ -151,7 +152,7 @@ function pinta(t, f) {
 /* ═══════════ cierre: motion graphics ═══════════ */
 function palabras(id, lista) { const el = document.getElementById(id); if (el.dataset.ok) return el.querySelectorAll("i"); el.dataset.ok = 1; el.innerHTML = lista.map(([w]) => `<span class="m"><i>${w}</i></span>`).join(" "); return el.querySelectorAll("i"); }
 const C0 = E.cierre;
-const L = { a1: [["¿Tu", C0 + 0.1], ["marca", C0 + 0.28]], a2: [["necesita", C0 + 0.55], ["la", C0 + 0.8], ["suya?", C0 + 0.9]], c2: [["Escríbenos.", C0 + 2.0]] };
+const L = { a1: [["¿Tu", C0 + 0.1], ["marca", C0 + 0.28]], a2: [["necesita", C0 + 0.55], ["la", C0 + 0.8], ["suya?", C0 + 0.9]], c2: [["Escríbenos.", C0 + 1.85]] };
 function subir(id, t, y0 = 120) { const is = palabras(id, L[id]); is.forEach((e, k) => { const u = clamp((t - L[id][k][1]) / 0.55), v = easeOutExpo(u); e.style.transform = `translateY(${(1 - v) * y0}%) rotate(${(1 - v) * 7}deg)`; e.style.opacity = u > 0 ? 1 : 0; }); }
 function cierreFx(t) {
   const cierre = document.getElementById("cierre"), r = easeOutExpo(clamp((t - C0) / 0.55)) * 1750;
@@ -159,7 +160,7 @@ function cierreFx(t) {
   const g = document.getElementById("cbg").getContext("2d"); g.clearRect(0, 0, 1080, 1920);
   for (let k = 0; k < 5; k++) { const u = (Math.max(0, t - C0) * 0.16 + k / 5) % 1; g.strokeStyle = `rgba(245,227,179,${0.14 * (1 - u)})`; g.lineWidth = 6; g.beginPath(); g.arc(540, 960, 120 + u * 1100, 0, 6.2832); g.stroke(); }
   subir("a1", t); subir("a2", t); subir("c2", t);
-  const bt = clamp((t - (C0 + 2.3)) / 0.6), btn = document.getElementById("cierreBtn");
+  const bt = clamp((t - (C0 + 2.2)) / 0.6), btn = document.getElementById("cierreBtn");
   btn.style.opacity = bt > 0 ? 1 : 0; btn.style.transform = `translateY(${(1 - easeOutExpo(bt)) * 90}px) scale(${0.5 + 0.5 * easeOutBack(bt)})`;
 }
 window.render = (t) => { pinta(t, Math.floor(t * 24 + 1e-6)); };
