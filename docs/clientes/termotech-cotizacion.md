@@ -15,6 +15,7 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shop
 > - Botón de **«Solicitar cotización»** en los equipos que se vendan por proyecto (para el equipo comercial: edificios, hospitales), con formulario y WhatsApp.
 > - Pagos con **Wompi** (tarjeta de crédito y los medios que ofrezca) y métodos de envío por zonas con las transportadoras que usen.
 > - Carga de productos con sus fichas técnicas.
+> - Facturación electrónica: instalación y configuración de la app que conecta Shopify con su programa facturador (como Siigo o Alegra), NIT y razón social en la compra, y compra de prueba.
 > - Páginas de preguntas frecuentes, garantía, envíos y contacto, y las legales.
 > - SEO básico y analítica instalada.
 > - Capacitación para que administren la tienda.
@@ -22,13 +23,13 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shop
 > **Valor: $2.500.000.** Forma de pago: [50 % para empezar y 50 % al entregar]. Tiempo: [4 a 5 semanas] desde que nos entreguen el logo, las fichas técnicas y la lista de productos.
 >
 > **No incluye (se cotiza aparte si lo necesitan):**
-> - Integración de factura electrónica o inventario con su programa contable.
+> - Sincronización de inventario con su programa contable.
 > - Fotografía de producto y redacción de textos si no los tienen.
 > - Rediseño o ampliación del logo y guía de marca.
 > - Cuentas de cliente con precios por empresa o por volumen.
 > - Soporte mensual después del lanzamiento.
 >
-> **Costos de terceros, a cargo de TermoTech:** plan de Shopify, dominio, transportadora, comisiones de Wompi y las aplicaciones que se necesiten.
+> **Costos de terceros, a cargo de TermoTech:** plan de Shopify, dominio, aplicaciones, plan del programa facturador y suscripción de la app de facturación, transportadora y comisiones de Wompi.
 >
 > **Para poder vender, ustedes necesitan:** la empresa constituida (NIT y RUT) para abrir la cuenta de Wompi y habilitar la factura electrónica. Podemos construir la web mientras tanto.
 >
@@ -39,7 +40,7 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shop
 1. **Cantidad de productos.** La propuesta ya no fija un número (decisión de Oscar). Riesgo: si el catálogo crece mucho, el alcance queda abierto; conviene acordarlo por escrito al iniciar.
 2. **Forma de pago y tiempo.** Propuse 50 % y 50 %, y 4 a 5 semanas.
 3. **Wompi con Shopify.** Hay que validar el mecanismo exacto de integración (app o pasarela compatible) antes de prometerlo en la propuesta formal.
-4. **Factura electrónica.** Se dejó fuera; es la parte que más suele crecer. Ofrécela como complemento.
+4. **Factura electrónica.** Decisión de Oscar: la instalación y configuración de la app va incluida en el precio. Siguen por cuenta del cliente el plan del programa facturador y la suscripción de la app. Riesgo: si piden facturar con un programa sin app de Shopify, o con reglas especiales, eso ya sería trabajo extra.
 5. **Qué se cotiza y qué se compra.** Si generadores y torres son solo por cotización, el flujo con «Solicitar cotización» alcanza; si quieren pago directo en todo, el envío de equipos pesados se complica.
 6. **El brief de TermoTech.** Las respuestas llegaron por audio y mezclaron cosas; confirmar por escrito lo de los puntos 1 y 5.
 
