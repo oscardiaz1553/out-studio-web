@@ -42,6 +42,7 @@ export default defineConfig({
         proyectos: fileURLToPath(new URL('./proyectos.html', import.meta.url)),
         cotizar: fileURLToPath(new URL('./cotizar.html', import.meta.url)),
         brief: fileURLToPath(new URL('./brief.html', import.meta.url)),
+        hablaDeportes: fileURLToPath(new URL('./habla-deportes/preguntas/index.html', import.meta.url)),
         privacidad: fileURLToPath(new URL('./privacidad.html', import.meta.url)),
         terminos: fileURLToPath(new URL('./terminos.html', import.meta.url)),
         servicios: fileURLToPath(new URL('./servicios/index.html', import.meta.url)),

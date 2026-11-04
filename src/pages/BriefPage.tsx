@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import LogoOut from '../components/LogoOut';
 import AccentButton from '../components/AccentButton';
 import PrivacyNote from '../components/PrivacyNote';
@@ -129,7 +129,7 @@ export default function BriefPage() {
   const [answers, setAnswers] = useState<BriefAnswers>({});
   const [status, setStatus] = useState<Status>('idle');
   const [bot, setBot] = useState(false);
-  const hydrated = useRef(false);
+  const [cargado, setCargado] = useState(false);
 
   // Retoma lo que ya había escrito (si el navegador lo permite).
   useEffect(() => {
@@ -143,16 +143,16 @@ export default function BriefPage() {
     } catch {
       /* sin almacenamiento: sigue funcionando sin guardar */
     }
-    hydrated.current = true;
+    setCargado(true);
   }, [cliente]);
   useEffect(() => {
-    if (!hydrated.current || status === 'success') return;
+    if (!cargado || status === 'success') return;
     try {
       localStorage.setItem(`${STORE_KEY}:${cliente}`, JSON.stringify({ contact, answers }));
     } catch {
       /* ignorar */
     }
-  }, [contact, answers, cliente, status]);
+  }, [contact, answers, cliente, status, cargado]);
 
   const required = BRIEF_SECTIONS.flatMap((s) => s.questions.filter((q) => q.required).map((q) => answerKey(s.id, q.id)));
   const total = BRIEF_SECTIONS.reduce((n, s) => n + s.questions.length, 0);
