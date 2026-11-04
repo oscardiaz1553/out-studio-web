@@ -2,6 +2,7 @@
 User-agent: *
 Allow: /
 Disallow: /cotizar.html
+Disallow: /brief.html
 
 # Rastreadores de IA: se permite que lean y citen el sitio.
 User-agent: GPTBot

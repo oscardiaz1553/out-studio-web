@@ -13,7 +13,7 @@ import { preview } from 'vite';
 
 const DIST = 'dist';
 const SITE = 'https://outstudio.online';
-const SKIP = new Set(['cotizar.html', '404.html']);
+const SKIP = new Set(['cotizar.html', 'brief.html', '404.html']);
 
 function htmlFiles(dir) {
   const out = [];
