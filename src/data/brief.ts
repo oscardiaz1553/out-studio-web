@@ -3,7 +3,7 @@
 // qué necesita y qué ya tiene antes de cotizar. Las respuestas llegan por
 // correo a Out. No se indexa ni sale en el sitemap.
 
-export type BriefKind = 'single' | 'multi' | 'text' | 'long';
+export type BriefKind = 'single' | 'multi' | 'text' | 'long' | 'range';
 
 export interface BriefQuestion {
   id: string;
@@ -13,6 +13,8 @@ export interface BriefQuestion {
   options?: string[];
   placeholder?: string;
   required?: boolean;
+  /** Solo para 'range': un control deslizante de dinero en pesos. */
+  range?: { min: number; max: number; step: number; unknown: string };
 }
 
 export interface BriefSection {
@@ -204,9 +206,9 @@ export const BRIEF_SECTIONS: BriefSection[] = [
       {
         id: 'presupuesto',
         label: '¿Qué presupuesto tienen en mente?',
-        help: 'Es para ajustar la propuesta, no para fijar el precio.',
-        kind: 'single',
-        options: ['Menos de $3.000.000', '$3.000.000 a $6.000.000', '$6.000.000 a $10.000.000', 'Más de $10.000.000', 'No lo sé, necesito orientación'],
+        help: 'Mueve el control. Es para ajustar la propuesta, no para fijar el precio.',
+        kind: 'range',
+        range: { min: 2000000, max: 20000000, step: 500000, unknown: 'No lo sé, necesito orientación' },
       },
       {
         id: 'soporte',
@@ -259,3 +261,9 @@ export function buildBriefText(contact: BriefContact, answers: BriefAnswers): st
   }
   return lines.join('\n');
 }
+
+/** Pesos colombianos con puntos: 4500000 → «$4.500.000». */
+export const pesos = (n: number) => '$' + n.toLocaleString('es-CO').replace(/,/g, '.');
+
+/** Texto que se guarda como respuesta del control de presupuesto. */
+export const presupuestoTexto = (n: number, max: number) => (n >= max ? `${pesos(max)} o más` : `Hasta ${pesos(n)}`);

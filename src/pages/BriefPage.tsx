@@ -11,6 +11,8 @@ import {
   answerKey,
   buildBriefText,
   isAnswered,
+  pesos,
+  presupuestoTexto,
 } from '../data/brief';
 import { EMAIL, WEB3FORMS_ACCESS_KEY, WHATSAPP_URL } from '../data/site';
 
@@ -67,6 +69,38 @@ function Field({ q, value, onChange }: { q: BriefQuestion; value: BriefAnswer | 
           ))}
         </div>
       )}
+      {q.kind === 'range' && q.range && (() => {
+        const r = q.range;
+        const unknown = value === r.unknown;
+        const num = typeof value === 'string' && !unknown ? Number(value.replace(/\D/g, '')) || r.min : Math.round((r.min + r.max) / 2 / r.step) * r.step;
+        const elegido = typeof value === 'string' && value !== '' && !unknown;
+        const pct = ((num - r.min) / (r.max - r.min)) * 100;
+        return (
+          <div className="flex flex-col gap-5">
+            <p className="font-display font-extrabold text-4xl sm:text-5xl tracking-tight text-klein min-h-[3rem]" aria-live="polite">
+              {unknown ? 'Aún no lo sé' : elegido ? (num >= r.max ? `${pesos(r.max)} o más` : `Hasta ${pesos(num)}`) : <span className="text-muted/70">Mueve el control</span>}
+            </p>
+            <input
+              type="range"
+              min={r.min}
+              max={r.max}
+              step={r.step}
+              value={num}
+              disabled={unknown}
+              aria-label={q.label}
+              aria-valuetext={elegido ? presupuestoTexto(num, r.max) : 'Sin elegir'}
+              onChange={(e) => onChange(presupuestoTexto(Number(e.target.value), r.max))}
+              style={{ background: `linear-gradient(to right, #1B2FCC ${elegido ? pct : 0}%, rgba(20,30,92,.18) ${elegido ? pct : 0}%)` }}
+              className="out-slider w-full h-2 rounded-full appearance-none cursor-pointer disabled:opacity-40"
+            />
+            <div className="flex justify-between text-xs text-muted -mt-2"><span>{pesos(r.min)}</span><span>{pesos(r.max)} o más</span></div>
+            <label className="relative block sm:w-fit">
+              <input type="checkbox" checked={unknown} onChange={() => onChange(unknown ? '' : r.unknown)} className="peer sr-only" />
+              <span className={OPTION}>{r.unknown}</span>
+            </label>
+          </div>
+        );
+      })()}
       {q.kind === 'text' && (
         <input
           type="text"

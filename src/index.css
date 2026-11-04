@@ -189,3 +189,10 @@ a {
 .prose-out img { display: block; width: 100%; height: auto; border-radius: 16px; }
 .prose-out .figure-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
 @media (max-width: 480px) { .prose-out .figure-pair { grid-template-columns: 1fr; } }
+
+/* Control deslizante del brief: pulgar grande y fácil de tocar en celular */
+.out-slider { -webkit-appearance: none; appearance: none; outline: none; }
+.out-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 32px; height: 32px; border-radius: 50%; background: #1B2FCC; border: 4px solid #FBF8F5; box-shadow: 0 2px 8px rgba(20,30,92,.35); }
+.out-slider::-moz-range-thumb { width: 28px; height: 28px; border-radius: 50%; background: #1B2FCC; border: 4px solid #FBF8F5; box-shadow: 0 2px 8px rgba(20,30,92,.35); }
+.out-slider:focus-visible::-webkit-slider-thumb { outline: 2px solid #1B2FCC; outline-offset: 3px; }
+.out-slider:focus-visible::-moz-range-thumb { outline: 2px solid #1B2FCC; outline-offset: 3px; }
