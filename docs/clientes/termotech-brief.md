@@ -89,3 +89,23 @@ plan de marketing; el precio real depende de lo de abajo). No se da cifra hasta 
 1. Respuestas a 1, 2 y 3 (marcadas como clave), logo y qué contenido tienen.
 2. Una llamada de 15 minutos (plan de marketing: «se cierra más hablando que por correo»).
 3. Cotización en 6 a 24 horas con rango, qué incluye y qué es aparte.
+
+---
+
+## Respuestas recibidas (4 nov 2026, por audio; transcripción informal)
+
+- **Etapa:** la empresa no ha arrancado. Quieren empezar construyendo la web; negocio 100 % e-commerce, a nivel nacional.
+- **Clientes:** hogares, restaurantes, negocios, empresas. Habrá **una persona comercial** que venderá proyectos (edificios en construcción, hospitales). Hoy no tienen nada de eso montado.
+- **Productos:** neveras, aires acondicionados, generadores, torres de enfriamiento, «todo». Tendrán **fichas técnicas** de cada equipo y quieren mostrarlas en la web.
+- **Pagos:** tarjeta de crédito, probablemente con **Wompi**. El socio es dueño de FitHub y ya tiene medios de pago y links de pago.
+- **Facturación:** electrónica.
+- **Envíos:** nivel nacional, con Deprisa, Coordinadora «o la que sea».
+- **Lo que no dijeron:** cantidad de productos, marcas, logo (formato), fotos, dominio, fecha, presupuesto, quién carga los productos.
+
+## Pendiente de aclarar
+
+1. ¿Ya existe la empresa legalmente (NIT, RUT, cámara de comercio)? Wompi y la facturación electrónica la piden; sin eso se puede construir la web pero no vender.
+2. Cantidad de productos y marcas, y si las fichas y fotos las entregan los fabricantes.
+3. Qué se compra en la web y qué se cotiza (generadores y torres, probablemente por cotización).
+4. Logo en vector, dominio, fecha objetivo, presupuesto.
+5. Quién carga y mantiene los productos después.
