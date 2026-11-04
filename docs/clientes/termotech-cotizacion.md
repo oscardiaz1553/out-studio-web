@@ -1,6 +1,6 @@
-# TermoTech: propuesta de tienda ($2.600.000 en Shopify; $3.100.000 en WooCommerce)
+# TermoTech: propuesta de tienda Shopify ($2.500.000)
 
-Borrador para enviar al cliente. Precio definido por Oscar: **$2.600.000 en Shopify** (referencia del plan de marketing: desde $2.200.000) y **$3.100.000 con WordPress + WooCommerce**. Lo marcado con [confirmar] lo decide Oscar antes de enviar.
+Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shopify** (referencia del plan de marketing: desde $2.200.000). La propuesta al cliente es **solo Shopify**; WooCommerce ($3.100.000) queda como nota interna, no se ofrece. Lo marcado con [confirmar] lo decide Oscar antes de enviar.
 
 ## Mensaje para enviar
 
@@ -19,7 +19,7 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.600.000 en Shop
 > - SEO básico y analítica instalada.
 > - Capacitación para que administren la tienda.
 >
-> **Valor: $2.600.000.** Forma de pago: [50 % para empezar y 50 % al entregar]. Tiempo: [4 a 5 semanas] desde que nos entreguen el logo, las fichas técnicas y la lista de productos.
+> **Valor: $2.500.000.** Forma de pago: [50 % para empezar y 50 % al entregar]. Tiempo: [4 a 5 semanas] desde que nos entreguen el logo, las fichas técnicas y la lista de productos.
 >
 > **No incluye (se cotiza aparte si lo necesitan):**
 > - Integración de factura electrónica o inventario con su programa contable.
@@ -44,11 +44,11 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.600.000 en Shop
 5. **Qué se cotiza y qué se compra.** Si generadores y torres son solo por cotización, el flujo con «Solicitar cotización» alcanza; si quieren pago directo en todo, el envío de equipos pesados se complica.
 6. **El brief de TermoTech.** Las respuestas llegaron por audio y mezclaron cosas; confirmar por escrito lo de los puntos 1 y 5.
 
-## Opción B: WordPress + WooCommerce ($3.100.000)
+## Nota interna: WordPress + WooCommerce ($3.100.000), no se ofrece
 
-Mismo alcance de diseño, ficha técnica, «Solicitar cotización», carga de productos, pagos, envíos, SEO y capacitación. Se ofrece como alternativa, no como segunda propuesta obligatoria.
+Queda por si el cliente lo pide o si Wompi o los envíos pesados no se resuelven bien en Shopify.
 
-| | Shopify ($2.600.000) | WooCommerce ($3.100.000) |
+| | Shopify ($2.500.000) | WooCommerce ($3.100.000) |
 |---|---|---|
 | Costo mensual del cliente | Plan de Shopify (en dólares) y aplicaciones | Hosting y dominio; sin cuota por plataforma |
 | Mantenimiento y seguridad | Lo hace Shopify | A cargo del cliente o de un soporte mensual |
@@ -60,3 +60,7 @@ Mismo alcance de diseño, ficha técnica, «Solicitar cotización», carga de pr
 | Facilidad para administrar | Más sencilla | Más compleja |
 
 Recomendación por defecto: Shopify (más barata, más rápida de lanzar y sin mantenimiento técnico). WooCommerce solo si Wompi o los envíos pesados no se resuelven bien en Shopify, o si el cliente prefiere no pagar una cuota mensual de plataforma.
+
+## Documento
+
+PDF de 6 páginas hecho con el generador de cotizaciones de Out (`cotizar.html`): folio OUT-261104-001, válido 15 días, forma de pago 50 % y 50 % (la que trae el generador por defecto), 4 a 5 semanas. El cliente figura como «TermoTech» sin correo ni nombre de contacto (no los tenemos). Logos recortados sin la frase de abajo en `docs/clientes/termotech/`.
