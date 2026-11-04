@@ -14,7 +14,7 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shop
 > - Página de producto con **ficha técnica**: tabla de especificaciones y descarga del PDF del equipo.
 > - Botón de **«Solicitar cotización»** en los equipos que se vendan por proyecto (para el equipo comercial: edificios, hospitales), con formulario y WhatsApp.
 > - Pagos con **Wompi** (tarjeta de crédito y los medios que ofrezca) y métodos de envío por zonas con las transportadoras que usen.
-> - Carga inicial de hasta [30] productos con sus fichas.
+> - Carga de productos con sus fichas técnicas.
 > - Páginas de preguntas frecuentes, garantía, envíos y contacto, y las legales.
 > - SEO básico y analítica instalada.
 > - Capacitación para que administren la tienda.
@@ -23,7 +23,6 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shop
 >
 > **No incluye (se cotiza aparte si lo necesitan):**
 > - Integración de factura electrónica o inventario con su programa contable.
-> - Productos adicionales a los incluidos.
 > - Fotografía de producto y redacción de textos si no los tienen.
 > - Rediseño o ampliación del logo y guía de marca.
 > - Cuentas de cliente con precios por empresa o por volumen.
@@ -37,7 +36,7 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shop
 
 ## Antes de enviar [confirmar]
 
-1. **Cantidad de productos incluidos.** Puse 30 como supuesto; si el catálogo inicial es mayor, se cobra aparte por bloque o se sube el precio.
+1. **Cantidad de productos.** La propuesta ya no fija un número (decisión de Oscar). Riesgo: si el catálogo crece mucho, el alcance queda abierto; conviene acordarlo por escrito al iniciar.
 2. **Forma de pago y tiempo.** Propuse 50 % y 50 %, y 4 a 5 semanas.
 3. **Wompi con Shopify.** Hay que validar el mecanismo exacto de integración (app o pasarela compatible) antes de prometerlo en la propuesta formal.
 4. **Factura electrónica.** Se dejó fuera; es la parte que más suele crecer. Ofrécela como complemento.
