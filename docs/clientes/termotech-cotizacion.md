@@ -1,10 +1,10 @@
-# TermoTech: propuesta de tienda Shopify ($2.500.000)
+# Termo Tech: propuesta de tienda Shopify ($2.500.000)
 
 Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shopify** (referencia del plan de marketing: desde $2.200.000). La propuesta al cliente es **solo Shopify**; WooCommerce ($3.100.000) queda como nota interna, no se ofrece. Lo marcado con [confirmar] lo decide Oscar antes de enviar.
 
 ## Mensaje para enviar
 
-> Hola, gracias por la información. Con lo que nos cuentan, esta es nuestra propuesta para la tienda de TermoTech.
+> Hola, gracias por la información. Con lo que nos cuentan, esta es nuestra propuesta para la tienda de Termo Tech.
 >
 > **Qué hacemos: tienda online en Shopify, a medida, lista para vender a nivel nacional.**
 >
@@ -29,7 +29,7 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shop
 > - Cuentas de cliente con precios por empresa o por volumen.
 > - Soporte mensual después del lanzamiento.
 >
-> **Costos de terceros, a cargo de TermoTech:** plan de Shopify, dominio, aplicaciones, plan del programa facturador y suscripción de la app de facturación, transportadora y comisiones de Wompi.
+> **Costos de terceros, a cargo de Termo Tech:** plan de Shopify, dominio, aplicaciones, plan del programa facturador y suscripción de la app de facturación, transportadora y comisiones de Wompi.
 >
 > **Para poder vender, ustedes necesitan:** la empresa constituida (NIT y RUT) para abrir la cuenta de Wompi y habilitar la factura electrónica. Podemos construir la web mientras tanto.
 >
@@ -42,7 +42,7 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shop
 3. **Wompi con Shopify.** Hay que validar el mecanismo exacto de integración (app o pasarela compatible) antes de prometerlo en la propuesta formal.
 4. **Factura electrónica.** Decisión de Oscar: la instalación y configuración de la app va incluida en el precio. Siguen por cuenta del cliente el plan del programa facturador y la suscripción de la app. Riesgo: si piden facturar con un programa sin app de Shopify, o con reglas especiales, eso ya sería trabajo extra.
 5. **Qué se cotiza y qué se compra.** Si generadores y torres son solo por cotización, el flujo con «Solicitar cotización» alcanza; si quieren pago directo en todo, el envío de equipos pesados se complica.
-6. **El brief de TermoTech.** Las respuestas llegaron por audio y mezclaron cosas; confirmar por escrito lo de los puntos 1 y 5.
+6. **El brief de Termo Tech.** Las respuestas llegaron por audio y mezclaron cosas; confirmar por escrito lo de los puntos 1 y 5.
 
 ## Nota interna: WordPress + WooCommerce ($3.100.000), no se ofrece
 
@@ -63,4 +63,4 @@ Recomendación por defecto: Shopify (más barata, más rápida de lanzar y sin m
 
 ## Documento
 
-PDF de 6 páginas hecho con el generador de cotizaciones de Out (`cotizar.html`): folio OUT-261104-001, válido 15 días, forma de pago 50 % y 50 % (la que trae el generador por defecto), 4 a 5 semanas. El cliente figura como «TermoTech» sin correo ni nombre de contacto (no los tenemos). Logos recortados sin la frase de abajo en `docs/clientes/termotech/`.
+PDF de 6 páginas hecho con el generador de cotizaciones de Out (`cotizar.html`): folio OUT-261104-001, válido 15 días, forma de pago 50 % y 50 % (la que trae el generador por defecto), 4 a 5 semanas. El cliente figura como «Termo Tech» sin correo ni nombre de contacto (no los tenemos). Logos recortados sin la frase de abajo en `docs/clientes/termotech/`.

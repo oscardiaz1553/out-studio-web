@@ -1,12 +1,12 @@
-# TermoTech: qué preguntar antes de cotizar la tienda
+# Termo Tech: qué preguntar antes de cotizar la tienda
 
-Cliente: TermoTech, tienda online de equipos de refrigeración. Lo único que sabemos hoy: el nombre, que venden
+Cliente: Termo Tech, tienda online de equipos de refrigeración. Lo único que sabemos hoy: el nombre, que venden
 equipos de refrigeración y que tienen logo. Servicio probable: tienda Shopify a medida (desde $2.200.000 en el
 plan de marketing; el precio real depende de lo de abajo). No se da cifra hasta responder lo marcado como clave.
 
 ## Mensaje para enviarles (WhatsApp o correo)
 
-> Hola, gracias por escribirnos. Para cotizarles la tienda de TermoTech con precisión necesitamos entender cómo venden hoy. ¿Me responden estas preguntas (en un audio o por escrito) o agendamos 15 minutos?
+> Hola, gracias por escribirnos. Para cotizarles la tienda de Termo Tech con precisión necesitamos entender cómo venden hoy. ¿Me responden estas preguntas (en un audio o por escrito) o agendamos 15 minutos?
 >
 > 1. ¿A quién le venden: hogares, restaurantes y negocios, empresas e industria? ¿Qué porcentaje es cada uno?
 > 2. ¿Cuántos productos y modelos tienen? ¿Los precios se muestran o se cotiza cada uno?
