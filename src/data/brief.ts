@@ -208,7 +208,7 @@ export const BRIEF_SECTIONS: BriefSection[] = [
         label: '¿Qué presupuesto tienen en mente?',
         help: 'Mueve el control. Es para ajustar la propuesta, no para fijar el precio.',
         kind: 'range',
-        range: { min: 2000000, max: 20000000, step: 500000, unknown: 'No lo sé, necesito orientación' },
+        range: { min: 1000000, max: 4000000, step: 250000, unknown: 'No lo sé, necesito orientación' },
       },
       {
         id: 'soporte',
