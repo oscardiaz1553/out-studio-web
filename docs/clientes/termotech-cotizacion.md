@@ -9,7 +9,7 @@ Borrador para enviar al cliente. Precio definido por Oscar: **$2.500.000 en Shop
 > **Qué hacemos: tienda online en Shopify, a medida, lista para vender a nivel nacional.**
 >
 > Incluye:
-> - Diseño propio de la tienda (no plantilla), pensado primero para celular, con el logo y la identidad de TermoTech.
+> - Tienda en Shopify con diseño personalizado. Se construye con código propio según sus preferencias y referentes.
 > - Estructura por categorías: refrigeración, aires acondicionados, generadores, torres de enfriamiento y las que necesiten.
 > - Página de producto con **ficha técnica**: tabla de especificaciones y descarga del PDF del equipo.
 > - Botón de **«Solicitar cotización»** en los equipos que se vendan por proyecto (para el equipo comercial: edificios, hospitales), con formulario y WhatsApp.
