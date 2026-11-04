@@ -4,6 +4,7 @@ import {
   HD_QUESTIONS,
   HD_SECTIONS,
   HD_TOTAL,
+  HD_VERSION,
   HdAnswer,
   HdAnswers,
   HdQuestion,
@@ -19,7 +20,7 @@ import { QUOTE_WORKER_URL } from '../data/site';
  * y envía las respuestas al Worker, que arma y manda el correo.
  */
 
-const STORE_KEY = 'out-habla-deportes-v1';
+const STORE_KEY = 'out-habla-deportes-v2';
 const RING =
   'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-klein focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
 const FIELD =
@@ -180,6 +181,26 @@ function Question({
         />
       )}
 
+      {q.guide && (
+        <div className="rounded-2xl bg-paper-pure border-2 border-klein-deep/20 p-4 flex flex-col gap-3">
+          <p className="font-display font-bold text-[18px] text-klein-deep">{q.guide.title}</p>
+          <ul className="flex flex-col gap-3">
+            {q.guide.rows.map((r) => (
+              <li key={r.place} className="text-[16px] leading-snug">
+                <span className="block font-medium text-klein-deep">{r.place}</span>
+                <span className="block text-ink-2">Escritorio: {r.desktop}</span>
+                <span className="block text-ink-2">Celular: {r.mobile}</span>
+              </li>
+            ))}
+          </ul>
+          <ul className="flex flex-col gap-2 border-t border-klein-deep/15 pt-3">
+            {q.guide.notes.map((n) => (
+              <li key={n} className="text-[16px] leading-snug text-ink-2">{n}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {q.extra && (
         <label className="flex flex-col gap-1.5">
           <span className="text-[16px] text-ink-2">{q.extra} (opcional)</span>
@@ -244,7 +265,7 @@ export default function HablaDeportesPage() {
       const res = await fetch(QUOTE_WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ form: 'habla-deportes', id: idRef.current, nombre, contacto, answers, hp }),
+        body: JSON.stringify({ form: 'habla-deportes', v: HD_VERSION, id: idRef.current, nombre, contacto, answers, hp }),
       });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean };
       if (res.ok && data.ok) {
@@ -305,7 +326,7 @@ export default function HablaDeportesPage() {
             Cuéntanos cómo quieres tu web
           </h1>
           <p className="mt-4 text-[19px] leading-snug text-ink-2">
-            Son 17 preguntas cortas. Toma unos 5 minutos y nos ayuda a hacer la propuesta a tu medida.
+            Son {HD_TOTAL} preguntas cortas. Toma unos 5 minutos y nos ayuda a hacer la propuesta a tu medida.
           </p>
           <p className="mt-4 rounded-xl bg-carne text-klein-deep px-4 py-3 text-[17px] leading-snug">
             Si no sabes algo, déjalo en blanco.

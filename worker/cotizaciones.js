@@ -51,24 +51,23 @@ function safeEqual(a, b) {
 // ───────────────────────── Cuestionario de Habla Deportes ─────────────────────────
 // Los títulos y topes repiten los de src/data/habla-deportes.ts (el Worker es un
 // solo archivo que se pega en Cloudflare, no importa nada del sitio).
+const HD_VERSION = 2; // debe ser igual a HD_VERSION de src/data/habla-deportes.ts
 const HD_QUESTIONS = [
   { n: 1, kind: 'multi', max: 2, text: '¿Qué quieres que haga la gente al entrar a la web?' },
   { n: 2, kind: 'orden', max: 3, text: '¿Qué es lo más importante para ti? (en orden)' },
-  { n: 3, kind: 'uno', text: '¿La web será sobre todo de video, o también publicarán notas escritas?', extra: 'Si publican notas, ¿quién las escribe?' },
-  { n: 4, kind: 'uno', text: '¿Sobre qué equipos es la web?' },
-  { n: 5, kind: 'uno', text: '¿Quieren resultados y tabla de posiciones en la web?', extra: '¿Tienen proveedor de datos, como Data Factory?' },
-  { n: 6, kind: 'multi', text: '¿Qué redes usan más?' },
-  { n: 7, kind: 'uno', text: '¿Juan Salvador debe tener su propio espacio en la web, con sus videos y sus publicaciones de X?' },
-  { n: 8, kind: 'uno', text: '¿Quieren reproductor de radio en vivo en la web?', extra: 'Enlace de la transmisión, si lo tienen' },
-  { n: 9, kind: 'texto', text: '¿Quiénes son sus patrocinadores hoy? (un nombre por línea)' },
-  { n: 10, kind: 'multi', text: '¿Dónde quieren que se vean?' },
+  { n: 3, kind: 'texto', text: 'Aparte de Junior, ¿de qué otros equipos van a publicar noticias?' },
+  { n: 4, kind: 'uno', text: '¿Quieren resultados y tabla de posiciones en la web?', extra: '¿Tienen proveedor de datos, como Data Factory?' },
+  { n: 5, kind: 'multi', text: '¿Qué redes usan más?' },
+  { n: 6, kind: 'uno', text: '¿Juan Salvador debe tener su propio espacio en la web, con sus videos y sus publicaciones de X?' },
+  { n: 7, kind: 'uno', text: '¿Quieren que la transmisión del programa en YouTube se vea dentro de la web?', extra: 'Enlace de su canal o de la transmisión en YouTube' },
+  { n: 8, kind: 'texto', text: '¿Quiénes son sus patrocinadores hoy? (un nombre por línea)' },
+  { n: 9, kind: 'multi', text: '¿Dónde quieren que se vean?' },
+  { n: 10, kind: 'uno', text: '¿Quién va a cambiar las imágenes o GIFs de los patrocinadores dentro de la web?', extra: '¿Cada cuánto cambian las imágenes o GIFs?' },
   { n: 11, kind: 'uno', text: '¿Venden publicidad en la web, o solo patrocinios fijos?', extra: '¿Algún tipo de patrocinador que NO quieran mostrar?' },
   { n: 12, kind: 'texto', text: 'Nombra 3 sitios de deportes que te gusten y 1 que no. ¿Qué te gusta de cada uno?' },
   { n: 13, kind: 'multi', max: 2, text: '¿Cómo quieres que se sienta la web?' },
-  { n: 14, kind: 'uno', text: '¿Mantienen el azul del logo?', extra: '¿Tienen manual de marca?' },
+  { n: 14, kind: 'multi', text: '¿Qué material visual de la marca tienen?' },
   { n: 15, kind: 'texto', text: '¿Quién va a actualizar la web y cuántas veces al día?' },
-  { n: 16, kind: 'uno', text: '¿Para cuándo la quieren lista?' },
-  { n: 17, kind: 'multi', text: '¿Qué nos pueden enviar?' },
 ];
 
 const HD_LIMITS = { nombre: 120, contacto: 160, texto: 2000, otro: 200, extra: 300, opcion: 120, opciones: 12 };
@@ -174,6 +173,11 @@ function hdBuildEmail(d, when) {
 async function handleHablaDeportes(request, env, body, cors) {
   // Señuelo: si un bot llena el campo oculto, se responde «ok» y no se envía nada.
   if (clean(body.hp, 50)) return json({ ok: true }, 200, cors);
+
+  // Versión: evita mezclar las respuestas de un cuestionario con las preguntas de otro.
+  if (Number(body.v) !== HD_VERSION) {
+    return json({ ok: false, error: 'El cuestionario cambió. Recarga la página e inténtalo de nuevo.' }, 409, cors);
+  }
 
   const norm = hdNormalize(body);
   if (norm.error) return json({ ok: false, error: norm.error }, 400, cors);

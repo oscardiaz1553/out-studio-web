@@ -20,6 +20,8 @@ export interface HdQuestion {
   extra?: string;
   priority?: boolean;
   help?: string;
+  /** Guía con recomendaciones que se muestra bajo la pregunta. */
+  guide?: { title: string; rows: { place: string; desktop: string; mobile: string }[]; notes: string[] };
   placeholder?: string;
 }
 
@@ -45,12 +47,6 @@ export const HD_SECTIONS: HdSection[] = [
         help: 'Toca en orden, primero el más importante.',
         options: ['Videos del programa', 'Clips cortos (Shorts)', 'Noticias escritas', 'Radio en vivo', 'Resultados y datos', 'Opinión'],
       },
-      {
-        n: 3, kind: 'uno', otro: true,
-        text: '¿La web será sobre todo de video, o también publicarán notas escritas?',
-        options: ['Sobre todo video', 'Video y notas', 'Sobre todo notas'],
-        extra: 'Si publican notas, ¿quién las escribe?',
-      },
     ],
   },
   {
@@ -58,12 +54,13 @@ export const HD_SECTIONS: HdSection[] = [
     title: 'Enfoque',
     questions: [
       {
-        n: 4, kind: 'uno', otro: true,
-        text: '¿Sobre qué equipos es la web?',
-        options: ['Solo Junior y la Selección', 'Más Junior que todos los demás', 'Todos los equipos por igual'],
+        n: 3, kind: 'texto',
+        text: 'Aparte de Junior, ¿de qué otros equipos van a publicar noticias?',
+        help: 'Escribe los que se te ocurran, uno por línea.',
+        placeholder: 'Ej.: Selección Colombia',
       },
       {
-        n: 5, kind: 'uno',
+        n: 4, kind: 'uno',
         text: '¿Quieren resultados y tabla de posiciones en la web?',
         options: ['Sí', 'No', 'No sé'],
         extra: '¿Tienen proveedor de datos, como Data Factory?',
@@ -75,20 +72,21 @@ export const HD_SECTIONS: HdSection[] = [
     title: 'Redes y talento',
     questions: [
       {
-        n: 6, kind: 'multi', otro: true,
+        n: 5, kind: 'multi', otro: true,
         text: '¿Qué redes usan más?',
         options: ['YouTube', 'Instagram', 'X', 'TikTok', 'WhatsApp', 'Facebook'],
       },
       {
-        n: 7, kind: 'uno',
+        n: 6, kind: 'uno',
         text: '¿Juan Salvador debe tener su propio espacio en la web, con sus videos y sus publicaciones de X?',
         options: ['Sí', 'No', 'No sé'],
       },
       {
-        n: 8, kind: 'uno',
-        text: '¿Quieren reproductor de radio en vivo en la web?',
+        n: 7, kind: 'uno',
+        text: '¿Quieren que la transmisión del programa en YouTube se vea dentro de la web?',
+        help: 'El programa se transmite por YouTube. Aquí se vería el mismo video, sin salir de la web.',
         options: ['Sí', 'No', 'Más adelante'],
-        extra: 'Enlace de la transmisión, si lo tienen',
+        extra: 'Enlace de su canal o de la transmisión en YouTube',
       },
     ],
   },
@@ -97,15 +95,36 @@ export const HD_SECTIONS: HdSection[] = [
     title: 'Patrocinadores',
     questions: [
       {
-        n: 9, priority: true, kind: 'texto',
+        n: 8, priority: true, kind: 'texto',
         text: '¿Quiénes son sus patrocinadores hoy?',
         help: 'Un nombre por línea.',
         placeholder: 'Un nombre por línea',
       },
       {
-        n: 10, kind: 'multi', otro: true,
+        n: 9, kind: 'multi', otro: true,
         text: '¿Dónde quieren que se vean?',
         options: ['En el encabezado', 'Banners en la portada', 'Dentro de las secciones', 'En videos y radio', 'No sé'],
+      },
+      {
+        n: 10, kind: 'uno',
+        text: '¿Quién va a cambiar las imágenes o GIFs de los patrocinadores dentro de la web?',
+        help: 'Podrías hacerlo tú mismo desde un panel, sin pedirle nada a nadie.',
+        options: ['Nosotros mismos, desde un panel', 'Se las enviamos a Out y Out las cambia', 'No sé'],
+        extra: '¿Cada cuánto cambian las imágenes o GIFs?',
+        guide: {
+          title: 'Tamaños recomendados para las imágenes',
+          rows: [
+            { place: 'Encabezado (franja de arriba)', desktop: '728 × 90 px', mobile: '320 × 50 px' },
+            { place: 'Banner grande en la portada', desktop: '970 × 250 px', mobile: '320 × 100 px' },
+            { place: 'Cuadro dentro de las secciones', desktop: '300 × 250 px', mobile: '300 × 250 px' },
+            { place: 'Lateral largo', desktop: '300 × 600 px', mobile: 'No se muestra en celular' },
+          ],
+          notes: [
+            'Entrega cada imagen al doble de tamaño para que se vea nítida. Por ejemplo, 1456 × 180 px para la de 728 × 90.',
+            'Formatos: JPG, PNG, WebP o GIF. Peso: hasta 150 KB cada imagen y hasta 500 KB cada GIF.',
+            'Deja un margen en los bordes para que no se corte el texto en pantallas más pequeñas.',
+          ],
+        },
       },
       {
         n: 11, kind: 'uno',
@@ -131,10 +150,10 @@ export const HD_SECTIONS: HdSection[] = [
         options: ['Seria', 'Cercana', 'Juvenil', 'De barrio', 'Moderna'],
       },
       {
-        n: 14, kind: 'uno',
-        text: '¿Mantienen el azul del logo?',
-        options: ['Sí, el azul', 'Quieren cambiarlo', 'No sé'],
-        extra: '¿Tienen manual de marca?',
+        n: 14, kind: 'multi', otro: true,
+        text: '¿Qué material visual de la marca tienen?',
+        help: 'Marca todo lo que ya exista.',
+        options: ['Manual de marca', 'Logo en alta calidad', 'Colores y tipografías definidos', 'Fotos del programa y del estudio', 'Gráficos del programa (cortinillas, fondos)', 'Todavía no tenemos nada'],
       },
     ],
   },
@@ -147,25 +166,12 @@ export const HD_SECTIONS: HdSection[] = [
         text: '¿Quién va a actualizar la web y cuántas veces al día?',
         placeholder: 'Ej.: dos personas, unas 4 veces al día',
       },
-      {
-        n: 16, kind: 'uno',
-        text: '¿Para cuándo la quieren lista?',
-        options: ['Este mes', 'En 1 o 2 meses', 'En 3 meses o más', 'Sin prisa'],
-      },
-    ],
-  },
-  {
-    id: 'material',
-    title: 'Material',
-    questions: [
-      {
-        n: 17, kind: 'multi', otro: true,
-        text: '¿Qué nos pueden enviar?',
-        options: ['Logos en buena calidad', 'Fotos del programa y el estudio', 'Manual de marca', 'Acceso a YouTube y redes'],
-      },
     ],
   },
 ];
+
+/** Versión del cuestionario: el Worker la compara para no mezclar preguntas de versiones distintas. */
+export const HD_VERSION = 2;
 
 export const HD_QUESTIONS = HD_SECTIONS.flatMap((s) => s.questions);
 export const HD_TOTAL = HD_QUESTIONS.length;
