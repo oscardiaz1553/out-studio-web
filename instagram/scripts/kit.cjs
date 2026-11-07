@@ -77,7 +77,7 @@ const band = (h, style = '') =>
 /** Renderiza una lista de [html, ancho, alto, nombre] en la carpeta dada. */
 async function render(outDir, items) {
   fs.mkdirSync(outDir, { recursive: true });
-  const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+  const br = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
   for (const [html, w, h, name] of items) {
     const p = await br.newPage({ viewport: { width: w, height: h } });
     await p.setContent(html);

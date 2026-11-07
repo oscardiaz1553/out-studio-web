@@ -6,6 +6,8 @@ grande cerrando la mandíbula poco a poco. El pelo sale siempre de la imagen con
 cerrada y solo se cambia la zona de la boca, con bordes suaves.
 Uso: python3 instagram/blender/armar_bocas.py [carpeta_salida]
 """
+import os
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")) + "/"
 import os, sys
 import numpy as np
 from scipy import ndimage
@@ -13,7 +15,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import bpy
 import alinear, poses
 
-G = "/home/user/out-studio-web/design-src/mono/giro/"
+G = ROOT + "design-src/mono/giro/"
 CENTRO, RX, RY, PLUMA = (658, 745), 275, 175, 70
 Y0, Y1, Y2, DMAX = 650, 800, 980, 105
 

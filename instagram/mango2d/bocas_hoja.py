@@ -5,13 +5,15 @@ hocico de la ilustración y se recorta con bordes suaves. Salen PNG con transpar
 de la cara (1254 × 1254) recortados a su caja, y un JSON con la posición de cada uno.
 Uso: python3 instagram/mango2d/bocas_hoja.py [carpeta_salida]
 """
+import os
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")) + "/"
 import os, sys, json
 import numpy as np
 from scipy import ndimage
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "blender"))
 import bpy, poses
 
-R = "/home/user/out-studio-web/design-src/mono/ilustrado/"
+R = ROOT + "design-src/mono/ilustrado/"
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(R, "bocas")
 NOMBRES = [["m", "pb", "a", "e", "i"], ["o", "u", "dt", "fv", "sz"], ["l", "r", "ch", "j", "kg"], ["q", "n", "th", "w", "h"]]
 BASE_F = ((610.07, 600.73), (697.28, 599.76))     # fosas nasales en la ilustración

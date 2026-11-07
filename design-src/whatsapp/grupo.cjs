@@ -63,7 +63,7 @@ const HTML = `<!doctype html><html><head><style>${BASE}</style></head><body>
 </body></html>`;
 
 (async () => {
-  const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+  const br = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
   const p = await br.newPage({ viewport: { width: 1080, height: 1080 } });
   await p.setContent(HTML);
   await p.evaluate(() => document.fonts.ready);

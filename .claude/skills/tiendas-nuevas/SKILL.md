@@ -13,7 +13,7 @@ Las seis tiendas viven en `src/data/projects.ts` detrás del interruptor
 1. `node scripts/tiendas-nuevas.mjs off`
 2. `npm run seo:pages` (regenera `proyectos.html` y el resto de páginas estáticas).
 3. Publica con el flujo de siempre:
-   - `PRERENDER_CHROMIUM=/opt/pw-browsers/chromium-1194/chrome-linux/chrome npm run build`
+   - `npm run build` (en la nube hace falta `PRERENDER_CHROMIUM=/opt/pw-browsers/chromium-1194/chrome-linux/chrome`; en un Mac normal basta con `npx playwright install chromium` una vez)
    - `git add -A` y commit con el mensaje "Proyectos: quita las tiendas nuevas" y las líneas de atribución que dé la sesión (nunca el identificador del modelo en el mensaje).
    - `git push -u origin desarrollo` (con reintentos si falla la red).
    - `git fetch origin main && git checkout main && git merge --ff-only desarrollo && git push origin main && git checkout desarrollo`

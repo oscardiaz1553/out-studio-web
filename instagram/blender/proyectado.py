@@ -4,13 +4,15 @@ La silueta transparente de la imagen se convierte en una malla; la profundidad s
 infla como un globo desde los bordes (más grueso al centro) y la imagen se proyecta
 como textura. Así el 3D conserva el diseño de Mango: su pelaje, sus lentes y su cara.
 """
+import os
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")) + "/"
 import math
 import numpy as np
 import bpy
 import bmesh
 from scipy import ndimage
 
-IMAGEN = "/home/user/out-studio-web/design-src/mono/mono-avatar.png"
+IMAGEN = ROOT + "design-src/mono/mono-avatar.png"
 ESCALA = 3.1 / 1086        # unidades de Blender por píxel de la imagen
 
 

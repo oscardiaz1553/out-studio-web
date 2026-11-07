@@ -10,7 +10,7 @@ const TIPOS = { '.html': 'text/html', '.js': 'text/javascript', '.png': 'image/p
 const srv = http.createServer((q, r) => { const p = path.join(raiz, decodeURIComponent(q.url.split('?')[0])); fs.readFile(p, (e, d) => { if (e) { r.writeHead(404); r.end(); return; } r.writeHead(200, { 'Content-Type': TIPOS[path.extname(p)] || 'application/octet-stream' }); r.end(d); }); }).listen(8765);
 (async () => {
   fs.mkdirSync(out, { recursive: true });
-  const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'] });
+  const br = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'] });
   const p = await br.newPage({ viewport: { width: 1080, height: 1920 } });
   p.on('pageerror', (e) => console.log('ERR', e.message));
   p.on('console', (m) => console.log('LOG', m.text()));

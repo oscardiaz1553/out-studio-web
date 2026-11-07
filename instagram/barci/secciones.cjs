@@ -2,7 +2,7 @@
 const { chromium } = require('playwright');
 const CSS = 'html,body{overflow:auto!important;height:auto!important;position:static!important} *{animation:none!important;transition:none!important} dialog, dialog-modal, .email-popup__content, [class*="email-popup"]{display:none!important}';
 (async () => {
-  const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+  const br = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
   for (const [modo, o, paso] of [['escritorio', { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 }, 800], ['celular', { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true }, 760]]) {
     const p = await (await br.newContext({ ...o, reducedMotion: 'reduce' })).newPage();
     for (const [n, ruta] of [['home', '/'], ['producto', '/products/bar-004-tank-top-serena'], ['brava', '/collections/brava']]) {

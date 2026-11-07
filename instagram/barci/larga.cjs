@@ -1,7 +1,7 @@
 // Captura larga (home en celular) para el reel: node larga.cjs  -> capturas/celular-home-larga.jpg
 const { chromium } = require('playwright');
 (async () => {
-  const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+  const br = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
   const p = await (await br.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, reducedMotion: 'reduce' })).newPage();
   await p.goto('https://barci.com.co/', { waitUntil: 'networkidle' });
   await p.addStyleTag({ content: '*{animation:none!important;transition:none!important} dialog, dialog-modal, .email-popup__content, [class*="email-popup"]{display:none!important}' });

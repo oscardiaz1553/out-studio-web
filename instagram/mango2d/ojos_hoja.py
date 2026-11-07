@@ -4,13 +4,15 @@ Se alinea por los lentes (separación y altura del cielo reflejado). Del parche 
 y la frente, y el interior de los lentes; el aro dorado se queda el de la ilustración (más nítido).
 Uso: python3 instagram/mango2d/ojos_hoja.py [carpeta_salida]
 """
+import os
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")) + "/"
 import os, sys, json
 import numpy as np
 from scipy import ndimage
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "blender"))
 import bpy, poses
 
-R = "/home/user/out-studio-web/design-src/mono/ilustrado/"
+R = ROOT + "design-src/mono/ilustrado/"
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(R, "ojos")
 NOMBRES = [["normal", "feliz", "sorprendido", "enojado"], ["triste", "serio", "parpadeo", "guino-izq"],
            ["guino-der", "ojos-abiertos", "entreabiertos", "mirada-izq"], ["mirada-der", "mirada-arriba", "mirada-abajo", "ceja-der"],

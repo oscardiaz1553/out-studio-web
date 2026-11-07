@@ -5,6 +5,8 @@ Uso: python3 mango_habla.py env.json salida_carpeta [ancho_cuadro]
   env.json: salida de instagram/scripts/envolvente-voz.py (30 valores por segundo, 0 a 1)
 Después: ffmpeg -framerate 30 -i salida_carpeta/f_%04d.png -i voz.wav ... (ver README)
 """
+import os
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")) + "/"
 import os, sys, json, math
 import numpy as np
 from scipy import ndimage
@@ -12,7 +14,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import bpy
 import estilo, poses
 
-B = "/home/user/out-studio-web/design-src/mono/giro/bocas/"
+B = ROOT + "design-src/mono/giro/bocas/"
 ESTADOS = ["cerrada", "rendija", "media", "abierta", "a_tope"]
 FONDO = (0.106, 0.184, 0.80)
 

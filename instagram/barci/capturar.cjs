@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
 const B = 'https://barci.com.co';
 const PAGS = [['home', '/'], ['esenciales', '/collections/esenciales'], ['brava', '/collections/brava'], ['producto', '/products/bar-004-tank-top-serena'], ['nosotras', '/pages/nosotras'], ['accesorios', '/collections/accesorios']];
 (async () => {
-  const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+  const br = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
   for (const [modo, ctxOpt] of [['escritorio', { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 }], ['celular', { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true }]]) {
     const ctx = await br.newContext({ ...ctxOpt, reducedMotion: 'reduce' }); const p = await ctx.newPage();
     for (const [nombre, ruta] of PAGS) {

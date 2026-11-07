@@ -1,4 +1,6 @@
 """Las seis vistas de Mango con el estilo de cómic. Uso: python3 instagram/blender/prueba-poses.py carpeta"""
+import os
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")) + "/"
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 import numpy as np
@@ -8,7 +10,7 @@ import estilo, poses
 out = sys.argv[1]
 nombres = ["frente", "tres-cuartos-izq", "perfil-izq", "tres-cuartos-der", "perfil-der", "espalda"]
 for n in nombres:
-    ruta = f"/home/user/out-studio-web/design-src/mono/giro/mango-{n}.png"
+    ruta = f"{ROOT}design-src/mono/giro/mango-{n}.png"
     rgba = estilo.comic_alfa(ruta, bandas=5, punto=7)
     rgba = estilo.con_contorno(rgba, 4)
     comp = estilo.sobre_fondo(rgba)

@@ -9,12 +9,14 @@ solo lo que está conectado con el borde de la imagen y se parece al color del f
 pelo claro del interior nunca se vuelve transparente.
 Uso: python3 instagram/blender/poses.py [carpeta_salida]
 """
+import os
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")) + "/"
 import os, sys
 import numpy as np
 import bpy
 from scipy import ndimage
 
-HOJA = "/home/user/out-studio-web/design-src/mono/giro/hoja-de-giro.png"
+HOJA = ROOT + "design-src/mono/giro/hoja-de-giro.png"
 VISTAS = [("frente", 0, 0), ("tres-cuartos-izq", 1, 0), ("perfil-izq", 2, 0),
           ("tres-cuartos-der", 0, 1), ("perfil-der", 1, 1), ("espalda", 2, 1)]
 
@@ -59,7 +61,7 @@ def guardar(rgba, ruta):
 
 
 if __name__ == "__main__":
-    out = sys.argv[1] if len(sys.argv) > 1 else "/home/user/out-studio-web/design-src/mono/giro"
+    out = sys.argv[1] if len(sys.argv) > 1 else ROOT + "design-src/mono/giro"
     os.makedirs(out, exist_ok=True)
     hoja = cargar(HOJA)
     H, W, _ = hoja.shape
